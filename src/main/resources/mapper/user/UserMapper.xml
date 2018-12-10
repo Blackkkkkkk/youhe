@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.user.UserMapper">
+
+    <resultMap type="com.youhe.entity.user.User" id="userMap">
+        <id property="uid" column="UID"/>
+        <result property="userAccount" column="USER_ACCOUNT"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="phone" column="PHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="locked" column="LOCKED"/>
+        <result property="userPassword" column="USER_PASSWORD"/>
+        <result property="registerDate" column="REGISTER_DATE"/>
+        <collection property="roles" ofType="com.youhe.entity.role.Role">
+            <id property="rid" column="RID"/>
+            <result property="rname" column="NAME"/>
+            <collection property="permissions" ofType="com.youhe.entity.permission.Permission">
+                <id property="pid" column="PID"/>
+                <result property="pname" column="PNAME"/>
+                <result property="percode" column="PERCODE"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <resultMap type="com.youhe.entity.user.User" id="userList">
+        <id property="uid" column="UID"/>
+        <result property="userAccount" column="USER_ACCOUNT"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="phone" column="PHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="locked" column="LOCKED"/>
+        <result property="registerDate" column="REGISTER_DATE"/>
+    </resultMap>
+
+
+    <select id="findByUserName" parameterType="string" resultMap="userMap">
+        SELECT u.*,r.*,p.* FROM sys_user u inner join sys_user_role ur on ur.sys_user_id=u.uid
+        inner join sys_role r on r.rid=ur.sys_role_id
+        inner join sys_role_permission mr on mr.sys_role_id=r.rid
+        inner join sys_permission p on mr.sys_permission_id=p.pid
+        WHERE USER_ACCOUNT=#{userAccount};
+    </select>
+
+
+    <select id="findUserList" parameterType="string" resultMap="userMap">
+        SELECT u.*,r.*,p.* FROM sys_user u inner join sys_user_role ur on ur.sys_user_id=u.uid
+        inner join sys_role r on r.rid=ur.sys_role_id
+        inner join sys_role_permission mr on mr.sys_role_id=r.rid
+        inner join sys_permission p on mr.sys_permission_id=p.pid
+        WHERE USER_ACCOUNT=#{userAccount};
+    </select>
+
+
+    <update id="update" parameterType="com.youhe.entity.user.User">
+        UPDATE sys_user u
+        <set>
+            <if test="userName != null and userName != ''">
+                u.USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                u.USER_PASSWORD = #{userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null and salt != ''">
+                u.SALT = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                u.phone = #{phone,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where 1 = 1 and u.USER_ACCOUNT = #{userAccount}
+
+    </update>
+
+
+</mapper>

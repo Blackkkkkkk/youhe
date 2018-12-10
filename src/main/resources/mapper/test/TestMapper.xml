@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.test.TestMapper">
+
+    <resultMap type="com.youhe.entity.user.User" id="userList">
+        <id property="uid" column="UID"/>
+        <result property="userAccount" column="USER_ACCOUNT"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="phone" column="PHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="locked" column="LOCKED"/>
+        <result property="registerDate" column="REGISTER_DATE"/>
+    </resultMap>
+
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_user
+        where USER_ACCOUNT = #{userAccount}
+    </delete>
+
+</mapper>
