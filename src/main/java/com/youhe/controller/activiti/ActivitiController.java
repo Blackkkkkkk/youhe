@@ -70,9 +70,6 @@ public class ActivitiController {
 
         List<ACT_RE_MODEL_PROCDEF> list = activitiService.findList();
 
-          RepositoryService repositoryService = processEngine.getRepositoryService();
-
-          List list1 = repositoryService.createModelQuery().list();
 
         model.addAttribute("list", list);
 

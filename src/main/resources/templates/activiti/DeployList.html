@@ -7,6 +7,111 @@
 
 </head>
 <link href="../bootstrap/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+
+<script th:inline="javascript">
+    // 部署流程
+    function deploy(resId) {
+
+
+        /*
+         var id = $("#ProcessId").val();
+
+         if (id == null || id.length <= 0) {
+
+         layer.msg('部署Process Id 值不能为空！', {icon: 5, time: 1500});
+         } else {
+         $.ajax({
+         type: "post",
+         url: "/activiti/deploy",
+         dataType: "json",
+         data: {"modelId": id},
+         success: function (data) {
+         layer.msg(data.message, {icon: 1, time: 2000});
+         }
+         });
+         }
+         */
+
+        $.ajax({
+            type: "post",
+            url: "/activiti/deploy",
+            dataType: "json",
+            data: {"modelId": resId},
+            success: function (data) {
+                layer.msg(data.message, {icon: 1, time: 2000});
+            }
+        });
+    }
+
+    //启动流程
+    function startFlow(key) {
+
+        $.ajax({
+            type: "post",
+            url: "/activiti/start",
+            dataType: "json",
+            data: {"keyName": key},
+            success: function (data) {
+                if ((data.state) == ("success")) {
+                    layer.msg(data.message, {icon: 1, time: 2000});
+                } else {
+                    layer.msg(data.message, {icon: 2, time: 2000});
+                }
+            }
+        });
+    }
+
+    //修改流程图
+    function changeFlow(id) {
+        layer.open({
+            type: 2,
+            shade: false,
+            area: ['95%', '98%'],
+            maxmin: true,
+            content: '/modeler.html?modelId=' + id,
+            zIndex: layer.zIndex //重点1
+        });
+    }
+
+    //暂停流程
+
+    function stopFlow(id) {
+
+        $.ajax({
+            type: "post",
+            url: "/activiti/stop",
+            dataType: "json",
+            data: {"keyName": id},
+            success: function (data) {
+                if ((data.state) == ("success")) {
+                    layer.msg(data.message, {icon: 1, time: 2000});
+                } else {
+                    layer.msg(data.message, {icon: 2, time: 2000});
+                }
+            }
+        });
+
+    }
+    // 激活流程
+    function activationFlow(id) {
+
+        $.ajax({
+            type: "post",
+            url: "/activiti/activation",
+            dataType: "json",
+            data: {"keyName": id},
+            success: function (data) {
+                if ((data.state) == ("success")) {
+                    layer.msg(data.message, {icon: 1, time: 2000});
+                } else {
+                    layer.msg(data.message, {icon: 2, time: 2000});
+                }
+            }
+        });
+
+    }
+
+</script>
 <body>
 <div id="wrapper">
     <nav th:include="common/Left_Ment :: left"></nav>
@@ -86,31 +191,27 @@
                                             <button class="btn  btn-primary btn-xs btn-outline btn-success  dim"
                                                     type="button" th:if="${prod.deployment_id_!=null}"
                                                     shiro:hasPermission="user:startFlow"
-                                            ><p th:onclick="
-                                            'javascript:startFlow(\''+${prod.key_}+'\');'">启动流程</p></i>
+                                                    th:onclick="
+                                            'javascript:startFlow(\''+${prod.key_}+'\');'"
+                                            >启动流程</i>
                                             </button>
 
                                             <button class="btn  btn-primary btn-xs btn-outline btn-success  dim"
                                                     type="button" th:if="${prod.deployment_id_!=null}"
-                                            ><p th:onclick="
-                                            'javascript:stopFlow(\''+${prod.key_}+'\')'">暂停流程</p></i>
+                                                    th:onclick="
+                                            'javascript:stopFlow(\''+${prod.key_}+'\')'"
+                                            >暂停流程</i>
                                             </button>
                                             <button class="btn  btn-primary btn-xs btn-outline btn-success  dim"
                                                     type="button" th:if="${prod.deployment_id_!=null}"
-                                            ><p th:onclick="
-                                            'javascript:test()'">test</p></i>
-                                            </button>
-
-
-                                            <button class="btn  btn-primary btn-xs btn-outline btn-success  dim"
-                                                    type="button" th:if="${prod.deployment_id_!=null}"
-                                            ><p th:onclick="
-                                            'javascript:activationFlow(\''+${prod.key_}+'\')'">激活流程</p></i>
+                                                    th:onclick="
+                                            'javascript:activationFlow(\''+${prod.key_}+'\')'"
+                                            >激活流程</i>
                                             </button>
 
                                             <button class="btn  btn-primary btn-xs btn-outline btn-success  dim"
-                                                    type="button"><p th:onclick="
-                                            'javascript:changeFlow(\''+${prod.resId}+'\')'">修改流程部署图</p></i>
+                                                    type="button" th:onclick="
+                                            'javascript:changeFlow(\''+${prod.resId}+'\')'">修改流程图</i>
                                             </button>
                                         </td>
                                     </tr>
@@ -153,110 +254,11 @@
 <!-- Page-Level Scripts -->
 
 <script th:inline="javascript">
-
-    // 部署流程
-    function deploy(resId) {
-
-
-        /*
-         var id = $("#ProcessId").val();
-
-         if (id == null || id.length <= 0) {
-
-         layer.msg('部署Process Id 值不能为空！', {icon: 5, time: 1500});
-         } else {
-         $.ajax({
-         type: "post",
-         url: "/activiti/deploy",
-         dataType: "json",
-         data: {"modelId": id},
-         success: function (data) {
-         layer.msg(data.message, {icon: 1, time: 2000});
-         }
-         });
-         }
-         */
-
-        $.ajax({
-            type: "post",
-            url: "/activiti/deploy",
-            dataType: "json",
-            data: {"modelId": resId},
-            success: function (data) {
-                layer.msg(data.message, {icon: 1, time: 2000});
-            }
-        });
-    }
-
-    //启动流程
-    function startFlow(key) {
-        $.ajax({
-            type: "post",
-            url: "/activiti/start",
-            dataType: "json",
-            data: {"keyName": key},
-            success: function (data) {
-                if ((data.state) == ("success")) {
-                    layer.msg(data.message, {icon: 1, time: 2000});
-                } else {
-                    layer.msg(data.message, {icon: 2, time: 2000});
-                }
-            }
-        });
-    }
-
-    //修改流程图
-    function changeFlow(id) {
-        layer.open({
-            type: 2,
-            shade: false,
-            area: ['95%', '98%'],
-            maxmin: true,
-            content: '/modeler.html?modelId=' + id,
-            zIndex: layer.zIndex //重点1
-        });
-    }
-
-    //暂停流程
-
-    function stopFlow(id) {
-
-        $.ajax({
-            type: "post",
-            url: "/activiti/stop",
-            dataType: "json",
-            data: {"keyName": id},
-            success: function (data) {
-                if ((data.state) == ("success")) {
-                    layer.msg(data.message, {icon: 1, time: 2000});
-                } else {
-                    layer.msg(data.message, {icon: 2, time: 2000});
-                }
-            }
-        });
-
-    }
-    // 激活流程
-    function activationFlow(id) {
-
-        $.ajax({
-            type: "post",
-            url: "/activiti/activation",
-            dataType: "json",
-            data: {"keyName": id},
-            success: function (data) {
-                if ((data.state) == ("success")) {
-                    layer.msg(data.message, {icon: 1, time: 2000});
-                } else {
-                    layer.msg(data.message, {icon: 2, time: 2000});
-                }
-            }
-        });
-
-    }
-
-
     $(document).ready(function () {
+
+        var message = [[${list}]];
+        // console.log(message);
+
 
         window.onload = function () {
 
