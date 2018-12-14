@@ -243,10 +243,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
+
+
+
         <dependency>
             <groupId>local.com.github.theborakompanioni</groupId>
             <artifactId>thymeleaf-extras-shiro</artifactId>
