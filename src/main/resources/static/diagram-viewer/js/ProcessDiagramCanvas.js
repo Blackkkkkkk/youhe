@@ -822,9 +822,9 @@ ProcessDiagramCanvas.prototype = {
 		var destinationActivity = this.g.getById(destinationActivityId);
 		if (sourceActivity == null || destinationActivity == null) {
 			if (sourceActivity == null)
-				console.error("source activity["+sourceActivityId+"] not found");
+				console.error("source activiti["+sourceActivityId+"] not found");
 			else
-				console.error("destination activity["+destinationActivityId+"] not found");
+				console.error("destination activiti["+destinationActivityId+"] not found");
 			return null;
 		}
 			var bbSourceActivity = sourceActivity.getBBox()
@@ -1248,9 +1248,9 @@ ProcessDiagramCanvas.prototype = {
 			shape.data("contextObject", contextObject);
 		}
 		
-		//var activity = this.getConextObject();
-		//console.log("activity: " + activity.getId(), activity);
-		//Object.clone(activity);
+		//var activiti = this.getConextObject();
+		//console.log("activiti: " + activiti.getId(), activiti);
+		//Object.clone(activiti);
 		
 		/*
 		c.mouseover(function(){

@@ -1,5 +1,6 @@
 package com.youhe.serviceImpl.user;
 
+import com.youhe.biz.user.UserBiz;
 import com.youhe.entity.user.User;
 import com.youhe.mapper.user.UserMapper;
 import com.youhe.service.user.UserService;
@@ -13,12 +14,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserBiz userBiz;
 
 
     @Override
     public User findByUserName(String userAccount) {
-        return userMapper.findByUserName(userAccount);
+        return userBiz.findByUserName(userAccount);
 
     }
 
@@ -26,12 +27,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findUserList(User user) {
 
-        return userMapper.findUserList(user);
+        return userBiz.findUserList(user);
     }
 
     //更新用户
     public void update(User user) {
-        userMapper.update(user);
+        userBiz.update(user);
     }
 
 }

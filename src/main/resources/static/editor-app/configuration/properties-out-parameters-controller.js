@@ -18,7 +18,7 @@
  */
 
 /*
- * Input parameters for call activity
+ * Input parameters for call activiti
  */
 
 var KisBpmOutParametersCtrl = [ '$scope' , '$modal', '$timeout', '$translate', function($scope, $modal, $timeout, $translate) {

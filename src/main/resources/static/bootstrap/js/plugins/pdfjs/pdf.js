@@ -8888,7 +8888,7 @@ var PDFDocumentLoadingTask = (function PDFDocumentLoadingTaskClosure() {
 
     /**
      * Aborts all network requests and destroys worker.
-     * @return {Promise} A promise that is resolved after destruction activity
+     * @return {Promise} A promise that is resolved after destruction activiti
      *                   is completed.
      */
     destroy: function () {

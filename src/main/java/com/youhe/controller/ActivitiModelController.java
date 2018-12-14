@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.youhe.utils.shiro.AuthRealm;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import com.youhe.utils.workflow.ExportFlow;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
@@ -15,6 +16,7 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import static com.youhe.utils.shiro.ShiroUserUtils.getShiroUser;
 
@@ -151,6 +156,8 @@ public class ActivitiModelController {
         processEngine.getTaskService().complete(task.getId());
         return "SUCCESS";
     }
+
+
 
 
 }

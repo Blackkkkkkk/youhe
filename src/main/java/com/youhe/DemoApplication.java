@@ -1,7 +1,7 @@
 package com.youhe;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.Test;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

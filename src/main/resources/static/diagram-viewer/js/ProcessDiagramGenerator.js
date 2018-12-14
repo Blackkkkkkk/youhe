@@ -456,7 +456,7 @@ var ProcessDiagramGenerator = {
 			//console.error("subProcess is not implemented yet");
 		};
 		
-		// call activity
+		// call activiti
 		this.activityDrawInstructions["callActivity"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -580,7 +580,7 @@ var ProcessDiagramGenerator = {
 				activitiesLength --;
 				progress += step;
 				pb1.set('value', parseInt(progress));
-				//console.log(activitiesLength, "--> activityId: " + activity.getId() + ", name: " + activity.getProperty("name"));
+				//console.log(activitiesLength, "--> activityId: " + activiti.getId() + ", name: " + activiti.getProperty("name"));
 				ProcessDiagramGenerator.drawActivity(processDiagramCanvas, activity);
 			});
 			
@@ -750,12 +750,12 @@ var ProcessDiagramGenerator = {
 		if (drawInstruction != null) {	
 			drawInstruction.apply({processDiagramCanvas:processDiagramCanvas, activity:activity});
 		} else {
-			//console.error("no drawInstruction for " + type + ": ", activity);
+			//console.error("no drawInstruction for " + type + ": ", activiti);
 		}
 		
 		// Actually draw the markers
 		if (activity.getProperty("multiInstance") != undefined || activity.getProperty("collapsed") != undefined) {
-			//console.log(activity.getProperty("name"), activity.properties);
+			//console.log(activiti.getProperty("name"), activiti.properties);
 			var multiInstanceSequential = (activity.getProperty("multiInstance") == "sequential");
 			var multiInstanceParallel = (activity.getProperty("multiInstance") == "parrallel");
 			var collapsed = activity.getProperty("collapsed");
@@ -763,7 +763,7 @@ var ProcessDiagramGenerator = {
 					multiInstanceSequential, multiInstanceParallel, collapsed);
 		}
 		/*
-		processDiagramCanvas.drawActivityMarkers(activity.getX(), activity.getY(), activity.getWidth(), activity.getHeight(), multiInstanceSequential,
+		processDiagramCanvas.drawActivityMarkers(activiti.getX(), activiti.getY(), activiti.getWidth(), activiti.getHeight(), multiInstanceSequential,
               multiInstanceParallel, collapsed);
 		*/
 

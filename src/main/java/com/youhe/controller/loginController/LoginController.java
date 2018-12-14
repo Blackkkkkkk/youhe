@@ -9,6 +9,8 @@ import com.youhe.utils.shiro.AuthRealm;
 import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import com.youhe.utils.workflow.ExportFlow;
+import org.activiti.engine.ProcessEngine;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -47,6 +49,9 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    ProcessEngine processEngine;
 
 
     @RequestMapping(value = "/")
@@ -111,6 +116,10 @@ public class LoginController {
     @RequestMapping(value = "/index")
     public String index() {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+
+        ExportFlow export = new ExportFlow();
+
+      //  export.Export(processEngine,"4");
 
         log.debug(shiroUser.getUserName() + ">>>>>>>>>>>>登录成功");
 
