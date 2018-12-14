@@ -314,5 +314,40 @@ public class ActivitiController {
         return hashMap;
     }
 
+    /**
+     * 删除流程流程
+     */
+    @RequestMapping("/del")
+    @ResponseBody
+    public Map<String, String> del(String keyName) {
+        Map<String, String> hashMap = new HashMap<String, String>();
+        String message = "流程删除成功!";
+        String state = "fail";
+
+
+        try {
+
+            RepositoryService repositoryService = processEngine.getRepositoryService();
+            // 获取仓库服务对象
+
+
+            // 普通删除，如果当前规则下有正在执行的流程，则抛异常
+            // repositoryService.deleteDeployment(keyName);
+            // 级联删除,会删除和当前规则相关的所有信息，包括历史
+            repositoryService.deleteDeployment(keyName, true);
+
+            state = "success";
+        } catch (ActivitiException e) {
+
+            message = "流程删除失败！";
+            log.debug("activationProcess erro:" + e);
+        }
+
+        hashMap.put("message", message);
+        hashMap.put("state", state);
+
+        return hashMap;
+    }
+
 
 }
