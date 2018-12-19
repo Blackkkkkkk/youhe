@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>部门管理</title>
+<#include "/header.html">
+<link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap-table.min.css">
+<link rel="stylesheet" href="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.css">
+<script src="${request.contextPath}/statics/libs/bootstrap-table.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
+<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.extension.js"></script>
+<script src="${request.contextPath}/statics/plugins/treegrid/tree.table.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<#if shiro.hasPermission("sys:dept:save")>
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sys:dept:update")>
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sys:dept:delete")>
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+		</div>
+		<table id="deptTable" data-mobile-responsive="true" data-click-to-select="true">
+			<thead>
+			<tr>
+				<th data-field="selectItem" data-checkbox="true"></th>
+			</tr>
+			</thead>
+		</table>
+	</div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">部门名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="dept.name" placeholder="部门名称"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">上级部门</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="dept.parentName" @click="deptTree" readonly="readonly" placeholder="一级部门"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">排序号</div>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" v-model="dept.orderNum" placeholder="排序号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- 选择部门 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+	
+	<div class="wrapper">
+	<div class="treeShowHideButton" onclick="search();">
+		<label id="btnShow" title="显示搜索" style="display:none;">︾</label>
+		<label id="btnHide" title="隐藏搜索">︽</label>
+	</div>
+	<div class="treeSearchInput" id="search">
+		<label for="keyword">关键字：</label><input type="text" class="empty" id="keyword" maxlength="50">
+		<button class="btn" id="btn" onclick="searchNode()"> 搜索 </button>
+	</div>
+	<div class="treeExpandCollapse">
+		<a href="javascript:" id="btnExpand">展开</a> /
+		<a href="javascript:" id="btnCollapse">折叠</a>
+	</div>
+	<div id="deptTree" class="ztree"></div>
+	</div>
+</div>
+<script src="${request.contextPath}/statics/js/modules/sys/dept.js?_${.now?long}"></script>
+	<script src="${request.contextPath}/statics/js/ztree.js"></script>
+	
+	<script>
+	var lastValue = "", nodeList = [], key = $("#keyword");
+		key.bind("focus", focusKey).bind("blur", blurKey).bind("change cut input propertychange", searchNode);
+		key.bind("keydown", function (e){if(e.which == 13){searchNode();}});
+	
+		function focusKey(e) {
+			if (key.hasClass("empty")) {
+				key.removeClass("empty");
+			}
+		}
+	
+		function blurKey(e) {
+			if (key.get(0).value === "") {
+				key.addClass("empty");
+			}
+			searchNode(e);
+		}
+	
+		function searchNode() {
+			var value = $.trim(key.get(0).value);
+			var keyType = "name";
+			if (lastValue === value) {
+				return;
+			}
+			lastValue = value;
+			var nodes = ztree.getNodes();
+			if (value == "") {
+				showAllNode(nodes);
+				return;
+			}
+			hideAllNode(nodes);
+			nodeList = ztree.getNodesByParamFuzzy(keyType, value);
+			updateNodes(nodeList);
+		}
+	
+		function hideAllNode(nodes){
+			//var ztree = $.fn.zTree.getZTreeObj("deptTree");
+			nodes = ztree.transformToArray(nodes);
+			for(var i=nodes.length-1; i>=0; i--) {
+				ztree.hideNode(nodes[i]);
+			}
+		}
+	
+		function showAllNode(nodes){
+			nodes = ztree.transformToArray(nodes);
+			for(var i=nodes.length-1; i>=0; i--) {
+				if(nodes[i].getParentNode()!=null){
+					ztree.expandNode(nodes[i],false,false,false,false);
+				}else{
+					ztree.expandNode(nodes[i],true,true,false,false);
+				}
+				ztree.showNode(nodes[i]);
+				showAllNode(nodes[i].children);
+			}
+		}
+	
+		function updateNodes(nodeList) {
+			ztree.showNodes(nodeList);
+			for(var i=0, l=nodeList.length; i<l; i++) {
+				var treeNode = nodeList[i];
+				showChildren(treeNode);
+				showParent(treeNode)
+			}
+		}
+	
+		function showChildren(treeNode){
+			if (treeNode.isParent){
+				for(var idx in treeNode.children){
+					var node = treeNode.children[idx];
+					ztree.showNode(node);
+					showChildren(node);
+				}
+			}
+		}
+		function showParent(treeNode){
+			var parentNode;
+			while((parentNode = treeNode.getParentNode()) != null){
+				ztree.showNode(parentNode);
+				ztree.expandNode(parentNode, true, false, false);
+				treeNode = parentNode;
+			}
+		}
+	
+		function search($this) {
+			$('#search').slideToggle(200);
+			$('#btnShow').toggle();
+			$('#btnHide').toggle();
+			$('#keyword').focus();
+		}
+		
+$(function () {
+		    
+		    
+		    $('#btnExpand').click(function() {
+				ztree.expandAll(true);
+			});
+			$('#btnCollapse').click(function() {
+				ztree.expandAll(false);
+			});
+		});
+	</script>
+</body>
+</html>
