@@ -33,7 +33,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
  * aop 处理事务
  */
 @Aspect
-@Configuration
+//@Configuration
 public class TransactionAdviceConfig {
     private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.youhe.serviceImpl.*.*(..))";
     @Autowired

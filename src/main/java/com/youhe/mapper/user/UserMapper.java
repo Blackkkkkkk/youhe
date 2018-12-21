@@ -19,4 +19,14 @@ public interface UserMapper {
     //更新用户
     void update(User user);
 
+    //查找用户表
+    List<User> findOnlyUserList(User user);
+
+    //保存用户
+    void save(User user);
+
+    //删除用户
+    void del(User user);
+
+
 }

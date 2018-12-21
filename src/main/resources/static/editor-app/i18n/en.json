@@ -75,7 +75,7 @@
     "PROPERTY.ASSIGNMENT.TYPE" : "Type",
     "PROPERTY.ASSIGNMENT.TYPE.IDENTITYSTORE" : "Identity store",
     "PROPERTY.ASSIGNMENT.TYPE.STATIC" : "Static values",
-    "PROPERTY.ASSIGNMENT.ASSIGNEE" : "Assignee",
+    "PROPERTY.ASSIGNMENT.ASSIGNEE" : "委托人",
     "PROPERTY.ASSIGNMENT.MATCHING" : "Use &uparrow; and &downarrow; to select and press Enter to confirm or use the mouse",
     "PROPERTY.ASSIGNMENT.ASSIGNEE_PLACEHOLDER" : "Enter an assignee",
     "PROPERTY.ASSIGNMENT.EMPTY" : "No assignment selected",

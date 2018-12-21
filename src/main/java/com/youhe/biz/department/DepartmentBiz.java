@@ -3,19 +3,20 @@ package com.youhe.biz.department;
 
 import com.youhe.entity.activitiData.ACT_RE_MODEL_PROCDEF;
 import com.youhe.entity.department.Department;
+import com.youhe.entity.department.User_Department;
+import com.youhe.entity.role.User_Role;
 import com.youhe.mapper.activiti.ActivitiMapper;
 import com.youhe.mapper.department.DepartmentMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 
-@Service
-@Transactional
 public class DepartmentBiz {
     private Logger log = LoggerFactory.getLogger(DepartmentBiz.class);
 
@@ -46,5 +47,21 @@ public class DepartmentBiz {
         log.debug("add:");
         departmentMapper.add(department);
     }
+
+    // 更新 用户-部门表
+    public void update_user_department(User_Department user_department) {
+        departmentMapper.update_user_department(user_department);
+    }
+
+    // 保存 用户-部门表
+    public void save_user_department(User_Department user_department) {
+        departmentMapper.save_user_department(user_department);
+    }
+
+    //删除用户-部门表
+    public void del_user_departmentt(User_Department user_department) {
+        departmentMapper.del_user_departmentt(user_department);
+    }
+
 
 }

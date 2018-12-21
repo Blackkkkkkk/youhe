@@ -12,11 +12,47 @@ public class Role extends SysBaseEntity {
     private String rid;
     private String rname;//角色名
     private int available;//是否可用
+    //上级角色ID，一级部门为0
+    private Long parentId;
+
+    /**
+     * ztree属性
+     */
+    private Boolean open;
+
+
+
+    //上级角色名称
+    private String parentName;
 
     private Set<User> users = new HashSet<>();
 
     private Set<Permission> permissions = new HashSet<>();
 
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public Boolean getOpen() {
+        return open;
+    }
+
+    public void setOpen(Boolean open) {
+        this.open = open;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 
     public String getRid() {
         return rid;

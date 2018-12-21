@@ -1,4 +1,4 @@
-package com.youhe.controller.department;
+package com.youhe.controller.sys.department;
 
 import com.youhe.controller.loginController.LoginController;
 import com.youhe.entity.department.Department;
@@ -6,7 +6,6 @@ import com.youhe.service.department.DepartmentService;
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class DepartmentController {
     public String index() {
 
         System.out.println("123");
-        return "dept/department";
+        return "sys/dept/department";
     }
 
 

@@ -126,6 +126,7 @@
         var value = $.trim(key.get(0).value);
         var keyType = "name";
         if (lastValue === value) {
+
             return;
         }
         lastValue = value;
@@ -136,6 +137,7 @@
         }
         hideAllNode(nodes);
         nodeList = ztree.getNodesByParamFuzzy(keyType, value);
+
         updateNodes(nodeList);
     }
 

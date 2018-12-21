@@ -31,25 +31,12 @@
         <result property="email" column="EMAIL"/>
         <result property="locked" column="LOCKED"/>
         <result property="registerDate" column="REGISTER_DATE"/>
+        <result property="userPassword" column="USER_PASSWORD"/>
+        <result property="roleId" column="ROLE_ID"></result>
+        <result property="departmentId" column="DEPARTMENT_ID"></result>
+        <result property="roleName" column="ROLE_NAME"></result>
+        <result property="departmentName" column="DEPARTMENT_NAME"></result>
     </resultMap>
-
-
-    <select id="findByUserName" parameterType="string" resultMap="userMap">
-        SELECT u.*,r.*,p.* FROM sys_user u inner join sys_user_role ur on ur.sys_user_id=u.uid
-        inner join sys_role r on r.rid=ur.sys_role_id
-        inner join sys_role_permission mr on mr.sys_role_id=r.rid
-        inner join sys_permission p on mr.sys_permission_id=p.pid
-        WHERE USER_ACCOUNT=#{userAccount};
-    </select>
-
-
-    <select id="findUserList" parameterType="string" resultMap="userMap">
-        SELECT u.*,r.*,p.* FROM sys_user u inner join sys_user_role ur on ur.sys_user_id=u.uid
-        inner join sys_role r on r.rid=ur.sys_role_id
-        inner join sys_role_permission mr on mr.sys_role_id=r.rid
-        inner join sys_permission p on mr.sys_permission_id=p.pid
-        WHERE USER_ACCOUNT=#{userAccount};
-    </select>
 
 
     <update id="update" parameterType="com.youhe.entity.user.User">
@@ -67,10 +54,108 @@
             <if test="phone != null and phone != ''">
                 u.phone = #{phone,jdbcType=VARCHAR},
             </if>
+            <if test="email != null and email != ''">
+                u.EMAIL = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="locked != null ">
+                u.LOCKED = #{locked,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null and roleId != ''">
+                u.ROLE_ID = #{roleId,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentId != null and departmentId != ''">
+                u.DEPARTMENT_ID = #{departmentId,jdbcType=VARCHAR},
+            </if>
         </set>
-        where 1 = 1 and u.USER_ACCOUNT = #{userAccount}
-
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="userAccount!=null and userAccount !=''">
+                    AND USER_ACCOUNT=#{userAccount}
+                </if>
+                <if test="uid!=null">
+                    AND UID=#{uid}
+                </if>
+            </trim>
+        </where>
     </update>
+
+
+    <select id="findByUserName" parameterType="string" resultMap="userMap">
+        SELECT u.*,r.*,p.* FROM sys_user u
+        inner join sys_user_role ur on ur.sys_user_id=u.uid
+        inner join sys_role r on r.rid=ur.sys_role_id
+        inner join sys_role_permission mr on mr.sys_role_id=r.rid
+        inner join sys_permission p on mr.sys_permission_id=p.pid
+        WHERE USER_ACCOUNT=#{userAccount};
+    </select>
+
+    <!-- 查询用户所有权限，包括角色和部门-->
+    <select id="findUserList" parameterType="string" resultMap="userMap">
+        SELECT u.*,r.*,p.* FROM sys_user u
+        inner join sys_user_role ur on ur.sys_user_id=u.uid
+        inner join sys_role r on r.rid=ur.sys_role_id
+
+        <!--
+                inner join sys_user_department ud on ud.sys_user_id=u.uid
+                inner join sys_department d on d.DEPT_ID=ud.sys_department_id
+          -->
+        inner join sys_role_permission mr on mr.sys_role_id=r.rid
+        inner join sys_permission p on mr.sys_permission_id=p.pid
+        WHERE
+
+        USER_ACCOUNT=#{userAccount}
+
+    </select>
+
+    <!--单独查询用户表-->
+    <select id="findOnlyUserList" parameterType="com.youhe.entity.user.User" resultMap="userList">
+        SELECT DISTINCT u.* , r.RNAME ROLE_NAME ,d.NAME DEPARTMENT_NAME FROM sys_user u
+        LEFT JOIN sys_role r on r.rid=u.ROLE_ID
+        LEFT JOIN sys_department d on d.DEPT_ID=u.DEPARTMENT_ID
+        WHERE
+        1 =1
+        <if test="userAccount!=null and userAccount !=''">
+            AND USER_ACCOUNT=#{userAccount}
+        </if>
+        <if test="uid!=null">
+            AND UID=#{uid}
+        </if>
+    </select>
+
+
+    <insert id="save" parameterType="com.youhe.entity.user.User" keyProperty="uid"
+            useGeneratedKeys="true">
+        insert into sys_user(
+        USER_ACCOUNT,
+        USER_NAME,
+        USER_PASSWORD,
+        SALT,
+        LOCKED,
+        REGISTER_DATE,
+        PHONE,
+        EMAIL,
+        ROLE_ID,
+        DEPARTMENT_ID,
+        ORDER_NUM
+        )
+        values(
+        #{userAccount,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR},
+        #{userPassword,jdbcType=VARCHAR},
+        #{salt,jdbcType=VARCHAR},
+        0,
+        NOW(),
+        #{phone,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR},
+        #{roleId,jdbcType=VARCHAR},
+        #{departmentId,jdbcType=VARCHAR},
+        #{orderNum,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="del" parameterType="com.youhe.entity.user.User">
+        DELETE from  sys_user where UID = #{uid}
+    </delete>
 
 
 </mapper>

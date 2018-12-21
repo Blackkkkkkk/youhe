@@ -12,6 +12,12 @@
     </resultMap>
 
 
+    <resultMap id="department_use_list" type="com.youhe.entity.department.User_Department">
+        <id column="id" property="id"></id>
+        <result column="sys_user_id" property="sys_user_id"></result>
+        <result column="sys_department_id" property="sys_department_id"></result>
+    </resultMap>
+
     <select id="findDepartMentList" parameterType="com.youhe.entity.department.Department" resultMap="departmentList">
         select * , (SELECT `NAME` from sys_department where DEPT_ID = de.PARENT_ID) PARENT_NAME from sys_department de
         where
@@ -33,18 +39,20 @@
     <update id="update" parameterType="com.youhe.entity.department.Department">
         UPDATE sys_department
         SET
-        <if test="parentId != null">
-            PARENT_ID =#{parentId},
-        </if>
-        <if test="name != null and name!=''">
-            NAME=#{name},
-        </if>
-        <if test="orderNum != null">
-            ORDER_NUM =#{orderNum},
-        </if>
-        <if test="status != null">
-            STATUS =#{status},
-        </if>
+        <trim suffixOverrides=",">
+            <if test="parentId != null">
+                PARENT_ID =#{parentId},
+            </if>
+            <if test="name != null and name!=''">
+                NAME=#{name},
+            </if>
+            <if test="orderNum != null">
+                ORDER_NUM =#{orderNum},
+            </if>
+            <if test="status != null">
+                STATUS =#{status},
+            </if>
+        </trim>
         WHERE DEPT_ID=#{deptId}
     </update>
 
@@ -52,5 +60,49 @@
             useGeneratedKeys="true">
               insert into sys_department(PARENT_ID,NAME,ORDER_NUM,STATUS) value(#{parentId},#{name},#{orderNum},1)
     </insert>
+
+
+    <!-- 更新部门-用户表 -->
+    <update id="update_user_department" parameterType="com.youhe.entity.department.User_Department">
+        UPDATE sys_user_department
+        <set>
+            <trim suffixOverrides=",">
+                <if test="sys_user_id !=null and sys_user_id !=''">
+                    sys_user_id = #{sys_user_id,jdbcType=VARCHAR},
+                </if>
+                <if test="sys_department_id!= null and sys_department_id !=''">
+                    sys_department_id = #{sys_department_id,jdbcType=VARCHAR},
+                </if>
+            </trim>
+        </set>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id !=null and id !=''">
+                    AND id = #{id,jdbcType=INTEGER}
+                </if>
+                <if test="sys_user_id !=null and sys_user_id !=''">
+                    AND sys_user_id = #{sys_user_id,jdbcType=VARCHAR}
+                </if>
+            </trim>
+        </where>
+    </update>
+
+
+    <insert id="save_user_department" parameterType="com.youhe.entity.department.User_Department" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into sys_user_department(
+        sys_user_id,
+        sys_department_id
+        )
+        values(
+        #{sys_user_id,jdbcType=VARCHAR},
+        #{sys_department_id,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <delete id="del_user_departmentt" parameterType="com.youhe.entity.department.User_Department">
+        DELETE from  sys_user_department where sys_user_id = #{sys_user_id}
+    </delete>
 
 </mapper>

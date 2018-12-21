@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class User  implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,13 +18,66 @@ public class User  implements Serializable {
     private String phone;  //手机号码
     private String email;//邮箱
     private Date registerDate; //注册时间
-    private Long locked;//状态
+    private Long locked;//状态 账号是否锁定，1：锁定，0未锁定
     private String userPassword;// 密码
     private String salt;// 密码干扰
+
+    private String roleId;//角色id
+
+    private String departmentId;//部门 id
+
+    private int orderNum; // 排序
+
+
+    //查询属性
+
+    private String roleName;//角色名
+    private String departmentName;// 部门名字
 
 
     private Set<Role> roles = new HashSet<>();
 
+
+    public int getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(int orderNum) {
+        this.orderNum = orderNum;
+    }
+
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 
     public Set<Role> getRoles() {
         return roles;

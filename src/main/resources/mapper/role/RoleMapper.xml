@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.role.RoleMapper">
+
+
+    <resultMap type="com.youhe.entity.role.Role" id="roleList">
+        <id property="rid" column="RID"/>
+        <result property="rname" column="RNAME"/>
+        <result property="available" column="AVAILABLE"/>
+        <result property="parentId" column="PARENT_ID"></result>
+    </resultMap>
+
+
+    <resultMap id="role_use_list" type="com.youhe.entity.role.User_Role">
+        <id column="id" property="id"></id>
+        <result column="sys_user_id" property="sys_user_id"></result>
+        <result column="sys_role_id" property="sys_role_id"></result>
+    </resultMap>
+
+
+    <!-- 查询角色-->
+    <select id="findRoleList" parameterType="com.youhe.entity.role.Role" resultMap="roleList">
+        SELECT * FROM sys_role
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="rid !=null and rid!=''">
+                    AND RID=#{rid,jdbcType=VARCHAR}
+                </if>
+                <if test="rname!=null and rname !=''">
+                    AND RNAME=#{rname,jdbcType=VARCHAR}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+
+    <!-- 更新角色-用户表 -->
+    <update id="update_user_Role" parameterType="com.youhe.entity.role.User_Role">
+        UPDATE sys_user_role
+        <set>
+            <trim suffixOverrides=",">
+                <if test="sys_user_id !=null and sys_user_id !=''">
+                    sys_user_id = #{sys_user_id,jdbcType=VARCHAR},
+                </if>
+                <if test="sys_role_id!= null and sys_role_id !=''">
+                    sys_role_id = #{sys_role_id,jdbcType=VARCHAR},
+                </if>
+            </trim>
+        </set>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id !=null and id !=''">
+                    AND id = #{id,jdbcType=INTEGER}
+                </if>
+                <if test="sys_user_id !=null and sys_user_id !=''">
+                    AND sys_user_id = #{sys_user_id,jdbcType=VARCHAR}
+                </if>
+            </trim>
+        </where>
+    </update>
+
+
+    <insert id="save_user_Role" parameterType="com.youhe.entity.role.User_Role" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into sys_user_role(
+        sys_user_id,
+        sys_role_id
+        )
+        values(
+        #{sys_user_id,jdbcType=VARCHAR},
+        #{sys_role_id,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="del_user_Role" parameterType="com.youhe.entity.role.User_Role">
+        DELETE  from sys_user_role where sys_user_id = #{sys_user_id}
+    </delete>
+
+
+</mapper>

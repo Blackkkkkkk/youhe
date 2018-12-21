@@ -40,6 +40,7 @@ var vm = new Vue({
             $.get("/department/select", function (r) {
                 ztree = $.fn.zTree.init($("#deptTree"), setting, r.deptList);
                 var node = ztree.getNodeByParam("deptId", vm.dept.parentId);
+
                 ztree.selectNode(node);
                 vm.dept.parentName = node.name;
             })

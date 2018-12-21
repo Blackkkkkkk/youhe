@@ -13,9 +13,11 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class AuthRealm extends AuthorizingRealm {
@@ -28,14 +30,27 @@ public class AuthRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken utoken = (UsernamePasswordToken) token;//获取用户输入的token
         String username = utoken.getUsername();
-        User user = userService.findByUserName(username);
+
+
+        User search = new User();
+        search.setUserAccount(username);
+
+        User user = userService.findOnlyUserList(search).get(0);
+
+        // User user =userService.findByUserName(username);
         return new SimpleAuthenticationInfo(user, user.getUserPassword(), this.getClass().getName());//放入shiro.调用CredentialsMatcher检验密码
     }
 
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        User user = (User) principal.fromRealm(this.getClass().getName()).iterator().next();//获取session中的用户
+        User user = (User) principal.fromRealm(this.getClass().getName()).iterator().next();//获
+
+
+        if (isNotEmpty(userService.findByUserName(user.getUserAccount()))) {
+            user = userService.findByUserName(user.getUserAccount());
+        }
+        // 取session中的用户
         List<String> permissions = new ArrayList<>();
         Set<Role> roles = user.getRoles();
         if (roles.size() > 0) {
@@ -69,11 +84,11 @@ public class AuthRealm extends AuthorizingRealm {
 		matcher.setHashIterations(Constant.HASH_INTERATIONS);
 		setCredentialsMatcher(matcher);*/
     //setCredentialsMatcher(matcher);
-        /*System.out.println(new CustomCredentialsMatcher());
+        /*System.out.println(new CredentialsMatcher());
         System.out.println(matcher);*/
     // 重写校验
     /*
-        setCredentialsMatcher(new CustomCredentialsMatcher());
+        setCredentialsMatcher(new CredentialsMatcher());
     }
 */
 
@@ -93,7 +108,6 @@ public class AuthRealm extends AuthorizingRealm {
         private Long locked;//状态
         private String userPassword;// 密码
         private String salt;// 密码干扰
-
 
 
         public ShiroUser(Long uid, String userAccount, String userName, String phone, String email, Date registerDate
@@ -222,6 +236,23 @@ public class AuthRealm extends AuthorizingRealm {
             }
             return true;
         }
+    }
+
+    /**
+     * 判断对象是否为空或null
+     */
+    public static boolean isEmpty(Object obj) {
+        if (obj == null) return true;
+        else if (obj instanceof CharSequence) return ((CharSequence) obj).length() == 0;
+        else if (obj instanceof Collection) return ((Collection) obj).isEmpty();
+        else if (obj instanceof Map) return ((Map) obj).isEmpty();
+        else if (obj.getClass().isArray()) return Array.getLength(obj) == 0;
+
+        return false;
+    }
+
+    public static boolean isNotEmpty(Object obj) {
+        return !isEmpty(obj);
     }
 
 }

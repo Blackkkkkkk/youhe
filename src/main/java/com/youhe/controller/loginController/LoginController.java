@@ -75,13 +75,13 @@ public class LoginController {
             userLogin.setUserAccount(user.getUserAccount());
             userService.findUserList(userLogin);
 
-            List<User> list = userService.findUserList(userLogin);
+            List<User> list = userService.findOnlyUserList(userLogin);
             if (!CollectionUtils.isEmpty(list)) {
                 userLogin = list.get(0);
 
             }
 
-            InitUsernamePasswordToken initUsernamePasswordToken = new InitUsernamePasswordToken(userLogin.getUserAccount(), userLogin.getUserPassword(), 1, userLogin.getSalt());
+            InitUsernamePasswordToken initUsernamePasswordToken = new InitUsernamePasswordToken(userLogin.getUserAccount(), user.getUserPassword(), 1, userLogin.getSalt());
 
 
             subject.login(initUsernamePasswordToken);   //完成登录
@@ -144,7 +144,7 @@ public class LoginController {
                 log.debug(shiroUser.getUserName() + ">>>>>>>>>>>>退出登录");
             }
         }
-        return "redirect:login/login";
+        return "redirect:";
     }
 
 }
