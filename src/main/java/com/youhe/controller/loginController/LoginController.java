@@ -1,10 +1,10 @@
 package com.youhe.controller.loginController;
 
 import com.youhe.biz.test.TestBiz;
+import com.youhe.biz.user.UserBiz;
 import com.youhe.entity.user.User;
 import com.youhe.mapper.test.TestMapper;
-import com.youhe.service.test.TestService;
-import com.youhe.service.user.UserService;
+
 import com.youhe.utils.shiro.AuthRealm;
 import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
@@ -48,7 +48,7 @@ public class LoginController {
 
 
     @Autowired
-    private UserService userService;
+    private UserBiz userBiz;
 
     @Autowired
     ProcessEngine processEngine;
@@ -73,9 +73,9 @@ public class LoginController {
             User userLogin = new User();
 
             userLogin.setUserAccount(user.getUserAccount());
-            userService.findUserList(userLogin);
+            userBiz.findUserList(userLogin);
 
-            List<User> list = userService.findOnlyUserList(userLogin);
+            List<User> list = userBiz.findOnlyUserList(userLogin);
             if (!CollectionUtils.isEmpty(list)) {
                 userLogin = list.get(0);
 

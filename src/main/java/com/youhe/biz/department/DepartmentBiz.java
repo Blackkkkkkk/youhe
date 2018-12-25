@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
+@Service
 public class DepartmentBiz {
     private Logger log = LoggerFactory.getLogger(DepartmentBiz.class);
 

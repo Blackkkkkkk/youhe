@@ -1,11 +1,11 @@
 package com.youhe.utils.shiro;
 
+import com.youhe.biz.user.UserBiz;
 import com.youhe.common.Constant;
 import com.youhe.entity.SysBaseEntity;
 import com.youhe.entity.permission.Permission;
 import com.youhe.entity.role.Role;
 import com.youhe.entity.user.User;
-import com.youhe.service.user.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -23,7 +23,7 @@ import java.util.*;
 public class AuthRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService userService;
+    private UserBiz userBiz;
 
     //认证.登录
     @Override
@@ -35,7 +35,7 @@ public class AuthRealm extends AuthorizingRealm {
         User search = new User();
         search.setUserAccount(username);
 
-        User user = userService.findOnlyUserList(search).get(0);
+        User user = userBiz.findOnlyUserList(search).get(0);
 
         // User user =userService.findByUserName(username);
         return new SimpleAuthenticationInfo(user, user.getUserPassword(), this.getClass().getName());//放入shiro.调用CredentialsMatcher检验密码
@@ -47,8 +47,8 @@ public class AuthRealm extends AuthorizingRealm {
         User user = (User) principal.fromRealm(this.getClass().getName()).iterator().next();//获
 
 
-        if (isNotEmpty(userService.findByUserName(user.getUserAccount()))) {
-            user = userService.findByUserName(user.getUserAccount());
+        if (isNotEmpty(userBiz.findByUserName(user.getUserAccount()))) {
+            user = userBiz.findByUserName(user.getUserAccount());
         }
         // 取session中的用户
         List<String> permissions = new ArrayList<>();

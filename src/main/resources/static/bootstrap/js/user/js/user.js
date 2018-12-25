@@ -53,6 +53,7 @@ var vm = new Vue({
     },
     methods: {
         add: function () {
+            $("#myForm").bootstrapValidator('resetForm');
             vm.showList = false;
             $('#userAccount').removeAttr("disabled");
 
@@ -76,6 +77,8 @@ var vm = new Vue({
         reload: function () {
             vm.showList = true;
             User.table.refresh();
+            $("#myForm").bootstrapValidator('resetForm');
+            $('#myForm').bootstrapTable('destroy');
         },
         getRole: function () {
             //加载部门树
@@ -159,7 +162,39 @@ var vm = new Vue({
             });
         },
         saveOrUpdate: function (event) {
+
+            var bootstrapValidator = $("#myForm").data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = vm.User.uid == null ? "/user/save" : "/user/update";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    contentType: "application/json",
+                    data: JSON.stringify(vm.User),
+                    success: function (r) {
+                        if (r.code === 0) {
+                            layer.msg('操作成功', {icon: 1, time: 1000}, function () {
+                                vm.reload();
+                                $("#myForm").bootstrapValidator('resetForm');
+                            });
+                        } else {
+                            layer.msg(r.msg, {icon: 2, time: 1000});
+                            vm.reload();
+                            $("#myForm").bootstrapValidator('resetForm');
+                        }
+                    }
+                })
+            }
+            else {
+                return;
+            }
+
+
+            /*
+
             var url = vm.User.uid == null ? "/user/save" : "/user/update";
+
             $.ajax({
                 type: "POST",
                 url: url,
@@ -173,37 +208,13 @@ var vm = new Vue({
                             $(form).bootstrapValidator('resetForm');
                         });
                     } else {
-                        layer.msg(r.msg, {icon: 2, time: 1000});
+                        layer.msg(r.msg, {icon: 2, time: 1000}, function () {
+                            vm.reload();
+                            $(form).bootstrapValidator('resetForm');
+                        });
                     }
                 }
-            })
-
-/*
-            var bootstrapValidator = $("#myForm").data('bootstrapValidator');
-            bootstrapValidator.validate();
-            if (bootstrapValidator.isValid()) {
-                var url = vm.User.uid == null ? "/user/save" : "/user/update";
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    contentType: "application/json",
-                    data: JSON.stringify(vm.User),
-                    success: function (r) {
-                        if (r.code === 0) {
-                            layer.msg('操作成功', {icon: 1, time: 1000}, function () {
-
-                                vm.reload();
-                                $(form).bootstrapValidator('resetForm');
-                            });
-                        } else {
-                            layer.msg(r.msg, {icon: 2, time: 1000});
-                        }
-                    }
-                })
-            }
-            else {
-                return;
-            }*/
+            })*/
         },
         update: function () {
             var deptId = getDeptId();

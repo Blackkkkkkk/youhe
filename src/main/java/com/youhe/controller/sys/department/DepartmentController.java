@@ -1,8 +1,9 @@
 package com.youhe.controller.sys.department;
 
+import com.youhe.biz.department.DepartmentBiz;
 import com.youhe.controller.loginController.LoginController;
 import com.youhe.entity.department.Department;
-import com.youhe.service.department.DepartmentService;
+
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
@@ -27,7 +28,7 @@ import java.util.Map;
 public class DepartmentController {
 
     @Autowired
-    private DepartmentService departmentService;
+    private DepartmentBiz departmentBiz;
 
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
@@ -74,7 +75,7 @@ public class DepartmentController {
     @RequestMapping("/list")
     @ResponseBody
     public List<Department> list(Department department) {
-        List<Department> deptList = departmentService.findDepartMentList(department);
+        List<Department> deptList = departmentBiz.findDepartMentList(department);
 
         return deptList;
     }
@@ -87,7 +88,7 @@ public class DepartmentController {
     @ResponseBody
     public Map<String, List<Department>> select(Department department) {
         Map<String, List<Department>> map = new HashMap<String, List<Department>>();
-        List<Department> deptList = departmentService.findDepartMentList(department);
+        List<Department> deptList = departmentBiz.findDepartMentList(department);
 
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
         //添加一级部门
@@ -114,7 +115,7 @@ public class DepartmentController {
         department.setDeptId(deptId);
 
         try {
-            department = departmentService.findDepartMentList(department).get(0);
+            department = departmentBiz.findDepartMentList(department).get(0);
         } catch (Exception e) {
             log.info("/info/{deptId}: 查询为空");
         }
@@ -130,7 +131,7 @@ public class DepartmentController {
     @RequestMapping("/save")
     @ResponseBody
     public R save(@RequestBody Department dept) {
-        departmentService.add(dept);
+        departmentBiz.add(dept);
         return R.ok();
     }
 
@@ -140,7 +141,7 @@ public class DepartmentController {
     @RequestMapping(value = "/update")
     @ResponseBody
     public R update(@RequestBody Department dept) {
-        departmentService.update(dept);
+        departmentBiz.update(dept);
         return R.ok();
     }
 
@@ -150,7 +151,7 @@ public class DepartmentController {
     @RequestMapping("/del")
     @ResponseBody
     public R del( Department dept) {
-        departmentService.del(dept);
+        departmentBiz.del(dept);
         return R.ok();
     }
 

@@ -4,9 +4,10 @@ package com.youhe.controller.activiti;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.youhe.biz.activiti.ActivitiBiz;
 import com.youhe.controller.ActivitiModelController;
 import com.youhe.entity.activitiData.ACT_RE_MODEL_PROCDEF;
-import com.youhe.service.activiti.ActivitiService;
+
 import com.youhe.utils.shiro.AuthRealm;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
@@ -56,7 +57,7 @@ public class ActivitiController {
     ObjectMapper objectMapper;
 
     @Autowired
-    private ActivitiService activitiService;
+    private ActivitiBiz activitiBiz;
 
     @RequestMapping(value = "/edit")
     public String Eidt() {
@@ -68,7 +69,7 @@ public class ActivitiController {
     public String deployList(Model model) {
 
 
-        List<ACT_RE_MODEL_PROCDEF> list = activitiService.findList();
+        List<ACT_RE_MODEL_PROCDEF> list = activitiBiz.findList();
 
 
         model.addAttribute("list", list);
