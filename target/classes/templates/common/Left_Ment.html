@@ -48,8 +48,11 @@
                     <a href=""><i class="fa fa-cog"></i> <span class="nav-label">系统管理</span> <span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" id="systemManage_ul">
-                        <li shiro:hasPermission="sys:deptManage" id="deptManage"><a href="/department/index">部门管理</a></li>
+                        <li shiro:hasPermission="sys:deptManage" id="deptManage"><a href="/department/index">部门管理</a>
+                        </li>
+                        <li shiro:hasPermission="sys:roleManage" id="roleManage"><a href="/role/index">角色管理</a></li>
                         <li shiro:hasPermission="sys:userManage" id="userManage"><a href="/user/index">人员管理</a></li>
+                        <li shiro:hasPermission="sys:commodityManage" id="commodityManage"><a href="/user/index">商品管理</a></li>
                     </ul>
                 </li>
                 <li id="homePage">

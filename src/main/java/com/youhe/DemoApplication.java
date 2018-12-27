@@ -20,7 +20,7 @@ import java.util.List;
 @SpringBootApplication
 @ComponentScan({"com.youhe", "org.activiti.rest.diagram"})
 @EnableTransactionManagement
-//@EnableAspectJAutoProxy(exposeProxy = true)
+@EnableAspectJAutoProxy(exposeProxy = true)
 @EnableAutoConfiguration(exclude = {org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class, org.activiti.spring.boot.SecurityAutoConfiguration.class})
 @MapperScan("com.youhe.mapper")
 public class DemoApplication {
@@ -31,7 +31,5 @@ public class DemoApplication {
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
-
-
 
 }

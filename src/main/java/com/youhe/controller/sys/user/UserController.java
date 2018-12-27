@@ -4,25 +4,20 @@ import com.youhe.biz.department.DepartmentBiz;
 import com.youhe.biz.role.RoleBiz;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.controller.loginController.LoginController;
-import com.youhe.entity.department.Department;
 import com.youhe.entity.department.User_Department;
 import com.youhe.entity.role.Role;
 import com.youhe.entity.role.User_Role;
 import com.youhe.entity.user.User;
 
-import com.youhe.serviceImpl.Controller.UserController.UserControllerImpl;
+import com.youhe.serviceImpl.Controller.userController.UserControllerImpl;
 
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

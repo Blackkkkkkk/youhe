@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.permisson.PermissonMapper">
+
+
+    <resultMap type="com.youhe.entity.permission.Permission" id="permission">
+        <id property="pid" column="PID"/>
+        <result property="pname" column="PNAME"/>
+        <result property="type" column="TYPE"/>
+        <result property="url" column="URL"></result>
+        <result property="percode" column="PERCODE"></result>
+        <result property="parentid" column="PARENTID"/>
+        <result property="parentids" column="PARENTIDS"/>
+        <result property="sortstring" column="SORTSRING"/>
+        <result property="available" column="AVAILABLE"/>
+    </resultMap>
+
+
+    <resultMap id="save_Permission_Role" type="com.youhe.entity.permission.Permission_Role">
+        <id property="id" column="id"/>
+        <result property="sys_permission_id" column="sys_permission_id"></result>
+        <result property="sys_role_id" column="sys_role_id"></result>
+    </resultMap>
+
+    <!-- 查询权限-->
+    <select id="findPermissionList" parameterType="com.youhe.entity.permission.Permission" resultMap="permission">
+        SELECT * FROM sys_permission
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="pid !=null and pid !=''">
+                    AND PID=#{pid}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <insert id="save_permission_role" parameterType="com.youhe.entity.permission.Permission_Role"
+            keyProperty="id"
+            useGeneratedKeys="true">
+        insert into sys_role_permission(
+        sys_permission_id,
+        sys_role_id
+        )
+        values(
+        #{sys_permission_id},
+        #{sys_role_id}
+        )
+    </insert>
+
+    <delete id="del_permission_role" parameterType="com.youhe.entity.permission.Permission_Role">
+        DELETE  from sys_role_permission where sys_role_id = #{sys_role_id}
+    </delete>
+
+
+    <select id="find_permission_roleList" parameterType="com.youhe.entity.permission.Permission_Role" resultMap="save_Permission_Role">
+       SELECT * from sys_role_permission where sys_role_id = #{sys_role_id}
+    </select>
+
+</mapper>

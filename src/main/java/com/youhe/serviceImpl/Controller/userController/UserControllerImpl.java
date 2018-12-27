@@ -1,4 +1,4 @@
-package com.youhe.serviceImpl.Controller.UserController;
+package com.youhe.serviceImpl.Controller.userController;
 
 import com.youhe.biz.department.DepartmentBiz;
 import com.youhe.biz.role.RoleBiz;
@@ -6,16 +6,12 @@ import com.youhe.biz.user.UserBiz;
 import com.youhe.entity.department.User_Department;
 import com.youhe.entity.role.User_Role;
 import com.youhe.entity.user.User;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 
 @Service
-
 public class UserControllerImpl {
 
     @Autowired
@@ -47,7 +43,8 @@ public class UserControllerImpl {
             user_department.setSys_user_id(user.getUid() + "");
             user_department.setSys_department_id(user.getDepartmentId());
             departmentBiz.save_user_department(user_department);
-        }
 
+        }
     }
+
 }

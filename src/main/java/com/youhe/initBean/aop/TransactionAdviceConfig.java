@@ -5,10 +5,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.youhe.controller.loginController.LoginController;
+import com.youhe.utils.shiro.ShiroUser;
+import com.youhe.utils.shiro.ShiroUserUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -38,6 +43,8 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 @Configuration
 public class TransactionAdviceConfig {
     // private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.youhe.serviceImpl.*.*(..))";
+
+    private static final Logger log = LoggerFactory.getLogger(TransactionAdviceConfig.class);
 
     private static final int TX_METHOD_TIMEOUT = 5;
     private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.youhe.biz.*.*(..))";
@@ -80,20 +87,54 @@ public class TransactionAdviceConfig {
         //return new DefaultPointcutAdvisor(pointcut, txAdvice);
     }
 
-
+/*
     //该方法是一个前置通知：在目标方法执行之前执行
     @Before(value = "execution(* com.youhe..*())")
     public void beforeMethod(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         System.out.println("the method " + methodName + " begin with " + Arrays.asList(joinPoint.getArgs()));
-    }
+    }*/
 
+/*
     //该方法是一个后置通知：在目标方法执行之后执行（无论是否发生异常）
     @After(value = "execution(* com.youhe..*())")
     public void afterMethod(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         System.out.println("the method " + methodName + " end");
+    }*/
+
+    // 1、前置通知： 在目标方法开始之前执行（就是要告诉该方法要在哪个类哪个方法前执行）
+// @Before("execution(public int Spring4_AOP.aopAnnotation.*.*(int ,int))")
+    @Before(value = "execution(* com.youhe..*())")
+    public void beforeMethod(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        String className = joinPoint.getTarget().getClass().getName();
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        String name = "";
+
+        if (shiroUser.getUserName() != null && shiroUser.getUserName() != "") {
+            name = shiroUser.getUserName();
+        } else {
+            name = "游客";
+        }
+
+        log.info("【" + name + "】调用了:" + className + "类的" + methodName + "方法开始了");
     }
 
+
+    @After(value = "execution(* com.youhe..*())")
+    public void afterMethod(JoinPoint joinPoint) {
+        String className = joinPoint.getTarget().getClass().getName();
+        String methodName = joinPoint.getSignature().getName();
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        String name = "";
+
+        if (shiroUser.getUserName() != null && shiroUser.getUserName() != "") {
+            name = shiroUser.getUserName();
+        } else {
+            name = "游客";
+        }
+        log.info("【" + name + "】调用完了:" + className + "类的" + methodName +"方法");
+    }
 
 }

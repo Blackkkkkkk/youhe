@@ -13,3 +13,6 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   config-location: classpath:mybatis-page-config.xml
+
+mapper:
+  mappers: com.youhe.mapper

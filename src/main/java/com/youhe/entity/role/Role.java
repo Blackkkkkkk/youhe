@@ -5,6 +5,7 @@ import com.youhe.entity.permission.Permission;
 import com.youhe.entity.user.User;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Role extends SysBaseEntity {
@@ -14,6 +15,8 @@ public class Role extends SysBaseEntity {
     private int available;//是否可用
     //上级角色ID，一级部门为0
     private Long parentId;
+    //排序
+    private Integer orderNum;
 
     /**
      * ztree属性
@@ -21,14 +24,33 @@ public class Role extends SysBaseEntity {
     private Boolean open;
 
 
-
     //上级角色名称
     private String parentName;
+
+    // 角色对应的权限列表
+    private List<Long> permissiondList;
+
+
+    public List<Long> getPermissiondList() {
+        return permissiondList;
+    }
+
+    public void setPermissiondList(List<Long> permissiondList) {
+        this.permissiondList = permissiondList;
+    }
 
     private Set<User> users = new HashSet<>();
 
     private Set<Permission> permissions = new HashSet<>();
 
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
 
     public String getParentName() {
         return parentName;

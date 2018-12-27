@@ -1,16 +1,20 @@
 package com.youhe.controller.sys.department;
 
 import com.youhe.biz.department.DepartmentBiz;
+import com.youhe.biz.user.UserBiz;
 import com.youhe.controller.loginController.LoginController;
 import com.youhe.entity.department.Department;
 
+import com.youhe.entity.user.User;
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import org.activiti.engine.impl.util.CollectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +33,9 @@ public class DepartmentController {
 
     @Autowired
     private DepartmentBiz departmentBiz;
+
+    @Autowired
+    private UserBiz userBiz;
 
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
@@ -51,21 +58,16 @@ public class DepartmentController {
         Map<String, Long> map = new HashMap<String, Long>();
         long deptId = 0;
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
-        if (shiroUser.getUserAccount() != "admin") {
-            /*
-            List<SysDeptEntity> deptList = sysDeptService.queryList(new HashMap<String, Object>());
-            Long parentId = null;
-            for (SysDeptEntity sysDeptEntity : deptList) {
-                if (parentId == null) {
-                    parentId = sysDeptEntity.getParentId();
-                    continue;
-                }
+        if (!shiroUser.getUserAccount().equals("admin")) {
 
-                if (parentId > sysDeptEntity.getParentId().longValue()) {
-                    parentId = sysDeptEntity.getParentId();
-                }
+            User user = new User();
+            user.setUserAccount(shiroUser.getUserAccount());
+
+            if (!CollectionUtils.isEmpty(userBiz.findOnlyUserList(user))) {
+                user = userBiz.findOnlyUserList(user).get(0);
+                deptId = Long.parseLong(user.getDepartmentId());
             }
-            deptId = parentId;*/
+
         }
         map.put("deptId", deptId);
         return map;
@@ -150,7 +152,7 @@ public class DepartmentController {
      */
     @RequestMapping("/del")
     @ResponseBody
-    public R del( Department dept) {
+    public R del(Department dept) {
         departmentBiz.del(dept);
         return R.ok();
     }

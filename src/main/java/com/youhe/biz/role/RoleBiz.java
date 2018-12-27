@@ -29,6 +29,20 @@ public class RoleBiz {
         return roleMapper.findRoleList(role);
     }
 
+    //新增角色表
+    public void add(Role role) {
+        roleMapper.add(role);
+    }
+
+    //修改角色表
+    public void update(Role role) {
+        roleMapper.update(role);
+    }
+
+    //删除角色
+    public void del(Role role) {
+        roleMapper.del(role);
+    }
 
     // 更新 用户-角色表
     public void update_user_Role(User_Role user_role) {
@@ -36,7 +50,6 @@ public class RoleBiz {
     }
 
     // 保存 用户-角色表
-    @Transactional(propagation = Propagation.REQUIRED)
     public void save_user_Role(User_Role user_role) {
         roleMapper.save_user_Role(user_role);
     }

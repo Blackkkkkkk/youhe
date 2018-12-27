@@ -8,6 +8,8 @@
         <result property="rname" column="RNAME"/>
         <result property="available" column="AVAILABLE"/>
         <result property="parentId" column="PARENT_ID"></result>
+        <result property="parentName" column="PARENT_NAME"></result>
+        <result property="orderNum" column="ORDER_NUM"/>
     </resultMap>
 
 
@@ -20,18 +22,49 @@
 
     <!-- 查询角色-->
     <select id="findRoleList" parameterType="com.youhe.entity.role.Role" resultMap="roleList">
-        SELECT * FROM sys_role
+        SELECT *,(SELECT RNAME FROM sys_role WHERE s.PARENT_ID = RID) PARENT_NAME FROM sys_role S
         <where>
             <trim prefixOverrides="AND">
-                <if test="rid !=null and rid!=''">
-                    AND RID=#{rid,jdbcType=VARCHAR}
+                <if test="rid">
+                    AND s.RID=#{rid}
                 </if>
                 <if test="rname!=null and rname !=''">
-                    AND RNAME=#{rname,jdbcType=VARCHAR}
+                    AND s.RNAME=#{rname,jdbcType=VARCHAR}
                 </if>
             </trim>
         </where>
     </select>
+
+
+    <insert id="add" parameterType="com.youhe.entity.role.Role" keyProperty="rid"
+            useGeneratedKeys="true">
+        insert into sys_role(RNAME,AVAILABLE,PARENT_ID,ORDER_NUM) value(#{rname},1,#{parentId},#{orderNum})
+    </insert>
+
+
+    <update id="update" parameterType="com.youhe.entity.role.Role">
+        UPDATE sys_role
+        SET
+        <trim suffixOverrides=",">
+            <if test="parentId != null">
+                PARENT_ID =#{parentId},
+            </if>
+            <if test="available != null">
+                AVAILABLE =#{available},
+            </if>
+            <if test="rname != null and rname!=''">
+                RNAME=#{rname},
+            </if>
+            <if test="orderNum != null">
+                ORDER_NUM =#{orderNum},
+            </if>
+        </trim>
+        WHERE RID=#{rid}
+    </update>
+
+    <delete id="del" parameterType="com.youhe.entity.role.Role">
+           DELETE  from sys_role  WHERE RID=#{rid}
+    </delete>
 
 
     <!-- 更新角色-用户表 -->
@@ -75,6 +108,5 @@
     <delete id="del_user_Role" parameterType="com.youhe.entity.role.User_Role">
         DELETE  from sys_user_role where sys_user_id = #{sys_user_id}
     </delete>
-
 
 </mapper>
