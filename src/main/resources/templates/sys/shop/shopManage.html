@@ -8,6 +8,7 @@
 </head>
 <div>
     <link rel="stylesheet" href="../bootstrap/js/dept/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../bootstrap/js/dept/css/jquery.treegrid.css">
     <link rel="stylesheet" href="../ztree/css/metroStyle/metroStyle.css">
     <link rel="stylesheet" href="../ztree/css/metroStyle/metroStyle.css">
@@ -22,8 +23,13 @@
                 <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
                 <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
                 <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+                <a class="btn btn-success" @click="del"><i class="fa fa-plus-square"></i>&nbsp;上架</a>
+                <a class="btn btn-success" @click="del"><i class="fa fa-minus-square"></i>&nbsp;下架</a>
             </div>
-            <table id="deptTable" data-mobile-responsive="true" data-click-to-select="true">
+
+            <table class="dataTables-example" id="deptTable" data-mobile-responsive="true"
+                   data-click-to-select="true"
+            >
                 <thead>
                 <tr>
                     <th data-field="selectItem" data-checkbox="true"></th>
@@ -158,11 +164,11 @@
 <script src="../bootstrap/js/dept/js/jquery.treegrid.min.js"></script>
 <script src="../bootstrap/js/dept/js/jquery.treegrid.bootstrap3.js"></script>
 <script src="../bootstrap/js/dept/js/jquery.treegrid.extension.js"></script>
-<script src="../bootstrap/js/dept/js/tree.table.js"></script>
+<script src="../bootstrap/js/project/sys/shop/js/tree.table.js"></script>
 
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
-<script src="../bootstrap/js/user/js/user.js"></script>
-<script src="../bootstrap/js/user/js/Roleztree.js"></script>
+<script src="../bootstrap/js/project/sys/shop/js/shop.js"></script>
+<script src="../bootstrap/js/project/sys/shop/js/shopztree.js"></script>
 
 
 <script>
@@ -294,7 +300,7 @@
         $("#systemManage").attr("class", "active");
         $("#systemManage_ul").attr("class", "nav nav-second-level collapse in");
 
-        $("#deptManage").attr("class", "active");
+        $("#userManage").attr("class", "active");
 
 
         $('#btnExpandDept').click(function () {

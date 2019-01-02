@@ -17,7 +17,7 @@
         this.parentCode = 'parentId';// 用于设置父子关系
         this.expandAll = false;// 是否默认全部展开
         this.toolbarId = tableId + "Toolbar";
-        this.height = 100+'%';
+        this.height = 100 + '%';
     };
 
     TreeTable.prototype = {
@@ -27,7 +27,7 @@
         init: function () {
             var tableId = this.bstableId;
             this.btInstance =
-                $('#'+tableId).bootstrapTreeTable({
+                $('#' + tableId).bootstrapTreeTable({
                     id: this.id,// 选取记录返回的值
                     code: this.code,// 用于设置父子关系
                     parentCode: this.parentCode,// 用于设置父子关系
@@ -41,6 +41,7 @@
                     columns: this.columns,		//列数组
                     toolbar: "#" + this.toolbarId,//顶部工具条
                     height: this.height,
+
                 });
             return this;
         },
@@ -79,13 +80,13 @@
          * 设置是否默认全部展开
          */
         setExpandAll: function (expandAll) {
-        	this.expandAll = expandAll;
+            this.expandAll = expandAll;
         },
         /**
          * 设置表格高度
          */
         setHeight: function (height) {
-        	this.height = height;
+            this.height = height;
         },
         /**
          * 设置ajax post请求时候附带的参数

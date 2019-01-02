@@ -76,9 +76,11 @@ var vm = new Vue({
         },
         reload: function () {
             vm.showList = true;
-            User.table.refresh();
+            Shop.table.refresh();
             $("#myForm").bootstrapValidator('resetForm');
             $('#myForm').bootstrapTable('destroy');
+
+
         },
         getRole: function () {
             //加载部门树
@@ -189,32 +191,6 @@ var vm = new Vue({
             else {
                 return;
             }
-
-
-            /*
-
-            var url = vm.User.uid == null ? "/user/save" : "/user/update";
-
-            $.ajax({
-                type: "POST",
-                url: url,
-                contentType: "application/json",
-                data: JSON.stringify(vm.User),
-                success: function (r) {
-                    if (r.code === 0) {
-                        layer.msg('操作成功', {icon: 1, time: 1000}, function () {
-
-                            vm.reload();
-                            $(form).bootstrapValidator('resetForm');
-                        });
-                    } else {
-                        layer.msg(r.msg, {icon: 2, time: 1000}, function () {
-                            vm.reload();
-                            $(form).bootstrapValidator('resetForm');
-                        });
-                    }
-                }
-            })*/
         },
         update: function () {
             var deptId = getDeptId();
@@ -269,7 +245,7 @@ var vm = new Vue({
     }
 });
 
-var User = {
+var Shop = {
     id: "deptTable",
     table: null,
     layerIndex: -1
@@ -278,16 +254,21 @@ var User = {
 /**
  * 初始化表格的列
  */
-User.initColumn = function () {
+Shop.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
-        {title: 'ID', field: 'uid', visible: false, align: 'center', valign: 'middle', width: '80px'},
-        {title: '姓名', field: 'userName', visible: false, align: 'center', valign: 'middle', width: '80px'},
-        {title: '手机号码', field: 'phone', align: 'center', valign: 'middle', sortable: true, width: '180px'},
-        {title: '邮箱', field: 'email', align: 'center', valign: 'middle', sortable: true, width: '100px'},
-        {title: '角色', field: 'roleName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
-        {title: '部门', field: 'departmentName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
-        {title: '排序号', field: 'orderNum', align: 'center', valign: 'middle', sortable: true, width: '100px'}]
+        {title: 'ID', field: 'id', index: 'id', visible: false, align: 'center', valign: 'middle', width: '80px'},
+        {title: '商品名称', field: 'name',index: 'name', visible: false, align: 'center', valign: 'middle', width: '80px'},
+        {title: '商品价格', field: 'pirce',index: 'pirce', align: 'center', valign: 'middle', sortable: true, width: '180px'},
+        {title: '商品数量', field: 'num', index: 'num',align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '详情图', field: 'detail_picture', align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '缩略图', field: 'thumbnail', align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '是否置顶', field: 'top',index: 'top', align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '是否激活', field: 'status', index: 'status',align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '添加时间', field: 'register',index: 'register', align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '排序号', field: 'orderNum',index: 'orderNum', align: 'center', valign: 'middle', sortable: true, width: '100px'}]
+
+
     return columns;
 };
 
@@ -304,18 +285,17 @@ function getDeptId() {
 
 
 $(function () {
-    $.get("/department/info", function (r) {
-        var colunms = User.initColumn();
-        var table = new TreeTable(User.id, "/user/list", colunms);
 
-        table.setRootCodeValue(r.uid);
-        table.setExpandColumn(2);
-        table.setIdField("uid");
-        table.setCodeField("uid");
-        table.setExpandAll(false);
-        table.init();
-        User.table = table;
-    });
+    var colunms = Shop.initColumn();
+    var table = new TreeTable(Shop.id, "/shop/list", colunms);
+
+    console.log(table)
+
+    table.setIdField("id");
+    table.setCodeField("id");
+    table.init();
+
+    Shop.table = table;
 
 
 });

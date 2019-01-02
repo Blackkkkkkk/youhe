@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PageView<T> implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     //当前页
     private int pageNum;
     //每页的数量
@@ -31,6 +31,8 @@ public class PageView<T> implements Serializable {
     private int pages;
     //结果集
     private List<T> list;
+    //列表数据
+    private List<?> rows;
 
     //第一页
     private int firstPage;
@@ -54,9 +56,7 @@ public class PageView<T> implements Serializable {
     //所有导航页号
     private int[] navigatepageNums;
 
-    
-    
-    
+
     public PageView() {
     }
 
@@ -82,9 +82,9 @@ public class PageView<T> implements Serializable {
             this.pageNum = page.getPageNum();
             this.pageSize = page.getPageSize();
             this.orderBy = page.getOrderBy();
-
             this.pages = page.getPages();
             this.list = page;
+            this.rows = page;
             this.size = page.size();
             this.total = page.getTotal();
             //由于结果是>startRow的，所以实际的需要+1

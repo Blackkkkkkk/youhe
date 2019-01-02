@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.InputStream;
@@ -48,6 +49,16 @@ public class DemoApplicationTests {
 				System.out.println(e.toString());
 			}
 
+		}
+	}
+
+	@Test
+	public  void te(){
+		File file = new File("./upload/stencilset.json");
+		if(!file.exists()){
+			System.out.println("1");
+		}else {
+			System.out.println("2");
 		}
 	}
 }

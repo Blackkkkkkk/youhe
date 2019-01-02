@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.shop.ShopMapper">
+
+
+    <resultMap type="com.youhe.entity.shop.Shop" id="shopList">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="pirce" column="PRICE"/>
+        <result property="num" column="NUM"></result>
+        <result property="top" column="TOP"/>
+        <result property="status" column="STATUS"/>
+        <result property="register" column="REGISTER"/>
+        <result property="orderNum" column="ORDER_NUM"/>
+    </resultMap>
+
+    <select id="findShopList" parameterType="com.youhe.entity.shop.Shop" resultMap="shopList">
+
+        SELECT * FROM shop_commodity
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id!=null and id !=''">
+                    AND ID = #{id}
+                </if>
+            </trim>
+        </where>
+        ORDER BY top ,ORDER_NUM DESC
+    </select>
+
+    <insert id="save" parameterType="com.youhe.entity.shop.Shop" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into shop_commodity(
+        NAME,
+        PRICE,
+        NUM,
+        TOP,
+        STATUS,
+        REGISTER,
+        ORDER_NUM
+        )
+        values(
+        #{name,jdbcType=VARCHAR},
+        #{pirce,jdbcType=INTEGER},
+        #{num,jdbcType=INTEGER},
+        #{top,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER},
+        NOW(),
+        #{orderNum,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <delete id="del" parameterType="com.youhe.entity.shop.Shop">
+        DELETE from shop_commodity
+        where ID = #{id,jdbcType=INTEGER}
+    </delete>
+
+
+    <update id="update" parameterType="com.youhe.entity.shop.shop">
+        UPDATE shop_commodity
+        <set>
+            <trim suffixOverrides=",">
+                <if test="name != null and name != ''">
+                    NAME = #{name,jdbcType=VARCHAR},
+                </if>
+                <if test="pirce != null and pirce != ''">
+                    PRICE = #{pirce,jdbcType=INTEGER},
+                </if>
+                <if test="num != null and num != ''">
+                    NUM = #{num,jdbcType=VARCHAR},
+                </if>
+                <if test="top != null and top != ''">
+                    TOP = #{top,jdbcType=VARCHAR},
+                </if>
+                <if test="status != null and status != ''">
+                    STATUS = #{status,jdbcType=VARCHAR},
+                </if>
+                <if test="name != null ">
+                    REGISTER = NOW(),
+                </if>
+            </trim>
+        </set>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id != null and id != ''">
+                    AND ID = #{id,jdbcType=INTEGER}
+                </if>
+            </trim>
+        </where>
+    </update>
+
+
+</mapper>

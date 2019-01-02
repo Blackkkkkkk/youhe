@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.shop.PictureMapper">
+
+    <resultMap type="com.youhe.entity.shop.Picture" id="pictureList">
+        <id property="id" column="ID"/>
+        <result property="type" column="TYPE"/>
+        <result property="fileName" column="FILE_NAME"/>
+        <result property="fileType" column="FILE_TYPE"></result>
+        <result property="saveFileName" column="SAVE_FILE_NAME"></result>
+        <result property="reportaddr" column="REPORTADDR"/>
+        <result property="registerDate" column="REGISTER_DATE"/>
+        <result property="previewId" column="PREVIEW_ID"></result>
+    </resultMap>
+
+    <select id="findPictureList" parameterType="com.youhe.entity.shop.Picture" resultMap="pictureList">
+        SELECT * FROM shop_picture
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id!=null and id !=''">
+                    AND ID = #{id}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+
+    <insert id="save" parameterType="com.youhe.entity.shop.Picture" keyProperty="id"
+            useGeneratedKeys="true">
+    insert into shop_picture(
+    TYPE,
+    FILE_NAME,
+    FILE_TYPE,
+    SAVE_FILE_NAME,
+    REPORTADDR,
+    REGISTER_DATE,
+    PREVIEW_ID
+    )
+    values(
+    #{type,jdbcType=INTEGER},
+    #{fileName,jdbcType=VARCHAR},
+    #{fileType,jdbcType=VARCHAR},
+    #{saveFileName,jdbcType=VARCHAR},
+    #{reportaddr,jdbcType=VARCHAR},
+    NOW(),
+    #{previewId,jdbcType=VARCHAR}
+    )
+    </insert>
+
+    <delete id="del" parameterType="com.youhe.entity.shop.Picture">
+        DELETE from shop_picture
+        where
+        <trim prefixOverrides="AND">
+            <if test="id != null and id != ''">
+                AND ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="previewId != null and previewId != ''">
+                AND PREVIEW_ID = #{previewId,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </delete>
+
+    <update id="update" parameterType="com.youhe.entity.shop.Picture">
+        UPDATE shop_picture
+        <set>
+            <if test="type != null and type != ''">
+                TYPE = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="fileName != null and fileName != ''">
+                FILE_NAME = #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="fileType != null and fileType != ''">
+                FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="saveFileName != null and saveFileName != ''">
+                SAVE_FILE_NAME = #{saveFileName,jdbcType=VARCHAR},
+            </if>
+            <if test="reportaddr != null and reportaddr != ''">
+                REPORTADDR = #{reportaddr,jdbcType=VARCHAR},
+            </if>
+            <if test="register != null ">
+                REGISTER = #{register,jdbcType=DATE},
+            </if>
+
+        </set>
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id != null and id != ''">
+                    AND ID = #{id,jdbcType=INTEGER}
+                </if>
+                <if test="previewId != null and previewId != ''">
+                    AND PREVIEW_ID = #{previewId,jdbcType=VARCHAR}
+                </if>
+            </trim>
+        </where>
+    </update>
+</mapper>
