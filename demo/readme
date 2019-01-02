@@ -1,0 +1,10 @@
+						spring-boot整合activiti-modeler
+
+# 初始化数据库 
+	创建数据库，执行数据库脚本文件 activiti.sql
+# 修改配置文件 application.properties
+	修改数据库连接串，数据库用户名以及密码
+# 启动项目
+	运行spring-boot项目启动类DemoApplication.java中的main方法
+# modeler 页面
+	http://localhost/activiti/modeler
