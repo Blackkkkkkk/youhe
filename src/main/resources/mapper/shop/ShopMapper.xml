@@ -3,6 +3,7 @@
 <mapper namespace="com.youhe.mapper.shop.ShopMapper">
 
 
+
     <resultMap type="com.youhe.entity.shop.Shop" id="shopList">
         <id property="id" column="ID"/>
         <result property="name" column="NAME"/>
@@ -56,7 +57,7 @@
     </delete>
 
 
-    <update id="update" parameterType="com.youhe.entity.shop.shop">
+    <update id="update" parameterType="com.youhe.entity.shop.Shop">
         UPDATE shop_commodity
         <set>
             <trim suffixOverrides=",">
@@ -88,6 +89,7 @@
             </trim>
         </where>
     </update>
+
 
 
 </mapper>

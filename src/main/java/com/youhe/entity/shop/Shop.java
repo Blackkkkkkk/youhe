@@ -28,6 +28,8 @@ public class Shop extends SysBaseEntity {
     private Integer type;  //1.详情图，2缩略图
 
 
+
+
     public Integer getId() {
         return id;
     }
