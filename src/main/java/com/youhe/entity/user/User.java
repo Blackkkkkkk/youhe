@@ -30,7 +30,6 @@ public class User implements Serializable {
 
 
     //查询属性
-
     private String roleName;//角色名
     private String departmentName;// 部门名字
 

@@ -23,7 +23,6 @@ public class UserControllerImpl {
     @Autowired
     private DepartmentBiz departmentBiz;
 
-
     @Transactional(rollbackFor = Exception.class)
     public void controllerSave(User user) {
 

@@ -11,6 +11,7 @@
         <result property="reportaddr" column="REPORTADDR"/>
         <result property="registerDate" column="REGISTER_DATE"/>
         <result property="previewId" column="PREVIEW_ID"></result>
+        <result property="shopId" column="SHOP_ID"></result>
     </resultMap>
 
     <select id="findPictureList" parameterType="com.youhe.entity.shop.Picture" resultMap="pictureList">
@@ -19,6 +20,12 @@
             <trim prefixOverrides="AND">
                 <if test="id!=null and id !=''">
                     AND ID = #{id}
+                </if>
+                <if test="previewId != null and previewId != ''">
+                    AND PREVIEW_ID = #{previewId,jdbcType=VARCHAR}
+                </if>
+                <if test="shopId != null and shopId != ''">
+                    AND SHOP_ID = #{shopId,jdbcType=VARCHAR}
                 </if>
             </trim>
         </where>
@@ -34,7 +41,8 @@
     SAVE_FILE_NAME,
     REPORTADDR,
     REGISTER_DATE,
-    PREVIEW_ID
+    PREVIEW_ID,
+    SHOP_ID
     )
     values(
     #{type,jdbcType=INTEGER},
@@ -43,7 +51,8 @@
     #{saveFileName,jdbcType=VARCHAR},
     #{reportaddr,jdbcType=VARCHAR},
     NOW(),
-    #{previewId,jdbcType=VARCHAR}
+    #{previewId,jdbcType=VARCHAR},
+    #{shopId,jdbcType=VARCHAR}
     )
     </insert>
 
@@ -56,6 +65,9 @@
             </if>
             <if test="previewId != null and previewId != ''">
                 AND PREVIEW_ID = #{previewId,jdbcType=VARCHAR}
+            </if>
+            <if test="shopId != null and shopId != ''">
+                AND SHOP_ID = #{shopId,jdbcType=VARCHAR}
             </if>
         </trim>
     </delete>
@@ -81,7 +93,9 @@
             <if test="register != null ">
                 REGISTER = #{register,jdbcType=DATE},
             </if>
-
+            <if test="shopId != null and shopId != ''">
+                SHOP_ID = #{shopId,jdbcType=VARCHAR},
+            </if>
         </set>
         <where>
             <trim prefixOverrides="AND">

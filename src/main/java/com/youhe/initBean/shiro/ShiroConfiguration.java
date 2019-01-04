@@ -40,15 +40,12 @@ import java.util.LinkedHashMap;
 public class ShiroConfiguration {
 
 
-
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager) {
 
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(manager);
-
-
 
 
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
@@ -69,6 +66,8 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/bootstrap/font-awesome/*", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/bootstrap/img/*", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/bootstrap/locales/*", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/webapp/upload/*", "anon");
+
 
         filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问

@@ -18,6 +18,7 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -64,7 +65,10 @@ public class ShopControllerImpl {
 
 
 // 项目在容器中实际发布运行的根路径
-        String realPath = request.getSession().getServletContext().getRealPath("/") + "upload";
+        //   String realPath = request.getSession().getServletContext().getRealPath("/") + "upload";
+
+
+        String realPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "/templates/upload/";
 
 
         //判断保存文件的路径是否存在
@@ -111,17 +115,12 @@ public class ShopControllerImpl {
                     picture.setType(shop.getType());
                     picture.setSaveFileName(saveFileName);
                     picture.setPreviewId(shop.getPreviewId());
+                    picture.setShopId(shop.getId());
 
                     pictureBiz.save(picture);
 
                     System.out.println(picture.getId());
                     ret.put("previewId", shop.getPreviewId());
-                    /*
-
-                    if (picture.getId() > 0) {   //id值不为零，加到string
-                        picSaveList += picture.getId() + ",";
-                        System.out.println("1");
-                    }*/
 
                 } catch (Exception e) {
                     log.error(e.getMessage());
@@ -141,10 +140,7 @@ public class ShopControllerImpl {
             }
 
             ret.put("success", true);
-            /*
-            if (picSaveList != null && picSaveList != "") {
-                ret.put("picSaveList", picSaveList.substring(0, picSaveList.length() - 1));
-            }*/
+
 
         }
         return ret;

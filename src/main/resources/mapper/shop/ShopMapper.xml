@@ -3,7 +3,6 @@
 <mapper namespace="com.youhe.mapper.shop.ShopMapper">
 
 
-
     <resultMap type="com.youhe.entity.shop.Shop" id="shopList">
         <id property="id" column="ID"/>
         <result property="name" column="NAME"/>
@@ -53,7 +52,7 @@
 
     <delete id="del" parameterType="com.youhe.entity.shop.Shop">
         DELETE from shop_commodity
-        where ID = #{id,jdbcType=INTEGER}
+        where  ID = #{id,jdbcType=INTEGER}
     </delete>
 
 
@@ -79,6 +78,7 @@
                 <if test="name != null ">
                     REGISTER = NOW(),
                 </if>
+
             </trim>
         </set>
         <where>
@@ -89,7 +89,6 @@
             </trim>
         </where>
     </update>
-
 
 
 </mapper>

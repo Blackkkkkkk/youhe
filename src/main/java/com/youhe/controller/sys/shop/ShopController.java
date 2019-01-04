@@ -109,20 +109,16 @@ public class ShopController {
         return R.ok().put("result", result);
     }
 
-
     @RequestMapping("/save")
     @ResponseBody
     public R save(Shop shop) {
-
-
         Long id = shopBiz.save(shop);
 
-
-        //   List<Shop> shopList = shopBiz.findRoleList(shop);
-        System.out.println("1");
-        return R.ok().put("id", id);
+        if (id > 0) {
+            return R.ok().put("id", shop.getId());
+        } else {
+            return R.error("保存失败！");
+        }
 
     }
-
-
 }

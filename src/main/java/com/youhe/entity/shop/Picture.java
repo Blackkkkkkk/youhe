@@ -20,6 +20,16 @@ public class Picture extends SysBaseEntity {
 
     private String previewId;//照片的独立id
 
+    private Integer shopId; // 商品的ID
+
+
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
+    }
 
     public String getPreviewId() {
         return previewId;

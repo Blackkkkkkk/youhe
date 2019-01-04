@@ -21,17 +21,30 @@ var vm = new Vue({
     methods: {
         add: function () {
             vm.showList = false;
+
+            vm.shop = {
+                id: null,
+                name: null,
+                pirce: null,
+                num: null,
+                detail_picture: null,
+                thumbnail: null,
+                top: 0,
+                status: 1,
+                register: null,
+                orderNum: 0
+            };
+
         },
         reload: function () {
             vm.showList = true;
 
             if (typeof(wageNowTable) == "undefined") {
-                wageNowTable = $('.dataTables-example').DataTable().ajax.reload();//初始化
+                wageNowTable = $('.dataTables-example').DataTable();
+                wageNowTable.ajax.reload();//初始化
             } else {
-                var oSettings = wageNowTable.fnSettings();
-                oSettings.sAjaxSource = "wageQuery.action?wageDate="
-                    + date;
-                wageNowTable.fnDraw(false);//不会跳转到第一页，保留页面的页码和显示条数
+                $('.dataTables-example').dataTable().fnDraw(false);  //不会跳转到第一页，保留页面的页码和显示条数
+
             }
         },
         save: function () {
@@ -53,18 +66,20 @@ var vm = new Vue({
                         data: $("#myForm").serialize(),
                         success: function (data) {
 
-                            fishId = data;
+                            vm.id = data.id;
+                            console.log(vm)
                             //不上传图片时，不触发bootstrap 上传插件的初始化方法。仅将表单里面的（除图片以外的）内容提交，
                             if ($("#reportFile").val() != "") {
                                 $('#reportFile').fileinput('upload'); //触发插件开始上传。
                             } else {
                                 layer.msg('操作成功', {icon: 1, time: 1000}, function () {
-                                    vm.reload();
+
                                     $("#myForm").bootstrapValidator('resetForm');
 
                                     var table = $('.dataTables-example').DataTable();
                                     table.ajax.reload();
 
+                                    vm.reload();
                                 });
                             }
 
@@ -116,6 +131,7 @@ var FileInput = function () {
                 var data = {
                     "previewId": previewId,      //此处自定义传参
                     "type": 1,
+                    "id": vm.id,
                 };
                 return data;
             },
@@ -124,6 +140,7 @@ var FileInput = function () {
             }
         }).on('filesuccessremove', function (previewId, event, data, index, e) {
             //alert("1")
+
             /*
              $.ajax({
              type: "POST",
@@ -140,7 +157,8 @@ var FileInput = function () {
              }
              }
              });*/
-            // console.log(previewId)
+
+            // console.log(previewId);
             //  console.log(data);
             //  console.log(index);
 
@@ -148,7 +166,30 @@ var FileInput = function () {
         //导入文件上传完成之后的事件
         $("#reportFile").on("fileuploaded", function (event, data, previewId, index) {
             $('#' + previewId).attr('fileid', data.response.result.previewId);
-            console.log(previewId)
+
+            layer.msg('操作成功', {icon: 1, time: 1000}, function () {
+
+
+                $("#myForm").bootstrapValidator('resetForm');
+
+                var table = $('.dataTables-example').DataTable();
+                table.ajax.reload();
+
+
+                vm.reload();
+
+
+                $(event.target)
+                    .fileinput('clear')
+                    .fileinput('unlock')
+                $(event.target)
+                    .parent()
+                    .siblings('.fileinput-remove')
+                    .hide()
+
+
+            })
+
         }).on('filesuccessremove', function (event, previewId, extra) {
             //在移除事件里取出所需数据，并执行相应的删除指令
             console.log(($('#' + previewId).attr('fileid')))
@@ -158,7 +199,6 @@ var FileInput = function () {
             console.log(event, data);
             console.log("fileclear");
         })
-
 
     }
     return oFile;
