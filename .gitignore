@@ -1,1 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
+.mvn
+.gitignore
+.settings
+.idea
+.youheOA.iml

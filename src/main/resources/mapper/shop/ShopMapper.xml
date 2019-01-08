@@ -12,19 +12,25 @@
         <result property="status" column="STATUS"/>
         <result property="register" column="REGISTER"/>
         <result property="orderNum" column="ORDER_NUM"/>
+        <result property="saveFileName" column="SAVE_FILE_NAME"></result>
     </resultMap>
 
+    <!--
+      商品表和照片表关联，右表为照片表，当有多数据的时候取第一张为关联数据，满足前台的缩略图预览
+    -->
     <select id="findShopList" parameterType="com.youhe.entity.shop.Shop" resultMap="shopList">
+        SELECT sc.*,sp.SAVE_FILE_NAME FROM shop_commodity sc
+        LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
+        AND
+        sp.ID =
+        (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
+        where
+        1=1
+        <if test="id!=null and id !=''">
+            AND sc.ID = #{id}
+        </if>
 
-        SELECT * FROM shop_commodity
-        <where>
-            <trim prefixOverrides="AND">
-                <if test="id!=null and id !=''">
-                    AND ID = #{id}
-                </if>
-            </trim>
-        </where>
-        ORDER BY top ,ORDER_NUM DESC
+        ORDER BY sc.top ,sc.ORDER_NUM DESC
     </select>
 
     <insert id="save" parameterType="com.youhe.entity.shop.Shop" keyProperty="id"

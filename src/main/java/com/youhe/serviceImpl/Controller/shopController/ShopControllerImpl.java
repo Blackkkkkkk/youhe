@@ -11,11 +11,13 @@ import com.youhe.entity.shop.Picture;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.user.User;
 import com.youhe.serviceImpl.Controller.roleController.RoleControllerImpl;
+import com.youhe.utils.R;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ClassUtils;
@@ -36,6 +38,9 @@ public class ShopControllerImpl {
 
     @Autowired
     private PictureBiz pictureBiz;
+
+    @Autowired
+    private ShopBiz shopBiz;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -116,6 +121,7 @@ public class ShopControllerImpl {
                     picture.setSaveFileName(saveFileName);
                     picture.setPreviewId(shop.getPreviewId());
                     picture.setShopId(shop.getId());
+                    picture.setPictureSize(shop.getPictureSize());
 
                     pictureBiz.save(picture);
 
@@ -144,6 +150,32 @@ public class ShopControllerImpl {
 
         }
         return ret;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void del(Shop shop) {
+
+        shopBiz.del(shop);
+        Picture picture = new Picture();
+        picture.setShopId(shop.getId());
+
+
+        List<Picture> list = pictureBiz.findPictureList(picture);
+
+
+        File file;
+
+        pictureBiz.del(picture);
+
+        for (Picture item : list) {
+            file = new File(item.getReportaddr());
+            // 判断目录或文件是否存在
+            if (file.exists()) {  // 不存在返回 false
+                file.delete();
+            }
+        }
+
+
     }
 
 }

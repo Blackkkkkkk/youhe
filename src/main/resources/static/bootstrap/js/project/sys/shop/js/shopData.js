@@ -35,6 +35,12 @@ var vm = new Vue({
                 orderNum: 0
             };
 
+            //初始化fileinput
+            var oFileInput = new FileInput();
+
+            //参数1:控件id、参数2:上传地址
+            oFileInput.Init("reportFile", "/shop/uploadReport");
+
         },
         reload: function () {
             vm.showList = true;
@@ -60,14 +66,17 @@ var vm = new Vue({
                  */
                 if (picturename == ".JPG" || picturename == ".PNG" || picturename == "" || picturename == ".BMP" || picturename == ".JPEG") {
 
+
+                    var url = vm.shop.id == null ? "/shop/save" : "/shop/update";
+
                     $.ajax({
                         type: 'post',
-                        url: '/shop/save',
+                        url: url,
                         data: $("#myForm").serialize(),
                         success: function (data) {
 
                             vm.id = data.id;
-                            console.log(vm)
+
                             //不上传图片时，不触发bootstrap 上传插件的初始化方法。仅将表单里面的（除图片以外的）内容提交，
                             if ($("#reportFile").val() != "") {
                                 $('#reportFile').fileinput('upload'); //触发插件开始上传。
@@ -90,9 +99,127 @@ var vm = new Vue({
                     return false;
                 }
             }
+        },
+        update: function () {
+
+            var id = vm.getRowDate();
+
+            if (id.length > 0) {
+
+                vm.getDetail(id);
+
+                vm.showList = false;
+            }
+
+        },
+        del: function (id) {
+
+            var id = vm.getRowDate();
+            if (id.length > 0) {
+
+                $.get("/shop/del?id=" + id, function (r) {
+                    if (r.state) {
+                        layer.msg(r.msg, {icon: 1, time: 1000});
+                        // 刷新表格
+                        var table = $('.dataTables-example').DataTable();
+                        table.ajax.reload();
+                    } else {
+                        layer.msg(r.msg, {icon: 2, time: 1000});
+                    }
+
+                })
+            }
+
+
+        },   //根据选中行获取选择的Id
+        getRowDate: function () {
+            var radios = document.getElementsByName("radio");
+            var tag = false;
+            var val;
+            for (radio in radios) {
+                if (radios[radio].checked) {
+                    tag = true;
+                    val = radios[radio].value;
+                    break;
+                }
+            }
+            if (tag) {
+                return val;
+            }
+            else {
+                layer.msg('请选中行后在进行操作！', {icon: 2, time: 1000});
+                return '';
+            }
+        },
+        getDetail: function (id) {
+            $.get("/shop/ShopPiclist?id=" + id, function (r) {
+
+                if (r.shopList.length > 0) {
+                    vm.shop = r.shopList[0]
+                }
+
+                if (r.pictureList.length > 0) {
+                    // 照片地址初始化
+                    var initPictureAddress = new Array();
+                    //初始配置项
+                    var initialPreviewCfg = new Array();
+                    r.pictureList.forEach(function (v, index) {
+                        initPictureAddress.push("/webapp/upload/" + v.saveFileName)
+                        initialPreviewCfg.push({
+                            caption: v.fileName,
+                            size: v.pictureSize,
+                            width: "120px",
+                            url: "/shop/delReport?id=" + v.id + "&reportaddr=" + v.reportaddr,
+                            key: index
+                        })
+                    });
+
+                    //初始化修改的上传照片框
+                    $("#reportFile").fileinput({
+                        language: 'zh',
+                        theme: 'fa',
+                        uploadUrl: "/shop/uploadReport",
+                        uploadAsync: false,
+                        showCaption: false,                                     //是否显示标题
+                        showRemove: false,                                       //显示移除按钮,跟随文本框的那个
+                        showUpload: false,                                       //显示上传按钮
+                        showCancel: false,                                      //是否显示取消按钮
+                        maxFileCount: 5,
+                        overwriteInitial: false,
+                        initialPreview: initPictureAddress,
+                        initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                        initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                        initialPreviewConfig: initialPreviewCfg,
+                        uploadExtraData: {
+                            img_key: "1000",
+                            img_keywords: "happy, places",
+                        },
+                        layoutTemplates: {  // 隐藏上传按钮
+                            actionUpload: '',
+                        }
+
+                    }).on('filesorted', function (e, params) {
+                        console.log('file sorted', e, params);
+                    }).on('fileuploaded', function (e, params) {
+                        console.log('file uploaded', e, params);
+                    });
+
+                } else {
+
+                    //初始化fileinput
+                    var oFileInput = new FileInput();
+
+                    //参数1:控件id、参数2:上传地址
+                    oFileInput.Init("reportFile", "/shop/uploadReport");
+
+                }
+
+
+            })
         }
     }
 })
+
 
 var list = "";
 //初始化fileinput
@@ -109,7 +236,6 @@ var FileInput = function () {
             language: 'zh',                                         //设置语言
             uploadUrl: uploadUrl,                                   //上传的地址
             allowedFileExtensions: ['jpg', 'png', 'PNG', 'JPG', 'jpeg'],    //接收的文件后缀
-            showUpload: true,                                       //是否显示上传按钮
             showCaption: false,                                     //是否显示标题
             showRemove: false,                                       //显示移除按钮,跟随文本框的那个
             showUpload: false,                                       //显示上传按钮
@@ -127,11 +253,22 @@ var FileInput = function () {
             validateInitialCount: true,
             previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
             msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
-            uploadExtraData: function (previewId, index) {           //传参
+            uploadExtraData: function (previewId, index, event, data) {           //传参
+
+                // 获取之div下子标签的元素值
+                var htmvaul = $("#" + previewId).find("div").eq(1).find("div").find("div").eq(1).html();
+
+                var picSize;//照片大小
+                //格式固定，所以按长度截取
+                if (htmvaul != undefined && htmvaul != 'undefined' && htmvaul.length > 0) {
+                    picSize = htmvaul.substring(8, htmvaul.length - 11);
+
+                }
                 var data = {
                     "previewId": previewId,      //此处自定义传参
                     "type": 1,
                     "id": vm.id,
+                    "pictureSize": picSize,
                 };
                 return data;
             },
@@ -192,12 +329,12 @@ var FileInput = function () {
 
         }).on('filesuccessremove', function (event, previewId, extra) {
             //在移除事件里取出所需数据，并执行相应的删除指令
-            console.log(($('#' + previewId).attr('fileid')))
+            //  console.log(($('#' + previewId).attr('fileid')))
 
             delete(($('#' + previewId).attr('fileid')));
         }).on('fileclear', function (event, data, previewId, index) {
-            console.log(event, data);
-            console.log("fileclear");
+            // console.log(event, data);
+            // console.log("fileclear");
         })
 
     }

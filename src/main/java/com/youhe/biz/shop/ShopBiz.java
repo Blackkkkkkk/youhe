@@ -21,7 +21,7 @@ public class ShopBiz {
     private ShopMapper shopMapper;
 
     //查找商品表
-    public List<Shop> findRoleList(Shop shop) {
+    public List<Shop> findShopList(Shop shop) {
         return shopMapper.findShopList(shop);
     }
 

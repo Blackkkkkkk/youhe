@@ -21,12 +21,15 @@ public class Shop extends SysBaseEntity {
     private Integer status;    //1 上架 0下架
     private Date register; //注册时间
 
+    private String saveFileName; // 照片名字
+
     //排序
     private Integer orderNum;
 
     private String previewId;
     private Integer type;  //1.详情图，2缩略图
 
+    private String pictureSize; //照片大小
 
 
 
@@ -36,6 +39,23 @@ public class Shop extends SysBaseEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+
+    public String getPictureSize() {
+        return pictureSize;
+    }
+
+    public void setPictureSize(String pictureSize) {
+        this.pictureSize = pictureSize;
+    }
+
+    public String getSaveFileName() {
+        return saveFileName;
+    }
+
+    public void setSaveFileName(String saveFileName) {
+        this.saveFileName = saveFileName;
     }
 
     public String getName() {

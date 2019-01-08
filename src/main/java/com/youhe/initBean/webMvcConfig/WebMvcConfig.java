@@ -5,8 +5,12 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport {
+
+
+
 
 
     @Override
@@ -25,6 +29,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 
         super.addResourceHandlers(registry);
     }
+
 
 
 }

@@ -22,6 +22,15 @@ public class Picture extends SysBaseEntity {
 
     private Integer shopId; // 商品的ID
 
+    private String pictureSize; //照片大小
+
+    public String getPictureSize() {
+        return pictureSize;
+    }
+
+    public void setPictureSize(String pictureSize) {
+        this.pictureSize = pictureSize;
+    }
 
     public Integer getShopId() {
         return shopId;

@@ -2,6 +2,7 @@ package com.youhe.controller.sys.shop;
 
 import com.github.pagehelper.PageInfo;
 
+import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
 
 import com.youhe.controller.loginController.LoginController;
@@ -48,6 +49,8 @@ public class ShopController {
     @Autowired
     private ShopBiz shopBiz;
 
+    @Autowired
+    private PictureBiz pictureBiz;
 
     @Autowired
     private ShopControllerImpl shopController;
@@ -57,13 +60,6 @@ public class ShopController {
     @RequestMapping(value = "/index")
     public String index(Model model) {
 
-
-        File file = new File("./upload/stencilset.json");
-        if (!file.exists()) {
-            System.out.println("1");
-        } else {
-            System.out.println("2");
-        }
 
         return "sys/shop/shopDataManage";
 
@@ -77,9 +73,32 @@ public class ShopController {
     @ResponseBody
     public List<Shop> list(Shop shop) {
 
-        List<Shop> shopList = shopBiz.findRoleList(shop);
+        List<Shop> shopList = shopBiz.findShopList(shop);
 
         return shopList;
+
+    }
+
+
+    /**
+     * @param shop 获取商品和相册
+     * @return
+     */
+    @RequestMapping("/ShopPiclist")
+    @ResponseBody
+    public Map<String, List> ShopPiclist(Shop shop) {
+
+        Map<String, List> map = new HashMap<String, List>();
+
+
+        map.put("shopList", shopBiz.findShopList(shop));
+
+        Picture picture = new Picture();
+        picture.setShopId(shop.getId());
+        map.put("pictureList", pictureBiz.findPictureList(picture));
+
+
+        return map;
 
     }
 
@@ -104,6 +123,14 @@ public class ShopController {
     public R delReport(Picture picture) {
         Map<String, Object> result = new HashMap<String, Object>();
 
+        pictureBiz.del(picture);
+
+        File file = new File(picture.getReportaddr());
+        // 判断目录或文件是否存在
+        if (file.exists()) {  // 不存在返回 false
+            file.delete();
+        }
+
         // result = shopController.uploadReport(request, response, shop);
 
         return R.ok().put("result", result);
@@ -119,6 +146,49 @@ public class ShopController {
         } else {
             return R.error("保存失败！");
         }
+
+    }
+
+    @RequestMapping("/update")
+    @ResponseBody
+    public R update(Shop shop) {
+        Long id = shopBiz.update(shop);
+
+        if (id > 0) {
+            return R.ok().put("id", shop.getId());
+        } else {
+            return R.error("更新失败！");
+        }
+
+    }
+
+    @RequestMapping("/del")
+    @ResponseBody
+    public R del(Shop shop) {
+
+
+        try {
+            shopController.del(shop);
+            return R.ok("删除成功！").put("state", true);
+        } catch (Exception e) {
+            return R.error("删除失败！").put("state", false);
+        }
+
+    }
+
+
+    // 图片轮播
+    @RequestMapping(value = "/pictureCarousel")
+    public String pictureCarousel(Model model, Picture picture) {
+
+
+        List<Picture> list = pictureBiz.findPictureList(picture);
+
+
+        model.addAttribute("list", list);
+
+
+        return "sys/shop/pictureCarousel";
 
     }
 }
