@@ -1,5 +1,6 @@
 package com.youhe.controller.loginController;
 
+import com.alibaba.fastjson.JSON;
 import com.youhe.biz.test.TestBiz;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.entity.user.User;
@@ -10,6 +11,8 @@ import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import com.youhe.utils.workflow.ExportFlow;
+
+
 import org.activiti.engine.ProcessEngine;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.shiro.SecurityUtils;
@@ -19,12 +22,17 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -119,7 +127,7 @@ public class LoginController {
 
         ExportFlow export = new ExportFlow();
 
-      //  export.Export(processEngine,"4");
+        //  export.Export(processEngine,"4");
 
         log.debug(shiroUser.getUserName() + ">>>>>>>>>>>>登录成功");
 
@@ -145,6 +153,29 @@ public class LoginController {
             }
         }
         return "redirect:";
+    }
+
+
+    //国际化切换
+    @RequestMapping(value = "/changeLang")
+    @ResponseBody
+    public String il8nChange(String lang, HttpServletRequest request) {
+
+        if ("zh_cn".equals(lang)) {
+            Locale locale = new Locale("zh", "CN");
+            request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+            request.getSession().setAttribute("lan", "zh_CN");
+        } else if ("en_us".equals(lang)) {
+            Locale locale = new Locale("en", "US");
+            request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+            request.getSession().setAttribute("lan", "en_US");
+
+        } else {
+            request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, LocaleContextHolder.getLocale());
+            request.getSession().setAttribute("lan", "zh_CN");
+
+        }
+        return JSON.toJSONString("success");
     }
 
 }

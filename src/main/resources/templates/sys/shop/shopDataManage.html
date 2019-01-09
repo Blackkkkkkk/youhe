@@ -377,13 +377,13 @@
 
 
     function detail(shopId) {
-        layer.open({
+        top.layer.open({
             type: 2,
             title: '照片详情查看',
             shadeClose: true,
-            shade: 0.5,
-            scrollbar: false,
-            area: ['90%', '90%'],
+            shade: 0.1,
+            scrollbar: true,
+            area: ['80%', '80%'],
             content: '/shop/pictureCarousel?shopId=' + shopId
         })
     }

@@ -109,6 +109,8 @@ public class TransactionAdviceConfig {
     public void beforeMethod(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().getName();
+
+
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
         String name = "";
 
@@ -119,6 +121,7 @@ public class TransactionAdviceConfig {
         }
 
         log.info("【" + name + "】调用了:" + className + "类的" + methodName + "方法开始了");
+
     }
 
 
@@ -126,6 +129,7 @@ public class TransactionAdviceConfig {
     public void afterMethod(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = joinPoint.getSignature().getName();
+
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
         String name = "";
 
@@ -134,7 +138,7 @@ public class TransactionAdviceConfig {
         } else {
             name = "游客";
         }
-        log.info("【" + name + "】调用完了:" + className + "类的" + methodName +"方法");
-    }
+        log.info("【" + name + "】调用完了:" + className + "类的" + methodName + "方法");
 
+    }
 }

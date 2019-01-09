@@ -35,11 +35,12 @@ var vm = new Vue({
                 orderNum: 0
             };
 
+            $("#reportFile").fileinput('destroy'); // 先销毁在初始化上传框
             //初始化fileinput
             var oFileInput = new FileInput();
 
             //参数1:控件id、参数2:上传地址
-            oFileInput.Init("reportFile", "/shop/uploadReport");
+            oFileInput.Init("reportFile", "/shop/uploadReport", '', '');
 
         },
         reload: function () {
@@ -54,10 +55,8 @@ var vm = new Vue({
             }
         },
         save: function () {
-
             var bootstrapValidator = $("#myForm").data('bootstrapValidator');
             bootstrapValidator.validate();
-
 
             if (bootstrapValidator.isValid()) {
                 var picturename = "";//获取上传的文件的后缀名，如果不是jpg,或者png的话不出发上传，弹出提示，表单里面的其他内容也不上传。
@@ -101,7 +100,6 @@ var vm = new Vue({
             }
         },
         update: function () {
-
             var id = vm.getRowDate();
 
             if (id.length > 0) {
@@ -110,7 +108,6 @@ var vm = new Vue({
 
                 vm.showList = false;
             }
-
         },
         del: function (id) {
 
@@ -126,10 +123,8 @@ var vm = new Vue({
                     } else {
                         layer.msg(r.msg, {icon: 2, time: 1000});
                     }
-
                 })
             }
-
 
         },   //根据选中行获取选择的Id
         getRowDate: function () {
@@ -159,6 +154,8 @@ var vm = new Vue({
                 }
 
                 if (r.pictureList.length > 0) {
+
+                    $("#reportFile").fileinput('destroy'); // 先销毁在初始化上传框
                     // 照片地址初始化
                     var initPictureAddress = new Array();
                     //初始配置项
@@ -174,44 +171,16 @@ var vm = new Vue({
                         })
                     });
 
-                    //初始化修改的上传照片框
-                    $("#reportFile").fileinput({
-                        language: 'zh',
-                        theme: 'fa',
-                        uploadUrl: "/shop/uploadReport",
-                        uploadAsync: false,
-                        showCaption: false,                                     //是否显示标题
-                        showRemove: false,                                       //显示移除按钮,跟随文本框的那个
-                        showUpload: false,                                       //显示上传按钮
-                        showCancel: false,                                      //是否显示取消按钮
-                        maxFileCount: 5,
-                        overwriteInitial: false,
-                        initialPreview: initPictureAddress,
-                        initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
-                        initialPreviewFileType: 'image', // image is the default and can be overridden in config below
-                        initialPreviewConfig: initialPreviewCfg,
-                        uploadExtraData: {
-                            img_key: "1000",
-                            img_keywords: "happy, places",
-                        },
-                        layoutTemplates: {  // 隐藏上传按钮
-                            actionUpload: '',
-                        }
-
-                    }).on('filesorted', function (e, params) {
-                        console.log('file sorted', e, params);
-                    }).on('fileuploaded', function (e, params) {
-                        console.log('file uploaded', e, params);
-                    });
-
-                } else {
-
                     //初始化fileinput
                     var oFileInput = new FileInput();
-
                     //参数1:控件id、参数2:上传地址
-                    oFileInput.Init("reportFile", "/shop/uploadReport");
+                    oFileInput.Init("reportFile", "/shop/uploadReport", initPictureAddress, initialPreviewCfg);
 
+                } else {
+                    //初始化fileinput
+                    var oFileInput = new FileInput();
+                    //参数1:控件id、参数2:上传地址
+                    oFileInput.Init("reportFile", "/shop/uploadReport", '', '');
                 }
 
 
@@ -227,9 +196,19 @@ var FileInput = function () {
     var oFile = new Object();
 
     //初始化fileinput控件（第一次初始化）
-    oFile.Init = function (ctrlName, uploadUrl) {
+    // 照片地址初始化  initPictureAddress
+    //初始配置项 initialPreviewCfg =
+    oFile.Init = function (ctrlName, uploadUrl, initPictureAddress, initialPreviewCfg) {
         var control = $('#' + ctrlName);
 
+
+        //初始化变量
+        var overwriteInit = true, PreviewInit = false, PreviewTypeInit = '';
+
+        //判断是否有历史图片记录
+        if (initPictureAddress.length > 0) {
+            overwriteInit = false, PreviewInit = true, PreviewTypeInit = 'image';
+        }
 
         //初始化上传控件的样式
         control.fileinput({
@@ -251,9 +230,18 @@ var FileInput = function () {
             maxFileCount: 10,                                       //表示允许同时上传的最大文件个数
             enctype: 'multipart/form-data',
             validateInitialCount: true,
+
+            overwriteInitial: overwriteInit,
+            initialPreview: initPictureAddress,
+            initialPreviewAsData: PreviewInit, // identify if you are sending preview data only and not the raw markup
+            initialPreviewFileType: PreviewTypeInit, // image is the default and can be overridden in config below
+            initialPreviewConfig: initialPreviewCfg,
+
+
             previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
             msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
             uploadExtraData: function (previewId, index, event, data) {           //传参
+
 
                 // 获取之div下子标签的元素值
                 var htmvaul = $("#" + previewId).find("div").eq(1).find("div").find("div").eq(1).html();
@@ -312,7 +300,6 @@ var FileInput = function () {
                 var table = $('.dataTables-example').DataTable();
                 table.ajax.reload();
 
-
                 vm.reload();
 
 
@@ -324,9 +311,9 @@ var FileInput = function () {
                     .siblings('.fileinput-remove')
                     .hide()
 
+                $("#reportFile").fileinput('destroy');
 
             })
-
         }).on('filesuccessremove', function (event, previewId, extra) {
             //在移除事件里取出所需数据，并执行相应的删除指令
             //  console.log(($('#' + previewId).attr('fileid')))
@@ -336,11 +323,6 @@ var FileInput = function () {
             // console.log(event, data);
             // console.log("fileclear");
         })
-
     }
     return oFile;
 };
-
-
-
-

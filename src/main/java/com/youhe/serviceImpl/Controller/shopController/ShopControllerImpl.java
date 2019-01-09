@@ -48,9 +48,6 @@ public class ShopControllerImpl {
 
         Map<String, Object> result = new HashMap<String, Object>();
 
-        //获取参数
-        String reportGroupId = shop.getId() + "";
-
         //调用通用接口上传文件
         return ((ShopControllerImpl) AopContext.currentProxy()).uploadFile(request, "reportFile", shop);
 

@@ -30,7 +30,6 @@ public class ShiroUserUtils {
             BeanUtils.copyProperties(shiroUser, key);
         } catch (Exception e) {
         }
-
         return shiroUser;
 
 

@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 
 
 @Configuration
-
 public class ActitytiDataSourceConfig extends AbstractProcessEngineAutoConfiguration {
 
     private static final Logger log = LogManager.getLogger(ActitytiDataSourceConfig.class);
