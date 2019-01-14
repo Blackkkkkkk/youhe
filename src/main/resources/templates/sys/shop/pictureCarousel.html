@@ -21,7 +21,7 @@
             <div class="item active" th:each="prod,info : ${list}" th:if="${info.index ==0}"
                  style="align-content: center;">
                 <img alt="image" class="img-responsive"
-                     th:src="'/webapp/upload/'+${prod.saveFileName}" style="height: 90%;"
+                     th:src="${prod.pageaddr}+'/'+${prod.saveFileName}" style="height: 90%;"
                 >
                 <div class="carousel-caption">
                     <p th:text="${prod.fileName}" style="color: rgba(56, 47, 47, 0.78);font-size: 20px;"></p>
@@ -29,7 +29,7 @@
             </div>
             <div class="item " th:each="prod,info : ${list}" th:if="${info.index !=0}">
                 <img alt="image" class="img-responsive"
-                     th:src="'/webapp/upload/'+${prod.saveFileName}"
+                     th:src="${prod.pageaddr}+'/'+${prod.saveFileName}"
                 >
                 <div class="carousel-caption">
                     <p th:text="${prod.fileName}" style="color: rgba(56, 47, 47, 0.78);font-size: 20px;"></p>

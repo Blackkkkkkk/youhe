@@ -45,7 +45,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 
         // 获取项目编译后的路径
         String realPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "/templates/upload/";
-        registry.addResourceHandler("/webapp/upload/**").addResourceLocations("file:" + realPath);
+        registry.addResourceHandler("/templates/upload/**").addResourceLocations("file:" + realPath);
 
         super.addResourceHandlers(registry);
     }

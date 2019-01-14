@@ -13,13 +13,14 @@
         <result property="register" column="REGISTER"/>
         <result property="orderNum" column="ORDER_NUM"/>
         <result property="saveFileName" column="SAVE_FILE_NAME"></result>
+        <result property="pageaddr" column="PAGEADDR"></result>
     </resultMap>
 
     <!--
       商品表和照片表关联，右表为照片表，当有多数据的时候取第一张为关联数据，满足前台的缩略图预览
     -->
     <select id="findShopList" parameterType="com.youhe.entity.shop.Shop" resultMap="shopList">
-        SELECT sc.*,sp.SAVE_FILE_NAME FROM shop_commodity sc
+        SELECT sc.*,sp.SAVE_FILE_NAME,sp.PAGEADDR FROM shop_commodity sc
         LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
         AND
         sp.ID =

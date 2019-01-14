@@ -65,6 +65,15 @@ public class ShopController {
 
     }
 
+    //商城首页设置
+    @RequestMapping(value = "/shopPageMange")
+    public String shopPageMange(Model model) {
+
+        return "sys/shop/shopPageManage/shopPageManage";
+
+    }
+
+
     /**
      * @param shop 获取商品
      * @return

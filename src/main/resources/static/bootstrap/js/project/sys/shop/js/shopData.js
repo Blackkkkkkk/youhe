@@ -68,6 +68,10 @@ var vm = new Vue({
 
                     var url = vm.shop.id == null ? "/shop/save" : "/shop/update";
 
+
+                    console.log($("#myForm").serialize())
+
+
                     $.ajax({
                         type: 'post',
                         url: url,
@@ -161,7 +165,7 @@ var vm = new Vue({
                     //初始配置项
                     var initialPreviewCfg = new Array();
                     r.pictureList.forEach(function (v, index) {
-                        initPictureAddress.push("/webapp/upload/" + v.saveFileName)
+                        initPictureAddress.push(v.pageaddr + "/" + v.saveFileName)
                         initialPreviewCfg.push({
                             caption: v.fileName,
                             size: v.pictureSize,

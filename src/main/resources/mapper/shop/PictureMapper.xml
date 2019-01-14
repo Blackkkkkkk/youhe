@@ -13,6 +13,7 @@
         <result property="previewId" column="PREVIEW_ID"></result>
         <result property="shopId" column="SHOP_ID"></result>
         <result property="pictureSize" column="PICTURE_SIZE"></result>
+        <result property="pageaddr" column="PAGEADDR"></result>
     </resultMap>
 
     <select id="findPictureList" parameterType="com.youhe.entity.shop.Picture" resultMap="pictureList">
@@ -44,7 +45,8 @@
     REGISTER_DATE,
     PREVIEW_ID,
     SHOP_ID,
-    PICTURE_SIZE
+    PICTURE_SIZE,
+    PAGEADDR
     )
     values(
     #{type,jdbcType=INTEGER},
@@ -55,7 +57,8 @@
     NOW(),
     #{previewId,jdbcType=VARCHAR},
     #{shopId,jdbcType=VARCHAR},
-    #{pictureSize,jdbcType=VARCHAR}
+    #{pictureSize,jdbcType=VARCHAR},
+    #{pageaddr,jdbcType=VARCHAR}
     )
     </insert>
 
@@ -101,6 +104,9 @@
             </if>
             <if test="pictureSize != null and pictureSize != ''">
                 PICTURE_SIZE = #{pictureSize,jdbcType=VARCHAR},
+            </if>
+            <if test="pageaddr != null and pageaddr != ''">
+                PAGEADDR = #{pageaddr,jdbcType=VARCHAR},
             </if>
         </set>
         <where>

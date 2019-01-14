@@ -21,7 +21,12 @@ public class Shop extends SysBaseEntity {
     private Integer status;    //1 上架 0下架
     private Date register; //注册时间
 
+    /*
+    * 关联照片表的字段
+    **/
     private String saveFileName; // 照片名字
+
+    private String pageaddr; // 页面显示路径
 
     //排序
     private Integer orderNum;
@@ -32,7 +37,6 @@ public class Shop extends SysBaseEntity {
     private String pictureSize; //照片大小
 
 
-
     public Integer getId() {
         return id;
     }
@@ -41,6 +45,13 @@ public class Shop extends SysBaseEntity {
         this.id = id;
     }
 
+    public String getPageaddr() {
+        return pageaddr;
+    }
+
+    public void setPageaddr(String pageaddr) {
+        this.pageaddr = pageaddr;
+    }
 
     public String getPictureSize() {
         return pictureSize;

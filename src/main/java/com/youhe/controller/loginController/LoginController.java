@@ -178,4 +178,13 @@ public class LoginController {
         return JSON.toJSONString("success");
     }
 
+
+    @RequestMapping(value = "/skin-config")
+    public String skin() {
+
+
+        return "skin-config";
+    }
+
+
 }

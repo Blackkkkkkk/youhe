@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.shop.ShopUserIndexMapper">
+
+    <resultMap type="com.youhe.entity.shop.Shop_index_carousel" id="carouselList">
+        <id property="id" column="ID"/>
+        <result property="type" column="TYPE"/>
+        <result property="text_1" column="TEXT_1"/>
+        <result property="text_2" column="TEXT_2"></result>
+        <result property="text_3" column="TEXT_3"></result>
+        <result property="text_4" column="TEXT_4"/>
+        <result property="text_5" column="TEXT_5"/>
+        <result property="text_6" column="TEXT_6"></result>
+        <result property="picType" column="PICTYPE"></result>
+        <result property="pageaddr" column="PAGEADDR"></result>
+        <result property="pictureSize" column="PICTURE_SIZE"></result>
+        <result property="reportaddr" column="REPORTADDR"></result>
+    </resultMap>
+
+
+    <select id="findCarouselList" parameterType="com.youhe.entity.shop.Shop_index_carousel" resultMap="carouselList">
+        SELECT ca.*,pi.TYPE PICTYPE,pi.PAGEADDR,pi.PICTURE_SIZE , pi.REPORTADDR FROM shop_index_carousel_text ca
+        LEFT JOIN shop_picture pi on pi.SHOP_ID = ca.ID
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id!=null and id !=''">
+                    AND ID = #{id}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <update id="updateCarouse" parameterType="com.youhe.entity.shop.Shop_index_carousel">
+        UPDATE shop_index_carousel_text
+        <set>
+            <trim suffixOverrides=",">
+                <if test="type != null and type != ''">
+                    TYPE = #{type,jdbcType=INTEGER},
+                </if>
+                <if test="text_1!=null and text_1 !=''">
+                    TEXT_1 = #{text_1,jdbcType=VARCHAR},
+                </if>
+                <if test="text_2!=null and text_2 !=''">
+                    TEXT_2 = #{text_2,jdbcType=VARCHAR},
+                </if>
+                <if test="text_3!=null and text_3 !=''">
+                    TEXT_3 = #{text_3,jdbcType=VARCHAR},
+                </if>
+                <if test="text_4!=null and text_4 !=''">
+                    TEXT_4 = #{text_4,jdbcType=VARCHAR},
+                </if>
+                <if test="text_5!=null and text_5 !=''">
+                    TEXT_5 = #{text_5,jdbcType=VARCHAR},
+                </if>
+                <if test="text_6!=null and text_6 !=''">
+                    TEXT_6 = #{text_6,jdbcType=VARCHAR},
+                </if>
+            </trim>
+        </set>
+        <where>
+            <if test="id != null and id != ''">
+                AND ID = #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+    </update>
+
+
+</mapper>

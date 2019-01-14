@@ -12,17 +12,27 @@ public class Picture extends SysBaseEntity {
     private int id;
     private Date registerDate; //注册时间
 
-    private int type;  //1.详情图，2缩略图
+    private int type;  //1.详情图，2首页轮播图
     private String fileName;// 文件名称
     private String fileType;//文件类型
     private String saveFileName;//保存到服务器目录的文件名称
     private String reportaddr;// 保存到服务器目录的文件全路径
+    private String pageaddr;//页面显示路径
 
     private String previewId;//照片的独立id
 
-    private Integer shopId; // 商品的ID
+    private Integer shopId; // type 1:商品的ID   2:轮播图id
 
     private String pictureSize; //照片大小
+
+
+    public String getPageaddr() {
+        return pageaddr;
+    }
+
+    public void setPageaddr(String pageaddr) {
+        this.pageaddr = pageaddr;
+    }
 
     public String getPictureSize() {
         return pictureSize;

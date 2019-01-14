@@ -52,9 +52,22 @@
                         </li>
                         <li shiro:hasPermission="sys:roleManage" id="roleManage"><a href="/role/index">角色管理</a></li>
                         <li shiro:hasPermission="sys:userManage" id="userManage"><a href="/user/index">人员管理</a></li>
-                        <li shiro:hasPermission="sys:commodityManage" id="commodityManage"><a href="/shop/index">商品管理</a></li>
                     </ul>
                 </li>
+                <li id="shopMange" shiro:hasPermission="shop:page">
+                    <a href="index.html"><i class="fa fa-shopping-cart"></i> <span class="nav-label">商品主页</span> <span
+                            class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse" id="shopMange_ul">
+                        <li shiro:hasPermission="shop:commodityManage" id="commodityManage"><a
+                                href="/shop/index">商品管理</a></li>
+                        <li><a href="/shop/shopPageMange" id="shopPageManage">商城首页</a></li>
+                        <li><a href="dashboard_3.html">主页示例 v.3</a></li>
+                        <li><a href="dashboard_4_1.html">主页示例 v.4</a></li>
+                        <li><a href="dashboard_5.html">主页示例 v.5 </a></li>
+                    </ul>
+                </li>
+
+
                 <li id="homePage">
                     <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">主页</span> <span
                             class="fa arrow"></span></a>

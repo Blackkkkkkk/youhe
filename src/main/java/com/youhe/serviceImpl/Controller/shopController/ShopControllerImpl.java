@@ -69,8 +69,21 @@ public class ShopControllerImpl {
 // 项目在容器中实际发布运行的根路径
         //   String realPath = request.getSession().getServletContext().getRealPath("/") + "upload";
 
+        String realPath = null;
 
-        String realPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "/templates/upload/";
+        String pageaddr = ""; // 页面显示的路径
+
+        if (shop.getType() == 2) {   // 用户首页轮播图保存的路径
+            pageaddr = "/templates/upload/userShopIndex/carousel/";
+            realPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + pageaddr;
+
+
+        } else {//上传商品，保存相册的路径 按每天日期分类
+            pageaddr = "/templates/upload/ShopManage/" +
+                    new SimpleDateFormat("yyyyMMdd").format(new Date()) + "/";
+            realPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + pageaddr;
+
+        }
 
 
         //判断保存文件的路径是否存在
@@ -93,6 +106,7 @@ public class ShopControllerImpl {
                 String fileType = "";        //当前上传文件类型
                 String saveFileName = "";    //保存到服务器目录的文件名称
                 String reportAddr = "";      //保存到服务器目录的文件全路径
+
 
                 picture = new Picture();
                 try {
@@ -119,6 +133,7 @@ public class ShopControllerImpl {
                     picture.setPreviewId(shop.getPreviewId());
                     picture.setShopId(shop.getId());
                     picture.setPictureSize(shop.getPictureSize());
+                    picture.setPageaddr(pageaddr);
 
                     pictureBiz.save(picture);
 
