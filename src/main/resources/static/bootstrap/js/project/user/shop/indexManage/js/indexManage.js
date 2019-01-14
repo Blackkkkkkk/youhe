@@ -15,6 +15,7 @@ var vm = new Vue({
             text_1_5: null,
             text_1_6: null,
             type: null
+
         }
     },
     methods: {
