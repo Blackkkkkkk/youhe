@@ -1,5 +1,6 @@
 package com.youhe.initBean;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -26,9 +27,8 @@ import javax.sql.DataSource;
  * @author Administrator
  */
 @Configuration
-
 public class DruidConfiguation {
-    //  @Value("${mybatis.mapperLocation}")
+
     private String mapperLocations = "classpath:mapper/**/*.xml";
 
     private String configLocation = "classpath:mybatis-page-config.xml";
@@ -69,8 +69,10 @@ public class DruidConfiguation {
     //配置数据库的基本链接信息
     @Bean(name = "dataSource")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")    //可以在application.properties中直接导入
+    @ConfigurationProperties(prefix = "spring.datasource.druid")    //可以在application.properties中直接导入
     public DataSource dataSource() {
+
+
         return DataSourceBuilder.create().type(com.alibaba.druid.pool.DruidDataSource.class).build();
     }
 

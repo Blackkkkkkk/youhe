@@ -46,7 +46,6 @@ import java.util.Locale;
  * @author Administrator
  */
 @Configuration
-@AutoConfigureBefore(DruidConfiguation.class)
 public class ShiroConfiguration {
 
     @Bean
