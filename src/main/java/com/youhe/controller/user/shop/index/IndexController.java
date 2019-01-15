@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +38,14 @@ public class IndexController {
     private ShopControllerImpl shopController;
 
     @RequestMapping(value = "/index")
-    public String index() {
+    public String index(Model model, Shop_index_carousel shop_index_carousel) {
+
+        Map<String, List<Shop_index_carousel>> map = new HashMap<String, List<Shop_index_carousel>>();
+        List<Shop_index_carousel> carouselList = shopUserIndexBiz.findPictureList(shop_index_carousel);
+        map.put("carouselList", carouselList);
+
+        model.addAttribute("carouselList", carouselList);
+
 
         return "user/shop/index/index";
     }

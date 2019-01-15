@@ -49,7 +49,7 @@ public class ShopControllerImpl {
         Map<String, Object> result = new HashMap<String, Object>();
 
         //调用通用接口上传文件
-        return ((ShopControllerImpl) AopContext.currentProxy()).uploadFile(request, "reportFile", shop);
+        return ((ShopControllerImpl) AopContext.currentProxy()).uploadFile(request,shop);
 
     }
 
@@ -58,11 +58,10 @@ public class ShopControllerImpl {
      * 上传文件通用接口
      *
      * @param request     请求体
-     * @param dstFileName html上传组件中(input中name属性)，上传文件体名称，通过此名称获取所有上传的文件map
      * @param shop        （特殊）上传报告所述报告组参数
      */
     @Transactional(rollbackFor = Exception.class)
-    public Map<String, Object> uploadFile(HttpServletRequest request, String dstFileName, Shop shop) {
+    public Map<String, Object> uploadFile(HttpServletRequest request, Shop shop) {
         Map<String, Object> ret = new HashMap<String, Object>();
 
 
@@ -89,13 +88,13 @@ public class ShopControllerImpl {
         //判断保存文件的路径是否存在
         File fileUploadPath = new File(realPath);
         if (!fileUploadPath.exists()) {
-            fileUploadPath.mkdir();
+            fileUploadPath.mkdirs();
         }
 
 
         if (ServletFileUpload.isMultipartContent(request)) {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            List<MultipartFile> fileList = multipartRequest.getFiles(dstFileName);
+            List<MultipartFile> fileList = multipartRequest.getFiles(shop.getDstFileName());
 
             // String picSaveList = new String();  //保存到数据库返回的ID列
 

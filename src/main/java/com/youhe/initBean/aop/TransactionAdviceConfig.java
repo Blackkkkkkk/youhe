@@ -104,12 +104,11 @@ public class TransactionAdviceConfig {
     }*/
 
     // 1、前置通知： 在目标方法开始之前执行（就是要告诉该方法要在哪个类哪个方法前执行）
-// @Before("execution(public int Spring4_AOP.aopAnnotation.*.*(int ,int))")
-    @Before(value = "execution(* com.youhe..*())")
+
+    @Before(value = "execution(* com.youhe..*())  && !execution(* com.youhe.initBean..*())")
     public void beforeMethod(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().getName();
-
 
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
         String name = "";
@@ -119,13 +118,11 @@ public class TransactionAdviceConfig {
         } else {
             name = "游客";
         }
-
         log.info("【" + name + "】调用了:" + className + "类的" + methodName + "方法开始了");
-
     }
 
 
-    @After(value = "execution(* com.youhe..*())")
+    @After(value = "execution(* com.youhe..*()) && !execution(* com.youhe.initBean..*())")
     public void afterMethod(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = joinPoint.getSignature().getName();

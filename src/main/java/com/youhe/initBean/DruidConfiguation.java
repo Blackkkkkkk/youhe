@@ -11,6 +11,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -24,7 +25,8 @@ import javax.sql.DataSource;
  *
  * @author Administrator
  */
-//@Configuration
+@Configuration
+
 public class DruidConfiguation {
     //  @Value("${mybatis.mapperLocation}")
     private String mapperLocations = "classpath:mapper/**/*.xml";
@@ -47,6 +49,7 @@ public class DruidConfiguation {
         servletRegistrationBean.addInitParameter("resetEnable", "false");
         return servletRegistrationBean;
     }
+
 
     @Bean
     public FilterRegistrationBean statFilter() {

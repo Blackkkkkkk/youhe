@@ -2,6 +2,7 @@ package com.youhe.initBean.shiro;
 
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.youhe.initBean.DruidConfiguation;
 import com.youhe.utils.shiro.AuthRealm;
 import com.youhe.utils.shiro.CredentialsMatcher;
 import org.apache.shiro.authc.Authenticator;
@@ -20,6 +21,8 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -43,13 +46,9 @@ import java.util.Locale;
  * @author Administrator
  */
 @Configuration
+@AutoConfigureBefore(DruidConfiguation.class)
 public class ShiroConfiguration {
 
-
-
-
-
-    /*
     @Bean
     public FilterRegistrationBean shiroFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
@@ -60,7 +59,6 @@ public class ShiroConfiguration {
         registration.addUrlPatterns("/*");
         return registration;
     }
-*/
 
 
     @Bean
@@ -124,6 +122,8 @@ public class ShiroConfiguration {
     //配置核心安全事务管理器
     @Bean(name = "securityManager")
     public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
+
+
         System.err.println("--------------shiro已经加载----------------");
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
         manager.setRealm(authRealm);

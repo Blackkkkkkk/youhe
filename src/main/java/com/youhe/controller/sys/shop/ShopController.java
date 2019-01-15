@@ -104,6 +104,7 @@ public class ShopController {
 
         Picture picture = new Picture();
         picture.setShopId(shop.getId());
+        picture.setType(shop.getType());
         map.put("pictureList", pictureBiz.findPictureList(picture));
 
 

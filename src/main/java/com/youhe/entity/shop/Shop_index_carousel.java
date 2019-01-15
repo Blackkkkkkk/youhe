@@ -24,7 +24,16 @@ public class Shop_index_carousel extends SysBaseEntity {
     private String pictureSize; //照片大小
     private String pageaddr;//页面显示路径
     private String picType;//照片类型
+    private String saveFileName; // 照片名字
 
+
+    public String getSaveFileName() {
+        return saveFileName;
+    }
+
+    public void setSaveFileName(String saveFileName) {
+        this.saveFileName = saveFileName;
+    }
 
     public String getReportaddr() {
         return reportaddr;

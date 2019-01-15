@@ -29,6 +29,9 @@
                 <if test="shopId != null and shopId != ''">
                     AND SHOP_ID = #{shopId,jdbcType=VARCHAR}
                 </if>
+                <if test="type != null and type != ''">
+                    AND TYPE = #{type,jdbcType=INTEGER}
+                </if>
             </trim>
         </where>
     </select>

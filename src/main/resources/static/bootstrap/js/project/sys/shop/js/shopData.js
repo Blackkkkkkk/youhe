@@ -151,7 +151,7 @@ var vm = new Vue({
             }
         },
         getDetail: function (id) {
-            $.get("/shop/ShopPiclist?id=" + id, function (r) {
+            $.get("/shop/ShopPiclist?id=" + id+"&type=1", function (r) {
 
                 if (r.shopList.length > 0) {
                     vm.shop = r.shopList[0]
@@ -261,6 +261,7 @@ var FileInput = function () {
                     "type": 1,
                     "id": vm.id,
                     "pictureSize": picSize,
+                    "dstFileName":ctrlName,
                 };
                 return data;
             },

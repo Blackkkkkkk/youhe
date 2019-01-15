@@ -37,6 +37,17 @@ public class Shop extends SysBaseEntity {
     private String pictureSize; //照片大小
 
 
+    private  String dstFileName; // 对应前端上传控件id
+
+
+    public String getDstFileName() {
+        return dstFileName;
+    }
+
+    public void setDstFileName(String dstFileName) {
+        this.dstFileName = dstFileName;
+    }
+
     public Integer getId() {
         return id;
     }

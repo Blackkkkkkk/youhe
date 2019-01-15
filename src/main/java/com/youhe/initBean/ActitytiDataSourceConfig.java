@@ -28,7 +28,6 @@ public class ActitytiDataSourceConfig extends AbstractProcessEngineAutoConfigura
     public DataSource activitiDataSource() {
         log.info("activitiDataSource 初始化...");
 
-
         DruidDataSource druidDataSource = new DruidDataSource();
         druidDataSource.setUrl("jdbc:mysql://localhost/activiti");
         druidDataSource.setUsername("root");

@@ -15,10 +15,53 @@
         <result property="pageaddr" column="PAGEADDR"></result>
         <result property="pictureSize" column="PICTURE_SIZE"></result>
         <result property="reportaddr" column="REPORTADDR"></result>
+        <result property="saveFileName" column="SAVE_FILE_NAME"></result>
     </resultMap>
 
 
     <select id="findCarouselList" parameterType="com.youhe.entity.shop.Shop_index_carousel" resultMap="carouselList">
+        <!--
+           SELECT ca.*,pi.TYPE PICTYPE,pi.PAGEADDR,pi.PICTURE_SIZE , pi.REPORTADDR FROM shop_index_carousel_text ca
+           LEFT JOIN shop_picture pi on pi.SHOP_ID = ca.ID
+
+
+           <where>
+               <trim prefixOverrides="AND">
+                   <if test="id!=null and id !=''">
+                       AND ID = #{id}
+                   </if>
+               </trim>
+           </where>
+
+           -->
+        SELECT
+        *
+        FROM
+        shop_index_carousel_text cs
+        LEFT JOIN shop_picture sp ON cs.ID = sp.SHOP_ID
+        AND sp.ID = (
+        SELECT
+        ID
+        FROM
+        shop_picture ssp
+        WHERE
+        cs.ID = ssp.SHOP_ID
+        ORDER BY ssp.REGISTER_DATE DESC
+        LIMIT 1
+        )
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="id!=null and id !=''">
+                    AND cs.ID = #{id}
+                </if>
+            </trim>
+        </where>
+
+
+    </select>
+
+    <!-- 首页显示的信息-->
+    <select id="findCarouselListOne" parameterType="com.youhe.entity.shop.Shop_index_carousel" resultMap="carouselList">
         SELECT ca.*,pi.TYPE PICTYPE,pi.PAGEADDR,pi.PICTURE_SIZE , pi.REPORTADDR FROM shop_index_carousel_text ca
         LEFT JOIN shop_picture pi on pi.SHOP_ID = ca.ID
         <where>
@@ -29,6 +72,7 @@
             </trim>
         </where>
     </select>
+
 
     <update id="updateCarouse" parameterType="com.youhe.entity.shop.Shop_index_carousel">
         UPDATE shop_index_carousel_text
