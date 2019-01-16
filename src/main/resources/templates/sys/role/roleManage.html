@@ -31,6 +31,8 @@
                 </thead>
             </table>
         </div>
+
+
         <div v-show="!showList" class="panel panel-default">
             <div class="panel-heading">{{title}}</div>
             <form class="form-horizontal">
@@ -70,6 +72,7 @@
                 </div>
             </form>
         </div>
+
     </div>
     <!-- 选择部门 -->
     <div id="deptLayer" style="display: none;padding:10px;">
@@ -103,8 +106,11 @@
 <script src="../bootstrap/js/dept/js/jquery.treegrid.extension.js"></script>
 <script src="../bootstrap/js/dept/js/tree.table.js"></script>
 
+<!-- 引用vue组件-->
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
+<!--实例化vue,配置页面 -->
 <script src="../bootstrap/js/role/js/role.js"></script>
+<!-- 引用树的js-->
 <script src="../bootstrap/js/role/js/ztree.js"></script>
 
 
@@ -190,6 +196,7 @@
             }
         }
     }
+
     function showParent(treeNode) {
         var parentNode;
         while ((parentNode = treeNode.getParentNode()) != null) {

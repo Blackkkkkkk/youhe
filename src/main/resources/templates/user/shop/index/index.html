@@ -443,21 +443,24 @@
     <div id="layerslider" style="width: 100%; height: 494px; margin: 0 auto;">
         <!--LayerSlider layer-->
         <div class="ls-layer ls-layer1" style="slidedirection: right; transition2d: 24,25,27,28; ">
-            <img src="" th:src="${carouselList[0].pageaddr}+'/'+${carouselList[0].saveFileName}" class="ls-bg" alt="Slide background">
+            <img src="" th:src="${carouselList[0].pageaddr}+'/'+${carouselList[0].saveFileName}" class="ls-bg"
+                 alt="Slide background">
             <div class="ls-s-1 title"
                  style=" top: 96px; left: 35%; slidedirection : fade; slideoutdirection : fade; durationin : 750; durationout : 750; easingin : easeOutQuint; rotatein : 90; rotateout : -90; scalein : .5; scaleout : .5; showuntil : 4000; white-space: nowrap;">
                 <span th:text="${carouselList[0].text_1}"></span>
-                <strong> <span th:text="${carouselList[0].text_2}"></span></strong> <span th:text="${carouselList[0].text_3}"></span>
+                <strong> <span th:text="${carouselList[0].text_2}"></span></strong> <span
+                    th:text="${carouselList[0].text_3}"></span>
             </div>
             <div class="ls-s-1 mini-text"
                  style=" top: 338px; left: 35%; slidedirection : fade; slideoutdirection : fade; durationout : 750; easingin : easeOutQuint; delayin : 300; showuntil : 4000; white-space: nowrap;">
-                <span th:text="${carouselList[0].text_4}"></span><br>  <span th:text="${carouselList[0].text_5}"></span>
+                <span th:text="${carouselList[0].text_4}"></span><br> <span th:text="${carouselList[0].text_5}"></span>
             </div>
         </div>
 
         <!--LayerSlider layer-->
         <div class="ls-layer ls-layer2" style="slidedirection: right; transition2d: 110,111,112,113; ">
-            <img th:src="${carouselList[1].pageaddr}+'/'+${carouselList[1].saveFileName}" class="ls-bg" alt="Slide background">
+            <img th:src="${carouselList[1].pageaddr}+'/'+${carouselList[1].saveFileName}" class="ls-bg"
+                 alt="Slide background">
             <div class="ls-s-1 ls-title title"
                  style=" top: 40%; left: 21%; slidedirection : fade; slideoutdirection : fade; durationin : 750; durationout : 750; easingin : easeOutQuint; easingout : easeInOutQuint; delayin : 0; delayout : 0; rotatein : 90; rotateout : -90; scalein : .5; scaleout : .5; showuntil : 4000; white-space: nowrap;">
                 <strong class="title"><span th:text="${carouselList[1].text_1}"></span></strong>
@@ -467,8 +470,8 @@
 
             <div class="ls-s-2 ls-price title"
                  style=" top: 50%; left: 45%; slidedirection : fade; slideoutdirection : fade; durationout : 109750; easingin : easeOutQuint; delayin : 300; scalein : .8; scaleout : .8; showuntil : 4000; white-space: nowrap;">
-               <b th:text="${carouselList[1].text_4}"></span></b>
-                <strong ><span>¥</span><a th:text="${carouselList[1].text_5}" style="color:#FFFFFF; "></a></strong>
+                <b th:text="${carouselList[1].text_4}"></span></b>
+                <strong><span>¥</span><a th:text="${carouselList[1].text_5}" style="color:#FFFFFF; "></a></strong>
             </div>
 
             <a href="#" class="ls-s-1 ls-more mini-text"
@@ -479,7 +482,8 @@
 
         <!--LayerSlider layer-->
         <div class="ls-layer ls-layer3" style="slidedirection: right; transition2d: 92,93,105; ">
-            <img th:src="${carouselList[2].pageaddr}+'/'+${carouselList[2].saveFileName}" class="ls-bg" alt="Slide background">
+            <img th:src="${carouselList[2].pageaddr}+'/'+${carouselList[2].saveFileName}" class="ls-bg"
+                 alt="Slide background">
 
             <div class="ls-s-1 ls-title"
                  style=" top: 83px; left: 33%; slidedirection : fade; slideoutdirection : fade; durationin : 750; durationout : 750; easingin : easeOutQuint; rotatein : 90; rotateout : -90; scalein : .5; scaleout : .5; showuntil : 4000; white-space: nowrap;">
@@ -502,7 +506,8 @@
 
         <!--LayerSlider layer-->
         <div class="ls-layer ls-layer5" style="slidedirection: right; transition2d: 110,111,112,113; ">
-            <img th:src="${carouselList[3].pageaddr}+'/'+${carouselList[3].saveFileName}" class="ls-bg" alt="Slide background">
+            <img th:src="${carouselList[3].pageaddr}+'/'+${carouselList[3].saveFileName}" class="ls-bg"
+                 alt="Slide background">
 
             <div class="ls-s-1 title"
                  style=" top: 35%; left: 60%; slidedirection : fade; slideoutdirection : fade; durationin : 750; durationout : 750; easingin : easeOutQuint; rotatein : 90; rotateout : -90; scalein : .5; scaleout : .5; showuntil : 4000; white-space: nowrap;">
@@ -531,118 +536,24 @@
                 <div class="bxslider-wrapper">
                     <ul class="bxslider" data-slides-phone="1" data-slides-tablet="2" data-slides-desktop="5"
                         data-slide-margin="15">
-                        <li>
+                        <!-- 最新列表 -->
+                        <li th:each="shopList,info : ${shopList}">
                             <div class="product-item">
                                 <div class="pi-img-wrapper">
-                                    <img src="../bootstrap/user/temp/products/model1.jpg" class="img-responsive"
+                                    <img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
+                                         class="img-responsive"
                                          alt="Berry Lace Dress">
                                     <div>
-                                        <a href="../bootstrap/user/temp/products/model1.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
+                                        <a th:href="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
+                                                class="btn btn-default fancybox-button">查看</a>
                                         <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
                                     </div>
                                 </div>
-                                <h3><a href="item.html">Berry Lace Dress</a></h3>
-                                <div class="pi-price">$29.00</div>
+                                <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
+                                <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
                                 <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                                <div class="sticker sticker-sale"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="../bootstrap/user/temp/products/model2.jpg" class="img-responsive"
-                                         alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="../bootstrap/user/temp/products/model2.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress2</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="../bootstrap/user/temp/products/model6.jpg" class="img-responsive"
-                                         alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="../bootstrap/user/temp/products/model6.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress2</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="../bootstrap/user/temp/products/model4.jpg" class="img-responsive"
-                                         alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="../bootstrap/user/temp/products/model4.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="#">Berry Lace Dress4</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                                <div class="sticker sticker-new"></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="../bootstrap/user/temp/products/model5.jpg" class="img-responsive"
-                                         alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="../bootstrap/user/temp/products/model5.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress5</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="../bootstrap/user/temp/products/model3.jpg" class="img-responsive"
-                                         alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="../bootstrap/user/temp/products/model3.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress3</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="../bootstrap/user/temp/products/model7.jpg" class="img-responsive"
-                                         alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="../bootstrap/user/temp/products/model7.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress3</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                                <div class="sticker sticker-sale"  th:if="${info.index ==0}"></div>
+                                <div class="sticker sticker-new" th:if="${info.index ==1}"></div>
                             </div>
                         </li>
                     </ul>
@@ -1289,10 +1200,10 @@
                 data: {
                     lang: lang
                 }, success: function (data) {
-                location.reload();
-            }, erro: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("erro");
-            }
+                    location.reload();
+                }, erro: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("erro");
+                }
             }
         )
 

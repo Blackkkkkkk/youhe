@@ -30,8 +30,7 @@
         <if test="id!=null and id !=''">
             AND sc.ID = #{id}
         </if>
-
-        ORDER BY sc.top ,sc.ORDER_NUM DESC
+        ORDER BY sc.top ,sc.ORDER_NUM ,sc.REGISTER DESC
     </select>
 
     <insert id="save" parameterType="com.youhe.entity.shop.Shop" keyProperty="id"
