@@ -1,6 +1,7 @@
 package com.youhe.controller.user.shop.index;
 
 
+import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
 import com.youhe.controller.sys.shop.ShopController;
 import com.youhe.entity.shop.Shop;
@@ -35,17 +36,20 @@ public class IndexController {
     private ShopUserIndexBiz shopUserIndexBiz;
 
     @Autowired
-    private ShopControllerImpl shopController;
+    private ShopBiz shopBiz;
+
 
     @RequestMapping(value = "/index")
     public String index(Model model, Shop_index_carousel shop_index_carousel) {
 
-        Map<String, List<Shop_index_carousel>> map = new HashMap<String, List<Shop_index_carousel>>();
+        // 获取轮播图信息
         List<Shop_index_carousel> carouselList = shopUserIndexBiz.findPictureList(shop_index_carousel);
-        map.put("carouselList", carouselList);
 
         model.addAttribute("carouselList", carouselList);
 
+        Shop shop = new Shop();
+        List<Shop> shopList = shopBiz.findShopList(shop);
+        model.addAttribute("shopList", shopList);
 
         return "user/shop/index/index";
     }
