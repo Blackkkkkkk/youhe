@@ -68,7 +68,7 @@ public class ShopController {
 
     }
 
-    //商城首页设置
+    //设置
     @RequestMapping(value = "/shopPageMange")
     public String shopPageMange(Model model) {
 

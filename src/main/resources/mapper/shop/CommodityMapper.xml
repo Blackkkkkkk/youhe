@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.shop.CommodityMapper">
+
+    <resultMap type="com.youhe.entity.shop.Commodity" id="commodityList">
+        <id property="cid" column="CID"/>
+        <result property="cname" column="CNAME"/>
+        <result property="available" column="AVAILABLE"/>
+        <result property="parentId" column="PARENT_ID"></result>
+        <result property="parentName" column="PARENT_NAME"></result>
+        <result property="orderNum" column="ORDER_NUM"/>
+    </resultMap>
+
+    <!-- 查询角色-->
+    <select id="findCommodityList"  parameterType="com.youhe.entity.shop.Commodity"  resultMap="commodityList">
+        SELECT *,(SELECT CNAME FROM shop_commodity_role WHERE c.PARENT_ID = CID) PARENT_NAME FROM shop_commodity_role C
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="cid">
+                    AND c.CID=#{cid}
+                </if>
+                <if test="cname!=null and cname !=''">
+                    AND c.CNAME=#{cname,jdbcType=VARCHAR}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="com.youhe.entity.shop.Commodity" keyProperty="cid"
+            useGeneratedKeys="true">
+        insert into shop_commodity_role(CNAME,AVAILABLE,PARENT_ID,ORDER_NUM) value(#{cname},1,#{parentId},#{orderNum})
+    </insert>
+
+    <update id="update" parameterType="com.youhe.entity.shop.Commodity">
+        UPDATE shop_commodity_role
+        SET
+        <trim suffixOverrides=",">
+            <if test="parentId != null">
+                PARENT_ID =#{parentId},
+            </if>
+            <if test="available != null">
+                AVAILABLE =#{available},
+            </if>
+            <if test="cname != null and cname!=''">
+                CNAME=#{cname},
+            </if>
+            <if test="orderNum != null">
+                ORDER_NUM =#{orderNum},
+            </if>
+        </trim>
+        WHERE CID=#{cid}
+    </update>
+
+
+    <delete id="del" parameterType="com.youhe.entity.shop.Commodity">
+           DELETE  from shop_commodity_role  WHERE CID=#{cid}
+    </delete>
+
+
+
+</mapper>
+
+
