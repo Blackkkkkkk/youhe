@@ -79,6 +79,8 @@
     <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.25.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.25.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.25.Final" level="project" />
+    <orderEntry type="library" name="Maven: redis.clients:jedis:2.9.0" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.16.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.0.3.RELEASE" level="project" />
