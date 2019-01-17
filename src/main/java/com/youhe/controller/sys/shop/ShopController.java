@@ -1,7 +1,6 @@
 package com.youhe.controller.sys.shop;
 
-import com.github.pagehelper.PageInfo;
-
+import com.youhe.biz.redis.RedisBiz;
 import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
 
@@ -13,27 +12,24 @@ import com.youhe.entity.shop.Shop;
 
 import com.youhe.serviceImpl.Controller.shopController.ShopControllerImpl;
 import com.youhe.utils.R;
-import net.sf.json.JSONArray;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +51,18 @@ public class ShopController {
     @Autowired
     private ShopControllerImpl shopController;
 
+    @Autowired
+    private RedisBiz redisBiz;
+
+
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @RequestMapping(value = "/index")
     public String index(Model model) {
 
+      //  redisTemplate.opsForValue().set("name", "小明");
+        System.out.println(redisBiz.existsKey("name"));
+        System.out.println();
 
         return "sys/shop/shopDataManage";
 
@@ -83,6 +86,7 @@ public class ShopController {
     public List<Shop> list(Shop shop) {
 
         List<Shop> shopList = shopBiz.findShopList(shop);
+
 
         return shopList;
 
@@ -201,4 +205,6 @@ public class ShopController {
         return "sys/shop/pictureCarousel";
 
     }
+
+
 }
