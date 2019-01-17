@@ -28,6 +28,19 @@ spring:
            pool-prepared-statements: true
            max-open-prepared-statements: 50
            max-pool-prepared-statement-per-connection-size: 20
+# redis 配置
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      password:
+      jedis:
+        pool:
+          max-active: 8
+          min-idle: 0
+          max-idle: 8
+          max-wait: -1
+      timeout: 5000
 
     messages:
       encoding: utf-8

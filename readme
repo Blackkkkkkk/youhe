@@ -1,5 +1,6 @@
 						spring-boot整合activiti-modeler
 
+
 # 初始化数据库 
 	创建数据库，执行数据库脚本文件 activiti.sql
 # 修改配置文件 application.properties
