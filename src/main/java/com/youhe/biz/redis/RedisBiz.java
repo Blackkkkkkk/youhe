@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -107,16 +108,17 @@ public class RedisBiz implements RedisService {
     /*
       根据Map 存储到redis 的Hash 值里面(给某个hash 值的键值加1)
     */
-    public Long hincrement(KeyPrefix prefix, String key, String filed) {
+    public Long hincrement(KeyPrefix prefix, String key, String filed, int num) {
 
-        return redisTemplate.opsForHash().increment(prefix.getPrefix() + key, filed, 1);
+
+        return redisTemplate.opsForHash().increment(prefix.getPrefix() + key, filed, num);
     }
 
       /*
       根据Map 存储到redis 的Hash 值里面(根据id 去遍历所有的值)
       */
 
-    public List<Shop> hscan(KeyPrefix prefix, String key, String filed) {
+    public List<Shop> hscan(KeyPrefix prefix, String key) {
         List<Shop> shopList = new ArrayList<Shop>();
 
         //遍历出该ID 所有的购物车商品
@@ -134,5 +136,21 @@ public class RedisBiz implements RedisService {
         }
         return shopList;
     }
+
+    /*
+    删除hash结构中的某个键
+    */
+    public Long hdel(KeyPrefix prefix, String key, String filed) {
+        return redisTemplate.opsForHash().delete(prefix.getPrefix() + key, filed);
+    }
+
+
+    /*
+      设置 键过期时间   单位为秒
+     */
+    public void expire(KeyPrefix prefix, String key) {
+        System.out.println(redisTemplate.expire(prefix.getPrefix() + key, prefix.expireSeconds(), TimeUnit.SECONDS));
+    }
+
 
 }

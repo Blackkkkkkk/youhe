@@ -59,6 +59,26 @@ public class IndexController {
         return "user/shop/index/index";
     }
 
+    @RequestMapping(value = "/shoppingCart")
+    public String shoppingCart(Model model, Shop_index_carousel shop_index_carousel) {
+
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+
+        System.out.println(shiroUser.getUserAccount() == null || shiroUser.getUserAccount() == "");
+        if (shiroUser.getUserAccount() != null || shiroUser.getUserAccount() != "") {
+            try {
+                List<Shop> shopList = searchList(shiroUser.getUserAccount());
+                System.out.println("1");
+                model.addAttribute("shopList", shopList);
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+
+        }
+
+        return "user/shop/shoppingCart/shopping-cart";
+    }
+
 
     @RequestMapping("/CarouselList")
     @ResponseBody
@@ -118,33 +138,75 @@ public class IndexController {
     @RequestMapping(value = "/addCart")
     @ResponseBody
     public Map<String, Object> addCart(Shop shop) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
 
         Map<String, Object> map = new HashMap<String, Object>();
-        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
 
         int Status = 4;
 
-
-        if (shiroUser.getUserAccount() == null && shiroUser.getUserAccount() == "") {
+        if (shiroUser.getUserAccount() == null || shiroUser.getUserAccount() == "") {
             Status = 3;
         } else {
             // 判断缓存是否有该物品
             Boolean exists = redisBiz.hhasKey(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
             if (exists) {
                 // 数量自增1
-                Long num = redisBiz.hincrement(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+                Long num = redisBiz.hincrement(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
                 Status = 2;
             } else {
                 redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
                 Status = 1;
             }
+
+            redisBiz.expire(CartPrefix.getCartList, shiroUser.getUserAccount());
         }
 
-        List<Shop> shopList = redisBiz.hscan(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+        List<Shop> shopList = searchList(shiroUser.getUserAccount());
 
         map.put("shopList", shopList);
         map.put("Status", Status);
 
         return map;
+    }
+
+    // 查询购物车的信息
+    /*
+     * key : 查询的键 购物车主要是用户的登录账户
+     */
+    public List<Shop> searchList(String key) {
+        return redisBiz.hscan(CartPrefix.getCartList, key);
+    }
+
+
+    @RequestMapping(value = "/initCart")
+    @ResponseBody
+    public List<Shop> initCart() {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        return redisBiz.hscan(CartPrefix.getCartList, shiroUser.getUserAccount());
+    }
+
+
+    @RequestMapping(value = "/delCart")
+    @ResponseBody
+    public int delCart(Shop shop) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        Long status = redisBiz.hdel(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+        if (status == 1l) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    @RequestMapping(value = "/carNumUD")
+    @ResponseBody
+    public R carNumUD(Shop shop) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+
+        redisBiz.hincrement(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", shop.getCarNumUD());
+
+        List<Shop> shopList = searchList(shiroUser.getUserAccount());
+
+        return R.ok().put("shopList", shopList);
     }
 }

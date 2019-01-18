@@ -86,28 +86,34 @@ public class ShiroConfiguration {
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("login/login.html*", "anon"); //表示可以匿名访问
+
         filterChainDefinitionMap.put("/modeler.html*", "anon"); //表示可以匿名访问
 
         filterChainDefinitionMap.put("/login/**", "anon"); //匿名访问静态资源
 
+        filterChainDefinitionMap.put("/touristShop/index", "anon"); //表示可以匿名访问
+
         //静态资源
         // filterChainDefinitionMap.put("/**", "anon");
-        filterChainDefinitionMap.put("/bootstrap/css/*", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/bootstrap/js/*", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/bootstrap/fonts/*", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/bootstrap/font-awesome/*", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/bootstrap/img/*", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/bootstrap/locales/*", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/bootstrap/user/*", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/bootstrap/common/*", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/webapp/upload/*", "anon");
+        filterChainDefinitionMap.put("/bootstrap/css/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/bootstrap/js/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/bootstrap/fonts/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/bootstrap/font-awesome/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/bootstrap/img/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/bootstrap/locales/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/bootstrap/user/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/bootstrap/common/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/layui/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/webapp/upload/**", "anon");
 
+        //商城访问首页的拦截规则，全部放行，除了加入购物车或者结账的时候必须登录
+        filterChainDefinitionMap.put("/templates/upload/**", "anon");
+        filterChainDefinitionMap.put("/touristShop/**", "anon");
+        filterChainDefinitionMap.put("/changeLang","anon");
+        // 商城拦截结束
 
         filterChainDefinitionMap.put("/diagram-viewer/*", "anon");
         filterChainDefinitionMap.put("/editor-app/*", "anon");
-
-
-        //   layerslider/skins/fullwidth/skin.css
 
         filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问

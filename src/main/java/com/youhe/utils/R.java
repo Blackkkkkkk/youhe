@@ -24,14 +24,13 @@ import java.util.Map;
  *
  * @author xieweiqiang
  * @email 757027132@gmail.com
- * @date 2018年12月19日 下午9:59:27
+ * @date 2019年1月18日 下午9:59:27
  */
 public class R extends HashMap<String, Object> {
     private static final long serialVersionUID = 1L;
 
     public R() {
-        put("code", 0);
-        put("msg", "success");
+        put("Status", 0);
     }
 
     public static R error() {
@@ -44,8 +43,7 @@ public class R extends HashMap<String, Object> {
 
     public static R error(int code, String msg) {
         R r = new R();
-        r.put("code", code);
-        r.put("msg", msg);
+        r.put("Status", code);
         return r;
     }
 

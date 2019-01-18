@@ -169,11 +169,9 @@ public class LoginController {
             Locale locale = new Locale("en", "US");
             request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
             request.getSession().setAttribute("lan", "en_US");
-
         } else {
             request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, LocaleContextHolder.getLocale());
             request.getSession().setAttribute("lan", "zh_CN");
-
         }
         return JSON.toJSONString("success");
     }

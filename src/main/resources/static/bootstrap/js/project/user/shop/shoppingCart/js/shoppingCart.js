@@ -8,9 +8,26 @@ var vm = new Vue({
         carData: {
             items: 0,
             prices: 0
+        },
+        cartPrices: {
+            shipping: 0, //运费
+
+            allPrice: 0 // 总费用
         }
     },
+    mounted: function () {
+        this.initcart();
+        // this. test();
+
+        /*
+        this.$nextTick(function () {
+           // console.log(this.$refs.input1[0])
+        })*/
+    },
     methods: {
+        cartView: function () {
+
+        },
         addCar: function (event) {
 
             //获取点击对象
@@ -45,7 +62,8 @@ var vm = new Vue({
                 });
             }
             var num = 0;
-            var prices = 0;
+            var prices = 0;   // 购物车显示的价格
+
             _this.shopList = [];
             for (var index in r) {
                 num++;
@@ -55,6 +73,7 @@ var vm = new Vue({
             }
             _this.carData.items = num;
             _this.carData.prices = prices;
+            _this.cartPrices.allPrice = prices + _this.cartPrices.shipping
         },
         delCart: function (event) {
 
@@ -72,10 +91,26 @@ var vm = new Vue({
                     top.layer.msg('物品删除失败，请重新删除', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
                 }
             })
+        },   // 购物车数量增加
+        addCard: function (index) {
+
+            $.get("/touristShop/delCart?id=" + this.shopList[index].id + "&carNumUD=1", function (r) {
+
+            })
+
+            this.shopList[index].cartNum = this.shopList[index].cartNum + 1;
+            this.initcart(this.shopList)
+        },// 购物车数量减少
+        delCard: function (index) {
+            if (this.shopList[index].cartNum != 0) {
+                this.shopList[index].cartNum = this.shopList[index].cartNum - 1;
+                this.initcart(this.shopList)
+            }
         }
     }
 })
 
 jQuery(document).ready(function () {
-    vm.initcart();
+    //  vm.initcart();
+
 })

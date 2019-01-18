@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.1.1
+Version: 2.0.2
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en"> <!--<![endif]-->
+
+<!-- Head BEGIN -->
+<head>
+    <meta charset="utf-8">
+    <title>Shopping cart | Metronic Shop UI</title>
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta content="Metronic Shop UI description" name="description">
+    <meta content="Metronic Shop UI keywords" name="keywords">
+    <meta content="keenthemes" name="author">
+
+    <meta property="og:site_name" content="-CUSTOMER VALUE-">
+    <meta property="og:title" content="-CUSTOMER VALUE-">
+    <meta property="og:description" content="-CUSTOMER VALUE-">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
+    <meta property="og:url" content="-CUSTOMER VALUE-">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/favicon.ico" rel="SHORTCUT ICON" type="image/ico">
+
+    <!-- Fonts START -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
+          type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow&subset=all" rel="stylesheet" type="text/css">
+    <!-- Fonts END -->
+
+    <!-- Global styles START -->
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <link href="../bootstrap/js/project/user/shop/shoppingCart/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Global styles END -->
+
+    <!-- Page level plugin styles START -->
+    <link href="../bootstrap/user/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
+    <link href="../bootstrap/user/plugins/bxslider/jquery.bxslider.css" rel="stylesheet">
+    <!-- Page level plugin styles END -->
+
+    <!-- Theme styles START -->
+    <link href="../bootstrap/user/css/style-metronic.css" rel="stylesheet" type="text/css">
+    <link href="../bootstrap/user/css/style.css" rel="stylesheet" type="text/css">
+    <link href="../bootstrap/user/css/style-responsive.css" rel="stylesheet" type="text/css">
+    <link href="../bootstrap/user/css/custom.css" rel="stylesheet" type="text/css">
+    <!-- Theme styles END -->
+    <link href="../layui/css/layui.css" rel="stylesheet">
+</head>
+<!-- Head END -->
+
+<!-- Body BEGIN -->
+<body>
+<div id="wrapper">
+    <!-- BEGIN TOP BAR -->
+    <div th:include="common/userShopHead :: head"></div>
+    <!-- END TOP BAR -->
+
+    <!-- BEGIN HEADER -->
+    <div th:include="common/userShopHead :: head-navigation"></div>
+    <!-- END HEADER -->
+
+
+    <div class="main">
+        <div class="container">
+            <!-- BEGIN SIDEBAR & CONTENT -->
+            <div class="row margin-bottom-40">
+                <!-- BEGIN CONTENT -->
+                <div class="col-md-12 col-sm-12">
+                    <h1>Shopping cart</h1>
+                    <div class="shopping-cart-page">
+                        <div class="shopping-cart-data clearfix">
+                            <div class="table-wrapper-responsive">
+
+                                <table summary="Shopping cart">
+                                    <tr>
+                                        <th class="shopping-cart-image">Image</th>
+                                        <th class="shopping-cart-description">Description</th>
+                                        <th class="shopping-cart-ref-no">Ref No</th>
+                                        <th class="shopping-cart-quantity">Quantity</th>
+                                        <th class="shopping-cart-price">Unit price</th>
+                                        <th class="shopping-cart-total" colspan="2">Total</th>
+                                    </tr>
+
+                                    <tr v-for="(item,index) in shopList">
+                                        <td class="shopping-cart-image">
+                                            <a href="#"><img
+                                                    :src="item.pageaddr+item.saveFileName"
+                                                    alt="Berry Lace Dress"></a>
+                                        </td>
+                                        <td class="shopping-cart-description">
+                                            <h3><a href="#">Cool green dress with red bell</a></h3>
+                                            <p><strong>Item 1</strong> - Color: Green; Size: S</p>
+                                            <em>More info is here</em>
+                                        </td>
+                                        <td class="shopping-cart-ref-no">
+                                            javc2133
+                                        </td>
+                                        <td class="shopping-cart-quantity">
+                                            <div class="product-quantity">
+                                                <span class="input-group-btn"><button
+                                                        class="btn quantity-up bootstrap-touchspin-up" type="button"
+                                                        @click="addCard(index)"><i
+                                                        class="fa fa-angle-up"></i></button></span>
+                                                <input v-if="index == 0" id="product-quantity" type="text"
+                                                       :value="item.cartNum"
+                                                       readonly
+                                                       class="form-control input-sm" ref="input1">
+                                                <input v-if="index != 0" :id="'product-quantity'+(index+1)" type="text"
+                                                       :value="item.cartNum"
+                                                       readonly
+                                                       class="form-control input-sm">
+                                                <span class="input-group-btn"><button
+                                                        class="btn quantity-down bootstrap-touchspin-down"
+                                                        type="button" @click="delCard(index)"><i
+                                                        class="fa fa-angle-down"></i></button></span>
+                                            </div>
+                                        </td>
+                                        <td class="shopping-cart-price">
+                                            <strong><span>¥</span>{{item.pirce}}</strong>
+                                        </td>
+                                        <td class="shopping-cart-total">
+                                            <strong><span>¥</span>{{item.pirce * item.cartNum}}</strong>
+                                        </td>
+                                        <td class="del-goods-col">
+                                            <a class="del-goods" href="#"><i class="fa fa-times"></i></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="shopping-total">
+                                <ul>
+                                    <li>
+                                        <em>小计</em>
+                                        <strong class="price"><span>¥</span>{{carData.prices}}</strong>
+                                    </li>
+                                    <li>
+                                        <em>运费</em>
+                                        <strong class="price"><span>¥</span>{{cartPrices.shipping}}</strong>
+                                    </li>
+                                    <li class="shopping-total-price">
+                                        <em>总计</em>
+                                        <strong class="price"><span>¥</span>{{cartPrices.allPrice}}</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button class="btn btn-default" type="submit">Continue shopping <i
+                                class="fa fa-shopping-cart"></i>
+                        </button>
+                        <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
+                    </div>
+                </div>
+                <!-- END CONTENT -->
+            </div>
+            <!-- END SIDEBAR & CONTENT -->
+
+            <!-- BEGIN SIMILAR PRODUCTS -->
+            <div class="row margin-bottom-40">
+                <div class="col-md-12 col-sm-12 bxslider-wrapper bxslider-wrapper-similar-products">
+                    <h2>Most popular products</h2>
+                    <ul class="bxslider bxslider-similar-products" data-slides-phone="1" data-slides-tablet="2"
+                        data-slides-desktop="4" data-slide-margin="20">
+                        <li>
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="/templates/upload/k4.jpg"
+                                         class="img-responsive" alt="Berry Lace Dress">
+                                    <div>
+                                        <a href="/templates/upload/k4.jpg"
+                                           class="btn btn-default fancybox-button">Zoom</a>
+                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                                    </div>
+                                </div>
+                                <h3><a href="item.html">Berry Lace Dress</a></h3>
+                                <div class="pi-price">$29.00</div>
+                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="/templates/upload/k1.jpg"
+                                         class="img-responsive" alt="Berry Lace Dress">
+                                    <div>
+                                        <a href="/templates/upload/k1.jpg"
+                                           class="btn btn-default fancybox-button">Zoom</a>
+                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                                    </div>
+                                </div>
+                                <h3><a href="item.html">Berry Lace Dress2</a></h3>
+                                <div class="pi-price">$29.00</div>
+                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="/templates/upload/k2.jpg"
+                                         class="img-responsive" alt="Berry Lace Dress">
+                                    <div>
+                                        <a href="/templates/upload/k2.jpg"
+                                           class="btn btn-default fancybox-button">Zoom</a>
+                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                                    </div>
+                                </div>
+                                <h3><a href="item.html">Berry Lace Dress3</a></h3>
+                                <div class="pi-price">$29.00</div>
+                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="/templates/upload/k3.jpg"
+                                         class="img-responsive" alt="Berry Lace Dress">
+                                    <div>
+                                        <a href="/templates/upload/k3.jpg"
+                                           class="btn btn-default fancybox-button">Zoom</a>
+                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                                    </div>
+                                </div>
+                                <h3><a href="item.html">Berry Lace Dress4</a></h3>
+                                <div class="pi-price">$29.00</div>
+                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="/templates/upload/k4.jpg"
+                                         class="img-responsive" alt="Berry Lace Dress">
+                                    <div>
+                                        <a href="/templates/upload/k4.jpg"
+                                           class="btn btn-default fancybox-button">Zoom</a>
+                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                                    </div>
+                                </div>
+                                <h3><a href="item.html">Berry Lace Dress5</a></h3>
+                                <div class="pi-price">$29.00</div>
+                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="/templates/upload/k1.jpg"
+                                         class="img-responsive" alt="Berry Lace Dress">
+                                    <div>
+                                        <a href="/templates/upload/k1.jpg"
+                                           class="btn btn-default fancybox-button">Zoom</a>
+                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                                    </div>
+                                </div>
+                                <h3><a href="item.html">Berry Lace Dress6</a></h3>
+                                <div class="pi-price">$29.00</div>
+                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- END SIMILAR PRODUCTS -->
+        </div>
+    </div>
+
+    <!-- BEGIN STEPS -->
+    <div class="steps3 steps3red">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-truck"></i>
+                    <div>
+                        <h2>Free shipping</h2>
+                        <em>Express delivery withing 3 days</em>
+                    </div>
+                    <span>&nbsp;</span>
+                </div>
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-gift"></i>
+                    <div>
+                        <h2>Daily Gifts</h2>
+                        <em>3 Gifts daily for lucky customers</em>
+                    </div>
+                    <span>&nbsp;</span>
+                </div>
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-phone"></i>
+                    <div>
+                        <h2>477 505 8877</h2>
+                        <em>24/7 customer care available</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END STEPS -->
+
+    <!-- BEGIN PRE-FOOTER -->
+    <div class="pre-footer">
+        <div class="container">
+            <div class="row">
+                <!-- BEGIN BOTTOM ABOUT BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>About us</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam sit nonummy nibh euismod
+                        tincidunt
+                        ut laoreet dolore magna aliquarm erat sit volutpat. Nostrud exerci tation ullamcorper suscipit
+                        lobortis nisl aliquip commodo consequat. </p>
+                    <p>Duis autem vel eum iriure dolor vulputate velit esse molestie at dolore.</p>
+                </div>
+                <!-- END BOTTOM ABOUT BLOCK -->
+                <!-- BEGIN BOTTOM INFO BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>Information</h2>
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Delivery Information</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Customer Service</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Order Tracking</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Shipping & Returns</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="contacts.html">Contact Us</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Careers</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Payment Methods</a></li>
+                    </ul>
+                </div>
+                <!-- END INFO BLOCK -->
+                <!-- BEGIN TWITTER BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>Latest Tweets</h2>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
+                            <span>3 min ago</span>
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
+                            <span>3 min ago</span>
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
+                            <span>3 min ago</span>
+                        </dd>
+                    </dl>
+                </div>
+                <!-- END TWITTER BLOCK -->
+                <!-- BEGIN BOTTOM CONTACTS -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>Our Contacts</h2>
+                    <address class="margin-bottom-40">
+                        35, Lorem Lis Street, Park Ave<br>
+                        California, US<br>
+                        Phone: 300 323 3456<br>
+                        Fax: 300 323 1456<br>
+                        Email: <a href="mailto:info@metronic.com">info@metronic.com</a><br>
+                        Skype: <a href="skype:metronic">metronic</a>
+                    </address>
+                </div>
+                <!-- END BOTTOM CONTACTS -->
+            </div>
+            <hr>
+            <div class="row">
+                <!-- BEGIN SOCIAL ICONS -->
+                <div class="col-md-6 col-sm-6">
+                    <ul class="social-icons">
+                        <li><a class="rss" data-original-title="rss" href="#"></a></li>
+                        <li><a class="facebook" data-original-title="facebook" href="#"></a></li>
+                        <li><a class="twitter" data-original-title="twitter" href="#"></a></li>
+                        <li><a class="googleplus" data-original-title="googleplus" href="#"></a></li>
+                        <li><a class="linkedin" data-original-title="linkedin" href="#"></a></li>
+                        <li><a class="youtube" data-original-title="youtube" href="#"></a></li>
+                        <li><a class="vimeo" data-original-title="vimeo" href="#"></a></li>
+                        <li><a class="skype" data-original-title="skype" href="#"></a></li>
+                    </ul>
+                </div>
+                <!-- END SOCIAL ICONS -->
+                <!-- BEGIN NEWLETTER -->
+                <div class="col-md-6 col-sm-6">
+                    <div class="pre-footer-subscribe-box pull-right">
+                        <h2>Newsletter</h2>
+                        <form action="#">
+                            <div class="input-group">
+                                <input type="text" placeholder="youremail@mail.com" class="form-control">
+                                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                  </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END NEWLETTER -->
+            </div>
+        </div>
+    </div>
+    <!-- END PRE-FOOTER -->
+
+    <!-- BEGIN FOOTER -->
+    <div class="footer padding-top-15">
+        <div class="container">
+            <div class="row">
+                <!-- BEGIN COPYRIGHT -->
+                <div class="col-md-6 col-sm-6 padding-top-10">
+                    2014 © Metronic Shop UI. ALL Rights Reserved.
+                </div>
+                <!-- END COPYRIGHT -->
+                <!-- BEGIN PAYMENTS -->
+                <div class="col-md-6 col-sm-6">
+                    <ul class="list-unstyled list-inline pull-right margin-bottom-15">
+                        <li><img
+                                src="/templates/upload/western-union.jpg"
+                                alt="We accept Western Union"
+                                title="We accept Western Union"></li>
+                        <li><img
+                                src="/templates/upload/american-express.jpg"
+                                alt="We accept American Express"
+                                title="We accept American Express"></li>
+                        <li><img
+                                src="/templates/upload/MasterCard.jpg"
+                                alt="We accept MasterCard"
+                                title="We accept MasterCard"></li>
+                        <li><img src="/templates/upload/PayPal.jpg"
+                                 alt="We accept PayPal" title="We accept PayPal"></li>
+                        <li><img src="/templates/upload/visa.jpg"
+                                 alt="We accept Visa" title="We accept Visa"></li>
+                    </ul>
+                </div>
+                <!-- END PAYMENTS -->
+            </div>
+        </div>
+    </div>
+    <!-- END FOOTER -->
+
+    <!-- BEGIN fast view of a product -->
+    <div id="product-pop-up" style="display: none; width: 700px;">
+        <div class="product-page product-pop-up">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-3">
+                    <div class="product-main-image">
+                        <img src="/templates/upload/model7.jpg"
+                             alt="Cool green dress with red bell"
+                             class="img-responsive">
+                    </div>
+                    <div class="product-other-images">
+                        <a href="#" class="active"><img alt="Berry Lace Dress"
+                                                        src="/templates/upload/model3.jpg"></a>
+                        <a href="#"><img alt="Berry Lace Dress"
+                                         src="/templates/upload/model4.jpg"></a>
+                        <a href="#"><img alt="Berry Lace Dress"
+                                         src="/templates/upload/model5.jpg"></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-9">
+                    <h1>Cool green dress with red bell</h1>
+                    <div class="price-availability-block clearfix">
+                        <div class="price">
+                            <strong><span>$</span>47.00</strong>
+                            <em>$<span>62.00</span></em>
+                        </div>
+                        <div class="availability">
+                            Availability: <strong>In Stock</strong>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <p>Lorem ipsum dolor ut sit ame dolore adipiscing elit, sed nonumy nibh sed euismod laoreet
+                            dolore
+                            magna aliquarm erat volutpat
+                            Nostrud duis molestie at dolore.</p>
+                    </div>
+                    <div class="product-page-options">
+                        <div class="pull-left">
+                            <label class="control-label">Size:</label>
+                            <select class="form-control input-sm">
+                                <option>L</option>
+                                <option>M</option>
+                                <option>XL</option>
+                            </select>
+                        </div>
+                        <div class="pull-left">
+                            <label class="control-label">Color:</label>
+                            <select class="form-control input-sm">
+                                <option>Red</option>
+                                <option>Blue</option>
+                                <option>Black</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="product-page-cart">
+                        <div class="product-quantity">
+                            <input id="product-quantity3" type="text" value="1" readonly class="form-control input-sm">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Add to cart</button>
+                        <button class="btn btn-default" type="submit">More details</button>
+                    </div>
+                </div>
+
+                <div class="sticker sticker-sale"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END fast view of a product -->
+<script src="../layui/layui.js"></script>
+
+<!-- Load javascripts at bottom, this will reduce page load time -->
+<!-- BEGIN CORE PLUGINS (REQUIRED FOR ALL PAGES) -->
+<!--[if lt IE 9]>
+<script src="../bootstrap/user/plugins/respond.min.js"></script>
+<![endif]-->
+<script src="../bootstrap/user/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="../bootstrap/user/plugins/back-to-top.js"></script>
+<script type="text/javascript" src="../bootstrap/user/plugins/jQuery-slimScroll/jquery.slimscroll.min.js"></script>
+<!-- END CORE PLUGINS -->
+
+<!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+<script type="text/javascript" src="../bootstrap/user/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
+<!-- pop up -->
+<script type="text/javascript" src="../bootstrap/user/plugins/bxslider/jquery.bxslider.min.js"></script>
+<!-- slider for products -->
+<script type="text/javascript" src='../bootstrap/user/plugins/zoom/jquery.zoom.min.js'></script><!-- product zoom -->
+<script src="../bootstrap/user/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+<!-- Quantity -->
+
+
+<script src="../bootstrap/js/dept/js/vue.min.js"></script>
+<!--<script type="text/javascript" src="../bootstrap/user/scripts/app.js"></script> -->
+<script src="../bootstrap/js/project/user/shop/shoppingCart/js/shoppingCart.js"></script>
+
+<script th:inline="javascript">
+    var layer;
+    jQuery(document).ready(function () {
+
+        layui.use("layer", function () {
+            layer = layui.layer;  //layer初始化
+
+        })
+
+
+        var App = function () {
+
+            // IE mode
+            var isRTL = false;
+            var isIE8 = false;
+            var isIE9 = false;
+            var isIE10 = false;
+
+            var responsive = true;
+
+            var responsiveHandlers = [];
+
+            var handleInit = function () {
+
+                if ($('body').css('direction') === 'rtl') {
+                    isRTL = true;
+                }
+
+                isIE8 = !!navigator.userAgent.match(/MSIE 8.0/);
+                isIE9 = !!navigator.userAgent.match(/MSIE 9.0/);
+                isIE10 = !!navigator.userAgent.match(/MSIE 10.0/);
+
+                if (isIE10) {
+                    jQuery('html').addClass('ie10'); // detect IE10 version
+                }
+            }
+
+            // runs callback functions set by App.addResponsiveHandler().
+            var runResponsiveHandlers = function () {
+                // reinitialize other subscribed elements
+                for (var i in responsiveHandlers) {
+                    var each = responsiveHandlers[i];
+                    each.call();
+                }
+            }
+
+            // handle the layout reinitialization on window resize
+            var handleResponsiveOnResize = function () {
+                var resize;
+                if (isIE8) {
+                    var currheight;
+                    $(window).resize(function () {
+                        if (currheight == document.documentElement.clientHeight) {
+                            return; //quite event since only body resized not window.
+                        }
+                        if (resize) {
+                            clearTimeout(resize);
+                        }
+                        resize = setTimeout(function () {
+                            runResponsiveHandlers();
+                        }, 50); // wait 50ms until window resize finishes.
+                        currheight = document.documentElement.clientHeight; // store last body client height
+                    });
+                } else {
+                    $(window).resize(function () {
+                        if (resize) {
+                            clearTimeout(resize);
+                        }
+                        resize = setTimeout(function () {
+                            runResponsiveHandlers();
+                        }, 50); // wait 50ms until window resize finishes.
+                    });
+                }
+            }
+
+            var handleIEFixes = function () {
+                //fix html5 placeholder attribute for ie7 & ie8
+                if (isIE8 || isIE9) { // ie8 & ie9
+                    // this is html5 placeholder fix for inputs, inputs with placeholder-no-fix class will be skipped(e.g: we need this for password fields)
+                    jQuery('input[placeholder]:not(.placeholder-no-fix), textarea[placeholder]:not(.placeholder-no-fix)').each(function () {
+
+                        var input = jQuery(this);
+
+                        if (input.val() == '' && input.attr("placeholder") != '') {
+                            input.addClass("placeholder").val(input.attr('placeholder'));
+                        }
+
+                        input.focus(function () {
+                            if (input.val() == input.attr('placeholder')) {
+                                input.val('');
+                            }
+                        });
+
+                        input.blur(function () {
+                            if (input.val() == '' || input.val() == input.attr('placeholder')) {
+                                input.val(input.attr('placeholder'));
+                            }
+                        });
+                    });
+                }
+            }
+
+            // Handles scrollable contents using jQuery SlimScroll plugin.
+            var handleScrollers = function () {
+                $('.scroller').each(function () {
+                    var height;
+                    if ($(this).attr("data-height")) {
+                        height = $(this).attr("data-height");
+                    } else {
+                        height = $(this).css('height');
+                    }
+                    $(this).slimScroll({
+                        allowPageScroll: true, // allow page scroll when the element scroll is ended
+                        size: '7px',
+                        color: ($(this).attr("data-handle-color") ? $(this).attr("data-handle-color") : '#bbb'),
+                        railColor: ($(this).attr("data-rail-color") ? $(this).attr("data-rail-color") : '#eaeaea'),
+                        position: isRTL ? 'left' : 'right',
+                        height: height,
+                        alwaysVisible: ($(this).attr("data-always-visible") == "1" ? true : false),
+                        railVisible: ($(this).attr("data-rail-visible") == "1" ? true : false),
+                        disableFadeOut: true
+                    });
+                });
+            }
+
+            var handleSearch = function () {
+                $('.search-btn').click(function () {
+                    if ($('.search-btn').hasClass('show-search-icon')) {
+                        if ($(window).width() > 767) {
+                            $('.search-box').fadeOut(300);
+                        } else {
+                            $('.search-box').fadeOut(0);
+                        }
+                        $('.search-btn').removeClass('show-search-icon');
+                    } else {
+                        if ($(window).width() > 767) {
+                            $('.search-box').fadeIn(300);
+                        } else {
+                            $('.search-box').fadeIn(0);
+                        }
+                        $('.search-btn').addClass('show-search-icon');
+                    }
+                });
+            }
+
+            var handleMenu = function () {
+                $(".header .navbar-toggle").click(function () {
+                    if ($(".header .navbar-collapse").hasClass("open")) {
+                        $(".header .navbar-collapse").slideDown(300)
+                            .removeClass("open");
+                    } else {
+                        $(".header .navbar-collapse").slideDown(300)
+                            .addClass("open");
+                    }
+                });
+            }
+
+            var handleSidebarMenu = function () {
+                $(".sidebar .dropdown a").click(function () {
+                    if ($(this).hasClass("collapsed") == false) {
+                        $(this).addClass("collapsed");
+                        $(this).siblings(".dropdown-menu").slideDown(300);
+                    } else {
+                        $(this).removeClass("collapsed");
+                        $(this).siblings(".dropdown-menu").slideUp(300);
+                    }
+                });
+            }
+
+            function handleDifInits() {
+                $(".header .navbar-toggle span:nth-child(2)").addClass("short-icon-bar");
+                $(".header .navbar-toggle span:nth-child(4)").addClass("short-icon-bar");
+            }
+
+            function handleUniform() {
+                if (!jQuery().uniform) {
+                    return;
+                }
+                var test = $("input[type=checkbox]:not(.toggle), input[type=radio]:not(.toggle, .star)");
+                if (test.size() > 0) {
+                    test.each(function () {
+                        if ($(this).parents(".checker").size() == 0) {
+                            $(this).show();
+                            $(this).uniform();
+                        }
+                    });
+                }
+            }
+
+            var handleFancybox = function () {
+                jQuery(".fancybox-fast-view").fancybox();
+
+                if (!jQuery.fancybox) {
+                    return;
+                }
+
+                if (jQuery(".fancybox-button").size() > 0) {
+                    jQuery(".fancybox-button").fancybox({
+                        groupAttr: 'data-rel',
+                        prevEffect: 'none',
+                        nextEffect: 'none',
+                        closeBtn: true,
+                        helpers: {
+                            title: {
+                                type: 'inside'
+                            }
+                        }
+                    });
+
+                    $('.fancybox-video').fancybox({
+                        type: 'iframe'
+                    });
+                }
+            }
+
+            // Handles Bootstrap Accordions.
+            var handleAccordions = function () {
+
+                jQuery('body').on('shown.bs.collapse', '.accordion.scrollable', function (e) {
+                    App.scrollTo($(e.target), -100);
+                });
+
+            }
+
+            // Handles Bootstrap Tabs.
+            var handleTabs = function () {
+                // fix content height on tab click
+                $('body').on('shown.bs.tab', '.nav.nav-tabs', function () {
+                    handleSidebarAndContentHeight();
+                });
+
+                //activate tab if tab id provided in the URL
+                if (location.hash) {
+                    var tabid = location.hash.substr(1);
+                    $('a[href="#' + tabid + '"]').click();
+                }
+            }
+
+            return {
+                init: function () {
+                    // init core variables
+                    handleInit();
+                    handleResponsiveOnResize();
+                    handleIEFixes();
+                    handleSearch();
+                    handleFancybox();
+                    handleDifInits();
+                    handleSidebarMenu();
+                    handleAccordions();
+                    handleMenu();
+                    handleScrollers();
+
+                    this.addResponsiveHandler(function () {
+                        App.initBxSlider(true);
+                    });
+                },
+
+                initUniform: function (els) {
+                    if (els) {
+                        jQuery(els).each(function () {
+                            if ($(this).parents(".checker").size() == 0) {
+                                $(this).show();
+                                $(this).uniform();
+                            }
+                        });
+                    } else {
+                        handleUniform();
+                    }
+                },
+                initBxSlider: function (reload) {
+                    $('.bxslider').each(function () {
+                        var width = $(window).width();
+
+                        var slides;
+                        var slideMargin = parseInt($(this).attr("data-slide-margin"));
+                        var slideContainerWidth = $(this).closest('.bxslider-wrapper').width();
+                        var slideWidth;
+
+                        if (width <= 480) {
+                            slides = $(this).attr("data-slides-phone");
+                        } else if (width > 480 && width <= 992) {
+                            slides = $(this).attr("data-slides-tablet");
+                        } else {
+                            slides = $(this).attr("data-slides-desktop");
+                        }
+
+                        slides = parseInt(slides);
+
+                        slideWidth = slideContainerWidth / slides;
+
+
+                        if (reload === true) {
+                            if (!$(this).data("bxslider")) {
+                                return;
+                            }
+                            $(this).data("bxslider").reloadSlider({
+                                minSlides: slides,
+                                maxSlides: slides,
+                                slideWidth: slideWidth,
+                                slideMargin: slideMargin,
+                                moveSlides: 5,
+                                responsive: true
+                            });
+                        } else {
+                            //alert(2);
+                            var slider = $(this).bxSlider({
+                                minSlides: slides,
+                                maxSlides: slides,
+                                slideWidth: slideWidth,
+                                slideMargin: slideMargin,
+                                moveSlides: 5,
+                                responsive: true
+                            });
+                            $(this).data("bxslider", slider);
+                        }
+                    });
+                },
+
+                initImageZoom: function () {
+                    $('.product-main-image').zoom({url: $('.product-main-image img').attr('data-BigImgSrc')});
+                },
+
+                initSliderRange: function () {
+                    $("#slider-range").slider({
+                        range: true,
+                        min: 0,
+                        max: 500,
+                        values: [50, 250],
+                        slide: function (event, ui) {
+                            $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+                        }
+                    });
+                    $("#amount").val("$" + $("#slider-range").slider("values", 0) +
+                        " - $" + $("#slider-range").slider("values", 1));
+                },
+
+                // wrapper function to scroll(focus) to an element
+                scrollTo: function (el, offeset) {
+                    var pos = (el && el.size() > 0) ? el.offset().top : 0;
+                    if (el) {
+                        if ($('body').hasClass('page-header-fixed')) {
+                            pos = pos - $('.header').height();
+                        }
+                        pos = pos + (offeset ? offeset : -1 * el.height());
+                    }
+
+                    jQuery('html,body').animate({
+                        scrollTop: pos
+                    }, 'slow');
+                },
+
+                //public function to add callback a function which will be called on window resize
+                addResponsiveHandler: function (func) {
+                    responsiveHandlers.push(func);
+                },
+
+                scrollTop: function () {
+                    App.scrollTo();
+                },
+
+                gridOption1: function () {
+                    $(function () {
+                        $('.grid-v1').mixitup();
+                    });
+                }
+
+            };
+        }();
+
+
+        App.init();
+        App.initBxSlider();
+        App.initImageZoom();
+    });
+
+</script>
+<!-- END PAGE LEVEL JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

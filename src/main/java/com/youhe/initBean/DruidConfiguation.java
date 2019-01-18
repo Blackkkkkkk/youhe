@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 @Configuration
 public class DruidConfiguation {
 
-    private String mapperLocations = "classpath:mapper/**/*.xml";
+    private String mapperLocations = "classpath:/mapper/**/*.xml";
 
     private String configLocation = "classpath:mybatis-page-config.xml";
 

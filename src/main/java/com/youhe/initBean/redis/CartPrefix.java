@@ -9,5 +9,5 @@ public class CartPrefix extends BasePrefix{
     /**
      * 设置购物车缓存
      */
-    public static CartPrefix getCartList= new CartPrefix(0,"cart");
+    public static CartPrefix getCartList= new CartPrefix(300,"cart");
 }

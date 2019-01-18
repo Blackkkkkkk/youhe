@@ -42,10 +42,19 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/resources/")
                 .addResourceLocations("classpath:/static/");
 
+        registry.addResourceHandler("/layerslider/skins/fullwidth/**").addResourceLocations("classpath:/static/bootstrap/" +
+                "user/plugins/layerslider/skins/fullwidth/");
 
         // 获取项目编译后的路径
         String realPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "/templates/upload/";
         registry.addResourceHandler("/templates/upload/**").addResourceLocations("file:" + realPath);
+
+
+
+        // 获取项目编译后的路径
+        String realPath1 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "/static/"
+                +"bootstrap/js/project/user/shop/shoppingCart/picture/";
+        registry.addResourceHandler("/resources/static/**").addResourceLocations("file:" + realPath1);
 
         super.addResourceHandlers(registry);
     }
