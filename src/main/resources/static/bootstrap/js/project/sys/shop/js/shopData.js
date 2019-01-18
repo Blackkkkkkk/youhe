@@ -12,10 +12,12 @@ var vm = new Vue({
             num: null,
             detail_picture: null,
             thumbnail: null,
-            top: 0,
-            status: 1,
+            top: null,
+            status: null,
             register: null,
-            orderNum: 0
+            orderNum: null,
+            hotSale: null,
+            isNewProductOrderNum: null,
         }
     },
     methods: {
@@ -29,10 +31,12 @@ var vm = new Vue({
                 num: null,
                 detail_picture: null,
                 thumbnail: null,
-                top: 0,
+                top: 1,
                 status: 1,
                 register: null,
-                orderNum: 0
+                orderNum: 1,
+                hotSale: 1,
+                isNewProductOrderNum: 1,
             };
 
             $("#reportFile").fileinput('destroy'); // 先销毁在初始化上传框
@@ -46,7 +50,7 @@ var vm = new Vue({
         reload: function () {
             vm.showList = true;
 
-            if (typeof(wageNowTable) == "undefined") {
+            if (typeof (wageNowTable) == "undefined") {
                 wageNowTable = $('.dataTables-example').DataTable();
                 wageNowTable.ajax.reload();//初始化
             } else {
@@ -144,14 +148,13 @@ var vm = new Vue({
             }
             if (tag) {
                 return val;
-            }
-            else {
+            } else {
                 layer.msg('请选中行后在进行操作！', {icon: 2, time: 1000});
                 return '';
             }
         },
         getDetail: function (id) {
-            $.get("/shop/ShopPiclist?id=" + id+"&type=1", function (r) {
+            $.get("/shop/ShopPiclist?id=" + id + "&type=1", function (r) {
 
                 if (r.shopList.length > 0) {
                     vm.shop = r.shopList[0]
@@ -261,7 +264,7 @@ var FileInput = function () {
                     "type": 1,
                     "id": vm.id,
                     "pictureSize": picSize,
-                    "dstFileName":ctrlName,
+                    "dstFileName": ctrlName,
                 };
                 return data;
             },
@@ -323,7 +326,7 @@ var FileInput = function () {
             //在移除事件里取出所需数据，并执行相应的删除指令
             //  console.log(($('#' + previewId).attr('fileid')))
 
-            delete(($('#' + previewId).attr('fileid')));
+            delete (($('#' + previewId).attr('fileid')));
         }).on('fileclear', function (event, data, previewId, index) {
             // console.log(event, data);
             // console.log("fileclear");

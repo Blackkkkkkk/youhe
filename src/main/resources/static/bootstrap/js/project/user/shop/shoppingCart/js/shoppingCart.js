@@ -92,20 +92,40 @@ var vm = new Vue({
                 }
             })
         },   // 购物车数量增加
-        addCard: function (index) {
+        addCardNum: function (event, index) {
 
-            $.get("/touristShop/delCart?id=" + this.shopList[index].id + "&carNumUD=1", function (r) {
+            var x = event.clientX;
+            var y = event.clientY;
 
+            _this = this;
+
+            $.get("/touristShop/carNumUD?id=" + this.shopList[index].id + "&carNumUD=1", function (r) {
+                if (r.Status == 1) {
+                    top.layer.msg(r.msg, {icon: 1, time: 1000, offset: [y + 'px', x + 'px']}, function () {
+                        _this.initcart(r.shopList)
+                    });
+                }
             })
 
-            this.shopList[index].cartNum = this.shopList[index].cartNum + 1;
-            this.initcart(this.shopList)
         },// 购物车数量减少
-        delCard: function (index) {
+        delCardNum: function (event, index) {
+            var x = event.clientX;
+            var y = event.clientY;
+
+            _this = this;
+
             if (this.shopList[index].cartNum != 0) {
-                this.shopList[index].cartNum = this.shopList[index].cartNum - 1;
-                this.initcart(this.shopList)
+                $.get("/touristShop/carNumUD?id=" + this.shopList[index].id + "&carNumUD=-1", function (r) {
+                    if (r.Status == 1) {
+                        top.layer.msg(r.msg, {icon: 1, time: 400, offset: [y + 'px', x + 'px']}, function () {
+                            _this.initcart(r.shopList)
+                        });
+                    }
+                })
             }
+        },
+        goShop: function () {
+            window.location.href = ('/touristShop/index')
         }
     }
 })

@@ -116,7 +116,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <div class="product-quantity">
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-up bootstrap-touchspin-up" type="button"
-                                                        @click="addCard(index)"><i
+                                                        @click="addCardNum($event,index)"><i
                                                         class="fa fa-angle-up"></i></button></span>
                                                 <input v-if="index == 0" id="product-quantity" type="text"
                                                        :value="item.cartNum"
@@ -128,7 +128,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                        class="form-control input-sm">
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-down bootstrap-touchspin-down"
-                                                        type="button" @click="delCard(index)"><i
+                                                        type="button" @click="delCardNum($event,index)"><i
                                                         class="fa fa-angle-down"></i></button></span>
                                             </div>
                                         </td>
@@ -161,7 +161,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </ul>
                             </div>
                         </div>
-                        <button class="btn btn-default" type="submit">Continue shopping <i
+                        <button class="btn btn-default" type="submit"
+                                @click="goShop()">继续购物 <i
                                 class="fa fa-shopping-cart"></i>
                         </button>
                         <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>

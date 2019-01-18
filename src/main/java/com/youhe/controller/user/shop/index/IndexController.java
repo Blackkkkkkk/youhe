@@ -53,6 +53,12 @@ public class IndexController {
         model.addAttribute("carouselList", carouselList);
 
         Shop shop = new Shop();
+
+        shop.setStatus(1).
+                setRegister_Sort(1).
+                setTop_Sort(1).
+                setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
+
         List<Shop> shopList = shopBiz.findShopList(shop);
         model.addAttribute("shopList", shopList);
 
@@ -68,7 +74,7 @@ public class IndexController {
         if (shiroUser.getUserAccount() != null || shiroUser.getUserAccount() != "") {
             try {
                 List<Shop> shopList = searchList(shiroUser.getUserAccount());
-                System.out.println("1");
+
                 model.addAttribute("shopList", shopList);
             } catch (Exception e) {
                 System.out.println(e.toString());
@@ -207,6 +213,6 @@ public class IndexController {
 
         List<Shop> shopList = searchList(shiroUser.getUserAccount());
 
-        return R.ok().put("shopList", shopList);
+        return R.ok(1, "修改成功").put("shopList", shopList);
     }
 }

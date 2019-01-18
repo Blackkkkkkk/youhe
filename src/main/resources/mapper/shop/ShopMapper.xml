@@ -14,6 +14,8 @@
         <result property="orderNum" column="ORDER_NUM"/>
         <result property="saveFileName" column="SAVE_FILE_NAME"></result>
         <result property="pageaddr" column="PAGEADDR"></result>
+        <result property="hotSale" column="HOT_SALE"></result>
+        <result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>
     </resultMap>
 
     <!--
@@ -27,10 +29,39 @@
         (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
         where
         1=1
-        <if test="id!=null and id !=''">
+        <if test="id!=null">
             AND sc.ID = #{id}
         </if>
-        ORDER BY sc.top ,sc.ORDER_NUM ,sc.REGISTER DESC
+        <if test="status!=null">
+            AND sc.STATUS = #{status}
+        </if>
+        ORDER BY
+        1 = 1
+        <if test="orderNum_Sort != null and orderNum_Sort ==1">
+            ,sc.ORDER_NUM
+        </if>
+        <if test="isNewProductOrderNum_Sort != null and isNewProductOrderNum_Sort == 1">
+            ,sc.IS_NEW_PRODUCT_ORDER_NUM
+        </if>
+        <if test=" top_Sort !=null and top_Sort ==1 ">
+            , sc.TOP
+        </if>
+        <if test=" register_Sort !=null and  register_Sort ==1 ">
+            , sc.REGISTER
+        </if>
+        <if test=" hotSale_Sort !=null and hotSale_Sort == 1">
+            , sc.HOT_SALE
+        </if>
+        <if test=" name_Sort !=null and name_Sort == 1">
+            , sc.NAME
+        </if>
+        <if test=" pirce_Sort !=null and pirce_Sort ==1 ">
+            , sc.PRICE
+        </if>
+        <if test=" num_Sort !=null and num_Sort == 1">
+            , sc.NUM
+        </if>
+        DESC
     </select>
 
     <insert id="save" parameterType="com.youhe.entity.shop.Shop" keyProperty="id"
@@ -42,7 +73,9 @@
         TOP,
         STATUS,
         REGISTER,
-        ORDER_NUM
+        ORDER_NUM,
+        HOT_SALE,
+        IS_NEW_PRODUCT_ORDER_NUM
         )
         values(
         #{name,jdbcType=VARCHAR},
@@ -51,7 +84,9 @@
         #{top,jdbcType=INTEGER},
         #{status,jdbcType=INTEGER},
         NOW(),
-        #{orderNum,jdbcType=VARCHAR}
+        #{orderNum,jdbcType=VARCHAR},
+        #{hotSale,jdbcType=INTEGER},
+        #{isNewProductOrderNum,jdbcType=INTEGER}
         )
     </insert>
 
@@ -69,7 +104,7 @@
                 <if test="name != null and name != ''">
                     NAME = #{name,jdbcType=VARCHAR},
                 </if>
-                <if test="pirce != null and pirce != ''">
+                <if test="pirce != null">
                     PRICE = #{pirce,jdbcType=INTEGER},
                 </if>
                 <if test="num != null and num != ''">
@@ -78,13 +113,18 @@
                 <if test="top != null and top != ''">
                     TOP = #{top,jdbcType=VARCHAR},
                 </if>
-                <if test="status != null and status != ''">
-                    STATUS = #{status,jdbcType=VARCHAR},
+                <if test="status != null">
+                    STATUS = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="hotSale != null">
+                    HOT_SALE = #{hotSale,jdbcType=INTEGER},
                 </if>
                 <if test="name != null ">
                     REGISTER = NOW(),
                 </if>
-
+                <if test="isNewProductOrderNum !=null">
+                    IS_NEW_PRODUCT_ORDER_NUM = #{isNewProductOrderNum,jdbcType=INTEGER},
+                </if>
             </trim>
         </set>
         <where>

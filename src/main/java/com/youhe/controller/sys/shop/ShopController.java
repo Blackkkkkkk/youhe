@@ -60,10 +60,6 @@ public class ShopController {
     @RequestMapping(value = "/index")
     public String index(Model model) {
 
-      //  redisTemplate.opsForValue().set("name", "小明");
-        System.out.println(redisBiz.existsKey("name"));
-        System.out.println();
-
         return "sys/shop/shopDataManage";
 
     }

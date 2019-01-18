@@ -7,10 +7,19 @@
 
 </head>
 <div>
-    <link href="../bootstrap/js/project/sys/shop/css/datatables.min.css" rel="stylesheet">
+
+
+    <!--
+     <link href="../bootstrap/js/project/sys/shop/css/datatables.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="../bootstrap/js/dept/css/bootstrap-table.min.css">
+    -->
 
     <link href="../bootstrap/js/project/sys/shop/css/fileinput.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css" href="../bootstrap/dataTable/datatables.min.css"/>
+
 
     <style type="text/css">
         .table > tbody > tr > td {
@@ -84,6 +93,16 @@
                         <label class="radio-inline"><input type="radio" name="status" value="0" v-model="shop.status">下架</label>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">是否热卖</div>
+                    <div class="col-sm-10">
+                        <label class="radio-inline"><input type="radio" name="hotSale" value="1" v-model="shop.hotSale"
+                                                           checked>热卖</label>
+                        <label class="radio-inline"><input type="radio" name="hotSale" value="0" v-model="shop.hotSale">非热卖</label>
+                    </div>
+                </div>
+
                 <!--
                 <div class="form-group">
                     <div class="col-sm-2 control-label">注册时间</div>
@@ -98,6 +117,13 @@
                         <input type="number" class="form-control" name="orderNum" v-model="shop.orderNum"/>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">新品排序号</div>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" name="isNewProductOrderNum" v-model="shop.isNewProductOrderNum"/>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="col-sm-2 control-label"></div>
                     <input type="button" name="submit" class="btn btn-primary" @click="save" value="确定"/>
@@ -152,6 +178,7 @@
                                         <th>详情图</th>
                                         <th>是否置顶</th>
                                         <th>是否上架</th>
+                                        <th>是否热卖</th>
                                         <th>注册时间</th>
                                         <th>排序号</th>
                                     </tr>
@@ -174,7 +201,7 @@
     </div>
 </div>
 <div th:include="common/Head :: js"></div>
-<script src="../bootstrap/js/project/sys/shop/js/datatables.min.js"></script>
+
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
 
 
@@ -183,6 +210,10 @@
 <script src="../bootstrap/js/project/sys/shop/js/fileinput.min.js"></script>
 <script src="../bootstrap/js/project/sys/shop/js/zh.js"></script>
 <script src="../bootstrap/js/project/sys/shop/js/shopData.js"></script>
+
+
+<script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
+
 
 <!-- Page-Level Scripts -->
 <script>
@@ -205,6 +236,8 @@
             dom: '<"html5buttons"B>f<"top">rt<"bottom"lp>i<"clear">',
             pagingType: "full_numbers",
             destroy: true,
+            colReorder: true,
+            responsive: true,
             language: {
                 "sLengthMenu": "每页显示 _MENU_条",
                 "paginate": {
@@ -218,14 +251,19 @@
                 //下面三者构成了总体的左下角的内容。
                 info: "总共_PAGES_ 页，显示第_START_ 到第 _END_ ，筛选之后得到 _TOTAL_ 条，初始_MAX_ 条 ",//左下角的信息显示，大写的词为关键字。
                 infoEmpty: "0条记录",//筛选为空时左下角的显示。
-                infoFiltered: ""//筛选之后的左下角筛选提示，
+                infoFiltered: "",//筛选之后的左下角筛选提示，
+                buttons: {
+                    "colvis": "列可见性",
+                    "print": "打印",
+                    "copy": "复制数据",
+                },
+                editor: {
+                    "Update": "更新",
+                }
+
             },
             buttons: [
-                {extend: 'copy'},
-                {extend: 'csv'},
-                {extend: 'excel', title: 'ExampleFile'},
-                {extend: 'pdf', title: 'ExampleFile'},
-
+                {extend: 'colvis'},
                 {
                     extend: 'print',
                     customize: function (win) {
@@ -236,16 +274,27 @@
                             .addClass('compact')
                             .css('font-size', 'inherit');
                     }
-                }
-            ],
-            ajax: {
-                url: "/shop/list",
-                dataSrc: function (json) {
-                    return json;
                 },
-                dataType: 'json',
-                type: "post",
-            },
+                {extend: 'copy'},
+                {extend: 'csv'},
+                {extend: 'excel', title: 'ExampleFile'},
+                {extend: 'pdf', title: 'ExampleFile'}
+            ],
+            ajax:
+                {
+                    url: "/shop/list",
+                    dataSrc:
+
+                        function (json) {
+                            return json;
+                        }
+
+                    ,
+                    dataType: 'json',
+                    type:
+                        "post",
+                }
+            ,
             columns: [
                 {data: null, orderable: false},
                 {data: "id"},
@@ -255,71 +304,90 @@
                 {data: "saveFileName", width: "15%"},
                 {data: "top"},
                 {data: "status"},
+                {data: "hotSale"},
                 {data: "register"},
                 {data: "orderNum"}
             ],
-            aoColumnDefs: [
-                {
-                    "render": function (data, type) {
-                        return "<div align='center'><input type='radio'   name='radio' value='" + data.id + "' ></div>";
+            aoColumnDefs:
+                [
+                    {
+                        "render": function (data, type) {
+                            return "<div align='center'><input type='radio'   name='radio' value='" + data.id + "' ></div>";
+                        },
+                        "aTargets": 0 //第一列
                     },
-                    "aTargets": 0 //第一列
-                },
-                {
-                    "render": function (data, type) {
-                        if (data == 1) {
-                            return ' <a class="btn btn-success" ><i class="fa fa-plus-square"></i>&nbsp;已置顶</a>';
-                        } else {
-                            return '  <a class="btn btn-success" ><i class="fa fa-minus-square"></i>&nbsp;未置顶</a>';
-                        }
+                    {
+                        "render": function (data, type) {
+                            if (data == 1) {
+                                return ' <a class="btn btn-success" ><i class="fa fa-plus-square"></i>&nbsp;已置顶</a>';
+                            } else {
+                                return '  <a class="btn btn-success" ><i class="fa fa-minus-square"></i>&nbsp;未置顶</a>';
+                            }
+                        },
+                        "aTargets": 6 //第一列
                     },
-                    "aTargets": 6 //第一列
-                },
-                {
-                    "render": function (data, type) {
-                        if (data == 1) {
+                    {
+                        "render": function (data, type) {
 
-                            return '<a class="btn btn-danger" ><i class="fa fa-check"></i>&nbsp;已上架</a>';
-                        } else {
-                            return ' <a class="btn btn-danger" ><i class="fa fa-close"></i>&nbsp;未上架</a>';
-                        }
+                            if (data == 1) {
+
+                                return '<a class="btn btn-danger" ><i class="fa fa-check"></i>&nbsp;已上架</a>';
+                            } else {
+                                return ' <a class="btn btn-danger" ><i class="fa fa-close"></i>&nbsp;未上架</a>';
+                            }
+                        },
+                        "aTargets": 7 //第7列
                     },
-                    "aTargets": 7 //第7列
-                },
-                {
-                    "render": function (data, type) {
+
+                    {
+                        "render": function (data, type) {
 
 
-                        if (data != undefined && data != 'undefined') {
+                            if (data != undefined && data != 'undefined') {
 
-                            return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
-                        } else {
-                            return '';
-                        }
+                                return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+                            } else {
+                                return '';
+                            }
+                        },
+                        "aTargets": 9 //第7列
                     },
-                    "aTargets": 8 //第7列
-                },
-                {
-                    "render": function (data, type, full) {
+                    {
+                        "render": function (data, type, full) {
 
-                        if (data != undefined && data != 'undefined' && data.length > 0) {
+                            if (data != undefined && data != 'undefined' && data.length > 0) {
 
-                            return '<img src="' + full.pageaddr + "/" + data + '"  onclick ="detail(' + "'" + full.id + "'" + ')" width="40" height="40">';
-                        } else {
-                            return '<a class="btn btn-sm btn-warning" ><i class="fa fa-file-photo-o"></i>&nbsp;暂无图片</a>';
+                                return '<img src="' + full.pageaddr + "/" + data + '"  onclick ="detail(' + "'" + full.id + "'" + ')" width="40" height="40">';
+                            } else {
+                                return '<a class="btn btn-sm btn-warning" ><i class="fa fa-file-photo-o"></i>&nbsp;暂无图片</a>';
 
-                        }
+                            }
+                        },
+                        "aTargets": 5 //第5列
                     },
-                    "aTargets": 5 //第5列
-                }
+                    {
+                        "render": function (data, type) {
 
-            ],
-            columnDefs: [
-                {orderable: false, targets: 0},
-                {width: "15%", orderable: false, targets: 5},
-            ],
-            order: [1, 'asc']
-        });
+                            if (data == 1) {
+
+                                return '<a class="btn btn-warning" ><i class="fa fa-check"></i>&nbsp;已上架</a>';
+                            } else {
+                                return ' <a class="btn btn-warning" ><i class="fa fa-close"></i>&nbsp;未上架</a>';
+                            }
+                        },
+                        "aTargets": 8 //第7列
+                    },
+
+                ],
+            columnDefs:
+                [
+                    {orderable: false, targets: 0},
+                    {width: "15%", orderable: false, targets: 5}
+                ],
+            order:
+                [1, 'asc']
+        })
+        ;
 
         $('form').bootstrapValidator({
 
@@ -381,7 +449,22 @@
 
 
     });
-
+    //对Date 类进行扩展
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
 
     function detail(shopId) {
         top.layer.open({
@@ -400,22 +483,6 @@
     })
 
 
-    //对Date 类进行扩展
-    Date.prototype.Format = function (fmt) {
-        var o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "h+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
 </script>
 
 </body>
