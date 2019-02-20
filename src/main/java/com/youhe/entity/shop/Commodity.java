@@ -2,10 +2,12 @@ package com.youhe.entity.shop;
 
 import com.youhe.entity.SysBaseEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Commodity extends SysBaseEntity {
+public class Commodity implements Serializable {
 
+    private static final long serialVersionUID = 3271541341702660411L;
     private String cid;
     private String cname; //商品角色名
     private int available;//是否可用
@@ -13,6 +15,9 @@ public class Commodity extends SysBaseEntity {
     private Long parentId;
     //排序
     private Integer orderNum;
+
+    private String son;// 是否存在子菜单
+
 
     /**
      * ztree属性
@@ -89,5 +94,13 @@ public class Commodity extends SysBaseEntity {
 
     public void setPermissiondList(List<Long> permissiondList) {
         this.permissiondList = permissiondList;
+    }
+
+    public String getSon() {
+        return son;
+    }
+
+    public void setSon(String son) {
+        this.son = son;
     }
 }

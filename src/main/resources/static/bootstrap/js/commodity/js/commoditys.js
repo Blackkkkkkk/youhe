@@ -61,6 +61,7 @@ var vm = new Vue({
         }
 
     },
+
     methods: {
         add: function () {
             vm.showList = false;
@@ -155,7 +156,6 @@ var vm = new Vue({
         saveOrUpdate: function (event) {
             var url = vm.dept.cid == null ? "/commodity/save" : "/commodity/update";
 
-
             console.log(url)
 
             //获取选择的权限菜单
@@ -172,8 +172,9 @@ var vm = new Vue({
                 contentType: "application/json",
                 data: JSON.stringify(vm.dept),
                 success: function (c) {
-                    if (c.code === 0) {
-                        layer.msg('操作成功', {icon: 1, time: 1000}, function () {
+
+                    if (c.Status == 0) {
+                        layer.msg(c.msg, {icon: 1, time: 1000}, function () {
                             vm.reload();
                         });
                     } else {

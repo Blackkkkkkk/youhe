@@ -8,12 +8,22 @@
         <result property="available" column="AVAILABLE"/>
         <result property="parentId" column="PARENT_ID"></result>
         <result property="parentName" column="PARENT_NAME"></result>
+        <result property="son" column="SON"></result>
         <result property="orderNum" column="ORDER_NUM"/>
     </resultMap>
 
     <!-- 查询角色-->
-    <select id="findCommodityList"  parameterType="com.youhe.entity.shop.Commodity"  resultMap="commodityList">
-        SELECT *,(SELECT CNAME FROM shop_commodity_role WHERE c.PARENT_ID = CID) PARENT_NAME FROM shop_commodity_role C
+    <select id="findCommodityList" parameterType="com.youhe.entity.shop.Commodity" resultMap="commodityList">
+        SELECT *,(SELECT CNAME FROM shop_commodity_role WHERE c.PARENT_ID = CID) PARENT_NAME,
+        (
+        SELECT
+        CNAME
+        FROM
+        shop_commodity_role
+        WHERE
+        PARENT_ID = C.CID LIMIT 1
+        ) SON
+        FROM shop_commodity_role C
         <where>
             <trim prefixOverrides="AND">
                 <if test="cid">
@@ -24,11 +34,12 @@
                 </if>
             </trim>
         </where>
+        ORDER BY c.PARENT_ID
     </select>
 
     <insert id="add" parameterType="com.youhe.entity.shop.Commodity" keyProperty="cid"
             useGeneratedKeys="true">
-        insert into shop_commodity_role(CNAME,AVAILABLE,PARENT_ID,ORDER_NUM) value(#{cname},1,#{parentId},#{orderNum})
+        insert into shop_commodity_role(CNAME, AVAILABLE, PARENT_ID, ORDER_NUM) value (#{cname}, 1, #{parentId}, #{orderNum})
     </insert>
 
     <update id="update" parameterType="com.youhe.entity.shop.Commodity">
@@ -53,9 +64,10 @@
 
 
     <delete id="del" parameterType="com.youhe.entity.shop.Commodity">
-           DELETE  from shop_commodity_role  WHERE CID=#{cid}
+        DELETE
+        from shop_commodity_role
+        WHERE CID = #{cid}
     </delete>
-
 
 
 </mapper>

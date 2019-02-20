@@ -131,7 +131,7 @@
                     </a>
                     <div class="ls-price">
                         <span th:text="${carouselList[2].text_5}"></span>
-                        <strong><a th:text="${carouselList[1].text_5}" style="color:#FFFFFF; "></a><sup>¥</sup></strong>
+                        <strong><a th:text="${carouselList[2].text_5}" style="color:#FFFFFF; "></a><sup>¥</sup></strong>
                     </div>
                 </div>
             </div>
@@ -202,73 +202,9 @@
                 <!-- BEGIN SIDEBAR -->
                 <div class="sidebar col-md-3 col-sm-4">
                     <ul class="list-group margin-bottom-25 sidebar-menu">
-                        <li class="list-group-item clearfix"><a href="product-list.html"><i
-                                class="fa fa-angle-right"></i>
-                            Ladies</a></li>
-                        <li class="list-group-item clearfix dropdown">
-                            <a href="javascript:void(0);">
-                                <i class="fa fa-angle-right"></i>
-                                Mens
-                                <i class="fa fa-angle-down"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="list-group-item dropdown clearfix">
-                                    <a href="javascript:void(0);"><i class="fa fa-circle"></i> Shoes <i
-                                            class="fa fa-angle-down"></i></a>
-                                    <ul class="dropdown-menu">
-                                        <li class="list-group-item dropdown clearfix">
-                                            <a href="javascript:void(0);"><i class="fa fa-circle"></i> Classic <i
-                                                    class="fa fa-angle-down"></i></a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="product-list.html"><i class="fa fa-circle"></i> Classic
-                                                    1</a>
-                                                </li>
-                                                <li><a href="product-list.html"><i class="fa fa-circle"></i> Classic
-                                                    2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="list-group-item dropdown clearfix">
-                                            <a href="javascript:void(0);"><i class="fa fa-circle"></i> Sport <i
-                                                    class="fa fa-angle-down"></i></a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="product-list.html"><i class="fa fa-circle"></i> Sport 1</a>
-                                                </li>
-                                                <li><a href="product-list.html"><i class="fa fa-circle"></i> Sport 2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="product-list.html"><i class="fa fa-circle"></i> Trainers</a></li>
-                                <li><a href="product-list.html"><i class="fa fa-circle"></i> Jeans</a></li>
-                                <li><a href="product-list.html"><i class="fa fa-circle"></i> Chinos</a></li>
-                                <li><a href="product-list.html"><i class="fa fa-circle"></i> T-Shirts</a></li>
-                            </ul>
-                        </li>
-                        <li class="list-group-item clearfix"><a href="product-list.html"><i
-                                class="fa fa-angle-right"></i>
-                            Kids</a></li>
-                        <li class="list-group-item clearfix"><a href="product-list.html"><i
-                                class="fa fa-angle-right"></i>
-                            Accessories</a></li>
-                        <li class="list-group-item clearfix"><a href="product-list.html"><i
-                                class="fa fa-angle-right"></i>
-                            Sports</a></li>
-                        <li class="list-group-item clearfix"><a href="product-list.html"><i
-                                class="fa fa-angle-right"></i>
-                            Brands</a></li>
-                        <li class="list-group-item clearfix"><a href="product-list.html"><i
-                                class="fa fa-angle-right"></i>
-                            Electronics</a></li>
-                        <li class="list-group-item clearfix"><a href="product-list.html"><i
-                                class="fa fa-angle-right"></i>
-                            Home & Garden</a></li>
-                        <li class="list-group-item clearfix"><a href="product-list.html"><i
-                                class="fa fa-angle-right"></i>
-                            Custom Link</a></li>
+                        <tree :lists="lists"></tree>
                     </ul>
-                </div>
+            </div>
                 <!-- END SIDEBAR -->
                 <!-- BEGIN CONTENT -->
                 <div class="col-md-9 col-sm-8">
@@ -864,7 +800,7 @@
         })
     });*/
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         App.init();
         App.initBxSlider();
         Index.initLayerSlider();

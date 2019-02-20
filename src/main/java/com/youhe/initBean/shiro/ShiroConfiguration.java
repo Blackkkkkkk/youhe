@@ -109,7 +109,9 @@ public class ShiroConfiguration {
         //商城访问首页的拦截规则，全部放行，除了加入购物车或者结账的时候必须登录
         filterChainDefinitionMap.put("/templates/upload/**", "anon");
         filterChainDefinitionMap.put("/touristShop/**", "anon");
-        filterChainDefinitionMap.put("/changeLang","anon");
+        filterChainDefinitionMap.put("/changeLang", "anon");
+        filterChainDefinitionMap.put("/commodity/list", "anon");
+
         // 商城拦截结束
 
         filterChainDefinitionMap.put("/diagram-viewer/*", "anon");

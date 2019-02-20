@@ -144,7 +144,6 @@ var vm = new Vue({
                        // console.log((menuIds.index(i)).get)
                         var node = menu_ztree.getNodeByParam("pid", menuIds[i]);
 
-
                         menu_ztree.checkNode(node, true, false);
                     }
                     //    vm.getDept();

@@ -35,7 +35,6 @@ public class CommodityController {
     private CommodityControllerImpl commodityControllerImpl;
 
 
-
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @RequestMapping(value = "/index")
@@ -74,12 +73,13 @@ public class CommodityController {
     @RequestMapping("/save")
     @ResponseBody
     public R save(@RequestBody Commodity commodity) {
+
         try {
             commodityControllerImpl.save(commodity);
-            return R.ok();
-        }catch (Exception e){
+            return R.ok(0, "保存成功");
+        } catch (Exception e) {
             log.info("/role/update: 角色保存失败:" + e.toString());
-            return R.error("保存失败！");
+            return R.error(1, "保存失败！");
         }
     }
 
@@ -136,7 +136,6 @@ public class CommodityController {
     }
 
 
-
     /**
      * 修改
      */
@@ -146,14 +145,10 @@ public class CommodityController {
 
         try {
             commodityControllerImpl.update(commodity);
-            return R.ok();
-        }catch (Exception e){
-
-            log.info("/role/update: 角色更新失败:" + e.toString());
+            return R.ok(0, "更新成功");
+        } catch (Exception e) {
+            log.info("/role/update: 分类更新失败:" + e.toString());
             return R.error("更新失败！");
         }
     }
-
-
-
 }

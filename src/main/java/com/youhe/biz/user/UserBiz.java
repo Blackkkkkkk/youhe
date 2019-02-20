@@ -1,6 +1,8 @@
 package com.youhe.biz.user;
 
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.youhe.entity.user.User;
 import com.youhe.mapper.user.UserMapper;
 import org.slf4j.Logger;
@@ -55,5 +57,8 @@ public class UserBiz {
     public void del(User user) {
         userMapper.del(user);
     }
+
+
+
 
 }
