@@ -215,4 +215,19 @@ public class IndexController {
 
         return R.ok(1, "修改成功").put("shopList", shopList);
     }
+
+
+    @RequestMapping(value = "/commodityMenu")
+    public String commodity(Model model, Shop shop) {
+        /*
+        shop.setStatus(1).
+                setRegister_Sort(1).
+
+                setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);*/
+
+        List<Shop> shopList = shopBiz.findCommodity(shop);
+        model.addAttribute("shopList", shopList);
+        return "user/shop/index/test";
+        //  return R.ok().put("shopList",shopList)
+    }
 }

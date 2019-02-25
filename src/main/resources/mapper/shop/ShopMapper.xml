@@ -18,6 +18,21 @@
         <result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>
     </resultMap>
 
+    <resultMap type="com.youhe.entity.shop.Shop" id="commodityList">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="pirce" column="PRICE"/>
+        <result property="num" column="NUM"></result>
+        <result property="top" column="TOP"/>
+        <result property="status" column="STATUS"/>
+        <result property="register" column="REGISTER"/>
+        <result property="orderNum" column="ORDER_NUM"/>
+        <result property="saveFileName" column="SAVE_FILE_NAME"></result>
+        <result property="pageaddr" column="PAGEADDR"></result>
+        <result property="hotSale" column="HOT_SALE"></result>
+        <result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>
+    </resultMap>
+
     <!--
       商品表和照片表关联，右表为照片表，当有多数据的时候取第一张为关联数据，满足前台的缩略图预览
     -->
@@ -63,6 +78,30 @@
         </if>
         DESC
     </select>
+
+    <!--
+     商品表和商品分类变关联，商品表和照片表关联，右表为照片表，
+   -->
+    <select id="findCommodity" parameterType="com.youhe.entity.shop.Shop" resultMap="commodityList">
+      SELECT
+	   sc.*,
+	   cr.CNAME,
+	   cr.CID,
+	   sp.SAVE_FILE_NAME,
+	   sp.PAGEADDR
+      FROM
+	    shop_commodity_role cr
+	    LEFT JOIN shop_commodity sc ON sc.commodity_id = cr.cid
+	    LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
+        AND
+        sp.ID =
+        (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
+       WHERE
+	     cr.cid=#{cid}
+    </select>
+
+
+
 
     <insert id="save" parameterType="com.youhe.entity.shop.Shop" keyProperty="id"
             useGeneratedKeys="true">

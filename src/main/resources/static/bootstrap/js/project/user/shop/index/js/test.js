@@ -1,5 +1,5 @@
 /**
- * Created by xiaoqiang on 2019/1/10.
+ * Created by liumeixiang 2019/2/22.
  */
 
 //新增vue组件化
@@ -59,7 +59,6 @@ var vm = new Vue({
 
         $.get("/commodity/list", function (r) {
 
-
             _this.menList = r
         })
 
@@ -72,12 +71,12 @@ var vm = new Vue({
             cname: 'cname',
             rootId: 0
         }
-        console.log(data)
+     //   console.log(data)
         _this.lists = _this.toTreeData(data, attributes)
-        console.log(_this.lists)
+     //   console.log(_this.lists)
         $.ajaxSettings.async = false;
 
-        console.log(_this.menList)
+      //  console.log(_this.menList)
 
     }
     ,

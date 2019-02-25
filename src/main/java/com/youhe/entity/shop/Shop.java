@@ -65,4 +65,10 @@ public class Shop extends SysBaseEntity {
     private int register_Sort;
     private int isNewProductOrderNum_Sort;
 
+
+    /*
+     * 关联商品分类表的字段
+     **/
+    private int cid;
+    private String cname;
 }

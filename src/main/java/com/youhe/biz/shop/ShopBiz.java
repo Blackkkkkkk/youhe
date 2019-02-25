@@ -26,6 +26,11 @@ public class ShopBiz {
     }
 
 
+    //查找分类表
+    public List<Shop> findCommodity(Shop shop) {
+        return shopMapper.findCommodity(shop);
+    }
+
     //查找商品表分页
     public PageInfo<Shop> list(Shop shop) {
 

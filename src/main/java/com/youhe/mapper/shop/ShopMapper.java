@@ -13,6 +13,9 @@ public interface ShopMapper {
     //查找角色表
     List<Shop> findShopList(Shop shop);
 
+    //查找分类
+    List<Shop> findCommodity(Shop shop);
+
     Long save(Shop shop);
 
     Long del(Shop shop);
