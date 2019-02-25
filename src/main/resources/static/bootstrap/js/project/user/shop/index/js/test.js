@@ -8,7 +8,7 @@ Vue.component('tree', {
     props: ['lists'],
     template: `
 		
-		<div>
+		<ul class="list-group margin-bottom-25 sidebar-menu">
 				  <template v-for="item in lists">
 
                         <li v-if="item.children == null" class="list-group-item clearfix"><a href="/touristShop/commodityMenu?cid=1"><i
@@ -32,7 +32,7 @@ Vue.component('tree', {
                                   <i v-if="item.parentId != 0" class="fa fa-circle" style="float: left;margin-right: 7px;font-size: 5px;position: relative;top: 7px;color: #949fae;"></i>{{item.cname}}</a></li>
                         </li>
                     </template>
-		</div>
+		</ul>
 	`
 })
 
