@@ -44,6 +44,8 @@
         (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
         where
         1=1
+        AND sp.SAVE_FILE_NAME is not NULL
+        AND sp.PAGEADDR is not NULL
         <if test="id!=null">
             AND sc.ID = #{id}
         </if>
@@ -83,56 +85,48 @@
      商品表和商品分类变关联，商品表和照片表关联，右表为照片表，
    -->
     <select id="findCommodity" parameterType="com.youhe.entity.shop.Shop" resultMap="commodityList">
-      SELECT
-	   sc.*,
-	   cr.CNAME,
-	   cr.CID,
-	   sp.SAVE_FILE_NAME,
-	   sp.PAGEADDR
-      FROM
-	    shop_commodity_role cr
-	    LEFT JOIN shop_commodity sc ON sc.commodity_id = cr.cid
-	    LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
-        AND
-        sp.ID =
-        (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
-       WHERE
-	     cr.cid=#{cid}
+        SELECT sc.*,
+               cr.CNAME,
+               cr.CID,
+               sp.SAVE_FILE_NAME,
+               sp.PAGEADDR
+        FROM shop_commodity_role cr
+                 LEFT JOIN shop_commodity sc ON sc.commodity_id = cr.cid
+                 LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
+            AND
+                                              sp.ID =
+                                              (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
+        WHERE cr.cid = #{cid}
     </select>
-
-
 
 
     <insert id="save" parameterType="com.youhe.entity.shop.Shop" keyProperty="id"
             useGeneratedKeys="true">
-        insert into shop_commodity(
-        NAME,
-        PRICE,
-        NUM,
-        TOP,
-        STATUS,
-        REGISTER,
-        ORDER_NUM,
-        HOT_SALE,
-        IS_NEW_PRODUCT_ORDER_NUM
-        )
-        values(
-        #{name,jdbcType=VARCHAR},
-        #{pirce,jdbcType=INTEGER},
-        #{num,jdbcType=INTEGER},
-        #{top,jdbcType=INTEGER},
-        #{status,jdbcType=INTEGER},
-        NOW(),
-        #{orderNum,jdbcType=VARCHAR},
-        #{hotSale,jdbcType=INTEGER},
-        #{isNewProductOrderNum,jdbcType=INTEGER}
-        )
+        insert into shop_commodity(NAME,
+                                   PRICE,
+                                   NUM,
+                                   TOP,
+                                   STATUS,
+                                   REGISTER,
+                                   ORDER_NUM,
+                                   HOT_SALE,
+                                   IS_NEW_PRODUCT_ORDER_NUM)
+        values (#{name,jdbcType=VARCHAR},
+                #{pirce,jdbcType=INTEGER},
+                #{num,jdbcType=INTEGER},
+                #{top,jdbcType=INTEGER},
+                #{status,jdbcType=INTEGER},
+                NOW(),
+                #{orderNum,jdbcType=VARCHAR},
+                #{hotSale,jdbcType=INTEGER},
+                #{isNewProductOrderNum,jdbcType=INTEGER})
     </insert>
 
 
     <delete id="del" parameterType="com.youhe.entity.shop.Shop">
-        DELETE from shop_commodity
-        where  ID = #{id,jdbcType=INTEGER}
+        DELETE
+        from shop_commodity
+        where ID = #{id,jdbcType=INTEGER}
     </delete>
 
 
