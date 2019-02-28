@@ -54,6 +54,7 @@ public class IndexController {
 
         Shop shop = new Shop();
 
+        shop.setIsIndex(1);
         shop.setStatus(1).
                 setRegister_Sort(1).
                 setTop_Sort(1).

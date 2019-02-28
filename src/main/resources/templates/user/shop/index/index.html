@@ -212,22 +212,25 @@
                     <div class="bxslider-wrapper">
                         <ul class="bxslider" data-slides-phone="1" data-slides-tablet="2" data-slides-desktop="3"
                             data-slide-margin="15">
-                            <li>
+                            <li th:each="shopList,info : ${shopList}">
                                 <div class="product-item">
                                     <div class="pi-img-wrapper">
-                                        <img src="../bootstrap/user/temp/products/k1.jpg" class="img-responsive"
+                                        <img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
+                                             class="img-responsive"
                                              alt="Berry Lace Dress">
                                         <div>
-                                            <a href="../bootstrap/user/temp/products/k1.jpg"
-                                               class="btn btn-default fancybox-button">Zoom</a>
+                                            <a th:href="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
+                                               class="btn btn-default fancybox-button">查看</a>
                                             <a href="#product-pop-up"
                                                class="btn btn-default fancybox-fast-view">View</a>
                                         </div>
                                     </div>
-                                    <h3><a href="item.html">Berry Lace Dress</a></h3>
-                                    <div class="pi-price">$29.00</div>
-                                    <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                                    <div class="sticker sticker-new"></div>
+                                    <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
+                                    <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
+                                    <a @click="addCar($event)" class="btn btn-default add2cart"
+                                       th:id="${shopList.id}">加入购物车</a>
+                                    <div class="sticker sticker-sale" th:if="${info.index ==0}"></div>
+                                    <div class="sticker sticker-new" th:if="${info.index ==1}"></div>
                                 </div>
                             </li>
                             <li>

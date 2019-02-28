@@ -11,7 +11,7 @@ Vue.component('tree', {
 		<div>
 				  <template v-for="item in lists">
 
-                        <li v-if="item.children == null" class="list-group-item clearfix"><a href="/touristShop/commodityMenu?cid=1"><i
+                        <li v-if="item.children == null" class="list-group-item clearfix"><a href="/touristShop/commodityMenu?cid={{item.cid}}"><i
                                 class="fa fa-angle-right"></i>
                             {{item.cname}}</a>
                         </li>
@@ -20,16 +20,16 @@ Vue.component('tree', {
                             <a v-if="item.children != null && item.children.length >0" href="javascript:void(0);" style="padding: 0px;" :id="item.cid"> 
                             <i v-if="item.parentId == 0" class="fa fa-angle-right"></i>
                             <i v-if="item.parentId != 0" class="fa fa-circle" style="float: left;margin-right: 7px;font-size: 5px;position: relative;top: 7px;color: #949fae;"></i>
-                            {{item.cname}}<i class="fa fa-angle-down"></i></a>
+                            {{item.cname}}33333<i class="fa fa-angle-down"></i></a>
                             <ul class="dropdown-menu" v-if="item.children != null && item.children.length >0">
                                 <treeNode :lists="item.children">                     
                                 </treeNode>
                             </ul>
 
-                        <li v-if="item.children != null && item.children.length ==0" class="list-group-item clearfix"><a
-                                href="/touristShop/commodityMenu?cid=1" style="padding: 0px;" :id="item.cid">
+                        <li v-if="item.children != null && item.children.length ==0" class="list-group-item clearfix">
+                                <a :href="'/touristShop/commodityMenu?cid='+item.cid+''" style="padding: 0px;" :id="item.cid">
                                 <i v-if="item.parentId == 0" class="fa fa-angle-right"></i>
-                                  <i v-if="item.parentId != 0" class="fa fa-circle" style="float: left;margin-right: 7px;font-size: 5px;position: relative;top: 7px;color: #949fae;"></i>{{item.cname}}</a></li>
+                                  <i v-if="item.parentId != 0" class="fa fa-circle" style="float: left;margin-right: 7px;font-size: 5px;position: relative;top: 7px;color: #949fae;"></i>{{item.cname}}1111</a></li>
                         </li>
                     </template>
 		</div>

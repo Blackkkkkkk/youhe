@@ -44,11 +44,16 @@
         (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
         where
         1=1
-        AND sp.SAVE_FILE_NAME is not NULL
-        AND sp.PAGEADDR is not NULL
+
         <if test="id!=null">
             AND sc.ID = #{id}
         </if>
+
+        <if test="isIndex !=null">
+            AND sp.SAVE_FILE_NAME is not NULL
+            AND sp.PAGEADDR is not NULL
+        </if>
+
         <if test="status!=null">
             AND sc.STATUS = #{status}
         </if>

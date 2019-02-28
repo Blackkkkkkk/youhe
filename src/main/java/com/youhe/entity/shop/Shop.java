@@ -25,6 +25,7 @@ public class Shop extends SysBaseEntity {
     private Integer status;    //1 上架 0下架
     private Date register; //注册时间
     private Integer hotSale;// 是否热卖   // 1热卖   0非热卖
+
     //排序
     private Integer orderNum;
     private Integer isNewProductOrderNum;// 是否新品排序号
@@ -71,4 +72,12 @@ public class Shop extends SysBaseEntity {
      **/
     private int cid;
     private String cname;
+
+    /*
+    *判断是哪一个页面
+     */
+
+    //0 用户页面，1  管理(PC端)
+    private int isIndex;
+
 }
