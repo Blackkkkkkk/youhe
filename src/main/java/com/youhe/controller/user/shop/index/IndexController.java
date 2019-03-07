@@ -20,6 +20,7 @@ import com.youhe.utils.pay.sdk.pay.domain.cashierPay.OrderInfo;
 import com.youhe.utils.pay.sdk.utils.Config;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +82,25 @@ public class IndexController {
 
         return "user/shop/index/index";
     }
+
+    @RequestMapping(value = "/viewList")
+    @ResponseBody
+    public R viewList(Model model, Shop shop) {
+        shop.setIsIndex(1);
+        shop.setStatus(1).
+                setRegister_Sort(1).
+                setTop_Sort(1).
+                setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
+
+        List<Shop> shopList = shopBiz.findShopList(shop);
+
+        if (!CollectionUtils.isEmpty(shopList)){
+            return R.ok(1,"").put("shopList",shopList.get(0));
+        }else {
+            return R.ok(0,"");
+        }
+    }
+
 
     @RequestMapping(value = "/shoppingCart")
     public String shoppingCart(Model model, Shop_index_carousel shop_index_carousel) {

@@ -16,6 +16,12 @@
         <result property="pageaddr" column="PAGEADDR"></result>
         <result property="hotSale" column="HOT_SALE"></result>
         <result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>
+        <result property="commodityId" column="COMMODITY_ID"></result>
+        <result property="describe" column="DESCRIBE"></result>
+        <result property="available" column="AVAILABLE"></result>
+        <result property="tid" column="TID"></result>
+        <result property="color" column="COLOR"></result>
+        <result property="size" column="SIZE"></result>
     </resultMap>
 
     <resultMap type="com.youhe.entity.shop.Shop" id="commodityList">
@@ -33,17 +39,43 @@
         <result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>
     </resultMap>
 
+    <!--<resultMap type="com.youhe.entity.shop.Shop" id="commodityTypeList">-->
+        <!--<id property="id" column="ID"/>-->
+        <!--<result property="name" column="NAME"/>-->
+        <!--<result property="pirce" column="PRICE"/>-->
+        <!--<result property="num" column="NUM"></result>-->
+        <!--<result property="top" column="TOP"/>-->
+        <!--<result property="status" column="STATUS"/>-->
+        <!--<result property="register" column="REGISTER"/>-->
+        <!--<result property="orderNum" column="ORDER_NUM"/>-->
+        <!--<result property="saveFileName" column="SAVE_FILE_NAME"></result>-->
+        <!--<result property="pageaddr" column="PAGEADDR"></result>-->
+        <!--<result property="hotSale" column="HOT_SALE"></result>-->
+        <!--<result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>-->
+        <!--<result property="commodityId" column="COMMODITY_ID"></result>-->
+        <!--<result property="describe" column="DESCRIBE"></result>-->
+        <!--<result property="available" column="AVAILABLE"></result>-->
+        <!--<result property="tid" column="TID"></result>-->
+        <!--<result property="color" column="COLOR"></result>-->
+        <!--<result property="size" column="SIZE"></result>-->
+    <!--</resultMap>-->
+
     <!--
       商品表和照片表关联，右表为照片表，当有多数据的时候取第一张为关联数据，满足前台的缩略图预览
     -->
     <select id="findShopList" parameterType="com.youhe.entity.shop.Shop" resultMap="shopList">
-        SELECT sc.*,sp.SAVE_FILE_NAME,sp.PAGEADDR FROM shop_commodity sc
+        SELECT sc.*,sp.SAVE_FILE_NAME,sp.PAGEADDR,ct.TID,ct.COLOR,ct.SIZE FROM shop_commodity sc
         LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
+        LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id
         AND
         sp.ID =
         (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
         where
         1=1
+
+        <if test="id!=null">
+            AND sc.ID = #{id}
+        </if>
 
         <if test="id!=null">
             AND sc.ID = #{id}
@@ -103,6 +135,21 @@
                                               (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
         WHERE cr.cid = #{cid}
     </select>
+
+
+    <!--&lt;!&ndash;-->
+    <!--商品表和商品类型表关联，右表类型表-->
+  <!--&ndash;&gt;-->
+    <!--<select id="findCommodityType" parameterMap="com.youhe.entity.shop.Shop" resultMap="commodityType">-->
+           <!--SELECT-->
+	         <!--sc.*,-->
+	         <!--ct.TID,-->
+	         <!--ct.COLOR,-->
+	         <!--ct.SIZE-->
+           <!--FROM  shop_commodity sc-->
+	       <!--LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id-->
+           <!--WHERE sc.id = #{id}-->
+    <!--</select>-->
 
 
     <insert id="save" parameterType="com.youhe.entity.shop.Shop" keyProperty="id"

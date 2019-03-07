@@ -16,6 +16,9 @@ public interface ShopMapper {
     //查找分类
     List<Shop> findCommodity(Shop shop);
 
+//    //查看详情
+//    List<Shop> findCommodityType(Shop shop);
+
     Long save(Shop shop);
 
     Long del(Shop shop);

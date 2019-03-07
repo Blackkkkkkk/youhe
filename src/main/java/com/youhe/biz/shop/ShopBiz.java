@@ -31,6 +31,11 @@ public class ShopBiz {
         return shopMapper.findCommodity(shop);
     }
 
+//    //查看详情
+//    public List<Shop> findCommodityType(Shop shop) {
+//        return shopMapper.findCommodity(shop);
+//    }
+
     //查找商品表分页
     public PageInfo<Shop> list(Shop shop) {
 

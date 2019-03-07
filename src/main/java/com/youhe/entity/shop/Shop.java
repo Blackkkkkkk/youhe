@@ -81,4 +81,12 @@ public class Shop extends SysBaseEntity {
     //0 用户页面，1  管理(PC端)
     private int isIndex;
 
+    private int commodityId;
+    private String describe;
+    private String available;
+    private int tid;
+    private String color;
+    private String size;
+
+
 }
