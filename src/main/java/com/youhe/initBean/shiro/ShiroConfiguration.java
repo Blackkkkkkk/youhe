@@ -104,6 +104,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/bootstrap/user/**", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/bootstrap/common/**", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/layui/**", "anon"); //匿名访问静态资源
+        filterChainDefinitionMap.put("/music/**", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/webapp/upload/**", "anon");
 
         //商城访问首页的拦截规则，全部放行，除了加入购物车或者结账的时候必须登录
@@ -116,6 +117,11 @@ public class ShiroConfiguration {
 
         filterChainDefinitionMap.put("/diagram-viewer/*", "anon");
         filterChainDefinitionMap.put("/editor-app/*", "anon");
+
+        //websocket
+        filterChainDefinitionMap.put("/socketServer/**", "anon");
+        filterChainDefinitionMap.put("/websocket/**", "anon");
+        filterChainDefinitionMap.put("/checkcenter/websocket/**", "anon");
 
         filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问

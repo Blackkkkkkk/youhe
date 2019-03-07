@@ -952,132 +952,212 @@
         </div>
     </div>
 </div>
-
-<div th:include="common/Head :: js"></div>
-<script>
-
-
-    $(document).ready(function () {
+<audio src="../music/orther.mp3" id="myaudio" controls="controls" hidden="true">
+    <div th:include="common/Head :: js"></div>
+    <script>
 
 
-        $("#homePage").attr("class", "active");
-        $("#homePage_ul").attr("class", "nav nav-second-level collapse in");
+        function autoPlay() {
+            var myAuto = document.getElementById('myaudio');
+            myAuto.play();
+        }
 
-        $("#homePage_1").attr("class", "active");
+        // 订单语音体系
+        var playSound = function () {
+            var borswer = window.navigator.userAgent.toLowerCase();
+            if (borswer.indexOf("ie") >= 0) {
+                //IE内核浏览器
+                var strEmbed = '<embed name="embedPlay" src="../music/orther.mp3" autostart="true" hidden="true" loop="false"></embed>';
+                if ($("body").find("embed").length <= 0)
+                    $("body").append(strEmbed);
+                var embed = document.embedPlay;
 
-        setTimeout(function () {
-            toastr.options = {
-                closeButton: true,
-                progressBar: true,
-                showMethod: 'slideDown',
-                timeOut: 4000
+                //浏览器不支持 audion，则使用 embed 播放
+                embed.volume = 100;
+                //embed.play();这个不需要
+            } else {
+                //非IE内核浏览器
+                var strAudio = "<audio id='audioPlay' src='../music/orther.mp3' hidden='true'>";
+
+                if ($("#audioPlay").length <= 0) {
+                    $("body").append(strAudio);
+                }
+
+                var audio = document.getElementById("audioPlay");
+
+                //浏览器支持 audio
+                audio.play();
+            }
+        }
+
+        var socket;
+        if (typeof (WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        } else {
+            console.log("您的浏览器支持WebSocket");
+            //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+            //等同于socket = new WebSocket("ws://localhost:8083/checkcentersys/websocket/20");
+            socket = new WebSocket("ws://192.168.2.244:80/websocket/20");
+            //socket = new WebSocket("ws://http://localhost:80/checkcenter/websocket/20");
+            //  socket = new WebSocket("/checkcenter/websocket/20".replace("http","ws"));
+            //打开事件
+            socket.onopen = function () {
+                console.log("Socket 已打开");
+                //socket.send("这是来自客户端的消息" + location.href + new Date());
             };
-            toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
+            //获得消息事件
+            socket.onmessage = function (msg) {
 
-        }, 1300);
 
+                if (msg.data == "连接成功") {
 
-        var data1 = [
-            [0, 4], [1, 8], [2, 5], [3, 10], [4, 4], [5, 16], [6, 5], [7, 11], [8, 6], [9, 11], [10, 30], [11, 10], [12, 13], [13, 4], [14, 3], [15, 3], [16, 6]
-        ];
-        var data2 = [
-            [0, 1], [1, 0], [2, 2], [3, 0], [4, 1], [5, 3], [6, 1], [7, 5], [8, 2], [9, 3], [10, 2], [11, 1], [12, 0], [13, 2], [14, 8], [15, 0], [16, 0]
-        ];
-        $("#flot-dashboard-chart").length && $.plot($("#flot-dashboard-chart"), [
-                data1, data2
-            ],
-            {
-                series: {
-                    lines: {
-                        show: false,
-                        fill: true
-                    },
-                    splines: {
-                        show: true,
-                        tension: 0.4,
-                        lineWidth: 1,
-                        fill: 0.4
-                    },
-                    points: {
-                        radius: 0,
-                        show: true
-                    },
-                    shadowSize: 2
-                },
-                grid: {
-                    hoverable: true,
-                    clickable: true,
-                    tickColor: "#d5d5d5",
-                    borderWidth: 1,
-                    color: '#d5d5d5'
-                },
-                colors: ["#1ab394", "#1C84C6"],
-                xaxis: {},
-                yaxis: {
-                    ticks: 4
-                },
-                tooltip: false
+                } else {
+                    toastr.options = {
+                        closeButton: true,
+                        progressBar: true,
+                        showMethod: 'slideDown',
+                        timeOut: 4000,
+                        positionClass: "toast-top-right"
+                    };
+                    toastr.info("订单号【" + msg.data+"】","有新的订单已支付!");
+                    autoPlay()
+                    console.log(msg.data);
+                }
+                //发现消息进入    开始处理前端触发逻辑
+            };
+            //关闭事件
+            socket.onclose = function () {
+                console.log("Socket已关闭");
+            };
+            //发生了错误事件
+            socket.onerror = function () {
+                alert("Socket发生了错误");
+                //此时可以尝试刷新页面
             }
-        );
-
-        var doughnutData = {
-            labels: ["App", "Software", "Laptop"],
-            datasets: [{
-                data: [300, 50, 100],
-                backgroundColor: ["#a3e1d4", "#dedede", "#9CC3DA"]
-            }]
-        };
+        }
 
 
-        var doughnutOptions = {
-            responsive: false,
-            legend: {
-                display: false
-            }
-        };
+        $(document).ready(function () {
 
 
-        var ctx4 = document.getElementById("doughnutChart").getContext("2d");
-        new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
+            $("#homePage").attr("class", "active");
+            $("#homePage_ul").attr("class", "nav nav-second-level collapse in");
 
-        var doughnutData = {
-            labels: ["App", "Software", "Laptop"],
-            datasets: [{
-                data: [70, 27, 85],
-                backgroundColor: ["#a3e1d4", "#dedede", "#9CC3DA"]
-            }]
-        };
+            $("#homePage_1").attr("class", "active");
 
 
-        var doughnutOptions = {
-            responsive: false,
-            legend: {
-                display: false
-            }
-        };
+            setTimeout(function () {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000,
+                    positionClass: "toast-top-right"
+                };
+                toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
+            }, 1300);
+
+            var data1 = [
+                [0, 4], [1, 8], [2, 5], [3, 10], [4, 4], [5, 16], [6, 5], [7, 11], [8, 6], [9, 11], [10, 30], [11, 10], [12, 13], [13, 4], [14, 3], [15, 3], [16, 6]
+            ];
+            var data2 = [
+                [0, 1], [1, 0], [2, 2], [3, 0], [4, 1], [5, 3], [6, 1], [7, 5], [8, 2], [9, 3], [10, 2], [11, 1], [12, 0], [13, 2], [14, 8], [15, 0], [16, 0]
+            ];
+            $("#flot-dashboard-chart").length && $.plot($("#flot-dashboard-chart"), [
+                    data1, data2
+                ],
+                {
+                    series: {
+                        lines: {
+                            show: false,
+                            fill: true
+                        },
+                        splines: {
+                            show: true,
+                            tension: 0.4,
+                            lineWidth: 1,
+                            fill: 0.4
+                        },
+                        points: {
+                            radius: 0,
+                            show: true
+                        },
+                        shadowSize: 2
+                    },
+                    grid: {
+                        hoverable: true,
+                        clickable: true,
+                        tickColor: "#d5d5d5",
+                        borderWidth: 1,
+                        color: '#d5d5d5'
+                    },
+                    colors: ["#1ab394", "#1C84C6"],
+                    xaxis: {},
+                    yaxis: {
+                        ticks: 4
+                    },
+                    tooltip: false
+                }
+            );
+
+            var doughnutData = {
+                labels: ["App", "Software", "Laptop"],
+                datasets: [{
+                    data: [300, 50, 100],
+                    backgroundColor: ["#a3e1d4", "#dedede", "#9CC3DA"]
+                }]
+            };
 
 
-        var ctx4 = document.getElementById("doughnutChart2").getContext("2d");
-        new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
+            var doughnutOptions = {
+                responsive: false,
+                legend: {
+                    display: false
+                }
+            };
 
-    });
-</script>
-<script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-4625583-2', 'webapplayers.com');
-    ga('send', 'pageview');
+            var ctx4 = document.getElementById("doughnutChart").getContext("2d");
+            new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
 
-</script>
+            var doughnutData = {
+                labels: ["App", "Software", "Laptop"],
+                datasets: [{
+                    data: [70, 27, 85],
+                    backgroundColor: ["#a3e1d4", "#dedede", "#9CC3DA"]
+                }]
+            };
+
+
+            var doughnutOptions = {
+                responsive: false,
+                legend: {
+                    display: false
+                }
+            };
+
+
+            var ctx4 = document.getElementById("doughnutChart2").getContext("2d");
+            new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
+
+        });
+    </script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-4625583-2', 'webapplayers.com');
+        ga('send', 'pageview');
+
+    </script>
 </body>
 </html>
