@@ -35,11 +35,15 @@ angular.module('activitiModeler')
             for(var i = 0; i < namespaces.length; i++) {
                 context = context[namespaces[i]];
             }
+
+
             return context[func].apply(this, args);
         };
 
         // Click handler for toolbar buttons
         $scope.toolbarButtonClicked = function(buttonIndex) {
+
+
 
             // Default behaviour
             var buttonClicked = $scope.items[buttonIndex];

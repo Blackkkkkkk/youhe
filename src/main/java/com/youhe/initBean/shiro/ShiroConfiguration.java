@@ -200,5 +200,4 @@ public class ShiroConfiguration {
         return authenticator;
     }
 
-
 }

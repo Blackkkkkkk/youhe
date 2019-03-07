@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.order.OrdertMapper">
+
+    <resultMap type="com.youhe.entity.order.Order" id="orderList">
+        <id property="id" column="id"/>
+        <result property="bigOrderCode" column="bigOrderCode"/>
+        <result property="status" column="status"/>
+        <result property="orderEndTime" column="orderEndTime"/>
+        <result property="totalPrice" column="totalPrice"></result>
+        <result property="transportStatus" column="transportStatus"></result>
+    </resultMap>
+
+    <resultMap type="com.youhe.entity.order.OrderDetails" id="orderDetailsList">
+        <id property="id" column="id"/>
+        <result property="bigOrderCode" column="bigOrderCode"/>
+        <result property="orderCode" column="orderCode"/>
+        <result property="name" column="name"/>
+        <result property="pirce" column="pirce"/>
+        <result property="num" column="num"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <select id="findOrder" parameterType="com.youhe.entity.order.Order" resultMap="orderList">
+        select * from order_order
+        where 1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="bigOrderCode != null">
+            AND bigOrderCode = #{bigOrderCode}
+        </if>
+    </select>
+
+
+    <update id="updateOrder" parameterType="com.youhe.entity.order.Order">
+        UPDATE order_order
+        SET
+        <trim suffixOverrides=",">
+            <if test="bigOrderCode != null">
+                bigOrderCode =#{bigOrderCode},
+            </if>
+            <if test="status != null ">
+                status=#{status},
+            </if>
+            <if test="orderEndTime != null">
+                orderEndTime =#{orderEndTime},
+            </if>
+            <if test="totalPrice != null">
+                totalPrice =#{totalPrice},
+            </if>
+            <if test="transportStatus != null">
+                transportStatus =#{transportStatus},
+            </if>
+        </trim>
+        WHERE
+        1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="bigOrderCode != null">
+            AND bigOrderCode = #{bigOrderCode}
+        </if>
+    </update>
+
+    <insert id="saveOrder" parameterType="com.youhe.entity.order.Order" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into order_order(bigOrderCode,
+                                status,
+                                orderEndTime,
+                                totalPrice, transportStatus)
+            value (
+                   #{bigOrderCode},
+                   #{status},
+                   #{orderEndTime},
+                   #{totalPrice},
+                   0
+            )
+    </insert>
+
+    <delete id="delOrder" parameterType="com.youhe.entity.order.Order">
+        DELETE
+        from order_order
+        where
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="bigOrderCode != null and  bigOrderCode !=''">
+            AND bigOrderCode = #{bigOrderCode}
+        </if>
+    </delete>
+
+    <select id="findOrderDetails">
+        select * from order_orderDetails
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="bigOrderCode != null">
+            AND bigOrderCode = #{bigOrderCode}
+        </if>
+        <if test="orderCode != null">
+            AND orderCode = #{orderCode}
+        </if>
+    </select>
+
+    <update id="updateOrderDetails" parameterType="com.youhe.entity.order.OrderDetails">
+        UPDATE order_orderDetails
+        SET
+        <trim suffixOverrides=",">
+            <if test="bigOrderCode != null and bigOrderCode !=''">
+                bigOrderCode =#{bigOrderCode},
+            </if>
+            <if test="orderCode != null and orderCode !=''">
+                orderCode =#{orderCode},
+            </if>
+            <if test="name != null and name !=''">
+                name =#{name},
+            </if>
+            <if test="pirce != null ">
+                pirce=#{pirce},
+            </if>
+            <if test="num != null ">
+                num=#{num},
+            </if>
+            <if test="remark != null and remark !=''">
+                remark =#{remark},
+            </if>
+        </trim>
+        WHERE
+        1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="bigOrderCode != null and  bigOrderCode !=''">
+            AND bigOrderCode = #{bigOrderCode}
+        </if>
+        <if test="orderCode != null and  !=''">
+            AND orderCode = #{orderCode}
+        </if>
+    </update>
+
+    <insert id="saveOrderDetails" parameterType="com.youhe.entity.order.OrderDetails" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into order_orderDetails(bigOrderCode,
+                                       orderCode,
+                                       name,
+                                       pirce,
+                                       num,
+                                       remark)
+            value (
+                   #{bigOrderCode},
+                   #{orderCode},
+                   #{name},
+                   #{pirce},
+                   #{num},
+                   #{remark})
+    </insert>
+
+
+    <delete id="delOrderDetails" parameterType="com.youhe.entity.order.OrderDetails">
+        DELETE
+        from order_orderDetails
+        where
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="bigOrderCode != null and  bigOrderCode !=''">
+            AND bigOrderCode = #{bigOrderCode}
+        </if>
+        <if test="orderCode != null and  !=''">
+            AND orderCode = #{orderCode}
+        </if>
+    </delete>
+
+
+</mapper>

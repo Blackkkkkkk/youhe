@@ -71,9 +71,9 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN TOP BAR -->
     <div th:include="common/userShopHead :: head"></div>
     <!-- END TOP BAR -->
-
-    <!-- BEGIN HEADER -->
     <div th:include="common/userShopHead :: head-navigation"></div>
+    <!-- BEGIN HEADER -->
+    <!--  <div th:include="common/userShopHead :: head-navigation"></div>-->
     <!-- END HEADER -->
 
 
@@ -90,12 +90,11 @@ License: You must have a valid license purchased only from themeforest(the above
 
                                 <table summary="Shopping cart">
                                     <tr>
-                                        <th class="shopping-cart-image">Image</th>
-                                        <th class="shopping-cart-description">Description</th>
-                                        <th class="shopping-cart-ref-no">Ref No</th>
-                                        <th class="shopping-cart-quantity">Quantity</th>
-                                        <th class="shopping-cart-price">Unit price</th>
-                                        <th class="shopping-cart-total" colspan="2">Total</th>
+                                        <th class="shopping-cart-image">图片</th>
+                                        <th class="shopping-cart-description" style=" text-align:center; ">描述</th>
+                                        <th class="shopping-cart-quantity">数量</th>
+                                        <th class="shopping-cart-price">单价</th>
+                                        <th class="shopping-cart-total" colspan="2">总价</th>
                                     </tr>
 
                                     <tr v-for="(item,index) in shopList">
@@ -104,14 +103,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                                     :src="item.pageaddr+item.saveFileName"
                                                     alt="Berry Lace Dress"></a>
                                         </td>
-                                        <td class="shopping-cart-description">
+                                        <td class="shopping-cart-description" style=" text-align:center; ">
                                             <h3><a href="#">Cool green dress with red bell</a></h3>
                                             <p><strong>Item 1</strong> - Color: Green; Size: S</p>
                                             <em>More info is here</em>
                                         </td>
-                                        <td class="shopping-cart-ref-no">
-                                            javc2133
-                                        </td>
+
                                         <td class="shopping-cart-quantity">
                                             <div class="product-quantity">
                                                 <span class="input-group-btn"><button
@@ -165,7 +162,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 @click="goShop()">继续购物 <i
                                 class="fa fa-shopping-cart"></i>
                         </button>
-                        <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
+                        <button class="btn btn-primary" type="submit" @click="pay">支付 <i class="fa fa-check"></i>
+                        </button>
                     </div>
                 </div>
                 <!-- END CONTENT -->
@@ -552,7 +550,6 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
 <!--<script type="text/javascript" src="../bootstrap/user/scripts/app.js"></script> -->
 <script src="../bootstrap/js/project/user/shop/shoppingCart/js/shoppingCart.js"></script>
-
 <script th:inline="javascript">
     var layer;
     jQuery(document).ready(function () {

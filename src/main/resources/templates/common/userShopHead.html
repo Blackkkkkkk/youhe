@@ -54,8 +54,7 @@
 </aside>
 
 
-
-<aside  th:fragment="head-navigation">
+<aside th:fragment="head-navigation">
     <!-- BEGIN HEADER -->
     <div role="navigation" class="navbar header no-margin">
         <div class="container">
@@ -95,7 +94,7 @@
                         </ul>
                         <div class="text-right">
                             <a href="/touristShop/shoppingCart" class="btn btn-default">购物车详情</a>
-                            <a href="checkout.html" class="btn btn-primary">Checkout</a>
+                            <a class="btn btn-primary">支付</a>
                         </div>
                     </div>
                 </div>
@@ -108,129 +107,31 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"
                            data-target="product-list.html" href="product-list.html">
-                            日用品
+                            商品
                             <i class="fa fa-angle-down"></i>
                         </a>
-                        <!-- BEGIN DROPDOWN MENU -->
                         <ul class="dropdown-menu" aria-labelledby="mega-menu">
                             <li>
                                 <div class="nav-content">
-                                    <!-- BEGIN DROPDOWN MENU - COLUMN -->
-                                    <div class="nav-content-col">
-                                        <h3>床类</h3>
-                                        <ul>
-                                            <li><a href="product-list.html">枕头</a></li>
-                                            <li><a href="product-list.html">毛巾</a></li>
-                                            <li><a href="product-list.html">被子</a></li>
-                                            <li><a href="product-list.html">枕头1</a></li>
-                                            <li><a href="product-list.html">毛巾1</a></li>
-                                            <li><a href="product-list.html">被子1</a></li>
-                                        </ul>
-                                    </div>
-                                    <!-- END DROPDOWN MENU - COLUMN -->
-                                    <!-- BEGIN DROPDOWN MENU - COLUMN -->
-                                    <div class="nav-content-col">
-                                        <h3>洗漱品</h3>
-                                        <ul>
-                                            <li><a href="product-list.html">牙刷</a></li>
-                                            <li><a href="product-list.html">牙膏</a></li>
-                                            <li><a href="product-list.html">毛巾</a></li>
-                                            <li><a href="product-list.html">牙刷1</a></li>
-                                            <li><a href="product-list.html">牙膏1</a></li>
-                                            <li><a href="product-list.html">毛巾1</a></li>
-                                        </ul>
-                                    </div>
-                                    <!-- END DROPDOWN MENU - COLUMN -->
-                                    <!-- BEGIN DROPDOWN MENU - COLUMN -->
-                                    <div class="nav-content-col">
-                                        <h3>食品</h3>
-                                        <ul>
-                                            <li><a href="product-list.html">泡面</a></li>
-                                            <li><a href="product-list.html">矿泉水</a></li>
-                                            <li><a href="product-list.html">花生</a></li>
-                                        </ul>
 
-                                        <h3>Clearance</h3>
-                                        <ul>
-                                            <li><a href="product-list.html">Jackets</a></li>
-                                            <li><a href="product-list.html">Bottoms</a></li>
-                                        </ul>
-                                    </div>
-                                    <!-- END DROPDOWN MENU - COLUMN -->
-                                    <!-- BEGIN DROPDOWN MENU - BRANDS -->
-                                    <div class="nav-brands">
-                                        <ul>
-                                            <li><a href="product-list.html"><img title="esprit" alt="esprit"
-                                                                                 src="../bootstrap/user/temp/brands/esprit.jpg"></a>
-                                            </li>
-                                            <li><a href="product-list.html"><img title="gap" alt="gap"
-                                                                                 src="../bootstrap/user/temp/brands/gap.jpg"></a>
-                                            </li>
-                                            <li><a href="product-list.html"><img title="next" alt="next"
-                                                                                 src="../bootstrap/user/temp/brands/next.jpg"></a>
-                                            </li>
-                                            <li><a href="product-list.html"><img title="puma" alt="puma"
-                                                                                 src="../bootstrap/user/temp/brands/puma.jpg"></a>
-                                            </li>
-                                            <li><a href="product-list.html"><img title="zara" alt="zara"
-                                                                                 src="../bootstrap/user/temp/brands/zara.jpg"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- END DROPDOWN MENU - BRANDS -->
+                                    <tree-head :lists="lists">
+                                    </tree-head>
                                 </div>
                             </li>
                         </ul>
-                        <!-- END DROPDOWN MENU -->
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"
                            data-target="product-list.html" href="product-list.html">
-                            服务
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <!-- BEGIN DROPDOWN MENU -->
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-submenu">
-                                <a href="product-list.html">餐饮 <i class="fa fa-angle-right"></i></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="product-list.html">鸡肉</a></li>
-                                    <li><a href="product-list.html">牛肉</a></li>
-                                    <li class="dropdown-submenu">
-                                        <a href="product-list.html">猪肉 <i class="fa fa-angle-right"></i></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="product-list.html">清蒸</a></li>
-                                            <li><a href="product-list.html">红烧</a></li>
-                                            <li><a href="product-list.html">水煮</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="product-list.html">其它</a></li>
-                            <li><a href="product-list.html">其它</a></li>
-                            <li><a href="product-list.html">其它</a></li>
-                            <li class="dropdown-submenu">
-                                <a href="product-list.html">其它 <i class="fa fa-angle-right"></i></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="product-list.html">其它</a></li>
-                                    <li><a href="product-list.html">其它</a></li>
-                                    <li class="dropdown-submenu">
-                                        <a href="product-list.html">其它 <i class="fa fa-angle-right"></i></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="product-list.html">其它</a></li>
-                                            <li><a href="product-list.html">其它</a></li>
-                                            <li><a href="product-list.html">其它</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <!-- END DROPDOWN MENU -->
+                            商品
+                            <i class="fa fa-angle-down"></i> </a>
+                        <tree-head-two :lists="lists">
+                        </tree-head-two>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"
                            data-target="product-list.html" href="product-list.html">
-                            新品
+                            新品推荐
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <!-- BEGIN DROPDOWN MENU -->
@@ -239,104 +140,46 @@
                                 <div class="nav-content">
                                     <div class="product-item">
                                         <div class="pi-img-wrapper">
-                                            <a href="item.html"><img src="../bootstrap/user/temp/products/model4.jpg"
-                                                                     class="img-responsive" alt="Berry Lace Dress"></a>
+                                            <a href="item.html"><img
+                                                    src="/templates/upload/ShopManage/20190115//20190115175344_model2.jpg"
+                                                    class="img-responsive" alt="Berry Lace Dress"></a>
                                         </div>
                                         <h3><a href="item.html">Berry Lace Dress</a></h3>
                                         <div class="pi-price">$29.00</div>
-                                        <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                                        <a href="#" class="btn btn-default add2cart">加入购物车</a>
                                     </div>
                                     <div class="product-item">
                                         <div class="pi-img-wrapper">
-                                            <a href="item.html"><img src="../bootstrap/user/temp/products/model3.jpg"
-                                                                     class="img-responsive" alt="Berry Lace Dress"></a>
+                                            <a href="item.html"><img
+                                                    src="/templates/upload/ShopManage/20190115//20190115175344_model2.jpg"
+                                                    class="img-responsive" alt="Berry Lace Dress"></a>
                                         </div>
                                         <h3><a href="item.html">Berry Lace Dress</a></h3>
                                         <div class="pi-price">$29.00</div>
-                                        <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                                        <a href="#" class="btn btn-default add2cart">加入购物车</a>
                                     </div>
                                     <div class="product-item">
                                         <div class="pi-img-wrapper">
-                                            <a href="item.html"><img src="../bootstrap/user/temp/products/model7.jpg"
-                                                                     class="img-responsive" alt="Berry Lace Dress"></a>
+                                            <a href="item.html"><img
+                                                    src="/templates/upload/ShopManage/20190115//20190115175344_model2.jpg"
+                                                    class="img-responsive" alt="Berry Lace Dress"></a>
                                         </div>
                                         <h3><a href="item.html">Berry Lace Dress</a></h3>
                                         <div class="pi-price">$29.00</div>
-                                        <a href="#" class="btn btn-default add2cart">Add to cart</a>
+                                        <a href="#" class="btn btn-default add2cart">加入购物车</a>
                                     </div>
                                 </div>
                             </li>
                         </ul>
                         <!-- END DROPDOWN MENU -->
                     </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"
-                           data-target="#" href="#">
-                            Pages
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <!-- BEGIN DROPDOWN MENU -->
-                        <ul class="dropdown-menu">
-                            <li><a href="index-light-footer.html">Light Footer</a></li>
-                            <li><a href="product-list.html">Product List</a></li>
-                            <li><a href="search-result.html">Search Result</a></li>
-                            <li><a href="item.html">Product Page</a></li>
-                            <li><a href="shopping-cart-null.html">Shopping Cart (Null Cart)</a></li>
-                            <li><a href="shopping-cart.html">Shopping Cart</a></li>
-                            <li><a href="checkout.html">Checkout</a></li>
-                            <li><a href="reg-page.html">Registration Page</a></li>
-                            <li><a href="login-page.html">Login Page</a></li>
-                            <li><a href="forgotton-password.html">Forget Password</a></li>
-                            <li><a href="about.html">About</a></li>
-                            <li><a href="contacts.html">Contacts</a></li>
-                            <li><a href="faq.html">FAQ</a></li>
-                            <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                            <li><a href="terms-conditions-page.html">Terms & Conditions</a></li>
-                            <li><a href="site-map.html">Site Map</a></li>
-                            <li><a href="page-404.html">404</a></li>
-                            <li><a href="page-500.html">500</a></li>
-                        </ul>
-                        <!-- END DROPDOWN MENU -->
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"
-                           data-target="#" href="#">
-                            Features
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <!-- BEGIN DROPDOWN MENU -->
-                        <ul class="dropdown-menu">
-                            <li><a href="feature-typography.html">Typography</a></li>
-                            <li><a href="feature-forms.html">Forms</a></li>
-                            <li><a href="feature-buttons.html">Buttons</a></li>
-                            <li><a href="feature-icons.html">Icons</a></li>
-                        </ul>
-                        <!-- END DROPDOWN MENU -->
-                    </li>
-                    <li><a href="#">Admin theme</a></li>
-                    <!-- BEGIN TOP SEARCH -->
-                    <li class="menu-search">
-                        <span class="sep"></span>
-                        <i class="fa fa-search search-btn"></i>
-                        <div class="search-box">
-                            <form action="#">
-                                <div class="input-group">
-                                    <input type="text" placeholder="Search" class="form-control">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="submit">Search</button>
-                                    </span>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-                    <!-- END TOP SEARCH -->
                 </ul>
+
             </div>
             <!-- END NAVIGATION -->
         </div>
     </div>
     <!-- END HEADER -->
-
 </aside>
 
 </body>

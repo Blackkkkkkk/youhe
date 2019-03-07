@@ -25,6 +25,7 @@ public class Shop extends SysBaseEntity {
     private Integer status;    //1 上架 0下架
     private Date register; //注册时间
     private Integer hotSale;// 是否热卖   // 1热卖   0非热卖
+    private String  remark;//备注
 
     //排序
     private Integer orderNum;

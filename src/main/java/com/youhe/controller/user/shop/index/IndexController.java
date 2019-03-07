@@ -4,17 +4,25 @@ package com.youhe.controller.user.shop.index;
 import com.youhe.biz.redis.RedisBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
-import com.youhe.controller.sys.shop.ShopController;
+import com.youhe.entity.order.Order;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.shop.Shop_index_carousel;
+import com.youhe.entity.shop.PayResult;
 import com.youhe.initBean.redis.CartPrefix;
-import com.youhe.serviceImpl.Controller.shopController.ShopControllerImpl;
+import com.youhe.serviceImpl.Controller.orderController.OrderControllerImpl;
 import com.youhe.utils.R;
+import com.youhe.utils.pay.sdk.domain.Response;
+import com.youhe.utils.pay.sdk.pay.PaymentHelper;
+import com.youhe.utils.pay.sdk.pay.domain.cashierPay.CashierRequest;
+import com.youhe.utils.pay.sdk.pay.domain.cashierPay.CashierResponse;
+import com.youhe.utils.pay.sdk.pay.domain.cashierPay.OrderGoods;
+import com.youhe.utils.pay.sdk.pay.domain.cashierPay.OrderInfo;
+import com.youhe.utils.pay.sdk.utils.Config;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +30,10 @@ import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +55,9 @@ public class IndexController {
 
     @Autowired
     private RedisBiz redisBiz;
+
+    @Autowired
+    private OrderControllerImpl orderController;
 
     @RequestMapping(value = "/index")
     public String index(Model model, Shop_index_carousel shop_index_carousel) {
@@ -231,4 +246,101 @@ public class IndexController {
         return "user/shop/index/test";
         //  return R.ok().put("shopList",shopList)
     }
+
+    @RequestMapping(value = "/asynchronousPay")
+    public String asynchronousPay(PayResult payResult, Model model) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        orderController.save(payResult, shiroUser.getUserAccount());
+
+        if (shiroUser.getUserAccount() != null || shiroUser.getUserAccount() != "") {
+            try {
+                List<Shop> shopList = searchList(shiroUser.getUserAccount());
+
+                model.addAttribute("shopList", shopList);
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+
+        }
+
+        return "user/shop/shoppingCart/shopping-cart";
+    }
+
+
+    @RequestMapping(value = "/pay")
+    @ResponseBody
+    public R pay() {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        List<Shop> shopList = searchList(shiroUser.getUserAccount());
+        Response response = new Response();
+        try {
+            initialize();
+            response = cashierPay();//统一下单接口，不包含分账信息
+
+            if (response.getReturnCode().equals("0000")) {
+                return R.ok(1, "").put("url", response.getCasherUrl());
+            } else {
+                return R.ok(0, "支付失败请联系管理员");
+            }
+        } catch (Exception e) {
+            return R.ok(0, "支付失败请联系管理员");
+        }
+
+    }
+
+
+    public void initialize() throws URISyntaxException {
+
+        Config.initialize(new File(IndexController.class.getClassLoader().getResource("").getPath() + "static/payproperties/config_uat.properties"));
+
+        /*  打印路径地址
+
+        System.out.println(IndexController.class.getClassLoader().getResource("").getPath() + "static/payproperties/config_uat.properties");
+        System.out.println(IndexController.class.getResource("").getPath());
+        System.out.println(this.getClass().getClassLoader().getResource("").getPath());
+        */
+
+        System.setProperty("sdk.mode", "debug");
+    }
+
+    /**
+     * 统一下单接口（不包含分账）
+     */
+    public Response cashierPay() throws Exception {
+
+        String outTradeNo = "SH-" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + (int) ((Math.random() * 9 + 1) * 10000); //交易编号,商户侧唯一
+        String customerCode = Config.getCustomerCode(); //商户编号
+        String terminalNo = "10001"; //终端号，写死
+        String clientIp = "127.0.0.1"; //IP
+        long payAmount = 2; //支付金额,分为单位
+        String payCurrency = "CNY"; //币种，写死
+        String channelType = "01"; //渠道类型，写死
+
+        String notifyUrl = "http://www.baidu.com"; //异步通知地址
+        String redirectUrl = "http://238r9j8196.wicp.vip/touristShop/asynchronousPay"; //同步通知地址
+        String attachData = payAmount + ""; //备注数据,可空
+        String transactionStartTime = Config.getTransactionStartTime();  //交易开始时间
+        String transactionEndTime = ""; //交易结束时间
+
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setId("test");
+        orderInfo.setBusinessType("test");
+        orderInfo.addGood(new OrderGoods("红富士", "1箱", 1));
+        orderInfo.addGood(new OrderGoods("82年的茅台", "1瓶", 1));
+
+        CashierRequest order = new CashierRequest(outTradeNo, customerCode, terminalNo, clientIp, orderInfo,
+                payAmount, payCurrency, channelType, notifyUrl, redirectUrl,
+                attachData, transactionStartTime, transactionEndTime);
+
+//        order.setRechargeMemCustCode("5651300000001052");
+        //----分账设置，如需分账，一定要传true
+        order.setNeedSplit(false);
+        //是否限制信用卡支付，不填默认是false(即不限制)
+        order.setNoCreditCards(true);
+        CashierResponse response = PaymentHelper.cashierPay(order);
+        System.out.println("收银台订购地址：" + response.getCasherUrl());
+
+        return response;
+    }
+
 }

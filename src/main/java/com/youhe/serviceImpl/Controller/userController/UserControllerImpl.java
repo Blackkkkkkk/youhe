@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-public class UserControllerImpl {
+public class  UserControllerImpl {
 
     @Autowired
     private UserBiz userBiz;
