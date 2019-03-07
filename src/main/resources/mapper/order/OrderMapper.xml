@@ -21,8 +21,16 @@
         <result property="remark" column="remark"/>
     </resultMap>
 
+    <sql id="order_Column_List">
+        id, bigOrderCode, status, orderEndTime, totalPrice, transportStatus
+    </sql>
+
+    <sql id="details_Column_List">
+        id, bigOrderCode, orderCode, name, pirce, num, remark
+    </sql>
+
     <select id="findOrder" parameterType="com.youhe.entity.order.Order" resultMap="orderList">
-        select * from order_order
+        select <include refid="order_Column_List"/> from order_order
         where 1=1
         <if test="id != null">
             AND id = #{id}
@@ -90,8 +98,8 @@
         </if>
     </delete>
 
-    <select id="findOrderDetails">
-        select * from order_orderDetails
+    <select id="findOrderDetails" resultType="com.youhe.entity.order.OrderDetails">
+        select <include refid="details_Column_List"/> from order_orderDetails
         <if test="id != null">
             AND id = #{id}
         </if>

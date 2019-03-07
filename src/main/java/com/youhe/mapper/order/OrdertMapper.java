@@ -1,8 +1,6 @@
 package com.youhe.mapper.order;
 
 
-import com.youhe.entity.department.Department;
-import com.youhe.entity.department.User_Department;
 import com.youhe.entity.order.Order;
 import com.youhe.entity.order.OrderDetails;
 

@@ -31,6 +31,12 @@ public class ShopBiz {
         return shopMapper.findCommodity(shop);
     }
 
+    public PageInfo<Shop> findCommodityByPage(Shop shop) {
+        PageHelper.startPage(shop.getPageNum(), shop.getPageSize(), true);
+        List<Shop> list = findCommodity(shop);
+        return new PageInfo<>(list);
+    }
+
 //    //查看详情
 //    public List<Shop> findCommodityType(Shop shop) {
 //        return shopMapper.findCommodity(shop);

@@ -1,12 +1,11 @@
 package com.youhe.biz.order;
 
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.youhe.entity.order.Order;
 import com.youhe.entity.order.OrderDetails;
-import com.youhe.entity.permission.Permission;
-import com.youhe.entity.permission.Permission_Role;
 import com.youhe.mapper.order.OrdertMapper;
-import com.youhe.mapper.permisson.PermissonMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +52,28 @@ public class OrderBiz {
 
     public void delOrderDetails(OrderDetails orderDetails) {
         ordertMapper.delOrderDetails(orderDetails);
+    }
+
+    /**
+     * 分页：查找订单列表
+     * @param order 订单参数
+     * @return pageInfo
+     */
+    public PageInfo<Order> findOrderByPage(Order order) {
+        PageHelper.startPage(order.getPageNum(), order.getPageSize());
+        List<Order> orders = ordertMapper.findOrder(order);
+        return new PageInfo<>(orders);
+    }
+
+    /**
+     * 分页：查找订单列表
+     * @param orderDetails 订单详情参数
+     * @return pageInfo
+     */
+    public PageInfo<OrderDetails> findOrderDetailByPage(OrderDetails orderDetails) {
+        PageHelper.startPage(orderDetails.getPageNum(), orderDetails.getPageSize());
+        List<OrderDetails> orderDetail = ordertMapper.findOrderDetails(orderDetails);
+        return new PageInfo<>(orderDetail);
     }
 
 }

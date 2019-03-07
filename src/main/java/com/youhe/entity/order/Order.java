@@ -1,6 +1,7 @@
 package com.youhe.entity.order;
 
 
+import com.youhe.entity.SysBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -11,7 +12,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @Getter
 @Setter
-public class Order implements Serializable {
+public class Order extends SysBaseEntity implements Serializable {
 
 
     private static final long serialVersionUID = 3160094850506230197L;

@@ -126,13 +126,15 @@
                 <!-- BEGIN CONTENT -->
                 <div class="col-md-9 col-sm-7">
 
+                    <iframe th:src="${'/touristShop/shopList.html?cid='+cId+'&pageSize=9&pageNum=1'}" id="iframepage" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" onLoad="" height="900px" width="100%"></iframe>
+
                     <!-- BEGIN PRODUCT LIST -->
-                    <div class="row product-list">
-                        <!-- PRODUCT ITEM START -->
+                    <!--<div class="row product-list">
+                        &lt;!&ndash; PRODUCT ITEM START &ndash;&gt;
                         <div class="bxslider-wrapper">
                             <ul class="list-group margin-bottom-25 sidebar-menu" data-slides-phone="1" data-slides-tablet="2" data-slides-desktop="5"
                                 data-slide-margin="15">
-                                <!-- 最新列表 -->
+                                &lt;!&ndash; 最新列表 &ndash;&gt;
                                 <li th:each="shopList,info : ${shopList}">
                                     <div>
                                     <div class="product-item">
@@ -156,24 +158,24 @@
                                 </li>
                             </ul>
                         </div>
-                        <!-- PRODUCT ITEM END -->
+                        &lt;!&ndash; PRODUCT ITEM END &ndash;&gt;
                     </div>
-                    <!-- END PRODUCT LIST -->
-                    <!-- BEGIN PAGINATOR -->
+                    &lt;!&ndash; END PRODUCT LIST &ndash;&gt;
+                    &lt;!&ndash; BEGIN PAGINATOR &ndash;&gt;
                     <div class="row">
-                        <div class="col-md-4 col-sm-4 items-info">Items 1 to 9 of 10 total</div>
+                        <div class="col-md-4 col-sm-4 items-info" th:text="${'Items ' + startRow + ' to' + endRow + ' of ' + total + ' total'}">Items 1 to 9 of 10 total</div>
                         <div class="col-md-8 col-sm-8">
                             <ul class="pagination pull-right">
                                 <li><a href="#">&laquo;</a></li>
-                                <li><a href="#">1</a></li>
-                                <li><span>2</span></li>
+                                <li th:each="i:${#numbers.sequence(1,5)}"><a th:href="${'/touristShop/commodityMenu?cid=1??pageSize=9&pageNum=' + i}" th:text="${i}"></a></li>
+                                &lt;!&ndash;<li><span>2</span></li>
                                 <li><a href="#">3</a></li>
                                 <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
+                                <li><a href="#">5</a></li>&ndash;&gt;
                                 <li><a href="#">&raquo;</a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div>-->
                     <!-- END PAGINATOR -->
                 </div>
                 <!-- END CONTENT -->

@@ -1,13 +1,13 @@
 package com.youhe.controller.user.shop.index;
 
 
+import com.github.pagehelper.PageInfo;
 import com.youhe.biz.redis.RedisBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
-import com.youhe.entity.order.Order;
+import com.youhe.entity.shop.PayResult;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.shop.Shop_index_carousel;
-import com.youhe.entity.shop.PayResult;
 import com.youhe.initBean.redis.CartPrefix;
 import com.youhe.serviceImpl.Controller.orderController.OrderControllerImpl;
 import com.youhe.utils.R;
@@ -23,10 +23,11 @@ import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +35,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -252,19 +252,28 @@ public class IndexController {
         return R.ok(1, "修改成功").put("shopList", shopList);
     }
 
+    @GetMapping(value = "/shopList")
+    public String shopList(Model model, Shop shop) {
+        shop.setStatus(1).
+                setRegister_Sort(1).
+                setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
+
+        shop.setPageNum(shop.getPageNum());
+        shop.setPageSize(shop.getPageSize());
+        PageInfo<Shop> pageInfo = shopBiz.findCommodityByPage(shop);
+        System.out.println(pageInfo.toString());
+        List<Shop> list = pageInfo.getList();
+        model.addAttribute("cId", shop.getCid());
+        model.addAttribute("shopList", list);
+        model.addAttribute("pageInfo", pageInfo);
+        return "user/shop/index/shop_list";
+    }
+
 
     @RequestMapping(value = "/commodityMenu")
     public String commodity(Model model, Shop shop) {
-        /*
-        shop.setStatus(1).
-                setRegister_Sort(1).
-
-                setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);*/
-
-        List<Shop> shopList = shopBiz.findCommodity(shop);
-        model.addAttribute("shopList", shopList);
-        return "user/shop/index/test";
-        //  return R.ok().put("shopList",shopList)
+        model.addAttribute("cId", shop.getCid());
+        return "user/shop/index/commodityMenu";
     }
 
     @RequestMapping(value = "/asynchronousPay")
