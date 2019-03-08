@@ -4,6 +4,8 @@ import com.youhe.biz.user.UserBiz;
 import com.youhe.entity.user.User;
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.InitUsernamePasswordToken;
+import com.youhe.utils.shiro.ShiroUser;
+import com.youhe.utils.shiro.ShiroUserUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
@@ -68,6 +70,24 @@ public class ShopLoginController {
     public R checkLogin() {
         Subject subject = SecurityUtils.getSubject();
         return R.ok().put("isLogin", subject.isAuthenticated());
+    }
+
+    /**
+     * 退出登录
+     * @return
+     */
+    @PostMapping(value = "loinOut")
+    public R loginOut() {
+        Subject currentUser = SecurityUtils.getSubject();
+        if (currentUser.getSession() != null) {
+            ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+            if (shiroUser != null) {
+                currentUser.logout();
+                LOGGER.debug(shiroUser.getUserName() + ">>>>>>>>>>>>退出登录");
+                return R.ok();
+            }
+        }
+        return R.error();
     }
 
 }
