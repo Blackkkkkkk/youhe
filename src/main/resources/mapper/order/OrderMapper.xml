@@ -100,15 +100,17 @@
 
     <select id="findOrderDetails" resultType="com.youhe.entity.order.OrderDetails">
         select <include refid="details_Column_List"/> from order_orderDetails
-        <if test="id != null">
-            AND id = #{id}
-        </if>
-        <if test="bigOrderCode != null">
-            AND bigOrderCode = #{bigOrderCode}
-        </if>
-        <if test="orderCode != null">
-            AND orderCode = #{orderCode}
-        </if>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="bigOrderCode != null and bigOrderCode != ''">
+                AND bigOrderCode = #{bigOrderCode}
+            </if>
+            <if test="orderCode != null">
+                AND orderCode = #{orderCode}
+            </if>
+        </trim>
     </select>
 
     <update id="updateOrderDetails" parameterType="com.youhe.entity.order.OrderDetails">
