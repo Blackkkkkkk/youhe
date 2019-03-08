@@ -103,13 +103,11 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/bootstrap/locales/**", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/bootstrap/user/**", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/bootstrap/common/**", "anon"); //匿名访问静态资源
-        filterChainDefinitionMap.put("/commJs/**", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/layui/**", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/music/**", "anon"); //匿名访问静态资源
         filterChainDefinitionMap.put("/webapp/upload/**", "anon");
 
         //商城访问首页的拦截规则，全部放行，除了加入购物车或者结账的时候必须登录
-        filterChainDefinitionMap.put("/touristShop/login", "anon");
         filterChainDefinitionMap.put("/templates/upload/**", "anon");
         filterChainDefinitionMap.put("/touristShop/**", "anon");
         filterChainDefinitionMap.put("/changeLang", "anon");

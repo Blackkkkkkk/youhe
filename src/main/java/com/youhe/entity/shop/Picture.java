@@ -12,7 +12,7 @@ public class Picture extends SysBaseEntity {
     private int id;
     private Date registerDate; //注册时间
 
-    private int type;  //1.详情图，2首页轮播图，3商品轮播图
+    private int type;  //1.详情图，2首页轮播图
     private String fileName;// 文件名称
     private String fileType;//文件类型
     private String saveFileName;//保存到服务器目录的文件名称

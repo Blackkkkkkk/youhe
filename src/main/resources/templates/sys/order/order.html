@@ -129,7 +129,7 @@
         $("#orderMange").attr("class", "active");
         $("#orderMange_ul").attr("class", "nav nav-second-level collapse in");
 
-        $("#orderMange").attr("class", "active");
+        $("#orderManage").attr("class", "active");
 
 
         $('.dataTables-example').DataTable({
@@ -304,20 +304,21 @@
         })
     }
 
+    $('.dataTables-example').on('click', 'tr td:nth-child(3)', function () {
 
-    $('.dataTables-example').on('click','tr', function() {
-        var bigOrderCode = $($(this).find('td')[2]).text();
-        if (bigOrderCode) {
-            layer.open({
-                type: 2,
-                title: '订单详情',
-                shadeClose: true,
-                shade: 0.1,
-                scrollbar: true,
-                area: ['70%', '90%'],
-                content: '/order/detail?bigOrderCode=' + bigOrderCode
-            });
-        }
+
+        var bigOrderCode = $(this).text();
+        console.log('bigOrderCode = ', bigOrderCode);
+        layer.open({
+            type: 2,
+            title: '订单详情',
+            shadeClose: true,
+            shade: 0.1,
+            scrollbar: true,
+            area: ['70%', '90%'],
+            content: '/order/detail?bigOrderCode=' + bigOrderCode
+        })
+
     });
 
     function refund(id) {

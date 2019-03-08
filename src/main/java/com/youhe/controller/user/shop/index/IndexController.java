@@ -4,13 +4,11 @@ package com.youhe.controller.user.shop.index;
 import com.github.pagehelper.PageInfo;
 import com.youhe.biz.order.OrderBiz;
 import com.youhe.biz.redis.RedisBiz;
-import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
 import com.youhe.entity.order.Order;
 import com.youhe.entity.pay.Refund;
 import com.youhe.entity.shop.PayResult;
-import com.youhe.entity.shop.Picture;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.shop.Shop_index_carousel;
 import com.youhe.initBean.redis.CartPrefix;
@@ -34,18 +32,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -64,9 +60,6 @@ public class IndexController {
 
     @Autowired
     private RedisBiz redisBiz;
-
-    @Autowired
-    private PictureBiz pictureBiz;
 
     @Autowired
     private OrderControllerImpl orderController;
@@ -91,14 +84,7 @@ public class IndexController {
                 setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
 
         List<Shop> shopList = shopBiz.findShopList(shop);
-
-        // 商品轮播图
-        Picture picture = new Picture();
-        picture.setType(3);
-        List<Picture> pictureList = pictureBiz.findPictureList(picture);
-
         model.addAttribute("shopList", shopList);
-        model.addAttribute("pictureList", pictureList);
 
         return "user/shop/index/index";
     }
@@ -207,6 +193,7 @@ public class IndexController {
 
         int Status = 4;
 
+
         if (shiroUser.getUserAccount() == null || shiroUser.getUserAccount() == "") {
             Status = 3;
         } else {
@@ -214,7 +201,14 @@ public class IndexController {
             Boolean exists = redisBiz.hhasKey(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
             if (exists) {
                 // 数量自增1
-                Long num = redisBiz.hincrement(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
+                if (shop.getCartNum() == 0) {
+                    redisBiz.hincrement(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
+                } else {
+                    for (int i = 0; i < shop.getCartNum(); i++) {
+                        redisBiz.hincrement(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
+                    }
+                    redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "@@remark", shop.getRemark());
+                }
                 Status = 2;
             } else {
                 redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
@@ -245,6 +239,7 @@ public class IndexController {
     @ResponseBody
     public List<Shop> initCart() {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        List<Shop> shopList1 = redisBiz.hscanSave(CartPrefix.getCartList, shiroUser.getUserAccount() + "");
         return redisBiz.hscan(CartPrefix.getCartList, shiroUser.getUserAccount());
     }
 
@@ -318,6 +313,7 @@ public class IndexController {
     }
 
 
+    //支付接口
     @RequestMapping(value = "/pay")
     @ResponseBody
     public R pay() {
@@ -346,25 +342,26 @@ public class IndexController {
 
         try {
             Order order = new Order();
-
             order.setBigOrderCode(refund.getOutTradeNo());
-
             List<Order> list = orderBiz.findOrder(order);
-
             if (!CollectionUtils.isEmpty(list)) {
                 order = list.get(0);
                 refund.setAmount(Long.parseLong(order.getTotalPrice() + ""))
                         .setRefundAmount(Long.parseLong(order.getTotalPrice() + ""));
                 Response response = PayUtil.refundApply(refund);
                 System.out.println(refund);
+                if (response.getReturnCode().equals("0000")) {
+                    return R.ok(1, "申请退款成功，请留意退款信息。");
+                } else {
+                    return R.ok(0, "申请退款失败。");
+                }
             } else {
-
+                return R.ok(0, "申请退款失败。");
             }
-
         } catch (Exception e) {
             log.info(e.toString());
+            return R.ok(0, "申请退款失败。");
         }
-        return R.ok();
     }
 
 
@@ -374,10 +371,7 @@ public class IndexController {
     public R refundResult(Refund refund) {
 
         try {
-
-            System.out.println("1");
         } catch (Exception e) {
-            System.out.println("2");
         }
         return R.ok();
     }
@@ -434,11 +428,6 @@ public class IndexController {
         System.out.println("收银台订购地址：" + response.getCasherUrl());
 
         return response;
-    }
-
-    @GetMapping(value = "orderList")
-    public ModelAndView orderList() {
-        return new ModelAndView("user/shop/order/my_order");
     }
 
 }
