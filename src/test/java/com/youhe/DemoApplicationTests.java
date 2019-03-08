@@ -1,5 +1,8 @@
 package com.youhe;
 
+import com.github.pagehelper.PageInfo;
+import com.youhe.biz.shop.ShopBiz;
+import com.youhe.entity.shop.Shop;
 import org.activiti.engine.ProcessEngine;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -8,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.InputStream;
@@ -23,6 +25,9 @@ public class DemoApplicationTests {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private ShopBiz shopBiz;
 
     @Test
     public void contextLoads() {
@@ -70,5 +75,28 @@ public class DemoApplicationTests {
         } else {
             System.out.println("2");
         }
+    }
+
+    @Test
+    public void findShopList() {
+        Shop shop = new Shop();
+//        shop.setPage(1);
+        shop.setPageNum(1);
+        shop.setPageSize(4);
+//        shop.setIsIndex(1);
+        shop.setStatus(1).
+                setRegister_Sort(1).
+                setTop_Sort(1).
+                setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
+//        PageInfo<Shop> list = shopBiz.list(shop);
+        /*PageBean<Shop> page = shopBiz.findShopListByPage(shop);
+//        System.out.println("shopListByPage.size() = " + shopListByPage.size());
+        System.out.println("page.toString() = " + page.getCurrentPage());
+        System.out.println("page.toString() = " + page.getTotalPage());
+        System.out.println("page.toString() = " + page.getTotalNum());*/
+
+        PageInfo<Shop> list = shopBiz.findCommodityByPage(shop);
+        System.out.println("list.getTotal() = " + list.getTotal());
+
     }
 }

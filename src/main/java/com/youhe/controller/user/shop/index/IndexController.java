@@ -3,9 +3,11 @@ package com.youhe.controller.user.shop.index;
 
 import com.github.pagehelper.PageInfo;
 import com.youhe.biz.redis.RedisBiz;
+import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
 import com.youhe.entity.shop.PayResult;
+import com.youhe.entity.shop.Picture;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.shop.Shop_index_carousel;
 import com.youhe.initBean.redis.CartPrefix;
@@ -34,10 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -56,6 +55,9 @@ public class IndexController {
 
     @Autowired
     private RedisBiz redisBiz;
+
+    @Autowired
+    private PictureBiz pictureBiz;
 
     @Autowired
     private OrderControllerImpl orderController;
@@ -77,7 +79,14 @@ public class IndexController {
                 setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
 
         List<Shop> shopList = shopBiz.findShopList(shop);
+
+        // 商品轮播图
+        Picture picture = new Picture();
+        picture.setType(3);
+        List<Picture> pictureList = pictureBiz.findPictureList(picture);
+
         model.addAttribute("shopList", shopList);
+        model.addAttribute("pictureList", pictureList);
 
         return "user/shop/index/index";
     }
