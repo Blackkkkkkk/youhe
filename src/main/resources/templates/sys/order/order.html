@@ -306,7 +306,7 @@
     $('.dataTables-example').on('click', 'tr td:nth-child(3)', function () {
 
 
-        var bigOrderCode = $($(this).find('td')[2]).text();
+        var bigOrderCode = $(this).text();
         console.log('bigOrderCode = ', bigOrderCode);
         layer.open({
             type: 2,
