@@ -1,7 +1,9 @@
 package com.youhe.utils.pay;
 
 import com.alibaba.fastjson.JSONObject;
+import com.youhe.biz.order.OrderBiz;
 import com.youhe.controller.user.shop.index.IndexController;
+import com.youhe.entity.order.Order;
 import com.youhe.entity.pay.Refund;
 import com.youhe.utils.pay.sdk.domain.Response;
 import com.youhe.utils.pay.sdk.pay.PaymentHelper;
@@ -23,6 +25,8 @@ public class PayUtil {
 
     public static Response refundApply(Refund refund) throws Exception {
 
+
+
         /*
         String transactionNo = "";//原交易单号
         String outTradeNo = "sd5fds4f65ds065064065012";//原支付交易的商户订单号
@@ -36,8 +40,10 @@ public class PayUtil {
         Long userId = null;//门户的用户ID，对API可空
 */
 
+        System.out.println(Config.getCustomerCode());
         RefundApplyRequest order = new RefundApplyRequest(refund.getTransactionNo(), refund.getOutTradeNo(), Config.getCustomerCode(), refund.getAmount(),
-                refund.getNotifyUrl(), refund.getSourceChannel(), refund.getOutRefundNo(), refund.getRefundAmount(),
+                refund.getNotifyUrl(), refund.getSourceChannel(), "RF-" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + (int) ((Math.random() * 9 + 1) * 10000)
+                , refund.getRefundAmount(),
                 refund.getRemark(), refund.getUserId());
 
         RefundApplyResponse response = PaymentHelper.refundApply(order);

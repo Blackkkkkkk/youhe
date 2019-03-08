@@ -92,8 +92,8 @@ var vm = new Vue({
         },
         menList: [],
         lists: [],
-        shopDetails:{},
-        view:{}
+        shopDetails: {},
+        view: {}
 
     },
     created: function () {
@@ -105,7 +105,7 @@ var vm = new Vue({
         _this = this;
         $.ajaxSettings.async = false;
 
-        $.get("/commodity/list",function (r) {
+        $.get("/commodity/list", function (r) {
             _this.menList = r;
         })
 
@@ -240,37 +240,6 @@ var vm = new Vue({
                 }
             })
         }
-        ,
-        showView:function(id){//这个只是给基本方法   还没用上ajax请求
-
-            _this = this ;
-            $.ajax({
-                type: "POST",
-                url: "/touristShop/viewList",
-                data:{"id":id},
-
-                success: function (r) {
-                    if(r.Status == 1 ){
-
-                        _this.view=  r.shopList ;
-                        console.log( _this.view.name)
-                    }
-
-                }})
-
-
-            layer.open({
-                title:false,
-                type: 1,
-                area: ['747px', 'auto'],
-                content: $('#product-pop-up'),//这可以写弹出框的html内容
-            });
-            /*
-            if (e.stopPropagation)
-                e.stopPropagation();
-            else
-                window.event.cancelBubble = true;*/
-        },
     }
 })
 

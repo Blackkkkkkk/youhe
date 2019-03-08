@@ -257,7 +257,8 @@
                 },
                 {
                     "render": function (data, type) {
-                        return '   <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;退款</a>'
+
+                        return '   <a class="btn btn-primary" onclick ="refund(' + "'" + data.bigOrderCode + "'" + ')"><i class="fa fa-plus"></i>&nbsp;退款</a>'
                     },
                     "aTargets": 7 //第7列
                 },
@@ -319,6 +320,20 @@
         })
 
     });
+
+    function refund(id) {
+
+        $.ajax({
+            type: "POST",
+            url: "/touristShop/refund",
+            dataType: "json",
+            data: {"outTradeNo": id},
+            success: function (r) {
+
+            }
+        })
+        console.log(id)
+    }
 
     $(function () {
 

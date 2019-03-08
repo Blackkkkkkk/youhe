@@ -179,6 +179,7 @@
                         <ul class="bxslider" data-slides-phone="1" data-slides-tablet="2" data-slides-desktop="5"
                             data-slide-margin="15">
                             <!-- 最新列表 -->
+
                             <li th:each="shopList,info : ${shopList}">
                                 <div class="product-item">
                                     <div class="pi-img-wrapper">
@@ -188,9 +189,10 @@
                                         <div>
                                             <a th:href="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
                                                class="btn btn-default fancybox-button">查看</a>
-                                            <a th:shopid="${shopList.id}"
+                                            <a th:id="${shopList.id}"
                                                class="btn btn-default fancybox-fast-view11"
-                                               @click="showView(shopList.id)">View</a>
+                                               th:onclick="'javascript:showView('+${shopList.id}+')'"
+                                            >View</a>
                                         </div>
                                     </div>
                                     <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
@@ -201,6 +203,7 @@
                                     <div class="sticker sticker-new" th:if="${info.index ==1}"></div>
                                 </div>
                             </li>
+
                         </ul>
                     </div>
                 </div>
@@ -233,7 +236,9 @@
                                             <a th:href="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
                                                class="btn btn-default fancybox-button">查看</a>
                                             <a href="#product-pop-up"
-                                               class="btn btn-default fancybox-fast-view11">View</a>
+                                               class="btn btn-default fancybox-fast-view11"
+                                               th:onclick="'javascript:showView('+${shopList.id}+')'"
+                                            >View</a>
                                         </div>
                                     </div>
                                     <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
@@ -712,7 +717,8 @@
                                    class="img-responsive">
                                    -->
 
-                            <img src="../bootstrap/user/temp/products/model7.jpg" alt="Cool green dress with red bell"
+                            <img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
+                                 alt="Cool green dress with red bell"
                                  class="img-responsive">
                         </div>
                         <div class="product-other-images">
@@ -819,6 +825,31 @@
 <script src="../bootstrap/js/project/user/shop/index/js/index.js"></script>
 
 <script type="text/javascript">
+
+    function showView(id) {
+        $.ajax({
+            data: {"id": id},
+            type: "POST",
+            dataType: 'json',
+            url: "/touristShop/viewList",
+            success: function (data) {
+                if (data.Status == 1) {
+                    console.log(data.shopList)
+                    vm.view = data.shopList;
+                    console.log(vm.view.name)
+                }
+            },
+            error: function (data) {
+            }
+        });
+        layer.open({
+            title: false,
+            type: 1,
+            area: ['747px', 'auto'],
+            content: $('#product-pop-up'),//这可以写弹出框的html内容
+        });
+    }
+
     var layer;
     /*
     jQuery(document).ready(function () {
