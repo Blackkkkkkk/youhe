@@ -9,6 +9,7 @@ import com.youhe.biz.shop.ShopUserIndexBiz;
 import com.youhe.controller.user.shop.index.IndexController;
 import com.youhe.entity.order.Order;
 import com.youhe.entity.order.OrderDetails;
+import com.youhe.entity.pay.Refund;
 import com.youhe.entity.permission.Permission_Role;
 import com.youhe.entity.role.Role;
 import com.youhe.entity.shop.PayResult;
@@ -16,8 +17,12 @@ import com.youhe.entity.shop.Shop;
 import com.youhe.initBean.redis.CartPrefix;
 import com.youhe.initBean.websocket.WebSocketServer;
 import com.youhe.utils.R;
+import com.youhe.utils.pay.PayUtil;
+import com.youhe.utils.pay.sdk.domain.Response;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +39,7 @@ import java.util.List;
 
 public class OrderControllerImpl {
 
+    private Logger log = LoggerFactory.getLogger(OrderControllerImpl.class);
     @Autowired
     private ShopUserIndexBiz shopUserIndexBiz;
 
@@ -66,7 +72,7 @@ public class OrderControllerImpl {
                         .setRemark(shop.getRemark());
                 orderBiz.saveOrderDetails(orderDetails);
 
-                payAmount += shop.getPirce() * shop.getNum();
+                payAmount += shop.getPirce() * shop.getCartNum();
             }
 
             Order order = new Order();
@@ -92,6 +98,56 @@ public class OrderControllerImpl {
         }
 
     }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public void refund(Refund refund, Long userId) {
+
+        Order order = new Order();
+        order.setBigOrderCode(refund.getOutTradeNo());
+
+        List<Order> list = orderBiz.findOrder(order);
+
+        if (!CollectionUtils.isEmpty(list)) {
+            order = list.get(0);
+            refund.setAmount(Long.parseLong(order.getTotalPrice() + ""))
+                    .setUserId(userId)
+                    .setRefundAmount(Long.parseLong(order.getTotalPrice() + ""))
+                    .setRemark("");
+            try {
+                Response response = PayUtil.refundApply(refund);
+            } catch (Exception e) {
+                log.info(e.toString());
+            }
+        } else {
+
+        }
+
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public void refundResult(Refund refund, Long userId) {
+
+
+        /*
+        Order order = new Order();
+        order.setBigOrderCode(refund.getOutTradeNo());
+
+        List<Order> list = orderBiz.findOrder(order);
+
+        if (!CollectionUtils.isEmpty(list)) {
+            order = list.get(0);
+            refund.setAmount(Long.parseLong(order.getTotalPrice() + ""))
+                    .setUserId(userId)
+                    .setRefundAmount(Long.parseLong(order.getTotalPrice() + ""))
+                    .setRemark("");
+        } else {
+
+        }
+*/
+    }
+
 
     public List<Shop> searchList(String key) {
         return redisBiz.hscan(CartPrefix.getCartList, key);
