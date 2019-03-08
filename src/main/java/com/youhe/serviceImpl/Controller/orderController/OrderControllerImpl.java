@@ -57,7 +57,8 @@ public class OrderControllerImpl {
 
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
         System.out.println(shiroUser.getUserAccount());
-        List<Shop> shopList = searchList(userAccount);
+
+        List<Shop> shopList = searchSaveList(userAccount);
 
         long payAmount = 0; //支付金额
         OrderDetails orderDetails = new OrderDetails();
@@ -72,9 +73,15 @@ public class OrderControllerImpl {
                         .setRemark(shop.getRemark());
                 orderBiz.saveOrderDetails(orderDetails);
 
-                payAmount += shop.getPirce() * shop.getCartNum();
+
+                //对应扣除库存
+                shop.setNum(shop.getNum() - shop.getCartNum());
+                shopBiz.update(shop);
+
+                payAmount += shop.getPirce() * shop.getCartNum();  // 计算支付金额
             }
 
+            //保存到数据表的大订单号
             Order order = new Order();
             order.setBigOrderCode(payResult.getOutTradeNo())
                     .setStatus(payResult.getPayState())
@@ -116,6 +123,7 @@ public class OrderControllerImpl {
                     .setRemark("");
             try {
                 Response response = PayUtil.refundApply(refund);
+                System.out.println(1);
             } catch (Exception e) {
                 log.info(e.toString());
             }
@@ -151,5 +159,9 @@ public class OrderControllerImpl {
 
     public List<Shop> searchList(String key) {
         return redisBiz.hscan(CartPrefix.getCartList, key);
+    }
+
+    public List<Shop> searchSaveList(String key) {
+        return redisBiz.hscanSave(CartPrefix.getCartList, key);
     }
 }
