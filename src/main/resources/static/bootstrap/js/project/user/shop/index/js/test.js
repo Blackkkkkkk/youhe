@@ -11,13 +11,13 @@ Vue.component('tree', {
 		<ul class="list-group margin-bottom-25 sidebar-menu">
 				  <template v-for="item in lists">
 
-                        <li v-if="item.children == null" class="list-group-item clearfix"><a href="/touristShop/commodityMenu?cid=1"><i
+                        <li v-if="item.children == null" class="list-group-item clearfix"><a :href="'/touristShop/commodityMenu?cid='+item.cid+''"><i
                                 class="fa fa-angle-right"></i>
                             {{item.cname}}</a>
                         </li>
                         <li v-if="item.children != null && item.children.length >0"
-                            class="list-group-item clearfix dropdown">
-                            <a v-if="item.children != null && item.children.length >0" href="javascript:void(0);" style="padding: 0px;" :id="item.cid"> 
+                            class="list-group-item clearfix dropdown  ">
+                            <a v-if="item.children != null && item.children.length >0"  style="padding: 0px;" :id="item.cid">
                             <i v-if="item.parentId == 0" class="fa fa-angle-right"></i>
                             <i v-if="item.parentId != 0" class="fa fa-circle" style="float: left;margin-right: 7px;font-size: 5px;position: relative;top: 7px;color: #949fae;"></i>
                             {{item.cname}}<i class="fa fa-angle-down"></i></a>
@@ -25,9 +25,8 @@ Vue.component('tree', {
                                 <treeNode :lists="item.children">                     
                                 </treeNode>
                             </ul>
-
                         <li v-if="item.children != null && item.children.length ==0" class="list-group-item clearfix"><a
-                                href="/touristShop/commodityMenu?cid=1" style="padding: 0px;" :id="item.cid">
+                                :href="'/touristShop/commodityMenu?cid='+item.cid+''" style="padding: 0px;" :id="item.cid">
                                 <i v-if="item.parentId == 0" class="fa fa-angle-right"></i>
                                   <i v-if="item.parentId != 0" class="fa fa-circle" style="float: left;margin-right: 7px;font-size: 5px;position: relative;top: 7px;color: #949fae;"></i>{{item.cname}}</a></li>
                         </li>
@@ -61,8 +60,6 @@ var vm = new Vue({
 
             _this.menList = r
         })
-
-
         let data = _this.menList;
         // 属性配置信息
         let attributes = {
@@ -71,12 +68,12 @@ var vm = new Vue({
             cname: 'cname',
             rootId: 0
         }
-     //   console.log(data)
+        //   console.log(data)
         _this.lists = _this.toTreeData(data, attributes)
-     //   console.log(_this.lists)
+        //   console.log(_this.lists)
         $.ajaxSettings.async = false;
 
-      //  console.log(_this.menList)
+        //  console.log(_this.menList)
 
     }
     ,
@@ -134,7 +131,7 @@ var vm = new Vue({
             var _this = this;
             var el = event.currentTarget;
             $.get("/touristShop/addCart?id=" + el.id, function (r) {
-                _this.initcart(r.shopList);
+                parent.vm.initcart(r.shopList);
                 if (r.Status == 1) {
                     top.layer.msg('加入购物车成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
                 } else if (r.Status == 2) {
@@ -145,32 +142,6 @@ var vm = new Vue({
                     layer.msg('添加到购物车失败，请联系管理员', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
                 }
             })
-        }
-        ,
-        initcart: function (r) {
-            var _this = this;
-            if (r == null || r == undefined || r == '') {
-                $.ajax({
-                    type: "POST",
-                    url: "/touristShop/initCart",
-                    dataType: "json",
-                    async: false,//取消异步
-                    success: function (data) {
-                        r = data;
-                    }
-                });
-            }
-            var num = 0;
-            var prices = 0;
-            _this.shopList = [];
-            for (var index in r) {
-                num++;
-                //  num +=  r.shopList[index].pirce
-                prices += r[index].pirce * r[index].cartNum;
-                _this.shopList.push(r[index])
-            }
-            _this.carData.items = num;
-            _this.carData.prices = prices;
         }
         ,
         delCart: function (event) {

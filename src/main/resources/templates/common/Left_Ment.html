@@ -60,8 +60,10 @@
                     <ul class="nav nav-second-level collapse" id="shopMange_ul">
                         <li shiro:hasPermission="shop:commodityManage" id="commodityManage"><a
                                 href="/shop/index">商品管理</a></li>
-                        <li><a href="/shop/shopPageMange" id="shopPageManage">商城首页</a></li>
-                        <li shiro:hasPermission="sys:roleManage" id="commodity"><a href="/commodity/index">商品分类</a></li>
+                        <li shiro:hasPermission="sys:shopPageMange" id="shopPageMange"><a href="/shop/shopPageMange"
+                                                                                          id="shopPageManage">商城首页</a>
+                        </li>
+                        <li shiro:hasPermission="sys:commodity" id="commodity"><a href="/commodity/index">商品分类</a></li>
                         <li><a href="dashboard_4_1.html">主页示例 v.4</a></li>
                         <li><a href="dashboard_5.html">主页示例 v.5 </a></li>
                     </ul>
@@ -69,7 +71,8 @@
 
                 <!-- todo permission配置 -->
                 <li id="orderMange" shiro:hasPermission="shop:page">
-                    <a href="index.html"><i class="fa fa-shopping-cart"></i> <span class="nav-label">订单管理</span> <span class="fa arrow"></span></a>
+                    <a href="index.html"><i class="fa fa-shopping-cart"></i> <span class="nav-label">订单管理</span> <span
+                            class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" id="orderMange_ul">
                         <li shiro:hasPermission="shop:orderManage" id="orderManage"><a href="/order/list">订单列表</a></li>
                     </ul>

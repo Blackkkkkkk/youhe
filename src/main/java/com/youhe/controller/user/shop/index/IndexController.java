@@ -217,7 +217,7 @@ public class IndexController {
                 Long num = redisBiz.hincrement(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
                 Status = 2;
             } else {
-                redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+                redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
                 Status = 1;
             }
 
