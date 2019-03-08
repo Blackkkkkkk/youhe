@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 
 @Service
@@ -101,15 +100,16 @@ public class RedisBiz implements RedisService {
     /*
      根据Map 存储到redis 的Hash 值里面(设置散列hashKey的值)
     */
-    public void hput(KeyPrefix prefix, String key, String filed, Object value) {
+    public void hput(KeyPrefix prefix, String key, String filed) {
 
-        redisTemplate.opsForHash().put(prefix.getPrefix() + key, filed, value);
+        redisTemplate.opsForHash().put(prefix.getPrefix() + key, filed, 1);
     }
 
     /*
       根据Map 存储到redis 的Hash 值里面(给某个hash 值的键值加1)
     */
     public Long hincrement(KeyPrefix prefix, String key, String filed, int num) {
+
 
         return redisTemplate.opsForHash().increment(prefix.getPrefix() + key, filed, num);
     }
@@ -126,44 +126,12 @@ public class RedisBiz implements RedisService {
         Shop shop = new Shop();
         while (curosr.hasNext()) {
             Map.Entry<Object, Object> entry = curosr.next();
-            Pattern pattern = Pattern.compile("[0-9]*");
-            if (pattern.matcher(entry.getKey() + "").matches()) {  //判断是值，还是存储的备注信息
-                shop.setId(Integer.parseInt(entry.getKey() + ""));
-                if (!CollectionUtils.isEmpty(shopBiz.findShopList(shop))) {  // 去查数据库该ID1的商品信息
-                    shop = shopBiz.findShopList(shop).get(0);
-                    shop.setCartNum(Integer.parseInt(entry.getValue() + ""));
-                    shopList.add(shop);
-                    shop = new Shop();
-                }
-            }
-
-        }
-        return shopList;
-    }
-
-
-    //遍历出所有值添加到数据库
-    public List<Shop> hscanSave(KeyPrefix prefix, String key) {
-        List<Shop> shopList = new ArrayList<Shop>();
-
-        //遍历出该ID 所有的购物车商品
-        Cursor<Map.Entry<Object, Object>> curosr = redisTemplate.opsForHash().scan(prefix.getPrefix() + key, ScanOptions.NONE);
-        Shop shop = new Shop();
-        while (curosr.hasNext()) {
-            Map.Entry<Object, Object> entry = curosr.next();
-            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-            if (pattern.matcher(entry.getKey() + "").matches()) {  //判断是值，还是存储的备注信息
-                shop.setId(Integer.parseInt(entry.getKey() + ""));
-                if (!CollectionUtils.isEmpty(shopBiz.findShopList(shop))) {  // 去查数据库该ID1的商品信息
-                    shop = shopBiz.findShopList(shop).get(0);
-                    shop.setCartNum(Integer.parseInt(entry.getValue() + ""));
-                    System.out.println(prefix.getPrefix() + key);
-                    System.out.println(entry.getKey() + "@@remark" + "");
-                    shop.setRemark(redisTemplate.opsForHash().get(prefix.getPrefix() + key, entry.getKey() + "@@remark") + "" == null ? ""
-                            : redisTemplate.opsForHash().get(prefix.getPrefix() + key, entry.getKey() + "@@remark") + "");
-                    shopList.add(shop);
-                    shop = new Shop();
-                }
+            shop.setId(Integer.parseInt(entry.getKey() + ""));
+            if (!CollectionUtils.isEmpty(shopBiz.findShopList(shop))) {  // 去查数据库该ID1的商品信息
+                shop = shopBiz.findShopList(shop).get(0);
+                shop.setCartNum(Integer.parseInt(entry.getValue() + ""));
+                shopList.add(shop);
+                shop = new Shop();
             }
         }
         return shopList;

@@ -62,75 +62,70 @@
 <body>
 <!--<div id="wrapper">-->
 
-<!-- BEGIN TOP BAR -->
-<!--<div th:include="common/userShopHead :: head"></div>-->
-<!-- END TOP BAR -->
+    <!-- BEGIN TOP BAR -->
+    <!--<div th:include="common/userShopHead :: head"></div>-->
+    <!-- END TOP BAR -->
 
-<!-- BEGIN HEADER -->
-<!--<div th:include="common/userShopHead :: head-navigation"></div>-->
-<!-- END HEADER -->
-<!-- BEGIN TOP BAR -->
+    <!-- BEGIN HEADER -->
+    <!--<div th:include="common/userShopHead :: head-navigation"></div>-->
+    <!-- END HEADER -->
+    <!-- BEGIN TOP BAR -->
 
-<!-- END TOP BAR -->
+    <!-- END TOP BAR -->
 
 
-<!-- END HEADER -->
+    <!-- END HEADER -->
 
-<div class="container" id="wrapper">
+    <div class="container">
 
-    <div class="row product-list">
-        <!-- PRODUCT ITEM START -->
-        <div class="col-md-3 col-sm-4 col-xs-5" th:each="shopList,info : ${shopList}"
-             th:if="${shopList.pageaddr!=null}">
-            <div class="product-item">
-                <div class="pi-img-wrapper">
-                    <img class="img-responsive" th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"/>
-                    <div>
-                        <a th:href="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
-                           class="btn btn-default fancybox-button" width="0px">查看</a>
-                        <a href="#product-pop-up"
-                           class="btn btn-default fancybox-fast-view">View</a>
+        <div class="row product-list">
+            <!-- PRODUCT ITEM START -->
+            <div class="col-md-3 col-sm-4 col-xs-5" th:each="shopList,info : ${shopList}" th:if="${shopList!=null}">
+                <div class="product-item">
+                    <div class="pi-img-wrapper">
+                        <img class="img-responsive" th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"/>
+                        <div>
+                            <a th:href="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
+                               class="btn btn-default fancybox-button" width="0px">查看</a>
+                            <a href="#product-pop-up"
+                               class="btn btn-default fancybox-fast-view">View</a>
+                        </div>
                     </div>
+                    <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
+                    <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
+                    <a @click="addCar($event)" class="btn btn-default add2cart"
+                       th:id="${shopList.id}">加入购物车</a>
+                    <div class="sticker sticker-sale" th:if="${info.index ==0}"></div>
+                    <div class="sticker sticker-new" th:if="${info.index ==1}"></div>
                 </div>
-                <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
-                <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
-                <a @click="addCar($event)" class="btn btn-default add2cart"
-                   th:id="${shopList.id}">加入购物车</a>
-                <div class="sticker sticker-sale" th:if="${info.index ==0}"></div>
-                <div class="sticker sticker-new" th:if="${info.index ==1}"></div>
+            </div>
+
+            <!-- PRODUCT ITEM END -->
+        </div>
+        <!-- END PRODUCT LIST -->
+        <!-- BEGIN PAGINATOR -->
+        <div class="row">
+            <div class="col-md-4 col-sm-4 items-info" th:text="${'Items ' + pageInfo.startRow + ' to ' + pageInfo.endRow + ' of ' + pageInfo.total + ' total'}">Items 1 to 9 of 10 total</div>
+            <div class="col-md-8 col-sm-8">
+                <ul id="ul" class="pagination pull-right">
+                    <li id="pageLi"><a href="javascript:void(0);" id="prePage"><<</a></li>
+                    <!--<li><span>1</span></li>-->
+                    <!--<li th:each="i:${#numbers.sequence(pageInfo.pageNum, pageInfo.pageNum + 3)}"><a href="" th:onclick="${'jumpPage('+i+')'}" th:text="${i}"></a></li>-->
+                    <!--<li><span>2</span></li>
+                    <li>< a href="#">3</ a></li>
+                    <li>< a href="#">4</ a></li>
+                    <li>< a href="#">5</ a></li>-->
+                    <li><a href="javascript:void(0);" id="aftPage">>></a></li>
+                </ul>
             </div>
         </div>
-        <div class="col-md-3 col-sm-4 col-xs-5" th:each="shopList,info : ${shopList}"
-             th:if="${shopList.pageaddr ==null}">
-            暂无商品数据
-        </div>
-
-        <!-- PRODUCT ITEM END -->
+        <!-- END PAGINATOR -->
     </div>
-    <!-- END PRODUCT LIST -->
-    <!-- BEGIN PAGINATOR -->
-    <div class="row">
-        <div class="col-md-4 col-sm-4 items-info"
-             th:text="${'Items ' + pageInfo.startRow + ' to ' + pageInfo.endRow + ' of ' + pageInfo.total + ' total'}">
-        </div>
-        <div class="col-md-8 col-sm-8">
-            <ul id="ul" class="pagination pull-right">
-                <li id="pageLi"><a href="javascript:void(0);" id="prePage"><<</a></li>
-                <!--<li><span>1</span></li>-->
-                <!--<li th:each="i:${#numbers.sequence(pageInfo.pageNum, pageInfo.pageNum + 3)}"><a href="" th:onclick="${'jumpPage('+i+')'}" th:text="${i}"></a></li>-->
-                <!--<li><span>2</span></li>
-                <li>< a href="#">3</ a></li>
-                <li>< a href="#">4</ a></li>
-                <li>< a href="#">5</ a></li>-->
-                <li><a href="javascript:void(0);" id="aftPage">>></a></li>
-            </ul>
-        </div>
-    </div>
-    <!-- END PAGINATOR -->
-</div>
 
 <!--</div>-->
 <!-- END fast view of a product -->
+
+<div th:include="common/Head :: js"></div>
 
 <!-- Load javascripts at bottom, this will reduce page load time -->
 <!-- BEGIN CORE PLUGINS(REQUIRED FOR ALL PAGES) -->
@@ -162,15 +157,12 @@
 -->
 
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
-<script src="../layui/layui.js"></script>
+<script src="../bootstrap/js/project/user/shop/index/js/test.js"></script>
+<script src="../commJs/yuhe.js"></script>
+
+
 <script type="text/javascript" th:inline="javascript">
-    var layer;
     jQuery(document).ready(function () {
-
-        layui.use("layer", function () {
-            layer = layui.layer;  //layer初始化
-
-        })
         // App.init();
         // App.initBxSlider();
         // App.initImageZoom();
@@ -181,8 +173,6 @@
         var cId = [[${cId}]];
         var pageSize = 2;
 
-
-        console.log([[${shopList}]]);
         var pageInfo = [[${pageInfo}]];
         var pageNum = pageInfo.pageNum;
         var pages = pageInfo.pages; // 总页数
@@ -200,7 +190,7 @@
             if (y === k) {
                 li += '<li><span id="current">' + pageNum + '</span></li>';
             } else {
-                li += '<li><a href="javascript:void(0)" id="' + i + '">' + i + '</a></li>';
+                li += '<li><a href="javascript:void(0)" id="'+i+'">' + i + '</a></li>';
             }
             k++;
         }
@@ -217,8 +207,7 @@
         function getUrlParam(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
             var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-            if (r != null) return unescape(r[2]);
-            return null; //返回参数值
+            if (r != null) return unescape(r[2]); return null; //返回参数值
         }
 
         $('#prePage').on('click', function () {
@@ -250,10 +239,20 @@
             authIframeHeight();
         });
 
+        // 加入购物车
+        /*$('.add2cart').on('click', function () {
+            // 加入购物车前先调用此方法
+            yuheUtils.checkLogin();
+
+            // todo 这里写加入购物车逻辑
+            var shopId = $(this).attr("id");
+
+        });
+*/
+
 
     });
 </script>
-<script src="../bootstrap/js/project/user/shop/index/js/test.js"></script>
 <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

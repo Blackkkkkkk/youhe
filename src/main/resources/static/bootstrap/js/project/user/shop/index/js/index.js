@@ -10,7 +10,7 @@ Vue.component('tree', {
 		<div>
 				  <template v-for="item in lists">
 
-                        <li v-if="item.children == null" class="list-group-item clearfix"><a :href="'/touristShop/commodityMenu?cid='+item.cid+''"><i
+                        <li v-if="item.children == null" class="list-group-item clearfix"><a href="/touristShop/commodityMenu?cid={{item.cid}}"><i
                                 class="fa fa-angle-right"></i>
                             {{item.cname}}</a>
                         </li>
@@ -90,17 +90,13 @@ var vm = new Vue({
             items: 0,
             prices: 0
         },
-        addcar: {
-            cartNum: 0,
-            remark: "",
-        },  // view 详情的
         menList: [],
         lists: [],
-        shopDetails: {},
-        view: {},
-        stocknum: 0,
-        stocktotal: 0,
-        minpic: []
+        shopDetails:{},
+        view:{},
+        stocknum:0,
+        stocktotal:0,
+        minpic:[]
     },
     created: function () {
 
@@ -111,7 +107,7 @@ var vm = new Vue({
         _this = this;
         $.ajaxSettings.async = false;
 
-        $.get("/commodity/list", function (r) {
+        $.get("/commodity/list",function (r) {
             _this.menList = r;
         })
 
@@ -177,38 +173,16 @@ var vm = new Vue({
 
             return tree;
         }
-        ,   // 购物车数量增加
-        addCardNum: function (event, index) {
-            _this.addcar.cartNum++;
-
-
-        }
-        ,// 购物车数量减少
-        delCardNum: function (event, index) {
-            if (_this.addcar.cartNum > 0) {
-                _this.addcar.cartNum--;
-            }
-        }
         ,
-        addCar: function (event, type) {
+        addCar: function (event) {
 
-            _this = this;
             //获取点击对象
             x = event.clientX  // 获取点击对象的x 轴
             y = event.clientY  // 获取点击对象的y 轴
             console.log(event)
             var _this = this;
             var el = event.currentTarget;
-
-
-            //type == 2  是view 那边添加
-            var url = "/touristShop/addCart?id=" + el.id;
-
-            if (type == 2) {
-                url = "/touristShop/addCart?id=" + el.id + "&remark=" + _this.addcar.remark + "&cartNum=" + _this.addcar.cartNum;
-            }
-
-            $.get(url, function (r) {
+            $.get("/touristShop/addCart?id=" + el.id, function (r) {
                 _this.initcart(r.shopList);
                 if (r.Status == 1) {
                     top.layer.msg('加入购物车成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
@@ -222,7 +196,6 @@ var vm = new Vue({
             })
         }
         ,
-
         initcart: function (r) {
             var _this = this;
             if (r == null || r == undefined || r == '') {
@@ -247,7 +220,8 @@ var vm = new Vue({
             }
             _this.carData.items = num;
             _this.carData.prices = prices;
-        },
+        }
+        ,
         delCart: function (event) {
 
             var x = event.clientX;
@@ -266,26 +240,25 @@ var vm = new Vue({
             })
         }
         ,
-        showView: function (id) {//这个只是给基本方法   还没用上ajax请求
+        showView:function(id){//这个只是给基本方法   还没用上ajax请求
 
-            _this = this;
+            _this = this ;
             $.ajax({
                 type: "POST",
                 url: "/touristShop/viewList",
-                data: {"id": id},
+                data:{"id":id},
 
-                success: function (r) {
-                    if (r.Status == 1) {
+                        success: function (r) {
+                            if(r.Status == 1 ){
 
-                        _this.view = r.shopList;
-                        _this.stocktotal = _this.view.num;
-                        _this.minpic = _this.view.thumbnail.split(',');
-                        console.log(_this.view);
+                                _this.view=  r.shopList ;
+                                _this.stocktotal=_this.view.num;
+                                _this.minpic=_this.view.thumbnail.split(',');
+                                console.log(_this.view);
                     }
-                }
-            })
+                }})
             layer.open({
-                title: false,
+                title:false,
                 type: 1,
                 area: ['747px', '580px'],
                 content: $('#product-pop-up'),//这可以写弹出框的html内容
