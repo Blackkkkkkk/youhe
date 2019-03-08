@@ -54,7 +54,7 @@
         .layui-layer-content {
             padding: 10px;
         }
-        
+
         #product-pop-up a:focus, #product-pop-up a:hover, #product-pop-up a:active {
             text-decoration: none;
             cursor: pointer;
@@ -232,7 +232,9 @@
                                             <a th:href="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
                                                class="btn btn-default fancybox-button">查看</a>
                                             <a href="#product-pop-up"
-                                               class="btn btn-default fancybox-fast-view11">View</a>
+                                               class="btn btn-default fancybox-fast-view11"
+                                               th:onclick="'javascript:showView('+${shopList.id}+')'"
+                                            >View</a>
                                         </div>
                                     </div>
                                     <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
@@ -712,25 +714,31 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-3">
                         <div class="product-main-image">
-                          <!--  <img :src="img_src"  alt="Cool green dress with red bell"
-                                 class="img-responsive">
-                                 -->
+                            <!--  <img :src="img_src"  alt="Cool green dress with red bell"
+                                   class="img-responsive">
+                                   -->
 
-                            <img src="../bootstrap/user/temp/products/model7.jpg" alt="Cool green dress with red bell"
+                            <!--<img src="../bootstrap/user/temp/products/model7.jpg" alt="Cool green dress with red bell"-->
+                                 <!--class="img-responsive">-->
+                            <img th:src="${shopList.detail_picture}" alt="Cool green dress with red bell"
+                            <img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
+                                 alt="Cool green dress with red bell"
                                  class="img-responsive">
                         </div>
                         <div class="product-other-images">
-                            <a href="#" class="active"><img alt="Berry Lace Dress"
-                                                            src="../bootstrap/user/temp/products/model3.jpg"></a>
-                            <a href="#"><img alt="Berry Lace Dress"
-                                             src="../bootstrap/user/temp/products/model4.jpg"></a>
-                            <a href="#"><img alt="Berry Lace Dress"
-                                             src="../bootstrap/user/temp/products/model5.jpg"></a>
+                            <a href="#" class=""  v-for="item in minpic"><img alt="Berry Lace Dress" :src="item"></a>
+                            <!--<a href="#" class="active"><img alt="Berry Lace Dress"-->
+                                                            <!--src="../bootstrap/user/temp/products/model3.jpg"></a>-->
+                            <!--<a href="#"><img alt="Berry Lace Dress"-->
+                                             <!--src="../bootstrap/user/temp/products/model4.jpg"></a>-->
+                            <!--<a href="#"><img alt="Berry Lace Dress"-->
+                                             <!--src="../bootstrap/user/temp/products/model5.jpg"></a>-->
+
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-9">
 
-                        <h3><a v-text="view.name" ></a></h3>
+                        <h3><a v-text="view.name"></a></h3>
                         <!--<h1>Cool green dress with red bell</h1>-->
                         <div class="price-availability-block clearfix">
                             <!--<div class="price">-->
@@ -739,7 +747,7 @@
                             <!--</div>-->
                             <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
                             <div class="availability">
-                                <!--Availability: <a th:text="${shopList.available}>0?'有库存':'无货'"></a>-->
+                                Availability: <a th:text="${shopList.available}>0?'有库存':'无货'"></a>
                             </div>
                         </div>
                         <div class="description">
@@ -748,29 +756,25 @@
 
                         </div>
                         <div class="product-page-options">
-                            <div class="pull-left">
-                                <label class="control-label">SIZE:</label>
-
-                                <select class="form-control input-sm">
-                                    <a th:text="${shopList.size}"></a>
-                                </select>
-                            </div>
-                            <div class="pull-left">
-                                <label class="control-label">Color:</label>
-                                <select class="form-control input-sm">
-                                    <option>Red</option>
-                                    <option>Blue</option>
-                                    <option>Black</option>
-                                </select>
+                            <div class="col-sm-3 control-label" style="line-height: 34px;text-align: right;">备注</div>
+                            <div class="col-sm-9">
+                                    <textarea class="form-control" placeholder="备注" th:text="${shopList.remark}"></textarea>
                             </div>
                         </div>
+                    <!--    <div class="product-page-options layui-form-item layui-form-text">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-block">
+                                <textarea name="desc" placeholder="请输入备注" class="layui-textarea"></textarea>
+                            </div>
+                        </div>-->
                         <div class="product-page-cart">
                             <div class="product-quantity">
                                 <input id="product-quantity" type="text" value="1" readonly name="product-quantity"
                                        class="form-control input-sm">
                             </div>
-                            <button class="btn btn-primary" type="submit">Add to cart</button>
-                            <button class="btn btn-default" type="submit">More details</button>
+                            <a @click="addCar($event)" class="btn btn-primary"
+                               th:id="${shopList.id}">添加到购物车</a>
+                            <button class="btn btn-default" type="submit">更多细节</button>
                         </div>
                     </div>
                     <div class="sticker sticker-sale"></div>

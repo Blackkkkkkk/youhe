@@ -2,10 +2,13 @@ package com.youhe.controller.user.shop.index;
 
 
 import com.github.pagehelper.PageInfo;
+import com.youhe.biz.order.OrderBiz;
 import com.youhe.biz.redis.RedisBiz;
 import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
+import com.youhe.entity.order.Order;
+import com.youhe.entity.pay.Refund;
 import com.youhe.entity.shop.PayResult;
 import com.youhe.entity.shop.Picture;
 import com.youhe.entity.shop.Shop;
@@ -13,6 +16,7 @@ import com.youhe.entity.shop.Shop_index_carousel;
 import com.youhe.initBean.redis.CartPrefix;
 import com.youhe.serviceImpl.Controller.orderController.OrderControllerImpl;
 import com.youhe.utils.R;
+import com.youhe.utils.pay.PayUtil;
 import com.youhe.utils.pay.sdk.domain.Response;
 import com.youhe.utils.pay.sdk.pay.PaymentHelper;
 import com.youhe.utils.pay.sdk.pay.domain.cashierPay.CashierRequest;
@@ -23,13 +27,13 @@ import com.youhe.utils.pay.sdk.utils.Config;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.editor.language.json.converter.util.CollectionUtils;
+import org.aspectj.weaver.ast.Or;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,7 +49,7 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/touristShop")
 public class IndexController {
-
+    private Logger log = LoggerFactory.getLogger(IndexController.class);
 
     @Autowired
     private ShopUserIndexBiz shopUserIndexBiz;
@@ -61,6 +65,9 @@ public class IndexController {
 
     @Autowired
     private OrderControllerImpl orderController;
+
+    @Autowired
+    private OrderBiz orderBiz;
 
     @RequestMapping(value = "/index")
     public String index(Model model, Shop_index_carousel shop_index_carousel) {
@@ -102,10 +109,10 @@ public class IndexController {
 
         List<Shop> shopList = shopBiz.findShopList(shop);
 
-        if (!CollectionUtils.isEmpty(shopList)){
-            return R.ok(1,"").put("shopList",shopList.get(0));
-        }else {
-            return R.ok(0,"");
+        if (!CollectionUtils.isEmpty(shopList)) {
+            return R.ok(1, "").put("shopList", shopList.get(0));
+        } else {
+            return R.ok(0, "");
         }
     }
 
@@ -285,6 +292,7 @@ public class IndexController {
         return "user/shop/index/commodityMenu";
     }
 
+    //支付成功的同步接口
     @RequestMapping(value = "/asynchronousPay")
     public String asynchronousPay(PayResult payResult, Model model) {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
@@ -301,10 +309,11 @@ public class IndexController {
 
         }
 
-        return "user/shop/shoppingCart/shopping-cart";
+        return "redirect:shoppingCart";
     }
 
 
+    //支付接口
     @RequestMapping(value = "/pay")
     @ResponseBody
     public R pay() {
@@ -326,6 +335,48 @@ public class IndexController {
 
     }
 
+    //退款接口
+    @RequestMapping(value = "/refund")
+    @ResponseBody
+    public R refund(Refund refund) {
+
+        try {
+            Order order = new Order();
+
+            order.setBigOrderCode(refund.getOutTradeNo());
+
+            List<Order> list = orderBiz.findOrder(order);
+
+            if (!CollectionUtils.isEmpty(list)) {
+                order = list.get(0);
+                refund.setAmount(Long.parseLong(order.getTotalPrice() + ""))
+                        .setRefundAmount(Long.parseLong(order.getTotalPrice() + ""));
+                Response response = PayUtil.refundApply(refund);
+                System.out.println(refund);
+            } else {
+
+            }
+
+        } catch (Exception e) {
+            log.info(e.toString());
+        }
+        return R.ok();
+    }
+
+
+    //退款接口
+    @RequestMapping(value = "/refundResult")
+    @ResponseBody
+    public R refundResult(Refund refund) {
+
+        try {
+
+            System.out.println("1");
+        } catch (Exception e) {
+            System.out.println("2");
+        }
+        return R.ok();
+    }
 
     public void initialize() throws URISyntaxException {
 

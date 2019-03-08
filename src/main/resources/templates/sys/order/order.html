@@ -83,6 +83,7 @@
                                         <th>发货状态</th>
                                         <th>订单总价</th>
                                         <th>订单完成时间</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -129,7 +130,6 @@
         $("#orderMange_ul").attr("class", "nav nav-second-level collapse in");
 
         $("#orderMange").attr("class", "active");
-
 
 
         $('.dataTables-example').DataTable({
@@ -202,7 +202,8 @@
                 {data: "status"},
                 {data: "transportStatus"},
                 {data: "totalPrice"},
-                {data: "orderEndTime"}
+                {data: "orderEndTime"},
+                {data: null}
 
             ],
             aoColumnDefs: [
@@ -216,10 +217,14 @@
                     "render": function (data, type) {
                         // 0 未支付   1 支付成功  2 支付超时
                         switch (Number(data)) {
-                            case 0: return '未支付';
-                            case 1: return '支付成功';
-                            case 2: return '支付超时';
-                            default: return data;
+                            case 0:
+                                return '未支付';
+                            case 1:
+                                return '支付成功';
+                            case 2:
+                                return '支付超时';
+                            default:
+                                return data;
                         }
                     },
                     "aTargets": 3 //第一列
@@ -228,10 +233,14 @@
                     "render": function (data, type) {
                         // 0 未发货   1 已发货   2 已收货
                         switch (Number(data)) {
-                            case 0: return '未发货';
-                            case 1: return '已发货';
-                            case 2: return '已收货';
-                            default: return data;
+                            case 0:
+                                return '未发货';
+                            case 1:
+                                return '已发货';
+                            case 2:
+                                return '已收货';
+                            default:
+                                return data;
                         }
                     },
                     "aTargets": 4 //第一列
@@ -246,6 +255,13 @@
                     },
                     "aTargets": 6 //第7列
                 },
+                {
+                    "render": function (data, type) {
+
+                        return '   <a class="btn btn-primary" onclick ="refund(' + "'" + data.bigOrderCode + "'" + ')"><i class="fa fa-plus"></i>&nbsp;退款</a>'
+                    },
+                    "aTargets": 7 //第7列
+                },
             ],
             columnDefs:
                 [
@@ -256,7 +272,6 @@
                 [1, 'asc']
         })
         ;
-
 
 
     });
@@ -289,8 +304,10 @@
         })
     }
 
-    $('.dataTables-example').on('click','tr', function() {
-        var bigOrderCode = $($(this).find('td')[2]).text();
+    $('.dataTables-example').on('click', 'tr td:nth-child(3)', function () {
+
+
+        var bigOrderCode = $(this).text();
         console.log('bigOrderCode = ', bigOrderCode);
         layer.open({
             type: 2,
@@ -303,6 +320,20 @@
         })
 
     });
+
+    function refund(id) {
+
+        $.ajax({
+            type: "POST",
+            url: "/touristShop/refund",
+            dataType: "json",
+            data: {"outTradeNo": id},
+            success: function (r) {
+
+            }
+        })
+        console.log(id)
+    }
 
     $(function () {
 

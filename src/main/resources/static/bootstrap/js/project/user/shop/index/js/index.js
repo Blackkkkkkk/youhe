@@ -93,8 +93,10 @@ var vm = new Vue({
         menList: [],
         lists: [],
         shopDetails:{},
-        view:{}
-
+        view:{},
+        stocknum:0,
+        stocktotal:0,
+        minpic:[]
     },
     created: function () {
 
@@ -118,19 +120,15 @@ var vm = new Vue({
             cname: 'cname',
             rootId: 0
         }
-        console.log(data)
         _this.lists = _this.toTreeData(data, attributes)
-        console.log(_this.lists)
         $.ajaxSettings.async = false;
 
-        console.log(_this.menList)
 
     }
     ,
     methods: {
 
         pay: function () {
-            console.log(this.shopList)
         },
         //把数据类型转成树格式
         toTreeData: function (data, attributes) {
@@ -181,6 +179,7 @@ var vm = new Vue({
             //获取点击对象
             x = event.clientX  // 获取点击对象的x 轴
             y = event.clientY  // 获取点击对象的y 轴
+            console.log(event)
             var _this = this;
             var el = event.currentTarget;
             $.get("/touristShop/addCart?id=" + el.id, function (r) {
@@ -249,20 +248,19 @@ var vm = new Vue({
                 url: "/touristShop/viewList",
                 data:{"id":id},
 
-                success: function (r) {
-                    if(r.Status == 1 ){
+                        success: function (r) {
+                            if(r.Status == 1 ){
 
-                        _this.view=  r.shopList ;
-                        console.log( _this.view.name)
+                                _this.view=  r.shopList ;
+                                _this.stocktotal=_this.view.num;
+                                _this.minpic=_this.view.thumbnail.split(',');
+                                console.log(_this.view);
                     }
-
                 }})
-
-
             layer.open({
                 title:false,
                 type: 1,
-                area: ['747px', 'auto'],
+                area: ['747px', '580px'],
                 content: $('#product-pop-up'),//这可以写弹出框的html内容
             });
             /*
