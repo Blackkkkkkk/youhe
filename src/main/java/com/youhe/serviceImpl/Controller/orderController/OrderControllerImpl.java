@@ -14,6 +14,8 @@ import com.youhe.entity.role.Role;
 import com.youhe.entity.shop.PayResult;
 import com.youhe.entity.shop.Shop;
 import com.youhe.initBean.redis.CartPrefix;
+import com.youhe.initBean.websocket.WebSocketServer;
+import com.youhe.utils.R;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.springframework.aop.framework.AopContext;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -73,6 +76,13 @@ public class OrderControllerImpl {
                     .setTotalPrice(Integer.parseInt(payAmount + ""));
 
             orderBiz.saveOrder(order);
+
+            //固定写死 id 20
+            try {
+                WebSocketServer.sendInfo(order.getBigOrderCode(), "20");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             //后期优化，省去一个遍历，直接放在上面
             for (Shop shop : shopList) {

@@ -51,12 +51,17 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
     @RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     public void saveModel(@PathVariable String modelId,
-                          @RequestParam("name") String name,
+                         // @RequestParam("name") String name,
                           @RequestParam("json_xml") String json_xml,
                           @RequestParam("svg_xml") String svg_xml,
                           @RequestParam("description") String description) {//对接收参数进行了修改
         try {
 
+            System.out.println(modelId);
+            System.out.println(json_xml);
+            System.out.println(svg_xml);
+            System.out.println(description);
+            /*
             Model model = repositoryService.getModel(modelId);
 
             ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
@@ -83,7 +88,7 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
             final byte[] result = outStream.toByteArray();
             repositoryService.addModelEditorSourceExtra(model.getId(), result);
             outStream.close();
-
+*/
 
         } catch (Exception e) {
             LOGGER.error("Error saving model", e);
