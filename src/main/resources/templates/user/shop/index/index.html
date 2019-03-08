@@ -59,30 +59,6 @@
             text-decoration: none;
             cursor: pointer;
         }
-
-        .product-quantity1 {
-            width: 70px;
-            float: left;
-            margin-right: 20px;
-            position: relative;
-        }
-
-        .product-quantity1 input.form-control {
-            border: none;
-            background: #edeff1 !important;
-            font: 300 23px 'Open Sans', sans-serif;
-            color: #647484;
-            height: 38px;
-            width: 50px;
-            text-align: center;
-            padding: 5px;
-        }
-
-        .product-quantity1 .btn i {
-            position: relative;
-            top: -2px;
-            left: 1px;
-        }
     </style>
 </head>
 <!-- Head END -->
@@ -213,14 +189,12 @@
                                             <a th:href="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
                                                class="btn btn-default fancybox-button">查看</a>
                                             <a th:shopid="${shopList.id}"
-                                               class="btn btn-default fancybox-fast-view11"
-                                               th:onclick="'javascript:showView('+${shopList.id}+')'"
-                                            >View</a>
+                                               class="btn btn-default fancybox-fast-view11" @click="showView(shopList.id)">View</a>
                                         </div>
                                     </div>
                                     <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
                                     <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
-                                    <a @click="addCar($event,1)" class="btn btn-default add2cart"
+                                    <a @click="addCar($event)" class="btn btn-default add2cart"
                                        th:id="${shopList.id}">加入购物车</a>
                                     <div class="sticker sticker-sale" th:if="${info.index ==0}"></div>
                                     <div class="sticker sticker-new" th:if="${info.index ==1}"></div>
@@ -265,7 +239,7 @@
                                     </div>
                                     <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
                                     <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
-                                    <a @click="addCar($event,1)" class="btn btn-default add2cart"
+                                    <a @click="addCar($event)" class="btn btn-default add2cart"
                                        th:id="${shopList.id}">加入购物车</a>
                                     <div class="sticker sticker-sale" th:if="${info.index ==0}"></div>
                                     <div class="sticker sticker-new" th:if="${info.index ==1}"></div>
@@ -484,12 +458,17 @@
                         <div id="myCarousel" class="carousel slide" data-ride="carousel">
                             <!-- Indicators -->
                             <ol class="carousel-indicators">
-                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                                <li data-target="#myCarousel" data-slide-to="1"></li>
-                                <li data-target="#myCarousel" data-slide-to="2"></li>
+                                <li data-target="#myCarousel" th:data-slide-to="${picStat.index}" class="active" th:each="picture,picStat: ${pictureList}"></li>
+                                <!--<li data-target="#myCarousel" data-slide-to="1"></li>
+                                <li data-target="#myCarousel" data-slide-to="2"></li>-->
                             </ol>
                             <div class="carousel-inner">
-                                <div class="item active">
+                                <div th:class="${picStat.index==0?'item active':'item'}" th:each="picture,picStat: ${pictureList}">
+                                    <img th:src="${picture.pageaddr + picture.fileName}" class="img-responsive"
+                                         alt="Berry Lace Dress">
+                                </div>
+                                <!--<div class="item active">
+                                    &lt;!&ndash;/templates/upload/ShopManage/20190115/20190115175318_model1.jpg&ndash;&gt;
                                     <img src="../bootstrap/user/temp/index-sliders/slide1.jpg" class="img-responsive"
                                          alt="Berry Lace Dress">
                                 </div>
@@ -500,7 +479,7 @@
                                 <div class="item">
                                     <img src="../bootstrap/user/temp/index-sliders/slide3.jpg" class="img-responsive"
                                          alt="Berry Lace Dress">
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -740,20 +719,20 @@
                                    -->
 
                             <!--<img src="../bootstrap/user/temp/products/model7.jpg" alt="Cool green dress with red bell"-->
-                            <!--class="img-responsive">-->
-                            <img th:src="${shopList.detail_picture}" alt="Cool green dress with red bell">
+                                 <!--class="img-responsive">-->
+                            <img th:src="${shopList.detail_picture}" alt="Cool green dress with red bell"
                             <img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
                                  alt="Cool green dress with red bell"
                                  class="img-responsive">
                         </div>
                         <div class="product-other-images">
-                            <a href="#" class="" v-for="item in minpic"><img alt="Berry Lace Dress" :src="item"></a>
+                            <a href="#" class=""  v-for="item in minpic"><img alt="Berry Lace Dress" :src="item"></a>
                             <!--<a href="#" class="active"><img alt="Berry Lace Dress"-->
-                            <!--src="../bootstrap/user/temp/products/model3.jpg"></a>-->
+                                                            <!--src="../bootstrap/user/temp/products/model3.jpg"></a>-->
                             <!--<a href="#"><img alt="Berry Lace Dress"-->
-                            <!--src="../bootstrap/user/temp/products/model4.jpg"></a>-->
+                                             <!--src="../bootstrap/user/temp/products/model4.jpg"></a>-->
                             <!--<a href="#"><img alt="Berry Lace Dress"-->
-                            <!--src="../bootstrap/user/temp/products/model5.jpg"></a>-->
+                                             <!--src="../bootstrap/user/temp/products/model5.jpg"></a>-->
 
                         </div>
                     </div>
@@ -768,9 +747,7 @@
                             <!--</div>-->
                             <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
                             <div class="availability">
-                                库存:
-                                <a th:if="${shopList.available}==null" th:text="无货"></a>
-                                <a th:if="${shopList.available}!=null" th:text="${shopList.available}>0?'有库存':'无货'"></a>
+                                Availability: <a th:text="${shopList.available}>0?'有库存':'无货'"></a>
                             </div>
                         </div>
                         <div class="description">
@@ -781,28 +758,23 @@
                         <div class="product-page-options">
                             <div class="col-sm-3 control-label" style="line-height: 34px;text-align: right;">备注</div>
                             <div class="col-sm-9">
-                                <textarea class="form-control" placeholder="备注"
-                                          v-model="addcar.remark"
-                                ></textarea>
+                                    <textarea class="form-control" placeholder="备注" th:text="${shopList.remark}"></textarea>
                             </div>
                         </div>
+                    <!--    <div class="product-page-options layui-form-item layui-form-text">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-block">
+                                <textarea name="desc" placeholder="请输入备注" class="layui-textarea"></textarea>
+                            </div>
+                        </div>-->
                         <div class="product-page-cart">
                             <div class="product-quantity">
-                                  <span class="input-group-btn"><button
-                                          class="btn quantity-up bootstrap-touchspin-up" type="button"
-                                          @click="addCardNum($event,0)" th:id="${shopList.id}"><i
-                                          class="fa fa-angle-up"></i></button></span>
-                                <input id="product-quantity" type="text"
-                                       :value="addcar.cartNum"
-                                       readonly
-                                       class="form-control input-sm" ref="input1">
-                                <span class="input-group-btn"><button
-                                        class="btn quantity-down bootstrap-touchspin-down"
-                                        type="button" @click="delCardNum($event,0)" th:id="${shopList.id}"><i
-                                        class="fa fa-angle-down"></i></button></span>
+                                <input id="product-quantity" type="text" value="1" readonly name="product-quantity"
+                                       class="form-control input-sm">
                             </div>
-                            <a @click="addCar($event,2)" class="btn btn-primary"
-                               th:id="${shopList.id}">添加到购物车1</a>
+                            <a @click="addCar($event)" class="btn btn-primary"
+                               th:id="${shopList.id}">添加到购物车</a>
+                            <button class="btn btn-default" type="submit">更多细节</button>
                         </div>
                     </div>
                     <div class="sticker sticker-sale"></div>
@@ -813,6 +785,7 @@
 
 
 </div>
+<div th:include="common/Head :: js"></div>
 <!-- END fast view of a product -->
 <script src="../layui/layui.js"></script>
 <!-- Load javascripts at bottom, this will reduce page load time -->
@@ -852,34 +825,8 @@
 
 <script src="../bootstrap/js/project/user/shop/index/js/index.js"></script>
 
+
 <script type="text/javascript">
-    function showView(id) {
-        //初始化
-        vm.addcar.cartNum = 0;
-        vm.addcar.remark = "";
-        $.ajax({
-            data: {"id": id},
-            type: "POST",
-            dataType: 'json',
-            url: "/touristShop/viewList",
-            success: function (data) {
-                if (data.Status == 1) {
-
-                    vm.view = data.shopList;
-
-                }
-            },
-            error: function (data) {
-            }
-        });
-        layer.open({
-            title: false,
-            type: 1,
-            area: ['747px', 'auto'],
-            content: $('#product-pop-up'),//这可以写弹出框的html内容
-        });
-    }
-
     var layer;
     /*
     jQuery(document).ready(function () {
