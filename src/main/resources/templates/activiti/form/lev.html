@@ -5,10 +5,14 @@
     <title>申请信息</title>
     <div th:include="common/head :: headCss"></div>
 
+    <!--todo 流程表单头部， 还未完成-->
     <div th:include="activiti/common/form :: formHeadView"></div>
+
 </head>
 <body style="background: white">
     <!--<form name="myForm" id="myForm" action="../../submit/task" method="post">-->
+
+    <!--下面是业务表单-->
     <form name="businessForm" id="businessForm" >
         <div class="form-group">
             <label class="col-sm-2 control-label">请假类型</label>
@@ -16,26 +20,27 @@
                 <input type="text" class="form-control" name="leaveType"  placeholder="填写审批意见"/>
             </div>
         </div>
-        <!--<div class="form-group">
+        <div class="form-group">
             <label class="col-sm-2 control-label">开始时间</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="startTime" th:value="${taskData.startTime==null?'':taskData.startTime}" placeholder="填写审批意见"/>
+                <input type="text" class="form-control" name="startTime" th:value="${taskData['startTime']==null?'':taskData['startTime']}" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">结束时间</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="endTime" th:value="${taskData.endTime==null?'':taskData.endTime}" placeholder="填写审批意见"/>
+                <input type="text" class="form-control" name="endTime" th:value="${taskData['endTime']==null?'':taskData['endTime']}" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">请假原因</label>
             <div class="col-sm-10">
-                <textarea class="form-control" name="reason" th:text="${taskData.reason==null?'':taskData.reason}" placeholder="填写审批意见"></textarea>
+                <textarea class="form-control" name="reason" th:text="${taskData['reason']==null?'':taskData['reason']}"></textarea>
             </div>
-        </div>-->
+        </div>
+
         <!--隐藏字段，用于路由条件变量判断-->
-        <div>
+        <div id="hideDiv">
             <input type="hidden" name="userId" value="">
         </div>
 
@@ -44,32 +49,9 @@
     <!--提交任务模态框-->
     <div th:include="activiti/common/form :: submitTaskModal"></div>
 
-    <!--<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>-->
     <div th:include="common/Head :: js"></div>
     <script>
         $(function () {
-
-            /*function CloseWebPage(){
-                if (navigator.userAgent.indexOf("MSIE") > 0) {
-                    if (navigator.userAgent.indexOf("MSIE 6.0") > 0) {
-                        window.opener = null;
-                        window.close();
-                    }else {
-                        window.open('', '_top');
-                        window.top.close();
-                    }
-                }
-                else if (navigator.userAgent.indexOf("Firefox")>0 || navigator.userAgent.indexOf("Chrome")> 0) {
-//window.location.href = 'about:blank ';
-                    window.location.href="about:blank";
-                    window.close();
-                }
-                else {
-                    window.opener=null;
-                    window.open('','_self');
-                    window.close();
-                }
-            }*/
 
         });
     </script>
