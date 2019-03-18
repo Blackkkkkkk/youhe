@@ -6,7 +6,6 @@ import com.youhe.common.Constant;
 import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.utils.R;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
