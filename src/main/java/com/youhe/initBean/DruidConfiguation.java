@@ -67,14 +67,14 @@ public class DruidConfiguation {
     }
 
     //配置数据库的基本链接信息
-    @Bean(name = "dataSource")
+    /*@Bean(name = "dataSource")
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource.druid")    //可以在application.properties中直接导入
     public DataSource dataSource() {
 
 
         return DataSourceBuilder.create().type(com.alibaba.druid.pool.DruidDataSource.class).build();
-    }
+    }*/
 
     @Bean
     public SqlSessionFactoryBean sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) {

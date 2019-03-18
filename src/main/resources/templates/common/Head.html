@@ -9,19 +9,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     
-    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/font-awesome/css/font-awesome.css}" rel="stylesheet">
 
     <!-- Toastr style -->
-    <link href="../bootstrap/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/plugins/toastr/toastr.min.css}" rel="stylesheet">
 
     <!-- Gritter -->
+    <link th:href="@{/bootstrap/js/plugins/gritter/jquery.gritter.css}" rel="stylesheet">
+
+    <link th:href="@{/bootstrap/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/style.css}" rel="stylesheet">
+
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
+    <!--<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    &lt;!&ndash; Toastr style &ndash;&gt;
+    <link href="../bootstrap/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    &lt;!&ndash; Gritter &ndash;&gt;
     <link href="../bootstrap/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
 
     <link href="../bootstrap/css/animate.css" rel="stylesheet">
     <link href="../bootstrap/css/style.css" rel="stylesheet">
 
-    <link href="../layui/css/layui.css" rel="stylesheet">
+    <link href="../layui/css/layui.css" rel="stylesheet">-->
 
 </head>
 <body>
@@ -161,10 +175,15 @@
     <script src="../layui/layui.js"></script>
 
     <!-- Mainly scripts -->
-    <script src="../bootstrap/js/jquery-3.1.1.min.js"></script>
+    <script th:src="@{/bootstrap/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrap/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+    <script th:src="@{/bootstrap/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+    <!--<script src="../bootstrap/js/jquery-3.1.1.min.js"></script>
     <script src="../bootstrap/js/bootstrap.min.js"></script>
     <script src="../bootstrap/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="../bootstrap/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../bootstrap/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>-->
 
     <!-- Flot -->
     <script src="../bootstrap/js/plugins/flot/jquery.flot.js"></script>
@@ -201,7 +220,7 @@
 
 
     <script src="../bootstrap/common/js/PageJs.js"></script>
-    <script src="../commJs/yuhe.js"></script>
+    <script th:src="@{/commJs/yuhe.js}"></script>
 </aside>
 
 

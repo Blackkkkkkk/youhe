@@ -54,6 +54,26 @@ var yuheUtils = {
             return false;
         }
         return true;
+    },
+    getFormJson: function (formId) {
+        var json = {};
+        var sArr = $('#' + formId).serializeArray();
+        sArr.forEach(function (item) {
+            if (item.value) {
+                if (json.hasOwnProperty(item.name)) {
+                    json[item.name] += ',' + item.value;
+                } else {
+                    json[item.name] = item.value;
+                }
+            } else {
+                if (json.hasOwnProperty(item.name)) {
+                    json[item.name] += ',';
+                } else {
+                    json[item.name] = '';
+                }
+            }
+        });
+        return json;
     }
 };
 
@@ -121,4 +141,40 @@ $(function () {
     bindAdd2Cart();
     bindLogin();
     bindLoginOut();
+
+    $('#submitTaskModal').modal('hide');
 });
+
+/**
+ * 提交任务
+ * @returns {boolean}
+ */
+function submitTask() {
+    alert('提交任务');
+    var taskData;
+    var businessFormData = yuheUtils.getFormJson('businessForm');
+    var taskFormData = yuheUtils.getFormJson('taskForm');
+    console.log("businessFormData= ", businessFormData);
+    console.log("taskFormData=" , taskFormData);
+    taskData = businessFormData;
+    taskData.flowVariable = JSON.stringify(taskFormData);
+    console.log("taskData=", taskData);
+    $.ajax({
+        type: 'POST',
+        url: '../../submit/task',
+        dataType:'json',
+        // contentType : 'application/json;charset=utf-8',
+        data: taskData,
+        success: function (r) {
+            alert(r.msg);
+        }
+    });
+    return false;
+}
+
+/**
+ * todo 审批用户选择
+ */
+function selUser() {
+    alert('选择用户');
+}

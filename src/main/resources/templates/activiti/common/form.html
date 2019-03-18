@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:shiro="http://www.w3.org/1999/xhtml">
+
+    <!--流程表单头-->
+    <div th:fragment="formHeadView" class="navbar-fixed-top">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#submitTaskModal">提交表单</button>
+    </div>
+
+    <!-- 模态框（Modal）模板 -->
+    <div th:fragment="submitTaskModal">
+        <div class="modal fade" id="submitTaskModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myModalLabel">提交任务</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--form-->
+                        <form class="form-horizontal" role="form">
+
+                            <!--todo 选择审批人-->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">审批人</label>
+                                <div class="form-group">
+                                    <span class="glyphicon glyphicon-user" onclick="selUser()">
+                                        <input type="text" name="nextUserId" class="icon-user-add" value="001"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <!--todo 下一节点-->
+                            <!--<div class="form-group">
+                                <label class="col-sm-2 control-label">下一节点</label>
+                                <div class="form-group">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionsRadiosinline" id="optionsRadios3" value="option1" checked> 选项 1
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionsRadiosinline" id="optionsRadios4"  value="option2"> 选项 2
+                                    </label>
+                                </div>
+
+                            </div>-->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">审批意见</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="comment"  rows="5" placeholder="填写审批意见"></textarea>
+                                </div>
+                            </div>
+
+                            <!--流程流转相关的关键字段值-->
+                            <input type="hidden" name="userId" value="">
+                            <input type="hidden" name="taskId" th:value="${taskData.flowVariable['taskId']}">
+                            <input type="hidden" name="processInstanceId" th:value="${taskData.flowVariable['processInstanceId']}">
+                            <input type="hidden" name="firstNodeKey" th:value="${taskData.flowVariable['firstNodeKey']}">
+                            <input type="hidden" name="formKey" th:value="${taskData.flowVariable['formKey']}">
+                            <input type="hidden" name="mainFormKey" th:value="${taskData.flowVariable['mainFormKey']}">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submitTask()">提交</button>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    </div>
+
+
+</html>

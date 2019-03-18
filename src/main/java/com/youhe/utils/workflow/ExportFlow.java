@@ -1,11 +1,11 @@
 package com.youhe.utils.workflow;
 
 import org.activiti.engine.ProcessEngine;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.List;
+
+//import org.apache.commons.io.FileUtils;
 
 /**
  * Created by xiaoqiang on 2018/12/10.
@@ -34,7 +34,7 @@ public class ExportFlow {
 			 * in.read(b))!=-1) { out.write(b, 0, len); } out.close();
 			 */
             try {
-                FileUtils.copyInputStreamToFile(in, new File("d:\\" + name));
+//                FileUtils.copyInputStreamToFile(in, new File("d:\\" + name));
                 in.close();
             } catch (Exception e) {
                 System.out.println(e.toString());

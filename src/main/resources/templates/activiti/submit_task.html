@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>任务提交</title>
+    <div></div>
+
+    <div th:include="common/head :: headCss"></div>
+</head>
+<body>
+    <!-- 模态框（Modal） -->
+    <!--<h2>模态框（Modal）插件事件</h2>-->
+    <!-- 按钮触发模态框 -->
+    <div class="navbar-fixed-top">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">提交表单</button>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">提交任务</h4>
+                </div>
+                <div class="modal-body">
+                    <!--form-->
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">审批人</label>
+                            <div class="form-group">
+                                <div>
+                                    <span class="glyphicon glyphicon-user" onclick="selUser()"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--todo 下一节点-->
+                        <!--<div class="form-group">
+                            <label class="col-sm-2 control-label">下一节点</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="optionsRadiosinline" id="optionsRadios3" value="option1" checked> 选项 1
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optionsRadiosinline" id="optionsRadios4"  value="option2"> 选项 2
+                                </label>
+                            </div>
+
+                        </div>-->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">审批意见</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="remark"  rows="5" placeholder="填写审批意见"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submitTask()">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <script src="../bootstrap/js/jquery-3.1.1.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- /.modal -->
+    <script>
+        $(function() {
+            $('#myModal').modal('hide');
+        });
+    </script>
+    <script>
+        $(function() {
+            /*$('#myModal').on('hide.bs.modal',
+                function() {
+                    alert('嘿，我听说您喜欢模态框...');
+                })*/
+        });
+
+        function submit() {
+            alert('成功提交');
+        }
+
+        function selUser() {
+            alert('选择用户');
+        }
+    </script>
+
+</body>
+</html>

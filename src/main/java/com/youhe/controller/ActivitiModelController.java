@@ -1,6 +1,6 @@
 package com.youhe.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
+/*import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.youhe.utils.shiro.AuthRealm;
@@ -28,11 +28,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.List;*/
 
 import static com.youhe.utils.shiro.ShiroUserUtils.getShiroUser;
 
-@Controller
+/*@Controller
 public class ActivitiModelController {
 
     private static final Logger log = LogManager.getLogger(ActivitiModelController.class);
@@ -44,10 +44,10 @@ public class ActivitiModelController {
     @Autowired
     ObjectMapper objectMapper;
 
-    /**
+    *//**
      * 新建一个空模型
-     */
-    @RequestMapping("/create")
+     *//*
+    *//*@RequestMapping("/create")
     public void newModel(HttpServletResponse response) throws IOException {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         //初始化一个空模型
@@ -80,12 +80,12 @@ public class ActivitiModelController {
                 "http://b3mn.org/stencilset/bpmn2.0#");
         editorNode.put("stencilset", stencilSetNode);
         repositoryService.addModelEditorSource(id, editorNode.toString().getBytes("utf-8"));
-        response.sendRedirect("/modeler.html?modelId=" + id);
-    }
+        response.sendRedirect("/modeler.html?modelId=" + id + "&name=" + name);
+    }*//*
 
-    /**
+    *//**
      * 获取所有模型
-     */
+     *//*
     @RequestMapping("/modelList")
     @ResponseBody
     public Object modelList() {
@@ -93,9 +93,9 @@ public class ActivitiModelController {
         return repositoryService.createModelQuery().list();
     }
 
-    /**
+    *//**
      * 发布模型为流程定义
-     */
+     *//*
     @RequestMapping("/deploy")
     @ResponseBody
     public Object deploy(String modelId) throws Exception {
@@ -129,9 +129,9 @@ public class ActivitiModelController {
         return "SUCCESS";
     }
 
-    /**
+    *//**
      * 启动流程
-     */
+     *//*
     @RequestMapping("/start")
     @ResponseBody
     public Object startProcess(String keyName) {
@@ -140,9 +140,9 @@ public class ActivitiModelController {
         return process.getId() + " : " + process.getProcessDefinitionId();
     }
 
-    /**
+    *//**
      * 提交任务
-     */
+     *//*
     @RequestMapping("/run")
     @ResponseBody
     public Object run(String processInstanceId) {
@@ -160,5 +160,5 @@ public class ActivitiModelController {
 
 
 
-}
+}*/
 

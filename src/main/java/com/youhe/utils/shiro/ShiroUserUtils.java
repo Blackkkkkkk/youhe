@@ -38,8 +38,9 @@ public class ShiroUserUtils {
 
     //取得当前用户的id
     public static Long getUserId() {
-        ShiroUser shiroUser = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-        return shiroUser.getUid();
+//        ShiroUser shiroUser = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+//        return shiroUser.getUid();
+        return getShiroUser().getUid();
     }
 
     //取得当前用户名
