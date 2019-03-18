@@ -125,7 +125,7 @@ function bindLoginOut() {
     $('#loginOut_1').on('click', function () {
         $.ajax({
             type: 'POST',
-            url: 'touristShop/loinOut',
+            url: 'touristShop/loginOut',
             success: function () {
                 alert('已注销');
             }
@@ -166,7 +166,12 @@ function submitTask() {
         // contentType : 'application/json;charset=utf-8',
         data: taskData,
         success: function (r) {
-            alert(r.msg);
+            if (r.Status == 0) {
+                alert('任务已提交');
+            } else {
+                alert('任务提交失败');
+            }
+
         }
     });
     return false;
