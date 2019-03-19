@@ -22,22 +22,23 @@
                         <td>管理管理员</td>
                         <td>请假类型</td>
                         <td>
-                            <select class="form-control">
-                                <option>年假</option>
-                                <option>事假</option>
-                                <option>调休</option>
+                            <select class="form-control" name="leaveType">
+                                <option>请选择</option>
+                                <option value="1" th:selected="${taskData['leaveType']=='1'}">年假</option>
+                                <option value="2" th:selected="${taskData['leaveType']=='2'}">事假</option>
+                                <option value="3" th:selected="${taskData['leaveType']=='3'}">调休</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>开始时间</td>
-                        <td><input type="text" class="form-control" id="startTime" name="startTime" th:value="${taskData['startTime']==null?'':taskData['startTime']}" /></td>
+                        <td><input type="text" class="form-control" id="startTime" name="startTime" th:value="${taskData['startTime']}"/></td>
                         <td>结束时间</td>
-                        <td><input type="text" class="form-control" id="endTime" name="endTime" th:value="${taskData['endTime']==null?'':taskData['endTime']}"/></td>
+                        <td><input type="text" class="form-control" id="endTime" name="endTime" th:value="${taskData['endTime']}"/></td>
                     </tr>
                     <tr>
                         <td>请假原因</td>
-                        <td colspan="4"><textarea class="form-control" name="reason" th:text="${taskData['reason']==null?'':taskData['reason']}"></textarea></td>
+                        <td colspan="4"><textarea class="form-control" name="reason" th:text="${taskData['reason']}"></textarea></td>
                     </tr>
                     </tbody>
                 </table>
