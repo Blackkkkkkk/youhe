@@ -150,7 +150,6 @@ $(function () {
  * @returns {boolean}
  */
 function submitTask() {
-    alert('提交任务');
     var taskData;
     var businessFormData = yuheUtils.getFormJson('businessForm');
     var taskFormData = yuheUtils.getFormJson('taskForm');

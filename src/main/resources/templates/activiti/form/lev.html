@@ -4,56 +4,70 @@
     <meta charset="UTF-8">
     <title>申请信息</title>
     <div th:include="common/head :: headCss"></div>
+</head>
+
+<body style="background: white">
 
     <!--todo 流程表单头部， 还未完成-->
     <div th:include="activiti/common/form :: formHeadView"></div>
 
-</head>
-<body style="background: white">
-    <!--<form name="myForm" id="myForm" action="../../submit/task" method="post">-->
+    <div class="container" style="padding-left:0!important;padding-right:0!important;">
+        <!--下面是业务表单-->
+        <form name="businessForm" id="businessForm">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td>申请人</td>
+                        <td>管理管理员</td>
+                        <td>请假类型</td>
+                        <td>
+                            <select class="form-control">
+                                <option>年假</option>
+                                <option>事假</option>
+                                <option>调休</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>开始时间</td>
+                        <td><input type="text" class="form-control" id="startTime" name="startTime" th:value="${taskData['startTime']==null?'':taskData['startTime']}" /></td>
+                        <td>结束时间</td>
+                        <td><input type="text" class="form-control" id="endTime" name="endTime" th:value="${taskData['endTime']==null?'':taskData['endTime']}"/></td>
+                    </tr>
+                    <tr>
+                        <td>请假原因</td>
+                        <td colspan="4"><textarea class="form-control" name="reason" th:text="${taskData['reason']==null?'':taskData['reason']}"></textarea></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-    <!--下面是业务表单-->
-    <form name="businessForm" id="businessForm" >
-        <div class="form-group">
-            <label class="col-sm-2 control-label">请假类型</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="leaveType"  placeholder="填写审批意见"/>
+            <!--隐藏字段，用于路由条件变量判断-->
+            <div id="hideDiv">
+                <input type="hidden" name="userId" value="">
+                <input type="hidden" name="type" value="2">
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">开始时间</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="startTime" th:value="${taskData['startTime']==null?'':taskData['startTime']}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">结束时间</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="endTime" th:value="${taskData['endTime']==null?'':taskData['endTime']}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">请假原因</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" name="reason" th:text="${taskData['reason']==null?'':taskData['reason']}"></textarea>
-            </div>
-        </div>
 
-        <!--隐藏字段，用于路由条件变量判断-->
-        <div id="hideDiv">
-            <input type="hidden" name="userId" value="">
-            <input type="hidden" name="type" value="2">
-        </div>
-
-    </form>
+        </form>
+    </div>
 
     <!--提交任务模态框-->
     <div th:include="activiti/common/form :: submitTaskModal"></div>
 
     <div th:include="common/Head :: js"></div>
     <script>
-        $(function () {
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
 
+            laydate.render({
+                elem: '#startTime'
+            });
+            laydate.render({
+                elem: '#endTime'
+            });
+        });
+        $(function () {
         });
     </script>
 </body>
