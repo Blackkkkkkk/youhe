@@ -142,43 +142,5 @@ $(function () {
     bindLogin();
     bindLoginOut();
 
-    $('#submitTaskModal').modal('hide');
 });
 
-/**
- * 提交任务
- * @returns {boolean}
- */
-function submitTask() {
-    var taskData;
-    var businessFormData = yuheUtils.getFormJson('businessForm');
-    var taskFormData = yuheUtils.getFormJson('taskForm');
-    console.log("businessFormData= ", businessFormData);
-    console.log("taskFormData=" , taskFormData);
-    taskData = businessFormData;
-    taskData.flowVariable = JSON.stringify(taskFormData);
-    console.log("taskData=", taskData);
-    $.ajax({
-        type: 'POST',
-        url: '../../submit/task',
-        dataType:'json',
-        // contentType : 'application/json;charset=utf-8',
-        data: taskData,
-        success: function (r) {
-            if (r.Status == 0) {
-                alert('任务已提交');
-            } else {
-                alert('任务提交失败');
-            }
-
-        }
-    });
-    return false;
-}
-
-/**
- * todo 审批用户选择
- */
-function selUser() {
-    alert('选择用户');
-}

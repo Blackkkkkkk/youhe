@@ -58,8 +58,8 @@ public class DemoApplicationTests {
              * in.read(b))!=-1) { out.write(b, 0, len); } out.close();
              */
             try {
-                FileUtils.copyInputStreamToFile(in, new File("d:\\" + name));
-                in.close();
+//                FileUtils.copyInputStreamToFile(in, new File("d:\\" + name));
+//                in.close();
             } catch (Exception e) {
                 System.out.println(e.toString());
             }

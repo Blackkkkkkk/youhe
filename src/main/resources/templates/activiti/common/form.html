@@ -63,15 +63,24 @@
                             <input type="hidden" name="mainFormKey" th:value="${taskData.flowVariable['mainFormKey']}">
                         </form>
                     </div>
+                    <!--流程流转按钮-->
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submit(preSubmit);">同意</button>
+                        <button type="button" class="btn btn-danger" onclick="back2PreNode()">驳回</button>
+                        <button type="button" class="btn btn-pinterest" onclick="back2AnyNode()">驳回任意环节</button>
+                        <button type="button" class="btn btn-bitbucket" onclick="back2FirstNode()">回退首环节</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submitTask()">提交</button>
                     </div>
 
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
     </div>
+
+    <!--业务表单提交按钮-->
+    <aside th:fragment="busBtn">
+        <button style="display: none" type="submit" id="busBtn">提交</button>
+    </aside>
 
 
 </html>

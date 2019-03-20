@@ -171,6 +171,20 @@
     </div>
 </aside>
 
+<!--核心js 去掉了多余的js-->
+<aside th:fragment="mainJs">
+    <script th:src="@{/layui/layui.js}"></script>
+
+    <!-- Mainly scripts -->
+    <script th:src="@{/bootstrap/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+    <script th:src="@{/bootstrap/common/js/PageJs.js}"></script>
+    <script th:src="@{/commJs/yuhe.js}"></script>
+    <script th:src="@{/commJs/processEngine.js}"></script>
+
+</aside>
+
 <aside th:fragment="js">
     <script th:src="@{/layui/layui.js}"></script>
 
