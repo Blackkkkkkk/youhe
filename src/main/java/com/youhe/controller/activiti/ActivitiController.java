@@ -6,7 +6,9 @@ import com.youhe.common.Constant;
 import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.utils.R;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class ActivitiController extends BaseController {
     private TaskService taskService;
     @Autowired
     private MyProcessEngine myProcessEngine;
+    @Autowired
+    private RepositoryService repositoryService;
 
     @GetMapping(value = "create")
     public void create(HttpServletRequest request, HttpServletResponse response) {
@@ -55,10 +59,13 @@ public class ActivitiController extends BaseController {
 
     /**
      * 启动流程
+     * @param deploymentId 流程发布ID
+     * @return 任务表单
      */
-    @GetMapping(value = "start")
-    public ModelAndView startProcess(String processDefinitionId) {
-        ProcessInstance processInstance = myProcessEngine.start(processDefinitionId);
+    @GetMapping(value = "start/{deploymentId}")
+    public ModelAndView startProcess(@PathVariable String deploymentId) {
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).singleResult();
+        ProcessInstance processInstance = myProcessEngine.start(processDefinition.getId());
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
         return new ModelAndView("redirect:form/task/"+ task.getId());
     }

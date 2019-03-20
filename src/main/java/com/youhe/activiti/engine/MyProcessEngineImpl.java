@@ -142,22 +142,26 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     @Override
     public ProcessInstance start(String processDefinitionId, String businessId) {
-        // 获取当前登录用户
-        Long userId = ShiroUserUtils.getUserId();
-        Map<String, Object> variables = new HashMap<>();
-        FlowVariable flowVariable = new FlowVariable();
-        flowVariable.setNextUserId(String.valueOf(userId));
-        variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
-        // 设置当前任务的办理人
-        Authentication.setAuthenticatedUserId(String.valueOf(userId));
-        ProcessInstance processInstance;
-        if (StrUtil.isAllBlank(businessId)) {
-            processInstance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
-        } else {
-            processInstance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
+        try {
+            // 获取当前登录用户
+            Long userId = ShiroUserUtils.getUserId();
+            Map<String, Object> variables = new HashMap<>();
+            FlowVariable flowVariable = new FlowVariable();
+            flowVariable.setNextUserId(String.valueOf(userId));
+            variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
+            // 设置当前任务的办理人
+            Authentication.setAuthenticatedUserId(String.valueOf(userId));
+            ProcessInstance processInstance;
+            if (StrUtil.isAllBlank(businessId)) {
+                processInstance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
+            } else {
+                processInstance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
+            }
+            LOGGER.info("用户{}启动了{}实例（{}）", userId, processInstance.getName(), processInstance.getId());
+            return processInstance;
+        } catch (Exception e) {
+            throw new YuheOAException("流程发布失败：" + e.getMessage());
         }
-        LOGGER.info("用户{}启动了{}实例（{}）", userId, processInstance.getName(), processInstance.getId());
-        return processInstance;
     }
 
     @Override
