@@ -12,6 +12,7 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,6 +31,11 @@ public class ActivitiController extends BaseController {
     @Autowired
     private RepositoryService repositoryService;
 
+    @GetMapping(value = "index")
+    public ModelAndView index() {
+        return new ModelAndView("activiti/manage/ProcessManagement");
+    }
+
     @GetMapping(value = "create")
     public void create(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -44,6 +50,7 @@ public class ActivitiController extends BaseController {
      * 获取所有流程模型
      */
     @GetMapping(value = "/modelList")
+    @ResponseBody
     public R modelList() {
         return R.ok().put("modelList", myProcessEngine.getModelList());
     }
@@ -59,6 +66,7 @@ public class ActivitiController extends BaseController {
 
     /**
      * 启动流程
+     *
      * @param deploymentId 流程发布ID
      * @return 任务表单
      */
@@ -67,7 +75,7 @@ public class ActivitiController extends BaseController {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).singleResult();
         ProcessInstance processInstance = myProcessEngine.start(processDefinition.getId());
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
-        return new ModelAndView("redirect:form/task/"+ task.getId());
+        return new ModelAndView("redirect:form/task/" + task.getId());
     }
 
     /**
@@ -83,6 +91,7 @@ public class ActivitiController extends BaseController {
 
     /**
      * 任务表单
+     *
      * @param taskId 任务ID
      * @return
      */
@@ -102,6 +111,7 @@ public class ActivitiController extends BaseController {
 
     /**
      * 所有已发布的流程
+     *
      * @return
      */
     @GetMapping(value = "deployed/processes")
@@ -111,6 +121,7 @@ public class ActivitiController extends BaseController {
 
     /**
      * 我的待办
+     *
      * @param userId 用户ID
      * @return
      */
@@ -121,6 +132,7 @@ public class ActivitiController extends BaseController {
 
     /**
      * 我的已办
+     *
      * @param userId 用户ID
      * @return
      */
