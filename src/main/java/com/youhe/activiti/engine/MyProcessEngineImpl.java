@@ -125,9 +125,9 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             return processDefinition.getId();
         } catch (Exception e) {
             LOGGER.error("流程{}发布失败：{}", modelName, e.getMessage());
+            throw new YuheOAException("流程发布失败" + e.getMessage());
         }
 
-        return null;
     }
 
     @Override
@@ -160,7 +160,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             LOGGER.info("用户{}启动了{}实例（{}）", userId, processInstance.getName(), processInstance.getId());
             return processInstance;
         } catch (Exception e) {
-            throw new YuheOAException("流程发布失败：" + e.getMessage());
+            throw new YuheOAException("流程启动失败：" + e.getMessage());
         }
     }
 
