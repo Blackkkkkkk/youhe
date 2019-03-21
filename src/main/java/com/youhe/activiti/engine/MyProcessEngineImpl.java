@@ -1,5 +1,6 @@
 package com.youhe.activiti.engine;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -9,7 +10,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.exception.YuheOAException;
-import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 我的流程引擎实现类
@@ -76,6 +77,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         modelData.setMetaInfo(modelObjectNode.toString());
         modelData.setName(modelName);
         modelData.setKey(modelKey);
+
+        LOGGER.info("editorNode.toString() = {}", editorNode.toString());
 
         // 保存模型
         repositoryService.saveModel(modelData);
@@ -190,8 +193,9 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public List<Task> getTaskList(String userId) {
-        return taskService.createTaskQuery().taskAssignee(userId).list();
+    public List<Map<String, Object>> getTaskList(String userId) {
+        List<Task> list = taskService.createTaskQuery().taskAssignee(userId).list();
+        return list.stream().map(BeanUtil::beanToMap).collect(Collectors.toList());
     }
 
     @Override
@@ -244,6 +248,11 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
         LOGGER.info("variables = {}", variables);
         return variables;
+    }
+
+    @Override
+    public void exportProcessXml() {
+
     }
 
 

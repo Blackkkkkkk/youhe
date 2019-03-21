@@ -64,7 +64,7 @@ public interface MyProcessEngine {
      * @param userId 用户ID
      * @return List<Task>
      */
-    List<Task> getTaskList(String userId);
+    List<Map<String, Object>> getTaskList(String userId);
 
     /**
      * 获取已办任务列表
@@ -79,5 +79,10 @@ public interface MyProcessEngine {
      * @return map
      */
     Map getTaskForm(String taskId);
+
+    /**
+     * 导出流程xml
+     */
+    void exportProcessXml();
 
 }
