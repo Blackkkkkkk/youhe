@@ -31,8 +31,8 @@ public class ActivitiController extends BaseController {
     @Autowired
     private RepositoryService repositoryService;
 
-    @GetMapping(value = "index")
-    public ModelAndView index() {
+    @GetMapping(value = "ProcessManagement")
+    public ModelAndView ProcessManagement() {
         return new ModelAndView("activiti/manage/ProcessManagement");
     }
 
