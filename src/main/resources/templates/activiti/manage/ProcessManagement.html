@@ -115,6 +115,65 @@
 
 <!-- Page-Level Scripts -->
 <script type="text/javascript">
+    // function openEditor(row) {
+    //     modelId=row;
+    //     console.log(row)
+    //     debugger
+    //     $.ajax({
+    //         // data: {"id": id},
+    //         type: "POST",
+    //         dataType: 'json',
+    //         url: "/process-editor/modeler.html?" + modelId,
+    //         // url: "/touristShop/viewList",
+    //         success: function (data) {
+    //             if (data.Status == 1) {
+    //
+    //                 vm.view = data.shopList;
+    //
+    //             }
+    //         },
+    //         error: function (data) {
+    //         }
+    //     });
+    //     layer.open({
+    //         title: false,
+    //         type: 1,
+    //         area: ['747px', 'auto'],
+    //         content: $('#product-pop-up'),//这可以写弹出框的html内容
+    //     });
+    // }
+
+    function start(row) {
+        deploymentId=row;
+        console.log(row)
+        $.ajax({
+            // data: {"deploymentId": deploymentId},    // 这行注释掉，不是这样传
+            type: "get",
+            dataType: 'json',
+            url: "/activiti/start/" + deploymentId, // 这样传才正确
+            success: function (r) {
+                if (r.Status == 0) {
+                    debugger
+                    layer.msg('操作成功', r.msg, {icon: 1, time: 1000});
+                    // 刷新表格
+                    var table = $('.dataTables-example').DataTable();
+                    table.ajax.reload();
+                } else {
+                    layer.msg('操作失败', r.msg, {icon: 2, time: 1000});
+                }
+            },
+            error: function (data) {
+            }
+        });
+        layer.open({
+            title: false,
+            type: 1,
+            area: ['747px', 'auto'],
+            content: $('#product-pop-up'),//这可以写弹出框的html内容
+        });
+    }
+
+
 
     var data;
     $(document).ready(function () {
@@ -205,7 +264,6 @@
 
             ],
 
-
             aoColumnDefs:
             [
                 {
@@ -215,16 +273,19 @@
                     "aTargets": 0 //第一列
                 },
                 {
-                    "render": function (data, type) {
-                            return '  <button class="btn btn-success"   @click="start"><i class="fa fa-minus-square"></i>&nbsp;启动流程</button>';
+                    "render": function (data, type,row) {
+                            // return '  <button class="btn btn-success"   @click="start"><i class="fa fa-minus-square"></i>&nbsp;启动流程</button>';
+                        // return ' <button class="btn btn-success" onclick="javascript:start(this.data);"><i class="fa fa-close"></i>&nbsp;启动流程</button>';
+                        // onclick ="refund(' + "'" + data.bigOrderCode + "'" + ')"
+
+                        return ' <button class="btn btn-success" onclick="javascript:start(' + "'" + row.deploymentId + "'" + ');"><i class="fa fa-close"></i>&nbsp;启动流程</button>';
                     },
                     "aTargets": 6 //第一列
                 },
                 {
-                    "render": function (data, type) {
-
-                            return ' <a class="btn btn-danger" ><i class="fa fa-close"></i>&nbsp;修改流程</a>';
-
+                    "render": function (data, type,row) {
+                        // href="xxx.html?id=' + row.id + '"
+                        return ' <a class="btn btn-danger"  href="/process-editor/modeler.html?modelId='+row.id+'" target="_blank"><i class="fa fa-close"></i>&nbsp;修改流程</a>';
                     },
                     "aTargets": 7 //第7列
                 }

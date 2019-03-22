@@ -29,44 +29,48 @@ var vm = new Vue({
         update: function (id) {
             var id = vm.getRowDate();
             if (id.length > 0) {
+                debugger
                 $.get("/activiti/deploy?modelId=" + id, function (r) {
-                    if (r.Status==0) {
+                    console.log(r);
+                    if (r.Status == 0) {
                         debugger
                         // layer.msg('操作成功', {icon: 1, time: 1000}, function ()
-                        layer.msg('操作成功',r.msg, {icon: 1, time: 1000});
+                        layer.msg('操作成功', r.msg, {icon: 1, time: 1000});
                         // 刷新表格
                         var table = $('.dataTables-example').DataTable();
                         table.ajax.reload();
                     } else {
-                        layer.msg('操作失败',r.msg, {icon: 2, time: 1000});
+                        layer.msg('操作失败', r.msg, {icon: 2, time: 1000});
                     }
                 })
             }
 
         },
 
-        start: function (id) {
-            debugger
-            var id = vm.getRowDate();
-            if (id.length > 0) {
-                $.get("/activiti/start/" + deploymentId, function (r) {
+        // start: function (id) {
+        //     debugger
+        //     var id = vm.getRowDate();
+        //
+        //     if (id.length > 0) {
+        //         $.get("/activiti/start/" + deploymentId, function (r) {
+        //             console.log(r);
+        //             if (r.Status == 0) {
+        //                 debugger
+        //                 // layer.msg('操作成功', {icon: 1, time: 1000}, function ()
+        //                 layer.msg('操作成功', r.msg, {icon: 1, time: 1000});
+        //                 // 刷新表格
+        //                 var table = $('.dataTables-example').DataTable();
+        //                 table.ajax.reload();
+        //             } else {
+        //                 layer.msg(r.msg, {icon: 2, time: 1000});
+        //             }
+        //         })
+        //     }
+        // },
 
-                    if (r.Status==0) {
-                        debugger
-                        // layer.msg('操作成功', {icon: 1, time: 1000}, function ()
-                        layer.msg('操作成功',r.msg, {icon: 1, time: 1000});
-                        // 刷新表格
-                        var table = $('.dataTables-example').DataTable();
-                        table.ajax.reload();
-                    } else {
-                        layer.msg('操作失败',r.msg, {icon: 2, time: 1000});
-                    }
-                })
-            }
 
 
-        },
-        //根据选中行获取选择的Id
+//根据选中行获取选择的Id
         getRowDate: function () {
             var radios = document.getElementsByName("radio");
             var tag = false;
