@@ -48,6 +48,11 @@ public class ActivitiController extends BaseController {
         return new ModelAndView("activiti/manage/MyToDo");
     }
 
+    @GetMapping(value = "/dealwithdo")
+    public ModelAndView indexMyDeal() {
+        return new ModelAndView("activiti/manage/MyDo");
+    }
+
     @GetMapping(value = "create")
     public void create(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -63,9 +68,8 @@ public class ActivitiController extends BaseController {
      */
     @GetMapping(value = "/modelList")
     @ResponseBody
-    public  List<Model> modelList() {
-        List<Model> modelList = myProcessEngine.getModelList();
-      return modelList;
+    public  R modelList() {
+      return R.ok().put("modelList",myProcessEngine.getModelList());
     }
 
     /**
@@ -141,15 +145,14 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "task/list")
     @ResponseBody
     public R myTaskList(String userId) {
+
         List<ProdefTask> taskList=new ArrayList<>();
-        try {
+
             taskList=myProcessEngine.getTaskList(userId);
             if(taskList.size()==0){
-                throw new YuheOAException(500,"无数据");
+                return R.ok().put("tasklist", taskList);
             }
-        }catch (YuheOAException e){
-            R.error(e.getErrorCode(),e.getMsg());
-        }
+
         return R.ok().put("tasklist", taskList);
     }
 

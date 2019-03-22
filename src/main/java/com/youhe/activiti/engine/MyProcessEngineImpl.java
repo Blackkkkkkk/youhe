@@ -1,6 +1,5 @@
 package com.youhe.activiti.engine;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -22,7 +21,6 @@ import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -32,7 +30,6 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 我的流程引擎实现类
@@ -195,26 +192,24 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     @Override
     public List<ProdefTask> getTaskList(String userId) {
-        List<ProdefTask > ptList=new ArrayList<>();
-        ProdefTask pt=new  ProdefTask();
-
+        List<ProdefTask> ptList=new ArrayList<>();
+        
         List<Task> taskList = taskService.createTaskQuery().taskAssignee(userId).list();
         taskList.forEach(lists->{
+            //通过浅克隆创建对象
+            ProdefTask pt = ProdefTask.getOnePerson();
+
             pt.setAssignee(lists.getAssignee());
             pt.setName(lists.getName());
-            pt.setCreateTime(lists.getCreateTime());
-
-            //通过流程定义id查询出流程名称
+            pt.setCreateTime(String.valueOf(lists.getCreateTime()));
             String processDefinitionId = lists.getProcessDefinitionId();
-            ProcessDefinitionQuery processDefinitionQuery = processEngine.getRepositoryService()
-                    .createProcessDefinitionQuery()
-                    .processDefinitionId(processDefinitionId);//使用流程定义ID查询
+            //根据流程定义id查询出流程名称
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionId(processDefinitionId)
+                    .singleResult();
+          pt.setName_(processDefinition.getName());
 
-            List<ProcessDefinition> proList= processDefinitionQuery.list();
-            proList.forEach(lists1->{
-                pt.setName_(lists1.getName());
-                ptList.add(pt);
-            });
+            ptList.add(pt);
         });
         return ptList;
         /*taskList.stream().map(BeanUtil::beanToMap).collect(Collectors.toList())*/

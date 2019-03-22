@@ -11,6 +11,8 @@ import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
 
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,13 +22,29 @@ import java.util.Map;
  *@Date 2019/3/2119:09
  *@Version 1.0
  */
-public class ProdefTask  {
+public class ProdefTask  implements Cloneable{
 
 
     private String name_;//流程名称
     private String name;//当前节点名称
     private String assignee;//提交人
-    private Date createTime;//创建时间
+    private String createTime;//创建时间
+    private static ProdefTask per = new ProdefTask();
+
+    private ProdefTask(){
+
+    }
+
+    public static ProdefTask getOnePerson() {
+        try {
+
+            return  (ProdefTask)per.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public String getName_() {
         return name_;
@@ -52,11 +70,11 @@ public class ProdefTask  {
         this.assignee = assignee;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 }
