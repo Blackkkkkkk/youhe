@@ -5,9 +5,14 @@ import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.common.Constant;
 import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.activiti.FlowVariable;
+import com.youhe.entity.activitiData.ACT_RE_MODEL_PROCDEF;
+import com.youhe.entity.activitiData.ProdefTask;
+import com.youhe.exception.YuheOAException;
+import com.youhe.mapper.activiti.ActivitiMapper;
 import com.youhe.utils.R;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -17,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,9 +36,15 @@ public class ActivitiController extends BaseController {
     @Autowired
     private RepositoryService repositoryService;
 
+
     @GetMapping(value = "ProcessManagement")
     public ModelAndView ProcessManagement() {
         return new ModelAndView("activiti/manage/ProcessManagement");
+    }
+
+    @GetMapping(value = "/dealwith")
+    public ModelAndView indexMyDealWith() {
+        return new ModelAndView("activiti/manage/MyToDo");
     }
 
     @GetMapping(value = "create")
@@ -50,8 +62,9 @@ public class ActivitiController extends BaseController {
      */
     @GetMapping(value = "/modelList")
     @ResponseBody
-    public R modelList() {
-        return R.ok().put("modelList", myProcessEngine.getModelList());
+    public  List<Model> modelList() {
+        List<Model> modelList = myProcessEngine.getModelList();
+      return modelList;
     }
 
     /**
@@ -80,7 +93,7 @@ public class ActivitiController extends BaseController {
     /**
      * 提交任务
      */
-    @PostMapping(value = "submit/task")
+    @RequestMapping(value = "submit/task")
     @ResponseBody
     public R submitTask(@RequestParam Map<String, Object> map) {
         LOGGER.info("submit task ={}", map.toString());
@@ -125,8 +138,22 @@ public class ActivitiController extends BaseController {
      * @return
      */
     @GetMapping(value = "task/list")
+    @ResponseBody
     public R myTaskList(String userId) {
-        return R.ok().put("taskList", myProcessEngine.getTaskList(userId));
+        userId="1";
+        try {
+            List<ProdefTask> taskList = myProcessEngine.getTaskList(userId);
+            if(taskList.size()==0){
+                throw new YuheOAException(500,"无数据");
+            }
+            R.ok().put("tasklist", taskList);
+            return R.ok().put("tasklist", taskList);
+        }catch (YuheOAException e){
+            R.error(e.getErrorCode(),e.getMsg());
+        }
+
+
+
     }
 
     /**
@@ -137,6 +164,7 @@ public class ActivitiController extends BaseController {
      */
     @GetMapping(value = "hisTask/list")
     public R hisTaskList(String userId) {
+
         return R.ok().put("hisTaskList", myProcessEngine.getHisTaskList(userId));
     }
 

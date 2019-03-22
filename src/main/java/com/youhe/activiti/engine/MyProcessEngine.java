@@ -1,5 +1,6 @@
 package com.youhe.activiti.engine;
 
+import com.youhe.entity.activitiData.ProdefTask;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -64,7 +65,7 @@ public interface MyProcessEngine {
      * @param userId 用户ID
      * @return List<Task>
      */
-    List<Map<String, Object>> getTaskList(String userId);
+    List<ProdefTask> getTaskList(String userId);
 
     /**
      * 获取已办任务列表

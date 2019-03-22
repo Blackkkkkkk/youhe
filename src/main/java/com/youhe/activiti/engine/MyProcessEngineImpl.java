@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
+import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.exception.YuheOAException;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
@@ -21,6 +22,7 @@ import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -29,9 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -193,10 +193,32 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public List<Map<String, Object>> getTaskList(String userId) {
-        List<Task> list = taskService.createTaskQuery().taskAssignee(userId).list();
-        return list.stream().map(BeanUtil::beanToMap).collect(Collectors.toList());
+    public List<ProdefTask> getTaskList(String userId) {
+        List<ProdefTask > ptList=new ArrayList<>();
+        ProdefTask pt=new  ProdefTask();
+
+        List<Task> taskList = taskService.createTaskQuery().taskAssignee(userId).list();
+        taskList.forEach(lists->{
+            pt.setAssignee(lists.getAssignee());
+            pt.setName(lists.getName());
+            pt.setCreateTime(lists.getCreateTime());
+
+            //通过流程定义id查询出流程名称
+            String processDefinitionId = lists.getProcessDefinitionId();
+            ProcessDefinitionQuery processDefinitionQuery = processEngine.getRepositoryService()
+                    .createProcessDefinitionQuery()
+                    .processDefinitionId(processDefinitionId);//使用流程定义ID查询
+
+            List<ProcessDefinition> proList= processDefinitionQuery.list();
+            proList.forEach(lists1->{
+                pt.setName_(lists1.getName());
+                ptList.add(pt);
+            });
+        });
+        return ptList;
+        /*taskList.stream().map(BeanUtil::beanToMap).collect(Collectors.toList())*/
     }
+
 
     @Override
     public List<HistoricTaskInstance> getHisTaskList(String userId) {
