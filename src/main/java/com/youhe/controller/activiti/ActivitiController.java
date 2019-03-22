@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -141,19 +142,16 @@ public class ActivitiController extends BaseController {
     @ResponseBody
     public R myTaskList(String userId) {
         userId="1";
+        List<ProdefTask> taskList=new ArrayList<>();
         try {
-            List<ProdefTask> taskList = myProcessEngine.getTaskList(userId);
+            taskList=myProcessEngine.getTaskList(userId);
             if(taskList.size()==0){
                 throw new YuheOAException(500,"无数据");
             }
-            R.ok().put("tasklist", taskList);
-            return R.ok().put("tasklist", taskList);
         }catch (YuheOAException e){
             R.error(e.getErrorCode(),e.getMsg());
         }
-
-
-
+        return R.ok().put("tasklist", taskList);
     }
 
     /**
