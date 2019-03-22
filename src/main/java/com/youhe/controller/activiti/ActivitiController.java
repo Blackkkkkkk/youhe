@@ -141,7 +141,6 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "task/list")
     @ResponseBody
     public R myTaskList(String userId) {
-        userId="1";
         List<ProdefTask> taskList=new ArrayList<>();
         try {
             taskList=myProcessEngine.getTaskList(userId);
