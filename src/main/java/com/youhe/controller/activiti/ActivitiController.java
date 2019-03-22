@@ -63,9 +63,8 @@ public class ActivitiController extends BaseController {
      */
     @GetMapping(value = "/modelList")
     @ResponseBody
-    public  List<Model> modelList() {
-        List<Model> modelList = myProcessEngine.getModelList();
-      return modelList;
+    public  R modelList() {
+        return R.ok().put("modelList",myProcessEngine.getModelList());
     }
 
     /**
