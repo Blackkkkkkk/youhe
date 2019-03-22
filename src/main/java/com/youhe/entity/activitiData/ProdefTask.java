@@ -22,6 +22,7 @@ import java.util.Map;
  */
 public class ProdefTask  {
 
+
     private String name_;//流程名称
     private String name;//当前节点名称
     private String assignee;//提交人
