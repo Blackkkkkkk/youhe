@@ -6,6 +6,12 @@ package com.youhe.common;
  */
 public class Constant {
 
+    /** http请求状态常量 */
+    public static final int OK = 0;
+    public static final int FAIL = 500;
+    public static final String OK_MSG = "请求成功";
+    public static final String FAIL_MSG = "请求失败";
+
     //SHIRO加密
     public static final String HASH_ALGORITHM = "SHA-1";//加密算法
     public static final int HASH_INTERATIONS = 1024;//迭代次数

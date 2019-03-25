@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -166,6 +167,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     @Override
     public void submitTask(Map<String, Object> taskFlowData) {
+        String userId = String.valueOf(ShiroUserUtils.getUserId());
         Object o = taskFlowData.get(Constant.FLOW_VARIABLE_KEY);
         JSONObject object = JSONUtil.parseObj(o);
         FlowVariable flowVariable = object.toBean(FlowVariable.class);
@@ -186,6 +188,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                 .taskId(flowVariable.getTaskId()).singleResult();
         taskService.addComment(task.getId(), processInstanceId,
                 flowVariable.getComment() == null ? Constant.DEFAULT_AGREE_COMMENT : flowVariable.getComment()); // 添加审批意见
+        Authentication.setAuthenticatedUserId(userId);
         taskService.complete(task.getId(), taskFlowData);
     }
 
@@ -193,7 +196,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public List<ProdefTask> getTaskList(String userId) {
         List<ProdefTask> ptList=new ArrayList<>();
-        
+
         List<Task> taskList = taskService.createTaskQuery().taskAssignee(userId).list();
         taskList.forEach(lists->{
             //通过浅克隆创建对象
@@ -214,7 +217,6 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         return ptList;
         /*taskList.stream().map(BeanUtil::beanToMap).collect(Collectors.toList())*/
     }
-
 
     @Override
     public List<ProdefTask> getHisTaskList(String userId) {
@@ -288,8 +290,20 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public void exportProcessXml() {
+    public String getProcessXmlData(String modelId) {
+        org.activiti.engine.repository.Model modelData = repositoryService.getModel(modelId);
 
+        BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+        JsonNode editorNode;
+        try {
+            editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
+        } catch (IOException e) {
+            throw new YuheOAException("导出流程xml出错：" + e.getMessage());
+        }
+        BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
+        BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
+        byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
+        return new String(bpmnBytes);
     }
 
 

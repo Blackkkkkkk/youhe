@@ -81,8 +81,10 @@ public interface MyProcessEngine {
     Map getTaskForm(String taskId);
 
     /**
-     * 导出流程xml
+     * 获取流程xml数据
+     * @param modelId 模型ID
+     * @return str
      */
-    void exportProcessXml();
+    String getProcessXmlData(String modelId);
 
 }

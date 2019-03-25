@@ -1,19 +1,20 @@
 package com.youhe.controller.activiti;
 
 
+import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.common.Constant;
 import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.activiti.FlowVariable;
-import com.youhe.entity.activitiData.ACT_RE_MODEL_PROCDEF;
 import com.youhe.entity.activitiData.ProdefTask;
-import com.youhe.exception.YuheOAException;
-import com.youhe.mapper.activiti.ActivitiMapper;
 import com.youhe.utils.R;
+import org.activiti.bpmn.converter.BpmnXMLConverter;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -23,7 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +40,6 @@ public class ActivitiController extends BaseController {
     private MyProcessEngine myProcessEngine;
     @Autowired
     private RepositoryService repositoryService;
-
 
     @GetMapping(value = "ProcessManagement")
     public ModelAndView ProcessManagement() {
@@ -77,8 +79,8 @@ public class ActivitiController extends BaseController {
      */
     @GetMapping(value = "/modelList")
     @ResponseBody
-    public  R modelList() {
-      return R.ok().put("modelList",myProcessEngine.getModelList());
+    public R modelList() {
+        return R.ok().put("modelList", myProcessEngine.getModelList());
     }
 
     /**
@@ -96,8 +98,8 @@ public class ActivitiController extends BaseController {
      * @param deploymentId 流程发布ID
      * @return 任务表单
      */
-    @GetMapping(value = "start/{deploymentId}")
-    public ModelAndView startProcess(@PathVariable String deploymentId) {
+    @GetMapping(value = "start")
+    public ModelAndView startProcess(String deploymentId) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).singleResult();
         ProcessInstance processInstance = myProcessEngine.start(processDefinition.getId());
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
@@ -107,7 +109,7 @@ public class ActivitiController extends BaseController {
     /**
      * 提交任务
      */
-    @RequestMapping(value = "submit/task")
+    @PostMapping(value = "submit/task")
     @ResponseBody
     public R submitTask(@RequestParam Map<String, Object> map) {
         LOGGER.info("submit task ={}", map.toString());
@@ -181,5 +183,46 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "submitTask")
     public ModelAndView submitTask() {
         return new ModelAndView("activiti/submit_task");
+    }
+
+    /**
+     * 导出流程xml
+     * @param modelId 模型ID
+     * @param response resp
+     */
+    @GetMapping(value = "export/processXml")
+    public void exportProcessXml(String modelId, HttpServletResponse response) {
+        BufferedOutputStream bos = null;
+        try {
+            org.activiti.engine.repository.Model modelData = repositoryService.getModel(modelId);
+            BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+            JsonNode editorNode;
+            editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
+            BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
+            BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
+            byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
+            String name = StrUtil.trim(bpmnModel.getMainProcess().getName());
+            String filename = name + ".bpmn20.xml";
+
+            bos = new BufferedOutputStream(response.getOutputStream());
+            bos.write(bpmnBytes);
+
+            response.setContentType("UTF-8");
+            response.setContentType("application/x-msdownload;");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
+            response.flushBuffer();
+        } catch (Exception e) {
+            LOGGER.error("导出流程XML失败:" + e.getMessage());
+        } finally {
+            if (bos != null) {
+                try {
+                    bos.flush();
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
