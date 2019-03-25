@@ -16,6 +16,7 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.Deployment;
@@ -264,9 +265,11 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 //        BeanUtil.copyProperties(variables.get(Constants.FLOW_VARIABLE_KEY), flowVariable);
 
         String firstNodeKey = flowVariable.getFirstNodeKey();
+        String currentNodeKey = task.getTaskDefinitionKey();
         if (StrUtil.isBlank(firstNodeKey)) {  // 首节点
-            firstNodeKey = task.getTaskDefinitionKey();
+            firstNodeKey = currentNodeKey;
             flowVariable.setFirstNodeKey(firstNodeKey); // 保存首节点key值
+            flowVariable.setFirstNode(true);
             if (StrUtil.isNotBlank(formKey)) {
                 flowVariable.setFormKey(formKey);   // 设置表单
                 flowVariable.setMainFormKey(formKey);   // 设置主表单
@@ -275,6 +278,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                 flowVariable.setMainFormKey(Constant.DEFAULT_FORM_NAME);
             }
         } else {    // 其它节点
+            flowVariable.setFirstNode(false);
             if (StrUtil.isBlank(formKey)) {
                 flowVariable.setFormKey(flowVariable.getMainFormKey()); // 如果其它节点没有配置表单则使用主表单
             } else {
@@ -282,6 +286,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             }
         }
         flowVariable.setProcessInstanceId(task.getProcessInstanceId());
+        flowVariable.setCurrentNodeKey(currentNodeKey);
         flowVariable.setTaskId(taskId);
         flowVariable.setUserId(String.valueOf(userId));
         variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
@@ -298,12 +303,18 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         try {
             editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
         } catch (IOException e) {
-            throw new YuheOAException("导出流程xml出错：" + e.getMessage());
+            throw new YuheOAException("获取流程xml数据出错：" + e.getMessage());
         }
         BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
         BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
         byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
         return new String(bpmnBytes);
+    }
+
+    @Override
+    public String getStartUserId(String processInstanceId) {
+        HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        return historicProcessInstance.getStartUserId();
     }
 
 

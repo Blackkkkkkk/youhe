@@ -13,10 +13,18 @@ $(function () {
  */
 function submitTask() {
     var taskData;
-    // $('#businessForm')
-    // $('#busBtn').click();
+    var fcEl = $('#businessForm').find('select.form-control');
     var businessFormData = yuheUtils.getFormJson('businessForm');
     var taskFormData = yuheUtils.getFormJson('taskForm');
+
+    // 保存选择的select的text值
+    for (var i = 0; i < fcEl.length; i++) {
+        console.log(fcEl[i]);
+        var name = $(fcEl[i]).attr('name');
+        var selTxt =$(fcEl[i]).find('option:selected').text();
+        businessFormData[name + '_show'] = selTxt;
+    }
+
     console.log("businessFormData= ", businessFormData);
     console.log("taskFormData=" , taskFormData);
     taskData = businessFormData;

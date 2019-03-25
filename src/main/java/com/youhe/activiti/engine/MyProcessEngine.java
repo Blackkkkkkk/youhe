@@ -78,7 +78,7 @@ public interface MyProcessEngine {
      * @param taskId 任务ID
      * @return map
      */
-    Map getTaskForm(String taskId);
+    Map<String, Object> getTaskForm(String taskId);
 
     /**
      * 获取流程xml数据
@@ -86,5 +86,12 @@ public interface MyProcessEngine {
      * @return str
      */
     String getProcessXmlData(String modelId);
+
+    /**
+     * 获取流程启动者
+     * @param processInstanceId
+     * @return
+     */
+    String getStartUserId(String processInstanceId);
 
 }

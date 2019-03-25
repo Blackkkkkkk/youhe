@@ -23,6 +23,8 @@ public class FlowVariable implements Serializable {
     private String mainFormKey; // 主表单key
     private String formKey; // 任务表单key
     private String firstNodeKey;  // 首节点key
+    private String currentNodeKey;  // 当前节点key
     private String comment; // 流转意见
+    private boolean firstNode;  // 是否首节点
 
 }
