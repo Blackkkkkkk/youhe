@@ -71,7 +71,7 @@ public interface MyProcessEngine {
      * @param userId 用户ID
      * @return List<HistoricTaskInstance>
      */
-    List<HistoricTaskInstance> getHisTaskList(String userId);
+    List<ProdefTask> getHisTaskList(String userId);
 
     /**
      * 获取流程表单

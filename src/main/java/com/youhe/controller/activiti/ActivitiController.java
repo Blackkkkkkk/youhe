@@ -12,6 +12,7 @@ import com.youhe.mapper.activiti.ActivitiMapper;
 import com.youhe.utils.R;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -43,11 +44,19 @@ public class ActivitiController extends BaseController {
         return new ModelAndView("activiti/manage/ProcessManagement");
     }
 
+    /**
+     * 我的待办页面
+     * @return
+     */
     @GetMapping(value = "/dealwith")
     public ModelAndView indexMyDealWith() {
         return new ModelAndView("activiti/manage/MyToDo");
     }
 
+    /**
+     * 我的已办页面
+     * @return
+     */
     @GetMapping(value = "/dealwithdo")
     public ModelAndView indexMyDeal() {
         return new ModelAndView("activiti/manage/MyDo");
@@ -145,9 +154,8 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "task/list")
     @ResponseBody
     public R myTaskList(String userId) {
-        List<ProdefTask> taskList=new ArrayList<>();
 
-            taskList=myProcessEngine.getTaskList(userId);
+        List<ProdefTask>   taskList=myProcessEngine.getTaskList(userId);
             if(taskList.size()==0){
                 return R.ok().put("tasklist", taskList);
             }
@@ -163,8 +171,11 @@ public class ActivitiController extends BaseController {
      */
     @GetMapping(value = "hisTask/list")
     public R hisTaskList(String userId) {
-
-        return R.ok().put("hisTaskList", myProcessEngine.getHisTaskList(userId));
+        List<ProdefTask> hisTaskList = myProcessEngine.getHisTaskList(userId);
+        if(hisTaskList.size()==0){
+            return R.ok().put("hisTaskList", hisTaskList);
+        }
+        return R.ok().put("hisTaskList", hisTaskList);
     }
 
     @GetMapping(value = "submitTask")

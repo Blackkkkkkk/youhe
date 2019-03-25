@@ -217,8 +217,27 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
 
     @Override
-    public List<HistoricTaskInstance> getHisTaskList(String userId) {
-        return historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).list();
+    public List<ProdefTask> getHisTaskList(String userId) {
+        List<ProdefTask> ptHisList=new ArrayList<>();
+
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).list();
+        list.forEach(lists->{
+            //通过浅克隆创建对象
+            ProdefTask pt = ProdefTask.getOnePerson();
+
+            pt.setAssignee(lists.getAssignee());
+            pt.setName(lists.getName());
+            pt.setCreateTime(String.valueOf(lists.getCreateTime()));
+            String processDefinitionId = lists.getProcessDefinitionId();
+            //根据流程定义id查询出流程名称
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionId(processDefinitionId)
+                    .singleResult();
+            pt.setName_(processDefinition.getName());
+
+            ptHisList.add(pt);
+        });
+        return ptHisList;
     }
 
     @Override
