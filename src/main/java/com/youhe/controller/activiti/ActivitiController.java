@@ -165,7 +165,6 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "task/list")
     @ResponseBody
     public R myTaskList(String userId) {
-
         List<ProdefTask>   taskList=myProcessEngine.getTaskList(userId);
             if(taskList.size()==0){
                 return R.ok().put("tasklist", taskList);

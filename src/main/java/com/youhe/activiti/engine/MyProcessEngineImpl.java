@@ -222,6 +222,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             pt.setAssignee(lists.getAssignee());
             pt.setName(lists.getName());
             pt.setCreateTime(String.valueOf(lists.getCreateTime()));
+            pt.setTaskId(lists.getId());
             String processDefinitionId = lists.getProcessDefinitionId();
             //根据流程定义id查询出流程名称
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()

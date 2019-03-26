@@ -29,6 +29,7 @@ public class ProdefTask  implements Cloneable{
     private String name;//当前节点名称
     private String assignee;//提交人
     private String createTime;//创建时间
+    private String taskId;//任务id
     private static ProdefTask per = new ProdefTask();
 
     private ProdefTask(){
@@ -76,5 +77,13 @@ public class ProdefTask  implements Cloneable{
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 }

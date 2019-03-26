@@ -71,7 +71,7 @@
                                         <th>提交人</th>
                                         <th>创建时间</th>
                                         <th>是否办理</th>
-
+                                        <th>任务编号</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -185,19 +185,19 @@
                 {data: "name"},
                 {data: "assignee"},
                 {data: "createTime"},
-                {data: "a"}
+                {data: "a"},
+                {data: "taskId",visible: false}
             ],
             aoColumnDefs:
                 [
                     {
-                        "render": function (data, type) {
-                            return '  <button class="btn btn-success"   onclick="openDes();"><i class="fa fa-minus-square"></i>&nbsp;办理</button>';
+                        "render": function (data, type,row) {
+                            return ' <a class="btn btn-success"  href="/activiti/form/task/'+row.taskId+'" target="_blank"><i class="fa fa-close"></i>&nbsp;办理</a>'
                         },
                         "aTargets": 4
                     }
 
                 ]
-
         })
     });
 
