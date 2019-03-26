@@ -29,18 +29,15 @@ var vm = new Vue({
         update: function (id) {
             var id = vm.getRowDate();
             if (id.length > 0) {
-                debugger
-                $.get("/activiti/deploy?modelId=" + id, function (r) {
-                    console.log(r);
-                    if (r.Status == 0) {
-                        debugger
+                $.get("/activiti/deploy?modelId=" + id, function (data,status) {
+                    if (data.Status == 0) {
                         // layer.msg('操作成功', {icon: 1, time: 1000}, function ()
-                        layer.msg('操作成功', r.msg, {icon: 1, time: 1000});
+                        layer.msg('操作成功');
                         // 刷新表格
                         var table = $('.dataTables-example').DataTable();
                         table.ajax.reload();
                     } else {
-                        layer.msg('操作失败', r.msg, {icon: 2, time: 1000});
+                        layer.msg('操作失败');
                     }
                 })
             }
@@ -73,12 +70,15 @@ var vm = new Vue({
 //根据选中行获取选择的Id
         getRowDate: function () {
             var radios = document.getElementsByName("radio");
+            debugger
             var tag = false;
             var val;
+
             for (radio in radios) {
                 if (radios[radio].checked) {
                     tag = true;
                     val = radios[radio].value;
+                    console.log(val);
                     break;
                 }
             }

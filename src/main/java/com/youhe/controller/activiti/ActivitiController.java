@@ -10,6 +10,7 @@ import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
 import com.youhe.entity.activitiData.ProdefTask;
+import com.youhe.exception.YuheOAException;
 import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
@@ -88,7 +89,8 @@ public class ActivitiController extends BaseController {
     /**
      * 发布模型为流程定义
      */
-    @RequestMapping("/deploy")
+    @GetMapping("/deploy")
+    @ResponseBody
     public R deploy(String modelId) {
         myProcessEngine.deploy(modelId);
         return R.ok();
@@ -106,6 +108,7 @@ public class ActivitiController extends BaseController {
         ProcessInstance processInstance = myProcessEngine.start(processDefinition.getId());
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
         return new ModelAndView("redirect:form/task/" + task.getId());
+
     }
 
     /**
