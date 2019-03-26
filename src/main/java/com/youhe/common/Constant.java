@@ -32,6 +32,7 @@ public class Constant {
     public final static String DEFAULT_AGREE_COMMENT = "同意";
     public final static String DEFAULT_DISAGREE_COMMENT = "不同意";
 
+    public final static String FORM_TEMP = "activiti/common/form_temp"; // 业务表单模板
     public final static String DEFAULT_FORM_NAME = "activiti/default";  // activiti默认表单
     public final static String FORM_PRFIX = "activiti/form/";   // actviti业务表单前缀
 

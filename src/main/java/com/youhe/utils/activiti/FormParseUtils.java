@@ -7,7 +7,6 @@ import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -32,7 +31,6 @@ public class FormParseUtils {
      */
     public static FormCodeData getTaskFormCode(String formKey, Map<String, Object> map) {
         String formUrl = ClassUtil.getClassPath() + "templates/activiti/form/" + formKey + ".html";
-//        formUrl = "D:\\JavaProgramme\\IdeaProjects\\youhe\\src\\main\\resources\\templates\\activiti\\form\\test.html";
         String formHtml = FileUtil.readString(formUrl, "UTF-8");
 
         Document doc = Jsoup.parse(formHtml);
@@ -101,6 +99,7 @@ public class FormParseUtils {
         return new FormCodeData(table.toString(), script);
     }
 
+    // todo 测试用，以后再删除
     public static void main(String[] args) {
         Map<String, Object> map = new HashMap<>();
         FlowVariable flowVariable = new FlowVariable();

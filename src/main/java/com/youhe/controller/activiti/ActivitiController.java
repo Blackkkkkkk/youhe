@@ -143,11 +143,10 @@ public class ActivitiController extends BaseController {
             return mv;
         }
         FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
-//        mv.setViewName(Constant.FORM_PRFIX + flowVariable.getFormKey());
-        mv.setViewName("activiti/common/form_temp");
+        mv.setViewName(Constant.FORM_TEMP);
         mv.addObject(Constant.TASK_DATA_KEY, map);
         FormCodeData taskFormCode = FormParseUtils.getTaskFormCode(flowVariable.getFormKey(), map);
-        LOGGER.info("taskFormCode={}", taskFormCode.toString());
+//        LOGGER.info("taskFormCode={}", taskFormCode.toString());
         mv.addObject("table", taskFormCode.getTableHtml());
         mv.addObject("script", taskFormCode.getScript());
         return mv;
@@ -242,32 +241,4 @@ public class ActivitiController extends BaseController {
         }
     }
 
-    @GetMapping(value = "test")
-    public ModelAndView test() {
-        ModelAndView mv = new ModelAndView("activiti/common/form_temp");
-        String s = FileUtil.readString(ClassUtil.getClassPath() + "templates/activiti/form/test.html", "UTF-8");
-        Document doc = Jsoup.parse(s);
-        Elements input = doc.select("table .form-control");
-        Elements script = doc.select("script");
-        String scriptStr = script.html();   // js脚本
-        script.remove();
-
-//        System.out.println(s);
-        System.out.println("input.size() = " + input.size());
-        input.forEach(ip -> {
-            Element element = new Element("span");
-            element.attr("name", ip.attr("name"));
-            element.text("admin test");
-            System.out.println("element.toString() = " + element.toString());
-//            ip.replaceWith(element);
-            System.out.println("ip.toString() = " + ip.toString());
-        });
-//        input.forEach();
-        Elements table = doc.select("table");
-
-        LOGGER.info("s={}", table.toString());
-        mv.addObject("table", table.toString());
-        mv.addObject("script", scriptStr);
-        return mv;
-    }
 }
