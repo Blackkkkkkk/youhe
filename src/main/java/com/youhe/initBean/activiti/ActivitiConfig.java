@@ -1,6 +1,7 @@
 package com.youhe.initBean.activiti;
 
 
+import com.youhe.activiti.ext.UUIDGenerator;
 import org.activiti.engine.*;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.spring.ProcessEngineFactoryBean;
@@ -10,11 +11,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -31,6 +30,9 @@ public class ActivitiConfig {
 
     @Autowired
     private GlobalActivitiEventListener globalActivitiEventListener;
+
+    @Autowired
+    private UUIDGenerator uUIDGenerator;
 
     @Bean
     @ConfigurationProperties(prefix = "spring.activiti")
@@ -57,6 +59,9 @@ public class ActivitiConfig {
         spec.setActivityFontName("宋体");
         spec.setLabelFontName("宋体");
         spec.setAnnotationFontName("宋体");
+
+        // 配置自定义流程实例ID生成策略
+        spec.setIdGenerator(uUIDGenerator);
 
         return spec;
     }

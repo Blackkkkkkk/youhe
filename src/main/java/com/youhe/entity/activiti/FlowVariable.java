@@ -16,6 +16,7 @@ public class FlowVariable implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String processName; // 流程名称
     private String userId;  // 用户ID
     private String nextUserId;  // 下一审批人
     private String processInstanceId;   // 流程实例ID
@@ -24,6 +25,7 @@ public class FlowVariable implements Serializable {
     private String formKey; // 任务表单key
     private String firstNodeKey;  // 首节点key
     private String currentNodeKey;  // 当前节点key
+    private String currentNodeName; // 当前节点名称
     private String comment; // 流转意见
     private boolean firstNode;  // 是否首节点
 

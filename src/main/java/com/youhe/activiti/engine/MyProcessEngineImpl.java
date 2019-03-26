@@ -31,7 +31,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 我的流程引擎实现类
@@ -153,13 +156,26 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
             // 设置当前任务的办理人
             Authentication.setAuthenticatedUserId(String.valueOf(userId));
+
             ProcessInstance processInstance;
             if (StrUtil.isAllBlank(businessId)) {
                 processInstance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
             } else {
                 processInstance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
             }
-            LOGGER.info("用户{}启动了{}实例（{}）", userId, processInstance.getName(), processInstance.getId());
+
+            // 设置流程启动后的相关核心变量
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
+            String processName = processDefinition.getName();
+            LOGGER.info("用户{}启动了[{}]实例（{}）", userId, processName, processInstance.getId());
+            Task task = taskService.createTaskQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult();
+            flowVariable.setProcessName(processName);
+            flowVariable.setProcessInstanceId(processInstance.getProcessInstanceId());
+            flowVariable.setCurrentNodeKey(task.getTaskDefinitionKey());
+            flowVariable.setTaskId(task.getId());
+            variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
+            taskService.setVariables(task.getId(), variables);
+
             return processInstance;
         } catch (Exception e) {
             throw new YuheOAException("流程启动失败：" + e.getMessage());
@@ -260,13 +276,11 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
         // 获取当前节点表单数据
         Map<String, Object> variables = taskService.getVariables(taskId);
-//        FlowVariable flowVariable = new FlowVariable();
         FlowVariable flowVariable = (FlowVariable) variables.get(Constant.FLOW_VARIABLE_KEY);
-//        BeanUtil.copyProperties(variables.get(Constants.FLOW_VARIABLE_KEY), flowVariable);
 
         String firstNodeKey = flowVariable.getFirstNodeKey();
         String currentNodeKey = task.getTaskDefinitionKey();
-        if (StrUtil.isBlank(firstNodeKey)) {  // 首节点
+        if (StrUtil.isBlank(firstNodeKey) || firstNodeKey.equals(currentNodeKey)) {  // 首节点
             firstNodeKey = currentNodeKey;
             flowVariable.setFirstNodeKey(firstNodeKey); // 保存首节点key值
             flowVariable.setFirstNode(true);
@@ -285,8 +299,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                 flowVariable.setFormKey(formKey);   // 否则更换成当前节点的表单
             }
         }
-        flowVariable.setProcessInstanceId(task.getProcessInstanceId());
         flowVariable.setCurrentNodeKey(currentNodeKey);
+        flowVariable.setCurrentNodeName(task.getName());
         flowVariable.setTaskId(taskId);
         flowVariable.setUserId(String.valueOf(userId));
         variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);

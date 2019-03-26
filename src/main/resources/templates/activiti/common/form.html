@@ -8,7 +8,7 @@
             <button class="btn btn-primary" data-toggle="modal" data-target="#submitTaskModal">提交表单</button>
         </div>
         <div class="container" style="margin-top: 35px;padding-left:0!important;padding-right:0!important;">
-            <div class="text-center" style="padding: 45px 0 45px 0; background: #c3e6df"><h2>请假流程</h2></div>
+            <div class="text-center" style="padding: 45px 0 45px 0; background: #c3e6df"><h2 th:text="${taskData.flowVariable['processName']}">请假流程</h2></div>
         </div>
     </div>
 
