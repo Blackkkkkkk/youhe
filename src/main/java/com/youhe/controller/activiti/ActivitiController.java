@@ -13,11 +13,15 @@ import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.exception.YuheOAException;
 import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
+import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -43,6 +47,8 @@ public class ActivitiController extends BaseController {
     private MyProcessEngine myProcessEngine;
     @Autowired
     private RepositoryService repositoryService;
+    @Autowired
+    private HistoryService historyService;
 
     @GetMapping(value = "ProcessManagement")
     public ModelAndView ProcessManagement() {
@@ -159,12 +165,12 @@ public class ActivitiController extends BaseController {
     /**
      * 我的待办
      *
-     * @param userId 用户ID
      * @return
      */
     @GetMapping(value = "task/list")
     @ResponseBody
-    public R myTaskList(String userId) {
+    public R myTaskList() {
+        String userId = String.valueOf(ShiroUserUtils.getUserId());
         List<ProdefTask>   taskList=myProcessEngine.getTaskList(userId);
             if(taskList.size()==0){
                 return R.ok().put("tasklist", taskList);
@@ -176,11 +182,11 @@ public class ActivitiController extends BaseController {
     /**
      * 我的已办
      *
-     * @param userId 用户ID
      * @return
      */
     @GetMapping(value = "hisTask/list")
-    public R hisTaskList(String userId) {
+    public R hisTaskList() {
+        String userId = String.valueOf(ShiroUserUtils.getUserId());
         List<ProdefTask> hisTaskList = myProcessEngine.getHisTaskList(userId);
         if(hisTaskList.size()==0){
             return R.ok().put("hisTaskList", hisTaskList);
