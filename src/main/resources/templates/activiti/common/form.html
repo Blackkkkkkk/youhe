@@ -5,7 +5,7 @@
     <!--流程表单头-->
     <div th:fragment="formHeadView" style="">
         <div class="navbar-fixed-top container" style="padding-left:0!important;padding-right:0!important;">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#submitTaskModal">提交表单</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#submitTaskModal">办理任务</button>
         </div>
         <div class="container" style="margin-top: 35px;padding-left:0!important;padding-right:0!important;">
             <div class="text-center" style="padding: 45px 0 45px 0; background: #c3e6df"><h2 th:text="${taskData.flowVariable['processName']}">请假流程</h2></div>
@@ -19,7 +19,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="myModalLabel">提交任务</h4>
+                        <h4 class="modal-title" id="myModalLabel" th:text="${'任务办理——当前环节：' + taskData.flowVariable['currentNodeName']}">任务办理</h4>
                     </div>
                     <div class="modal-body">
                         <!--form-->
@@ -56,8 +56,11 @@
 
                             <!--流程流转相关的关键字段值-->
                             <input type="hidden" name="userId" value="">
-                            <input type="hidden" name="taskId" th:value="${taskData.flowVariable['taskId']}">
+                            <input type="hidden" name="processName" th:value="${taskData.flowVariable['processName']}">
                             <input type="hidden" name="processInstanceId" th:value="${taskData.flowVariable['processInstanceId']}">
+                            <input type="hidden" name="taskId" th:value="${taskData.flowVariable['taskId']}">
+                            <input type="hidden" name="currentNodeKey" th:value="${taskData.flowVariable['currentNodeKey']}">
+                            <input type="hidden" name="currentNodeName" th:value="${taskData.flowVariable['currentNodeName']}">
                             <input type="hidden" name="firstNodeKey" th:value="${taskData.flowVariable['firstNodeKey']}">
                             <input type="hidden" name="firstNode" th:value="${taskData.flowVariable['firstNode']}">
                             <input type="hidden" name="formKey" th:value="${taskData.flowVariable['formKey']}">
