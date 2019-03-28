@@ -226,7 +226,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     public List<ProdefTask> getTaskList(String userId) {
         List<ProdefTask> ptList=new ArrayList<>();
 
-        List<Task> taskList = taskService.createTaskQuery().taskAssignee(userId).list();
+        List<Task> taskList = taskService.createTaskQuery().taskAssignee(userId).orderByTaskCreateTime().desc().list();
         taskList.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
@@ -252,7 +252,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     public List<ProdefTask> getHisTaskList(String userId) {
         List<ProdefTask> ptHisList=new ArrayList<>();
 
-        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).list();
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).orderByHistoricTaskInstanceEndTime().desc().list();
         list.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
@@ -276,8 +276,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     public Map<String, Object> getTaskFormData(String taskId) {
 
         // 获取当前登录用户
-        Long userId = ShiroUserUtils.getUserId();
-        Task task = taskService.createTaskQuery().taskId(taskId).taskAssignee(String.valueOf(userId)).singleResult();
+        String userId = String.valueOf(ShiroUserUtils.getUserId());
+        Task task = taskService.createTaskQuery().taskId(taskId).taskAssignee(userId).singleResult();
 
         if (task == null) {
             // todo 流程完结或当前用户没有权限
@@ -312,6 +312,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                 flowVariable.setFormKey(formKey);   // 否则更换成当前节点的表单
             }
         }
+        flowVariable.setUserId(userId);
         flowVariable.setCurrentNodeKey(currentNodeKey);
         flowVariable.setCurrentNodeName(task.getName());
         flowVariable.setTaskId(taskId);
@@ -356,6 +357,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         HistoricActivityInstance historicActivityInstance = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .activityId(activityId)
+                .orderByHistoricActivityInstanceStartTime()
                 .desc().singleResult();
         return historicActivityInstance;
     }
