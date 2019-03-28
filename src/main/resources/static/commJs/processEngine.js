@@ -93,21 +93,29 @@ function selUser() {
  * todo 回退到首节点
  */
 function back2FirstNode() {
-    var taskFormData = yuheUtils.getFormJson('taskForm');
-    $.ajax({
-        type: 'POST',
-        url: '../../rollBack/firstTask',
-        dataType:'json',
-        // contentType : 'application/json;charset=utf-8',
-        data: taskFormData,
-        success: function (r) {
-            if (r.Status == 0) {
-                alert('任务已回退到首环节');
-            } else {
-                alert('任务回退失败');
+    layer.confirm('确认回退到首环节吗？', {
+        btn: ['确定','取消'] //按钮
+    }, function(index){
+        layer.close();
+        var taskFormData = yuheUtils.getFormJson('taskForm');
+        $.ajax({
+            type: 'POST',
+            url: '../../rollBack/firstTask',
+            dataType:'json',
+            // contentType : 'application/json;charset=utf-8',
+            data: taskFormData,
+            success: function (r) {
+                if (r.Status == 0) {
+                    alert('任务已回退到首环节');
+                } else {
+                    alert('任务回退失败');
+                }
             }
-        }
+        });
+        layer.close(index);
+    }, function(){
     });
+
     // alert('未实现');
 }
 
@@ -115,21 +123,29 @@ function back2FirstNode() {
  * todo 驳回上环节
  */
 function back2PreNode() {
-    var taskFormData = yuheUtils.getFormJson('taskForm');
-    $.ajax({
-        type: 'POST',
-        url: '../../rollBack/preTask',
-        dataType:'json',
-        // contentType : 'application/json;charset=utf-8',
-        data: taskFormData,
-        success: function (r) {
-            if (r.Status == 0) {
-                alert('任务已驳回');
-            } else {
-                alert('任务驳回失败');
+    layer.confirm('确认驳回上个环节吗？', {
+        btn: ['确定','取消'] //按钮
+    }, function(index){
+        layer.close();
+        var taskFormData = yuheUtils.getFormJson('taskForm');
+        $.ajax({
+            type: 'POST',
+            url: '../../rollBack/preTask',
+            dataType:'json',
+            // contentType : 'application/json;charset=utf-8',
+            data: taskFormData,
+            success: function (r) {
+                if (r.Status == 0) {
+                    alert('任务已驳回');
+                } else {
+                    alert('任务驳回失败');
+                }
             }
-        }
+        });
+        layer.close(index);
+    }, function(){
     });
+
     // alert('未实现');
 }
 
@@ -138,7 +154,7 @@ function back2PreNode() {
  */
 function back2AnyNode() {
     // 需要弹框
-    var taskFormData = yuheUtils.getFormJson('taskForm');
+    /*var taskFormData = yuheUtils.getFormJson('taskForm');
     $.ajax({
         type: 'POST',
         url: '../../rollBack/anyTask',
@@ -152,6 +168,20 @@ function back2AnyNode() {
                 alert('任务驳回失败');
             }
         }
-    });
-    // alert('未实现');
+    });*/
+    alert('未实现');
+}
+
+/**
+ * 查看流程图
+ */
+function showFlowChart() {
+    
+}
+
+/**
+ * 查看流转意见
+ */
+function showComments() {
+
 }
