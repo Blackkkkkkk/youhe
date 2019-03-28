@@ -21,6 +21,7 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.TaskServiceImpl;
+import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -40,10 +41,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 我的流程引擎实现类
@@ -204,7 +202,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
         final String processInstanceId = flowVariable.getProcessInstanceId(); // 流程实例ID
         final String nextUserId = flowVariable.getNextUserId();   // 下一节点审批人用户ID
-
+        Map<String, Object> variables1 = runtimeService.getVariables(processInstanceId);
+        variables1.get(Constant.FLOW_VARIABLE_KEY);
         if (StrUtil.isBlank(processInstanceId)) {
             throw new YuheOAException("流程实例ID不允许为空");
         }
@@ -218,9 +217,34 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         taskService.addComment(task.getId(), processInstanceId,
                 flowVariable.getComment() == null ? Constant.DEFAULT_AGREE_COMMENT : flowVariable.getComment()); // 添加审批意见
         Authentication.setAuthenticatedUserId(userId);
+
         taskService.complete(task.getId(), taskFlowData);
     }
 
+    @Override
+    public Map<String, Object> getTaskFormValue(String taskId) {
+
+        // 获取当前登录用户
+        Long userId = ShiroUserUtils.getUserId();
+
+        HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
+                .taskId(taskId).taskAssignee(String.valueOf(userId)).singleResult();
+
+        String processInstanceId= historicTaskInstance.getProcessInstanceId();
+
+        List<HistoricVariableInstance> hisList = historyService.createHistoricVariableInstanceQuery()
+                .processInstanceId(processInstanceId).list();
+
+        Map<String,Object> hisMap=new HashMap<>();
+        hisList.forEach(list->{
+            hisMap.put(list.getVariableName(),list.getValue());
+        });
+        if (historicTaskInstance == null) {
+            // todo 流程完结或当前用户没有权限
+            return null;
+        }
+        return hisMap;
+    }
 
     @Override
     public List<ProdefTask> getTaskList(String userId) {
@@ -260,6 +284,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             pt.setAssignee(lists.getAssignee());
             pt.setName(lists.getName());
             pt.setCreateTime(String.valueOf(lists.getCreateTime()));
+            pt.setTaskId(lists.getId());
             String processDefinitionId = lists.getProcessDefinitionId();
             //根据流程定义id查询出流程名称
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
@@ -321,6 +346,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         LOGGER.info("variables = {}", variables);
         return variables;
     }
+
+
 
     @Override
     public String getProcessXmlData(String modelId) {

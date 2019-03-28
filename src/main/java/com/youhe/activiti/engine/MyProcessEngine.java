@@ -80,6 +80,13 @@ public interface MyProcessEngine {
      */
     Map<String, Object> getTaskFormData(String taskId);
 
+
+    /**
+     * 获取表单用户填写的数据
+     * @param taskId
+     * @return
+     */
+    Map<String, Object> getTaskFormValue(String taskId);
     /**
      * 获取流程xml数据
      * @param modelId 模型ID

@@ -40,6 +40,8 @@ function submitTask() {
         success: function (r) {
             if (r.Status == 0) {
                 alert('任务已提交');
+                var table = $('.dataTables-example').DataTable();
+                table.ajax.reload();
             } else {
                 alert('任务提交失败');
             }

@@ -141,6 +141,28 @@ public class ActivitiController extends BaseController {
         }
         FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
         mv.setViewName(Constant.FORM_TEMP);
+        mv.addObject(Constant.TASK_DATA_KEY , map);
+        FormCodeData taskFormCode = FormParseUtils.getTaskFormCode(flowVariable.getFormKey(), map);
+//        LOGGER.info("taskFormCode={}", taskFormCode.toString());
+        mv.addObject("table", taskFormCode.getTableHtml());
+        mv.addObject("script", taskFormCode.getScript());
+        return mv;
+    }
+
+    @GetMapping(value = "/form/histask/{taskId}")
+    public ModelAndView histaskForm(@PathVariable("taskId") String taskId) {
+        ModelAndView mv = new ModelAndView();
+        Map<String, Object> map = myProcessEngine.getTaskFormValue(taskId);
+
+        if (map == null) {
+            mv.setViewName(Constant.DEFAULT_FORM_NAME); // todo 跳转到没有权限的页面
+            return mv;
+        }
+        FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
+
+        flowVariable.setFirstNode(false);
+
+        mv.setViewName(Constant.HIS_FORM_TEMP);
         mv.addObject(Constant.TASK_DATA_KEY, map);
         FormCodeData taskFormCode = FormParseUtils.getTaskFormCode(flowVariable.getFormKey(), map);
 //        LOGGER.info("taskFormCode={}", taskFormCode.toString());
@@ -148,6 +170,7 @@ public class ActivitiController extends BaseController {
         mv.addObject("script", taskFormCode.getScript());
         return mv;
     }
+    
 
     /**
      * 所有已发布的流程
@@ -169,9 +192,6 @@ public class ActivitiController extends BaseController {
     public R myTaskList() {
         String userId = String.valueOf(ShiroUserUtils.getUserId());
         List<ProdefTask>   taskList=myProcessEngine.getTaskList(userId);
-            if(taskList.size()==0){
-                return R.ok().put("tasklist", taskList);
-            }
 
         return R.ok().put("tasklist", taskList);
     }
@@ -185,9 +205,7 @@ public class ActivitiController extends BaseController {
     public R hisTaskList() {
         String userId = String.valueOf(ShiroUserUtils.getUserId());
         List<ProdefTask> hisTaskList = myProcessEngine.getHisTaskList(userId);
-        if(hisTaskList.size()==0){
-            return R.ok().put("hisTaskList", hisTaskList);
-        }
+
         return R.ok().put("hisTaskList", hisTaskList);
     }
 
