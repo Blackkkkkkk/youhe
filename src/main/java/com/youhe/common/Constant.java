@@ -33,7 +33,12 @@ public class Constant {
     public final static String DEFAULT_DISAGREE_COMMENT = "不同意";
 
     public final static String FORM_TEMP = "activiti/common/form_temp"; // 业务表单模板
-    public final static String DEFAULT_FORM_NAME = "activiti/default";  // activiti默认表单
+    public final static String HIS_FORM_TEMP = "activiti/common/hisTask_temp"; // 历史任务业务表单模板
+    public final static String DEFAULT_FORM_NAME = "default";  // activiti默认表单
+    public final static String NO_PREMISSIONS_NAME = "activiti/no_premissions";  // activiti无权限页面
     public final static String FORM_PRFIX = "activiti/form/";   // actviti业务表单前缀
+
+    public final static int NODE_JUMP_TYPE_ROLL = 0;    // 节点跳转类型：回退
+    public final static int NODE_JUMP_TYPE_GO = 1;      // 节点跳转类型：前进
 
 }

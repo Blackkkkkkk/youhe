@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activitiData.ProdefTask;
@@ -16,9 +17,17 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.impl.interceptor.CommandExecutor;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.PvmActivity;
+import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -170,9 +179,11 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             LOGGER.info("用户{}启动了[{}]实例（{}）", userId, processName, processInstance.getId());
             Task task = taskService.createTaskQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult();
             flowVariable.setProcessName(processName);
+            flowVariable.setProcessDefinitionId(processDefinitionId);
             flowVariable.setProcessInstanceId(processInstance.getProcessInstanceId());
             flowVariable.setCurrentNodeKey(task.getTaskDefinitionKey());
             flowVariable.setTaskId(task.getId());
+            flowVariable.setExecutionId(task.getExecutionId());
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
             taskService.setVariables(task.getId(), variables);
 
@@ -188,6 +199,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         Object o = taskFlowData.get(Constant.FLOW_VARIABLE_KEY);
         JSONObject object = JSONUtil.parseObj(o);
         FlowVariable flowVariable = object.toBean(FlowVariable.class);
+        flowVariable.setFirstSubmit(false);
         taskFlowData.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
 
         final String processInstanceId = flowVariable.getProcessInstanceId(); // 流程实例ID
@@ -261,7 +273,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public Map<String, Object> getTaskForm(String taskId) {
+    public Map<String, Object> getTaskFormData(String taskId) {
 
         // 获取当前登录用户
         Long userId = ShiroUserUtils.getUserId();
@@ -303,6 +315,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         flowVariable.setCurrentNodeKey(currentNodeKey);
         flowVariable.setCurrentNodeName(task.getName());
         flowVariable.setTaskId(taskId);
+        flowVariable.setExecutionId(task.getExecutionId());
         flowVariable.setUserId(String.valueOf(userId));
         variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
         LOGGER.info("variables = {}", variables);
@@ -330,6 +343,109 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     public String getStartUserId(String processInstanceId) {
         HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         return historicProcessInstance.getStartUserId();
+    }
+
+    @Override
+    public String getStartActivityId(String processInstanceId) {
+        HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        return historicProcessInstance.getStartActivityId();
+    }
+
+    @Override
+    public HistoricActivityInstance getHisActivityInstance(String processInstanceId, String activityId) {
+        HistoricActivityInstance historicActivityInstance = historyService.createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .activityId(activityId)
+                .desc().singleResult();
+        return historicActivityInstance;
+    }
+
+    @Override
+    public String getHisAssignee(String processInstanceId, String activityId) {
+        HistoricActivityInstance hisActivityInstance = this.getHisActivityInstance(processInstanceId, activityId);
+        return hisActivityInstance.getAssignee();
+    }
+
+    @Override
+    public void gotoAnyTask(String targetTaskDefKey, Map<String, Object> map, String assignee, String comment, Integer type) {
+        try {
+            FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
+            String processInstanceId = flowVariable.getProcessInstanceId();
+            String processDefinitionId = flowVariable.getProcessDefinitionId();
+            ReadOnlyProcessDefinition processDefinitionEntity = (ReadOnlyProcessDefinition) repositoryService
+                    .getProcessDefinition(processDefinitionId);
+            // 目标节点
+            ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity(targetTaskDefKey);
+            // 优先使用参数过来的审批人
+            if (Constant.NODE_JUMP_TYPE_ROLL == type) { // 回退用户就使用历史审批用户
+                if (StrUtil.isBlank(assignee)) {
+                    // 获取历史任务审批人
+                    assignee = this.getHisAssignee(processInstanceId, destinationActivity.getId());
+                }
+            } else if (Constant.NODE_JUMP_TYPE_GO == type) {    // 前进就使用页面带进来的审批用户
+                String nextUserId = flowVariable.getNextUserId();
+                if (StrUtil.isBlank(nextUserId)) {
+                    throw new YuheOAException("审批人不允许为空");
+                }
+                assignee = nextUserId;
+            } else {
+                throw new YuheOAException("gotoAnyTask参数type错误");
+            }
+
+            // 设置目标节点审批人
+            flowVariable.setNextUserId(assignee);
+
+            // 优先使用参数传过来的意见
+            if (StrUtil.isBlank(comment)) {
+                comment = flowVariable.getComment();
+            }
+
+            // 当前节点
+            String executionId = flowVariable.getExecutionId();
+            Task task = taskService.createTaskQuery().executionId(executionId).singleResult();
+            ActivityImpl currentActivity = (ActivityImpl) processDefinitionEntity
+                    .findActivity(task.getTaskDefinitionKey());
+            taskService.addComment(task.getId(), processInstanceId, comment);
+            CommandExecutor commandExecutor = ((TaskServiceImpl) taskService)
+                    .getCommandExecutor();
+
+            // 开始跳转节点
+            commandExecutor.execute(new NodeJumpTaskCmd(executionId, destinationActivity, map, currentActivity));
+        } catch (Exception e) {
+            throw new YuheOAException("节点跳转失败：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void gotoFirstTask(Map<String, Object> map) {
+        FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
+        String processInstanceId = flowVariable.getProcessInstanceId();
+        String startUserId = this.getStartUserId(processInstanceId);
+        String activityId = this.getStartActivityId(processInstanceId);
+
+        this.gotoAnyTask(activityId, map, startUserId, "回退首环节", Constant.NODE_JUMP_TYPE_ROLL);
+    }
+
+    @Override
+    public void gotoPreTask(Map<String, Object> map) {
+        FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
+
+        // 取得流程定义
+        ProcessDefinitionEntity definition = (ProcessDefinitionEntity) (repositoryService.getProcessDefinition(flowVariable.getProcessDefinitionId()));
+
+        // 获取当前任务
+        Task task = taskService.createTaskQuery().taskId(flowVariable.getTaskId()).singleResult();
+
+        // 取得上一步活动
+        ActivityImpl currActivity = definition.findActivity(task.getTaskDefinitionKey());
+        List<PvmTransition> nextTransitionList = currActivity.getIncomingTransitions();
+        // 暂时不考虑上一步活动为会签的情况，默认认为上一步活动只有一个
+        PvmActivity nextActivity = nextTransitionList.get(0).getSource();
+        String activityId = nextActivity.getId();
+        ActivityImpl nextActivityImpl = definition.findActivity(activityId);
+        String assignee = this.getHisAssignee(flowVariable.getProcessInstanceId(), activityId);
+
+        this.gotoAnyTask(activityId, map, assignee, "驳回", Constant.NODE_JUMP_TYPE_ROLL);
     }
 
 

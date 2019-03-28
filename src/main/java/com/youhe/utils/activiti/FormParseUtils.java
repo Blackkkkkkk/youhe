@@ -50,24 +50,24 @@ public class FormParseUtils {
          **/
         controls.forEach(control -> {
             String edit = control.attr("data-edit");
-            if (!flowVariable.isFirstNode()) {  // 不是首环节
-                Element element = new Element("span");
+            Element element = new Element("span");
 
-                // 设置属性
-                String name = control.attr("name");
-                element.attr("name", control.attr("name"));
-                String id = control.attr("id");
-                if (StrUtil.isNotBlank(id)) {
-                    element.attr("id", control.attr("id"));
-                }
-                // 设置值
-                String val = map.get(name) == null ? "" : map.get(name).toString();
-                if ("select".equals(control.nodeName())) {
-                    String valShow = map.get(name) == null ? "" : map.get(name + "_show").toString();
-                    element.text(valShow);
-                } else {
-                    element.text(val);
-                }
+            // 设置属性
+            String name = control.attr("name");
+            element.attr("name", control.attr("name"));
+            String id = control.attr("id");
+            if (StrUtil.isNotBlank(id)) {
+                element.attr("id", control.attr("id"));
+            }
+            // 设置值
+            String val = map.get(name) == null ? "" : map.get(name).toString();
+            if ("select".equals(control.nodeName())) {
+                String valShow = map.get(name) == null ? "" : map.get(name + "_show").toString();
+                element.text(valShow);
+            } else {
+                element.text(val);
+            }
+            if (!flowVariable.isFirstNode()) {  // 不是首环节
 
                 String type = control.attr("type");
                 if (!type.equals("hidden")) {   // 非隐藏的字段都需要处理
@@ -90,6 +90,17 @@ public class FormParseUtils {
                             }
                         }
                     }
+                }
+            } else if (!flowVariable.isFirstSubmit()) { // 首环节，回退情况
+                if ("select".equals(control.nodeName())) {
+                    Elements options = control.select("option");
+                    options.forEach(option -> {
+                        if (val.equals(option.val())) {
+                            option.attr("selected", true);
+                        }
+                    });
+                } else {
+                    control.val(val);
                 }
             }
         });

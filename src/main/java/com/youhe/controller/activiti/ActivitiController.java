@@ -10,7 +10,6 @@ import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
 import com.youhe.entity.activitiData.ProdefTask;
-import com.youhe.exception.YuheOAException;
 import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
 import com.youhe.utils.shiro.ShiroUserUtils;
@@ -20,8 +19,6 @@ import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -137,9 +134,9 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "/form/task/{taskId}")
     public ModelAndView taskForm(@PathVariable("taskId") String taskId) {
         ModelAndView mv = new ModelAndView();
-        Map<String, Object> map = myProcessEngine.getTaskForm(taskId);
+        Map<String, Object> map = myProcessEngine.getTaskFormData(taskId);
         if (map == null) {
-            mv.setViewName(Constant.DEFAULT_FORM_NAME); // todo 跳转到没有权限的页面
+            mv.setViewName(Constant.NO_PREMISSIONS_NAME); // todo 跳转到没有权限的页面
             return mv;
         }
         FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
@@ -238,6 +235,66 @@ public class ActivitiController extends BaseController {
                 }
             }
         }
+    }
+
+    /**
+     * 前进到任意节点
+     * @param map 业务数据
+     * @return
+     */
+    @PostMapping(value = "goForward/anyTask")
+    @ResponseBody
+    public R goForwardAnyTask(@RequestParam Map<String, Object> map) {
+        FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
+        myProcessEngine.gotoAnyTask(flowVariable.getTargetTaskDefKey(), map, null, null, Constant.NODE_JUMP_TYPE_GO);
+        return R.ok();
+    }
+
+    /**
+     * 回退到任意节点
+     * @param taskId 任务ID
+     * @param targetNode 目标节点
+     * @return
+     */
+    @PostMapping(value = "rollBack/anyTask")
+    public R rollBackAnyTask(String taskId, String targetNode) {
+        Map<String, Object> map = myProcessEngine.getTaskFormData(taskId);
+        if (map == null) {
+            return R.error("当前任务不存在或已被提交");
+        }
+        FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
+        myProcessEngine.gotoAnyTask(flowVariable.getTargetTaskDefKey(), map, null, null, Constant.NODE_JUMP_TYPE_ROLL);
+        return R.ok();
+    }
+
+    /**
+     * 回退到首环节
+     * @param taskId 当前任务ID
+     * @return
+     */
+    @PostMapping(value = "rollBack/firstTask")
+    public R rollBackFirstTask(String taskId) {
+        Map<String, Object> map = myProcessEngine.getTaskFormData(taskId);
+        if (map == null) {
+            return R.error("当前任务不存在或已被提交");
+        }
+        myProcessEngine.gotoFirstTask(map);
+        return R.ok();
+    }
+
+    /**
+     * 驳回上环节
+     * @param taskId 当前任务ID
+     * @return
+     */
+    @PostMapping(value = "rollBack/preTask")
+    public R rollBackPreTask(String taskId) {
+        Map<String, Object> map = myProcessEngine.getTaskFormData(taskId);
+        if (map == null) {
+            return R.error("当前任务不存在或已被提交");
+        }
+        myProcessEngine.gotoPreTask(map);
+        return R.ok();
     }
 
 }

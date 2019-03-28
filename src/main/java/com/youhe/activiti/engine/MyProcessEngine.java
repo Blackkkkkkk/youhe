@@ -1,7 +1,7 @@
 package com.youhe.activiti.engine;
 
 import com.youhe.entity.activitiData.ProdefTask;
-import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
 
@@ -78,7 +78,7 @@ public interface MyProcessEngine {
      * @param taskId 任务ID
      * @return map
      */
-    Map<String, Object> getTaskForm(String taskId);
+    Map<String, Object> getTaskFormData(String taskId);
 
     /**
      * 获取流程xml数据
@@ -93,5 +93,52 @@ public interface MyProcessEngine {
      * @return
      */
     String getStartUserId(String processInstanceId);
+
+    /**
+     * 获取流程首环节activitiId
+     * @param processInstanceId
+     * @return
+     */
+    String getStartActivityId(String processInstanceId);
+
+    /**
+     * 获取历史任务实例
+     * @param processInstanceId 流程实例ID
+     * @param activityId 活动节点id/节点定义ID
+     * @return 历史任务审批人
+     */
+    HistoricActivityInstance getHisActivityInstance(String processInstanceId, String activityId);
+
+    /**
+     * 获取历史任务审批人
+     * @param processInstanceId 流程实例ID
+     * @param activityId 活动节点id/节点定义ID
+     * @return 历史任务审批人
+     */
+    String getHisAssignee(String processInstanceId, String activityId);
+
+    /**
+     * 跳转任务节点
+     * @param targetTaskDefKey 目标节点
+     * @param map 业务数据
+     * @param assignee 任务接收人
+     * @param comment 审批意见
+     * @param type 类型：0-回退 1-前进
+     */
+    void gotoAnyTask(String targetTaskDefKey, Map<String, Object> map, String assignee, String comment, Integer type);
+
+    /**
+     * 回退首环节
+     * @param map 业务数据
+     */
+    void gotoFirstTask(Map<String, Object> map);
+
+    /**
+     * 驳回上环节
+     * @param map 业务数据
+     */
+    void gotoPreTask(Map<String, Object> map);
+
+
 
 }

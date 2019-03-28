@@ -91,19 +91,65 @@ function selUser() {
  * todo 回退到首节点
  */
 function back2FirstNode() {
-    alert('未实现');
+    var taskFormData = yuheUtils.getFormJson('taskForm');
+    $.ajax({
+        type: 'POST',
+        url: '../../rollBack/firstTask',
+        dataType:'json',
+        // contentType : 'application/json;charset=utf-8',
+        data: taskFormData,
+        success: function (r) {
+            if (r.Status == 0) {
+                alert('任务已回退到首环节');
+            } else {
+                alert('任务回退失败');
+            }
+        }
+    });
+    // alert('未实现');
 }
 
 /**
  * todo 驳回上环节
  */
 function back2PreNode() {
-    alert('未实现');
+    var taskFormData = yuheUtils.getFormJson('taskForm');
+    $.ajax({
+        type: 'POST',
+        url: '../../rollBack/preTask',
+        dataType:'json',
+        // contentType : 'application/json;charset=utf-8',
+        data: taskFormData,
+        success: function (r) {
+            if (r.Status == 0) {
+                alert('任务已驳回');
+            } else {
+                alert('任务驳回失败');
+            }
+        }
+    });
+    // alert('未实现');
 }
 
 /**
  * todo 驳回任意环节
  */
 function back2AnyNode() {
-    alert('未实现');
+    // 需要弹框
+    var taskFormData = yuheUtils.getFormJson('taskForm');
+    $.ajax({
+        type: 'POST',
+        url: '../../rollBack/anyTask',
+        dataType:'json',
+        // contentType : 'application/json;charset=utf-8',
+        data: taskFormData,
+        success: function (r) {
+            if (r.Status == 0) {
+                alert('任务已驳回');
+            } else {
+                alert('任务驳回失败');
+            }
+        }
+    });
+    // alert('未实现');
 }
