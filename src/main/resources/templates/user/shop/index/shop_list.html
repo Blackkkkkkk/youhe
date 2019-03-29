@@ -7,6 +7,19 @@
 <html lang="en"> <!--<![endif]-->
 
 <!-- Head BEGIN -->
+<style>
+    #shop{
+        width:800px;
+        height:110px;
+        text-align: center;
+        /*margin-left:100px;*/
+         margin-top: 10%;
+        font-size: 20px;
+    }
+    #jiantou{
+        margin-left:400px;
+    }
+</style>
 <head>
     <meta charset="utf-8">
     <title>Men category | Metronic Shop UI</title>
@@ -76,12 +89,14 @@
 
     <!-- END HEADER -->
 
-    <div class="container">
+   <!--<div th:text="${shopList.pirce==null?'无相关商品':'123'}"></div>-->
 
         <div class="row product-list">
+
             <!-- PRODUCT ITEM START -->
             <div class="col-md-3 col-sm-4 col-xs-5" th:each="shopList,info : ${shopList}" th:if="${shopList!=null}">
-                <div class="product-item">
+                <div id=shop th:style="${shopList.pirce==null?'display:block':'display:none'} "><p>无&nbsp;相&nbsp;关&nbsp;商&nbsp;品</p></div>
+                <div class="product-item" th:style="${shopList.pirce==null?'display:none':'display:block'} " >
                     <div class="pi-img-wrapper">
                         <img class="img-responsive" th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"/>
                         <div>
@@ -92,33 +107,40 @@
                         </div>
                     </div>
                     <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
-                    <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
+                    <div   class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
                     <a @click="addCar($event)" class="btn btn-default add2cart"
                        th:id="${shopList.id}">加入购物车</a>
                     <div class="sticker sticker-sale" th:if="${info.index ==0}"></div>
                     <div class="sticker sticker-new" th:if="${info.index ==1}"></div>
                 </div>
+
+                <div class="row">
+                    <div  style="width: 200px" class="col-md-6 col-sm-6 items-info" th  th:text="${shopList.pirce}==null?'Items ' + '0' + ' to ' + '0' + ' of ' + '0' + ' total':${'Items ' + pageInfo.startRow + ' to ' + pageInfo.endRow + ' of ' + pageInfo.total + ' total'}">Items 1 to 9 of 10 total</div>
+
+                    <div class="col-md-8 col-sm-8" id="jiantou" th:style="${shopList.pirce==null?'display:none':'display:block'} ">
+                        <ul id="ul" class="pagination pull-right">
+                            <li id="pageLi"><a href="javascript:void(0);" id="prePage"><<</a></li>
+                            <!--<li><span>1</span></li>-->
+                            <!--<li th:each="i:${#numbers.sequence(pageInfo.pageNum, pageInfo.pageNum + 3)}"><a href="" th:onclick="${'jumpPage('+i+')'}" th:text="${i}"></a></li>-->
+                            <!--<li><span>2</span></li>
+                            <li>< a href="#">3</ a></li>
+                            <li>< a href="#">4</ a></li>
+                            <li>< a href="#">5</ a></li>-->
+                            <li><a href="javascript:void(0);" id="aftPage">>></a></li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
 
             <!-- PRODUCT ITEM END -->
         </div>
         <!-- END PRODUCT LIST -->
         <!-- BEGIN PAGINATOR -->
-        <div class="row">
-            <div class="col-md-4 col-sm-4 items-info" th:text="${'Items ' + pageInfo.startRow + ' to ' + pageInfo.endRow + ' of ' + pageInfo.total + ' total'}">Items 1 to 9 of 10 total</div>
-            <div class="col-md-8 col-sm-8">
-                <ul id="ul" class="pagination pull-right">
-                    <li id="pageLi"><a href="javascript:void(0);" id="prePage"><<</a></li>
-                    <!--<li><span>1</span></li>-->
-                    <!--<li th:each="i:${#numbers.sequence(pageInfo.pageNum, pageInfo.pageNum + 3)}"><a href="" th:onclick="${'jumpPage('+i+')'}" th:text="${i}"></a></li>-->
-                    <!--<li><span>2</span></li>
-                    <li>< a href="#">3</ a></li>
-                    <li>< a href="#">4</ a></li>
-                    <li>< a href="#">5</ a></li>-->
-                    <li><a href="javascript:void(0);" id="aftPage">>></a></li>
-                </ul>
-            </div>
-        </div>
+
+
+
+</div>
         <!-- END PAGINATOR -->
     </div>
 
@@ -162,13 +184,19 @@
 
 
 <script type="text/javascript" th:inline="javascript">
+
+
+
     jQuery(document).ready(function () {
+
+
         // App.init();
         // App.initBxSlider();
         // App.initImageZoom();
         // App.initSliderRange();
         // App.initUniform();
         // App.initTouchspin();
+
 
         var cId = [[${cId}]];
         var pageSize = 2;

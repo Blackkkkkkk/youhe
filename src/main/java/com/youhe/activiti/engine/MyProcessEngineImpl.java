@@ -1,5 +1,6 @@
 package com.youhe.activiti.engine;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -10,7 +11,9 @@ import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activitiData.ProdefTask;
+import com.youhe.entity.user.User;
 import com.youhe.exception.YuheOAException;
+import com.youhe.mapper.user.UserMapper;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -34,6 +37,7 @@ import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -63,6 +68,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     private FormService formService;
     @Autowired
     private HistoryService historyService;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public String createModel() {
@@ -249,15 +256,17 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public List<ProdefTask> getTaskList(String userId) {
         List<ProdefTask> ptList=new ArrayList<>();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        User userName= userMapper.findName(userId);
         List<Task> taskList = taskService.createTaskQuery().taskAssignee(userId).orderByTaskCreateTime().desc().list();
         taskList.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
 
-            pt.setAssignee(lists.getAssignee());
+            pt.setAssignee(userName.getUserName());
             pt.setName(lists.getName());
-            pt.setCreateTime(String.valueOf(lists.getCreateTime()));
+            pt.setCreateTime(date.format(lists.getCreateTime()));
             pt.setTaskId(lists.getId());
             String processDefinitionId = lists.getProcessDefinitionId();
             //根据流程定义id查询出流程名称
@@ -265,6 +274,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                     .processDefinitionId(processDefinitionId)
                     .singleResult();
           pt.setName_(processDefinition.getName());
+
+
 
             ptList.add(pt);
         });
@@ -275,7 +286,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public List<ProdefTask> getHisTaskList(String userId) {
         List<ProdefTask> ptHisList=new ArrayList<>();
-
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).orderByHistoricTaskInstanceEndTime().desc().list();
         list.forEach(lists->{
             //通过浅克隆创建对象
@@ -283,7 +294,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
             pt.setAssignee(lists.getAssignee());
             pt.setName(lists.getName());
-            pt.setCreateTime(String.valueOf(lists.getCreateTime()));
+            pt.setCreateTime(date.format(lists.getCreateTime()));
             pt.setTaskId(lists.getId());
             String processDefinitionId = lists.getProcessDefinitionId();
             //根据流程定义id查询出流程名称
