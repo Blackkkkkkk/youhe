@@ -28,5 +28,7 @@ public interface UserMapper {
     //删除用户
     void del(User user);
 
+  //根据用户id查询用户名称
+    User findName(String userId);
 
 }

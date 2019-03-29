@@ -188,7 +188,6 @@ public class ActivitiController extends BaseController {
      * @return
      */
     @GetMapping(value = "task/list")
-    @ResponseBody
     public R myTaskList() {
         String userId = String.valueOf(ShiroUserUtils.getUserId());
         List<ProdefTask>   taskList=myProcessEngine.getTaskList(userId);

@@ -157,5 +157,12 @@
         DELETE from  sys_user where UID = #{uid}
     </delete>
 
+    <select id="findName" resultType="com.youhe.entity.user.User">
+
+          SELECT USER_NAME AS 'userName'
+          FROM sys_user u
+          WHERE u.uid=#{userId}
+
+    </select>
 
 </mapper>

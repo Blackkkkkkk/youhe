@@ -287,12 +287,14 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     public List<ProdefTask> getHisTaskList(String userId) {
         List<ProdefTask> ptHisList=new ArrayList<>();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        User userName= userMapper.findName(userId);
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).orderByHistoricTaskInstanceEndTime().desc().list();
         list.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
 
-            pt.setAssignee(lists.getAssignee());
+            pt.setAssignee(userName.getUserName());
             pt.setName(lists.getName());
             pt.setCreateTime(date.format(lists.getCreateTime()));
             pt.setTaskId(lists.getId());
