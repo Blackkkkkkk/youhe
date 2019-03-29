@@ -123,7 +123,7 @@ public class ShopController {
         Map<String, Object> result = new HashMap<String, Object>();
 
         result = shopController.uploadReport(request, response, shop);
-
+        System.out.println(result+"************************");
         return R.ok().put("result", result);
     }
 
@@ -163,7 +163,6 @@ public class ShopController {
     @ResponseBody
     public R update(Shop shop) {
         Long id = shopBiz.update(shop);
-
         if (id > 0) {
             return R.ok().put("id", shop.getId());
         } else {

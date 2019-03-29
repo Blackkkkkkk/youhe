@@ -1,10 +1,40 @@
 var wageNowTable;
 
+var setting = {
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "cid",
+            pIdKey: "parentId",
+            rootPId: -1
+        },
+        key: {
+            url: "nourl",
+            name: "cname"
+        }
+    }
+};
 var vm = new Vue({
     el: '#wrapper',
     data: {
         showList: true,
         title: "新增商品",
+        dept: {
+            parentName: null,
+            parentId: 0,
+            orderNum: 0,
+            cid: null,
+            cname: null
+        },
+        permission: {
+            pid: null,
+            pname: null,
+            type: null,
+            url: null,
+            parentid: null,
+            parentids: null,
+            sortstring: null
+        },
         shop: {
             id: null,
             name: null,
@@ -18,12 +48,12 @@ var vm = new Vue({
             orderNum: null,
             hotSale: null,
             isNewProductOrderNum: null,
+            cid: '',
         }
     },
     methods: {
         add: function () {
             vm.showList = false;
-
             vm.shop = {
                 id: null,
                 name: null,
@@ -37,7 +67,13 @@ var vm = new Vue({
                 orderNum: 1,
                 hotSale: 1,
                 isNewProductOrderNum: 1,
+                cid: ''
             };
+            vm.dept = {parentName: null, parentId: 0, orderNum: 0, cid: null, cname: null};
+            console.log( vm.dept )
+            vm.getDept();
+
+
 
             $("#reportFile").fileinput('destroy'); // 先销毁在初始化上传框
             //初始化fileinput
@@ -61,40 +97,29 @@ var vm = new Vue({
         save: function () {
             var bootstrapValidator = $("#myForm").data('bootstrapValidator');
             bootstrapValidator.validate();
-
+            debugger
             if (bootstrapValidator.isValid()) {
                 var picturename = "";//获取上传的文件的后缀名，如果不是jpg,或者png的话不出发上传，弹出提示，表单里面的其他内容也不上传。
                 picturename = $("#reportFile").val().substring($("#reportFile").val().indexOf('.'), $("#reportFile").val().length).toUpperCase();
                 /*当上传的文件的格式是.png .jpg .PNG .JPG时 先将表单内的除图片以外的东西提交到后天，然后在触发插件，将图片上传，保存。
                  */
                 if (picturename == ".JPG" || picturename == ".PNG" || picturename == "" || picturename == ".BMP" || picturename == ".JPEG") {
-
-
                     var url = vm.shop.id == null ? "/shop/save" : "/shop/update";
-
-
                     console.log($("#myForm").serialize())
-
-
                     $.ajax({
                         type: 'post',
                         url: url,
                         data: $("#myForm").serialize(),
                         success: function (data) {
-
                             vm.id = data.id;
-
                             //不上传图片时，不触发bootstrap 上传插件的初始化方法。仅将表单里面的（除图片以外的）内容提交，
                             if ($("#reportFile").val() != "") {
                                 $('#reportFile').fileinput('upload'); //触发插件开始上传。
                             } else {
                                 layer.msg('操作成功', {icon: 1, time: 1000}, function () {
-
                                     $("#myForm").bootstrapValidator('resetForm');
-
                                     var table = $('.dataTables-example').DataTable();
                                     table.ajax.reload();
-
                                     vm.reload();
                                 });
                             }
@@ -192,9 +217,70 @@ var vm = new Vue({
 
 
             })
-        }
+        },
+        getDept: function () {
+
+
+            //加载部门树
+            $.get("/commodity/select", function (c) {
+
+                ztree = $.fn.zTree.init($("#deptTree"), setting, c.deptList);
+
+
+                var node = ztree.getNodeByParam("cid", vm.dept.cid);
+
+                ztree.selectNode(node);
+
+                if (node != null) {
+                    vm.dept.parentName = node.parentName;
+                }
+
+            })
+        },
+        deptTree: function () {
+            layer.open({
+                type: 1,
+                offset: '50px',
+                skin: 'layui-layer-molv',
+                title: "选择角色",
+                maxmin: true,
+                area: ['380px', '380px'],
+                shade: 0,
+                shadeClose: false,
+                content: jQuery("#deptLayer"),
+                btn: ['确定', '取消'],
+                btn1: function (index) {
+                    var node = ztree.getSelectedNodes();
+
+                    //选择上级部门
+                    vm.dept.parentId = node[0].cid;
+                    vm.dept.parentName = node[0].cname;
+                    vm.shop.cid =  node[0].cid;
+                    console.log( vm.shop)
+                    layer.close(index);
+                }
+            });
+        },
     }
-})
+});
+var Dept = {
+    id: "deptTable",
+    table: null,
+    layerIndex: -1
+};
+
+/**
+ * 初始化表格的列
+ */
+Dept.initColumn = function () {
+    var columns = [
+        {field: 'selectItem', radio: true},
+        {title: '角色ID', field: 'cid', visible: false, align: 'center', valign: 'middle', width: '80px'},
+        {title: '角色名称', field: 'cname', align: 'center', valign: 'middle', sortable: true, width: '180px'},
+        {title: '上级角色', field: 'parentName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '排序号', field: 'orderNum', align: 'center', valign: 'middle', sortable: true, width: '100px'}]
+    return columns;
+};
 
 
 var list = "";

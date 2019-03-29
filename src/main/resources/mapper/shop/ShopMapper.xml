@@ -40,24 +40,24 @@
     </resultMap>
 
     <!--<resultMap type="com.youhe.entity.shop.Shop" id="commodityTypeList">-->
-        <!--<id property="id" column="ID"/>-->
-        <!--<result property="name" column="NAME"/>-->
-        <!--<result property="pirce" column="PRICE"/>-->
-        <!--<result property="num" column="NUM"></result>-->
-        <!--<result property="top" column="TOP"/>-->
-        <!--<result property="status" column="STATUS"/>-->
-        <!--<result property="register" column="REGISTER"/>-->
-        <!--<result property="orderNum" column="ORDER_NUM"/>-->
-        <!--<result property="saveFileName" column="SAVE_FILE_NAME"></result>-->
-        <!--<result property="pageaddr" column="PAGEADDR"></result>-->
-        <!--<result property="hotSale" column="HOT_SALE"></result>-->
-        <!--<result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>-->
-        <!--<result property="commodityId" column="COMMODITY_ID"></result>-->
-        <!--<result property="describe" column="DESCRIBE"></result>-->
-        <!--<result property="available" column="AVAILABLE"></result>-->
-        <!--<result property="tid" column="TID"></result>-->
-        <!--<result property="color" column="COLOR"></result>-->
-        <!--<result property="size" column="SIZE"></result>-->
+    <!--<id property="id" column="ID"/>-->
+    <!--<result property="name" column="NAME"/>-->
+    <!--<result property="pirce" column="PRICE"/>-->
+    <!--<result property="num" column="NUM"></result>-->
+    <!--<result property="top" column="TOP"/>-->
+    <!--<result property="status" column="STATUS"/>-->
+    <!--<result property="register" column="REGISTER"/>-->
+    <!--<result property="orderNum" column="ORDER_NUM"/>-->
+    <!--<result property="saveFileName" column="SAVE_FILE_NAME"></result>-->
+    <!--<result property="pageaddr" column="PAGEADDR"></result>-->
+    <!--<result property="hotSale" column="HOT_SALE"></result>-->
+    <!--<result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>-->
+    <!--<result property="commodityId" column="COMMODITY_ID"></result>-->
+    <!--<result property="describe" column="DESCRIBE"></result>-->
+    <!--<result property="available" column="AVAILABLE"></result>-->
+    <!--<result property="tid" column="TID"></result>-->
+    <!--<result property="color" column="COLOR"></result>-->
+    <!--<result property="size" column="SIZE"></result>-->
     <!--</resultMap>-->
 
     <!--
@@ -139,16 +139,16 @@
 
     <!--&lt;!&ndash;-->
     <!--商品表和商品类型表关联，右表类型表-->
-  <!--&ndash;&gt;-->
+    <!--&ndash;&gt;-->
     <!--<select id="findCommodityType" parameterMap="com.youhe.entity.shop.Shop" resultMap="commodityType">-->
-           <!--SELECT-->
-	         <!--sc.*,-->
-	         <!--ct.TID,-->
-	         <!--ct.COLOR,-->
-	         <!--ct.SIZE-->
-           <!--FROM  shop_commodity sc-->
-	       <!--LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id-->
-           <!--WHERE sc.id = #{id}-->
+    <!--SELECT-->
+    <!--sc.*,-->
+    <!--ct.TID,-->
+    <!--ct.COLOR,-->
+    <!--ct.SIZE-->
+    <!--FROM  shop_commodity sc-->
+    <!--LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id-->
+    <!--WHERE sc.id = #{id}-->
     <!--</select>-->
 
 
@@ -162,6 +162,7 @@
                                    REGISTER,
                                    ORDER_NUM,
                                    HOT_SALE,
+                                   COMMODITY_ID,
                                    IS_NEW_PRODUCT_ORDER_NUM)
         values (#{name,jdbcType=VARCHAR},
                 #{pirce,jdbcType=INTEGER},
@@ -171,6 +172,7 @@
                 NOW(),
                 #{orderNum,jdbcType=VARCHAR},
                 #{hotSale,jdbcType=INTEGER},
+                #{cid},
                 #{isNewProductOrderNum,jdbcType=INTEGER})
     </insert>
 
