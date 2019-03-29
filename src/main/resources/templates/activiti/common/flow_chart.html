@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head th:include="common/head :: headCss"></head>
+<body style="background: white;">
+
+<div class="container text-center">
+    <!--流程状态图-->
+    <img th:src="@{/activiti/flowChart/image} + ${'?processInstanceId=' + processInstanceId}">
+</div>
+
+</body>
+</html>

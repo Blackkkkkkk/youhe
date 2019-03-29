@@ -176,12 +176,24 @@ function back2AnyNode() {
  * 查看流程图
  */
 function showFlowChart() {
-    
+    var processInstanceId = $('input[name="processInstanceId"]').val();
+    layer.open({
+        type: 2,
+        title: '流程状态图',
+        resize: true,
+        fixed: true,
+        shadeClose: true,
+        shade: 0.1,
+        scrollbar: true,
+        area: ['70%', '80%'],
+        content: '/activiti/current/flowChart?processInstanceId=' + processInstanceId,
+        // end: callback
+    });
 }
 
 /**
  * 查看流转意见
  */
 function showComments() {
-
+    alert('未实现');
 }
