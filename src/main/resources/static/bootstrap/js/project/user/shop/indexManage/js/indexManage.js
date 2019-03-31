@@ -188,7 +188,7 @@ var vm = new Vue({
                     } else if (type == 4) {
                         inputValue = "#reportFile_4";
                     }
-                    if (r.code === 0) {
+                    if (r.Status === 0) {
                         //不上传图片时，不触发bootstrap 上传插件的初始化方法。仅将表单里面的（除图片以外的）内容提交，
                         if ($(inputValue).val() != "") {
                             $(inputValue).fileinput('upload'); //触发插件开始上传。

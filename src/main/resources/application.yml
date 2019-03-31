@@ -56,7 +56,6 @@ spring:
 
 #  mvc:
 #    static-path-pattern: /static/**
-
 # mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
@@ -64,6 +63,8 @@ mybatis:
 
 mapper:
   mappers: com.youhe.mapper
+
+
 
 
 

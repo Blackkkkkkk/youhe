@@ -89,6 +89,9 @@
         <if test="status!=null">
             AND sc.STATUS = #{status}
         </if>
+        <if test="type!=null">
+            AND sp.TYPE = #{type}
+        </if>
         ORDER BY
         1 = 1
         <if test="orderNum_Sort != null and orderNum_Sort ==1">

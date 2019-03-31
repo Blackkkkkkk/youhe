@@ -1,24 +1,10 @@
 package com.youhe.initBean.webMvcConfig;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.web.servlet.LocaleResolver;
-
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
 
 
 @Configuration
@@ -47,7 +33,8 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 
         // 获取项目编译后的路径
         String realPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "/templates/upload/";
-        registry.addResourceHandler("/templates/upload/**").addResourceLocations("file:" + realPath);
+//        registry.addResourceHandler("/templates/upload/**").addResourceLocations("file:" + realPath);
+        registry.addResourceHandler("/templates/upload/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/templates/upload/");
 
 
 

@@ -21,9 +21,9 @@
         FROM
         shop_commodity_role
         WHERE
-        PARENT_ID = C.CID LIMIT 1
+        PARENT_ID = c.CID LIMIT 1
         ) SON
-        FROM shop_commodity_role C
+        FROM shop_commodity_role c
         <where>
             <trim prefixOverrides="AND">
                 <if test="cid">
