@@ -288,8 +288,8 @@ public class ActivitiController extends BaseController {
         if (map == null) {
             return R.error("当前任务不存在或已被提交");
         }
-        FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
-        myProcessEngine.gotoAnyTask(flowVariable.getTargetTaskDefKey(), map, null, null, Constant.NODE_JUMP_TYPE_ROLL);
+//        FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
+        myProcessEngine.gotoAnyTask(targetNode, map, null, null, Constant.NODE_JUMP_TYPE_ROLL);
         return R.ok();
     }
 
@@ -300,11 +300,7 @@ public class ActivitiController extends BaseController {
      */
     @PostMapping(value = "rollBack/firstTask")
     public R rollBackFirstTask(String taskId) {
-        Map<String, Object> map = myProcessEngine.getTaskFormData(taskId);
-        if (map == null) {
-            return R.error("当前任务不存在或已被提交");
-        }
-        myProcessEngine.gotoFirstTask(map);
+        myProcessEngine.gotoFirstTask(taskId);
         return R.ok();
     }
 
@@ -315,11 +311,7 @@ public class ActivitiController extends BaseController {
      */
     @PostMapping(value = "rollBack/preTask")
     public R rollBackPreTask(String taskId) {
-        Map<String, Object> map = myProcessEngine.getTaskFormData(taskId);
-        if (map == null) {
-            return R.error("当前任务不存在或已被提交");
-        }
-        myProcessEngine.gotoPreTask(map);
+        myProcessEngine.gotoPreTask(taskId);
         return R.ok();
     }
 
@@ -332,7 +324,7 @@ public class ActivitiController extends BaseController {
     public ModelAndView currentFlowChart(String processInstanceId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("processInstanceId", processInstanceId);
-        modelAndView.setViewName("activiti/common/flow_chart");
+        modelAndView.setViewName(Constant.FLOW_CHART);
         return modelAndView;
     }
 

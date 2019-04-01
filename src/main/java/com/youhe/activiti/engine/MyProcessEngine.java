@@ -4,6 +4,7 @@ import com.youhe.entity.activitiData.ProdefTask;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 
 import java.util.List;
 import java.util.Map;
@@ -119,10 +120,24 @@ public interface MyProcessEngine {
     /**
      * 获取历史任务审批人
      * @param processInstanceId 流程实例ID
-     * @param activityId 活动节点id/节点定义ID
-     * @return 历史任务审批人
+     * @param activityId 历史活动节点id/节点定义ID
+     * @return 历史任务审批人（上一环节审批）
      */
     String getHisAssignee(String processInstanceId, String activityId);
+
+    /**
+     * 获取上一环节审批人
+     * @param task 当前处理任务
+     * @return 上一环节审批人
+     */
+    String getPreAssignee(Task task);
+
+    /**
+     * 获取上一环节活动实例ID
+     * @param task
+     * @return
+     */
+    String getPreActivityId(Task task);
 
     /**
      * 跳转任务节点
@@ -136,15 +151,15 @@ public interface MyProcessEngine {
 
     /**
      * 回退首环节
-     * @param map 业务数据
+     * @param taskId 当前任务ID
      */
-    void gotoFirstTask(Map<String, Object> map);
+    void gotoFirstTask(String taskId);
 
     /**
      * 驳回上环节
-     * @param map 业务数据
+     * @param taskId 当前任务ID
      */
-    void gotoPreTask(Map<String, Object> map);
+    void gotoPreTask(String taskId);
 
 
 

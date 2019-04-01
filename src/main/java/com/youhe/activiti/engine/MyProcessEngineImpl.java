@@ -1,6 +1,5 @@
 package com.youhe.activiti.engine;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -23,8 +22,8 @@ import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -37,7 +36,6 @@ import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 我的流程引擎实现类
@@ -289,7 +290,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         User userName= userMapper.findName(userId);
-        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).orderByHistoricTaskInstanceEndTime().desc().list();
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime().desc().list();
         list.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
@@ -409,6 +410,34 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
+    public String getPreAssignee(Task task) {
+        if (task == null) {
+            throw new YuheOAException("获取上一环节审批人异常");
+        }
+        Map<String, Object> variables = taskService.getVariables(task.getId());
+        FlowVariable flowVariable = (FlowVariable) variables.get(Constant.FLOW_VARIABLE_KEY);
+        String preActivityId = this.getPreActivityId(task);
+        return this.getHisAssignee(flowVariable.getProcessInstanceId(), preActivityId);
+    }
+
+    @Override
+    public String getPreActivityId(Task task) {
+        if (task == null) {
+            throw new YuheOAException("获取上一活动ID异常");
+        }
+        Map<String, Object> variables = taskService.getVariables(task.getId());
+        FlowVariable flowVariable = (FlowVariable) variables.get(Constant.FLOW_VARIABLE_KEY);
+        // 取得流程定义
+        ProcessDefinitionEntity definition = (ProcessDefinitionEntity) (repositoryService.getProcessDefinition(flowVariable.getProcessDefinitionId()));
+        // 取得上一步活动
+        ActivityImpl currActivity = definition.findActivity(task.getTaskDefinitionKey());
+        List<PvmTransition> nextTransitionList = currActivity.getIncomingTransitions();
+        // 暂时不考虑上一步活动为会签的情况，默认认为上一步活动只有一个
+        PvmActivity nextActivity = nextTransitionList.get(0).getSource();
+        return nextActivity.getId();
+    }
+
+    @Override
     public void gotoAnyTask(String targetTaskDefKey, Map<String, Object> map, String assignee, String comment, Integer type) {
         try {
             FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
@@ -459,7 +488,12 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public void gotoFirstTask(Map<String, Object> map) {
+    public void gotoFirstTask(String taskId) {
+        Map<String, Object> map = this.getTaskFormData(taskId);
+        if (map == null) {
+            throw new YuheOAException("当前任务不存在或已被提交");
+        }
+
         FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
         String processInstanceId = flowVariable.getProcessInstanceId();
         String startUserId = this.getStartUserId(processInstanceId);
@@ -469,23 +503,16 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public void gotoPreTask(Map<String, Object> map) {
-        FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
-
-        // 取得流程定义
-        ProcessDefinitionEntity definition = (ProcessDefinitionEntity) (repositoryService.getProcessDefinition(flowVariable.getProcessDefinitionId()));
+    public void gotoPreTask(String taskId) {
+        Map<String, Object> map = this.getTaskFormData(taskId);
+        if (map == null) {
+            throw new YuheOAException("当前任务不存在或已被提交");
+        }
 
         // 获取当前任务
-        Task task = taskService.createTaskQuery().taskId(flowVariable.getTaskId()).singleResult();
-
-        // 取得上一步活动
-        ActivityImpl currActivity = definition.findActivity(task.getTaskDefinitionKey());
-        List<PvmTransition> nextTransitionList = currActivity.getIncomingTransitions();
-        // 暂时不考虑上一步活动为会签的情况，默认认为上一步活动只有一个
-        PvmActivity nextActivity = nextTransitionList.get(0).getSource();
-        String activityId = nextActivity.getId();
-        ActivityImpl nextActivityImpl = definition.findActivity(activityId);
-        String assignee = this.getHisAssignee(flowVariable.getProcessInstanceId(), activityId);
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String activityId = this.getPreActivityId(task);
+        String assignee = this.getPreAssignee(task);
 
         this.gotoAnyTask(activityId, map, assignee, "驳回", Constant.NODE_JUMP_TYPE_ROLL);
     }
