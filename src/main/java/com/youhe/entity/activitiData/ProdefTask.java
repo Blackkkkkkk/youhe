@@ -1,19 +1,16 @@
 package com.youhe.entity.activitiData;/**
  * @ClassName ProdefTask
- * @Description TODO
+ * @Description
  * @Author xdn
  * @Date 2019/3/2119:09
  * @Version 1.0
  */
 
-import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.task.DelegationState;
-import org.activiti.engine.task.Task;
 
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+
+import java.io.Serializable;
+
+
 
 /**
  *@ClassName ProdefTask
@@ -22,14 +19,17 @@ import java.util.Map;
  *@Date 2019/3/2119:09
  *@Version 1.0
  */
-public class ProdefTask  implements Cloneable{
+public class ProdefTask  implements Cloneable, Serializable {
 
-
-    private String name_;//流程名称
-    private String name;//当前节点名称
-    private String assignee;//提交人
+    private static final long serialVersionUID = 3160094850506230197L;
+    private String name_;//流程名称(标题)
+    private String name;//当前环节名称
+    private String startUserName;//发起人
+    private String preUserName;//上一个环节审批人
     private String createTime;//创建时间
+    private String endTime;//结束时间
     private String taskId;//任务id
+    private String startUserId;//发起人id
     private static ProdefTask per = new ProdefTask();
 
     private ProdefTask(){
@@ -63,12 +63,12 @@ public class ProdefTask  implements Cloneable{
         this.name = name;
     }
 
-    public String getAssignee() {
-        return assignee;
+    public String getStartUserName() {
+        return startUserName;
     }
 
-    public void setAssignee(String assignee) {
-        this.assignee = assignee;
+    public void setStartUserName(String startUserName) {
+        this.startUserName = startUserName;
     }
 
     public String getCreateTime() {
@@ -85,5 +85,29 @@ public class ProdefTask  implements Cloneable{
 
     public void setTaskId(String taskId) {
         this.taskId = taskId;
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getPreUserName() {
+        return preUserName;
+    }
+
+    public void setPreUserName(String preUserName) {
+        this.preUserName = preUserName;
     }
 }

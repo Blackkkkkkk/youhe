@@ -22,6 +22,7 @@ import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
@@ -36,6 +37,7 @@ import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +46,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 我的流程引擎实现类
@@ -56,6 +55,7 @@ import java.util.Map;
 public class MyProcessEngineImpl implements MyProcessEngine {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MyProcessEngineImpl.class);
+
 
     @Autowired
     private ProcessEngine processEngine;
@@ -210,8 +210,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
         final String processInstanceId = flowVariable.getProcessInstanceId(); // 流程实例ID
         final String nextUserId = flowVariable.getNextUserId();   // 下一节点审批人用户ID
-        Map<String, Object> variables1 = runtimeService.getVariables(processInstanceId);
-        variables1.get(Constant.FLOW_VARIABLE_KEY);
+
         if (StrUtil.isBlank(processInstanceId)) {
             throw new YuheOAException("流程实例ID不允许为空");
         }
@@ -259,18 +258,28 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         List<ProdefTask> ptList=new ArrayList<>();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        User userName= userMapper.findName(userId);
+
         List<Task> taskList = taskService.createTaskQuery().taskAssignee(userId).orderByTaskCreateTime().desc().list();
         taskList.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
 
-            pt.setAssignee(userName.getUserName());
+
             pt.setName(lists.getName());
             pt.setCreateTime(date.format(lists.getCreateTime()));
             pt.setTaskId(lists.getId());
-            String processDefinitionId = lists.getProcessDefinitionId();
+
+             //根据流程实例id查询发起人
+            String startUserId = this.getStartUserId(lists.getProcessInstanceId());
+            pt.setStartUserId(startUserId);
+            User user= userMapper.findName(pt.getStartUserId());
+            pt.setStartUserName(user.getUserName());
+           //查询出上一环节的审批人
+            String preAssignee = this.getPreAssignee(lists);
+            pt.setPreUserName(preAssignee);
+
             //根据流程定义id查询出流程名称
+            String processDefinitionId = lists.getProcessDefinitionId();
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(processDefinitionId)
                     .singleResult();
@@ -289,18 +298,26 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         List<ProdefTask> ptHisList=new ArrayList<>();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        User userName= userMapper.findName(userId);
+
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime().desc().list();
+
         list.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
 
-            pt.setAssignee(userName.getUserName());
+
             pt.setName(lists.getName());
             pt.setCreateTime(date.format(lists.getCreateTime()));
+            pt.setEndTime(date.format(lists.getEndTime()));
             pt.setTaskId(lists.getId());
-            String processDefinitionId = lists.getProcessDefinitionId();
+
+        //根据流程实例id查询发起人
+            String startUserId = this.getStartUserId(lists.getProcessInstanceId());
+            pt.setStartUserId(startUserId);
+            User user= userMapper.findName(pt.getStartUserId());
+            pt.setStartUserName(user.getUserName());
             //根据流程定义id查询出流程名称
+            String processDefinitionId = lists.getProcessDefinitionId();
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(processDefinitionId)
                     .singleResult();
@@ -414,6 +431,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         if (task == null) {
             throw new YuheOAException("获取上一环节审批人异常");
         }
+
         Map<String, Object> variables = taskService.getVariables(task.getId());
         FlowVariable flowVariable = (FlowVariable) variables.get(Constant.FLOW_VARIABLE_KEY);
         String preActivityId = this.getPreActivityId(task);

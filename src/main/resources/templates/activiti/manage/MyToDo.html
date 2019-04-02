@@ -66,11 +66,12 @@
                                     <thead>
                                     <tr>
 
-                                        <th>流程名称</th>
-                                        <th>当前节点名称</th>
-                                        <th>提交人</th>
+                                        <th>标题</th>
+                                        <th>当前环节名称名称</th>
                                         <th>创建时间</th>
-                                        <th>是否办理</th>
+                                        <th>发起人</th>
+                                        <th>发送人</th>
+                                        <th>操作</th>
                                         <th>任务编号</th>
                                     </tr>
                                     </thead>
@@ -184,8 +185,9 @@
 
                 {data: "name_"},
                 {data: "name"},
-                {data: "assignee"},
                 {data: "createTime"},
+                {data: "startUserName"},
+                {data: "preUserName"},
                 {data: "a"},
                 {data: "taskId",visible: false}
             ],
@@ -193,9 +195,9 @@
                 [
                     {
                         "render": function (data, type,row) {
-                            return ' <a class="btn btn-success"  href="/activiti/form/task/'+row.taskId+'" target="_blank"><i class="fa fa-close"></i>&nbsp;办理</a>'
+                            return ' <a class="btn btn-primary btn-xs btn-outline"  href="/activiti/form/task/'+row.taskId+'" target="_blank">办理</a>'
                         },
-                        "aTargets": 4
+                        "aTargets": 5
                     }
 
                 ]
