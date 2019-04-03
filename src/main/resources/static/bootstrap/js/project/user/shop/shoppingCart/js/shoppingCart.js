@@ -101,8 +101,8 @@ var vm = new Vue({
     methods: {
         pay: function () {
 
-            $.get("/touristShop/pay", function (r) {
-                if(r.Status == 1){
+            $.get("/order/cashierPay", function (r) {
+                if(r.Status == 0){
                     window.location.href = (r.url)
                 }else {
                     layer.msg(r.msg, {icon: 2, time: 500});

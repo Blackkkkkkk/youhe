@@ -16,8 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
  * 订单管理
  */
 @RestController
-@RequestMapping(value = "order")
-public class OrderController {
+@RequestMapping(value = "order/manage")
+public class OrderManageController {
 
     @Autowired
     private OrderBiz orderBiz;

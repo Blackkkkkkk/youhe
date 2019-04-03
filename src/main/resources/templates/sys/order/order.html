@@ -185,7 +185,7 @@
             ],
             ajax:
                 {
-                    url: "/order/listData",
+                    url: "/order/manage/listData",
                     dataSrc: function (r) {
                         console.log(r);
                         return r.page.list;
@@ -315,7 +315,7 @@
                 shade: 0.1,
                 scrollbar: true,
                 area: ['70%', '90%'],
-                content: '/order/detail?bigOrderCode=' + bigOrderCode
+                content: '/order/manage/detail?bigOrderCode=' + bigOrderCode
             });
         }
     });
