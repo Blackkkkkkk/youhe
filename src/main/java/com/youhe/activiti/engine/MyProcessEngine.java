@@ -1,5 +1,6 @@
 package com.youhe.activiti.engine;
 
+import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.repository.Model;
@@ -161,6 +162,11 @@ public interface MyProcessEngine {
      */
     void gotoPreTask(String taskId);
 
-
+    /**
+     *查看流转意见
+     * @param processInstanceId 流程实例id
+     * @return
+     */
+     List<MyCommentEntity> findAdvice(String processInstanceId);
 
 }

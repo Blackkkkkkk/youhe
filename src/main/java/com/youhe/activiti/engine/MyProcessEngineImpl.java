@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
+import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.entity.user.User;
 import com.youhe.exception.YuheOAException;
@@ -27,6 +28,7 @@ import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
+import org.activiti.engine.impl.persistence.entity.CommentEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
@@ -36,12 +38,16 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -238,19 +244,14 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
                 .taskId(taskId).taskAssignee(String.valueOf(userId)).singleResult();
 
-        String processInstanceId= historicTaskInstance.getProcessInstanceId();
 
         List<HistoricVariableInstance> hisList = historyService.createHistoricVariableInstanceQuery()
-                .processInstanceId(processInstanceId).list();
+                .processInstanceId(historicTaskInstance.getProcessInstanceId()).list();
 
         Map<String,Object> hisMap=new HashMap<>();
         hisList.forEach(list->{
             hisMap.put(list.getVariableName(),list.getValue());
         });
-        if (historicTaskInstance == null) {
-            // todo 流程完结或当前用户没有权限
-            return null;
-        }
         return hisMap;
     }
 
@@ -277,21 +278,22 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             pt.setStartUserName(user.getUserName());
            //查询出上一环节的审批人
             String preAssignee = this.getPreAssignee(lists);
-            pt.setPreUserName(preAssignee);
+            if(StringUtils.isNotBlank(preAssignee)){
+                User userMapperName = userMapper.findName(preAssignee);
+                pt.setPreUserName(userMapperName.getUserName());
+            }
 
-            //根据流程定义id查询出流程名称
+            //根据流程定义id查询出流程名称(标题)
             String processDefinitionId = lists.getProcessDefinitionId();
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(processDefinitionId)
                     .singleResult();
           pt.setName_(processDefinition.getName());
 
-
-
             ptList.add(pt);
         });
         return ptList;
-        /*taskList.stream().map(BeanUtil::beanToMap).collect(Collectors.toList())*/
+
     }
 
     @Override
@@ -317,7 +319,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             pt.setStartUserId(startUserId);
             User user= userMapper.findName(pt.getStartUserId());
             pt.setStartUserName(user.getUserName());
-            //根据流程定义id查询出流程名称
+            //根据流程定义id查询出流程名称(标题)
             String processDefinitionId = lists.getProcessDefinitionId();
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(processDefinitionId)
@@ -537,5 +539,30 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         this.gotoAnyTask(activityId, map, assignee, "驳回", Constant.NODE_JUMP_TYPE_ROLL);
     }
 
+    @Override
+    public List<MyCommentEntity> findAdvice(String processInstanceId) {
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<MyCommentEntity> comList=new ArrayList();
+
+        List<Comment> proComments = taskService.getProcessInstanceComments(processInstanceId);
+
+        proComments.forEach(comment -> {
+
+            CommentEntity commentEntity = (CommentEntity)comment;
+            MyCommentEntity com=new MyCommentEntity();
+            com.setTime(date.format(commentEntity.getTime()));
+            BeanUtils.copyProperties(commentEntity, com);
+
+             //根据任务id查询出审批人和当前环节名称
+            List<HistoricTaskInstance> userList = processEngine.getHistoryService().createHistoricTaskInstanceQuery().taskId(comment.getTaskId()).list();
+            userList.forEach(ul->{
+                User userMapperName = userMapper.findName(ul.getAssignee());
+                com.setUserId(userMapperName.getUserName());
+                com.setCurNoName(ul.getName());
+            });
+            comList.add(com);
+        });
+        return comList;
+    }
 
 }

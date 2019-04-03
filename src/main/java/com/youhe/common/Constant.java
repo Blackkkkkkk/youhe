@@ -38,6 +38,7 @@ public class Constant {
     public final static String NO_PREMISSIONS_NAME = "activiti/no_premissions";  // activiti无权限页面
     public final static String FORM_PRFIX = "activiti/form/";   // actviti业务表单前缀
     public final static String FLOW_CHART = "activiti/common/flow_chart";   // 流程图
+    public final static String COMMENT_ADVICE = "activiti/common/comment_advice";   // 查看流转意见
 
     public final static int NODE_JUMP_TYPE_ROLL = 0;    // 节点跳转类型：回退
     public final static int NODE_JUMP_TYPE_GO = 1;      // 节点跳转类型：前进

@@ -24,7 +24,7 @@ function submitTask() {
         var selTxt =$(fcEl[i]).find('option:selected').text();
         businessFormData[name + '_show'] = selTxt;
     }
-
+      var status=0;
     console.log("businessFormData= ", businessFormData);
     console.log("taskFormData=" , taskFormData);
     taskData = businessFormData;
@@ -40,14 +40,18 @@ function submitTask() {
         success: function (r) {
             if (r.Status == 0) {
                 alert('任务已提交');
-                var table = $('.dataTables-example').DataTable();
-                table.ajax.reload();
-            } else {
+                status=1;
+            }
+            else {
                 alert('任务提交失败');
             }
-
         }
     });
+    if(status=1){
+        window.opener.location.reload();//刷新父页面
+    }
+   //刷新
+
     return false;
 }
 
@@ -177,6 +181,7 @@ function back2AnyNode() {
  */
 function showFlowChart() {
     var processInstanceId = $('input[name="processInstanceId"]').val();
+    var taskId = $('input[name="taskId"]').val();
     layer.open({
         type: 2,
         title: '流程状态图',
@@ -186,7 +191,7 @@ function showFlowChart() {
         shade: 0.1,
         scrollbar: true,
         area: ['70%', '80%'],
-        content: '/activiti/current/flowChart?processInstanceId=' + processInstanceId,
+        content: '/activiti/current/flowChart?processInstanceId=' + processInstanceId+'&taskId='+taskId,
         // end: callback
     });
 }
@@ -195,5 +200,17 @@ function showFlowChart() {
  * 查看流转意见
  */
 function showComments() {
-    alert('未实现');
+    var processInstanceId = $('input[name="processInstanceId"]').val();
+    layer.open({
+        type: 2,
+        title: '查看流转意见',
+        resize: true,
+        fixed: true,
+        shadeClose: true,
+        shade: 0.1,
+        scrollbar: true,
+        area: ['90%', '60%'],
+        content: '/activiti/find/advice?processInstanceId='+processInstanceId,
+        // end: callback
+    });
 }
