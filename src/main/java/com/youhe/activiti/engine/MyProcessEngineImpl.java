@@ -190,6 +190,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             flowVariable.setCurrentNodeKey(task.getTaskDefinitionKey());
             flowVariable.setTaskId(task.getId());
             flowVariable.setExecutionId(task.getExecutionId());
+            flowVariable.setFirstNode(true);
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
             taskService.setVariables(task.getId(), variables);
 
@@ -412,12 +413,13 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     @Override
     public HistoricActivityInstance getHisActivityInstance(String processInstanceId, String activityId) {
-        HistoricActivityInstance historicActivityInstance = historyService.createHistoricActivityInstanceQuery()
+        List<HistoricActivityInstance> list = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .activityId(activityId)
+                .finished()
                 .orderByHistoricActivityInstanceStartTime()
-                .desc().singleResult();
-        return historicActivityInstance;
+                .desc().list();
+        return list == null ? null : list.get(0);   // 取最新那条就行
     }
 
     @Override
