@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="../bootstrap/js/dept/css/bootstrap-table.min.css">
     -->
 
-    <link href="../bootstrap/js/project/manage/css/fileinput.min.css" rel="stylesheet">
+    <link href="../bootstrap/js/project/sys/shop/css/fileinput.min.css" rel="stylesheet">
 
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/dataTable/datatables.min.css"/>
@@ -73,14 +73,12 @@
                                     <thead>
                                     <tr>
                                         <th></th>
-                                        <th>ID</th>
                                         <th>版本</th>
                                         <th>流程模板名称</th>
                                         <th>发布ID</th>
                                         <th>创建时间</th>
-                                        <th>是否启动</th>
-                                        <th>是否编辑</th>
-                                        <th></th>
+                                        <th>操作</th>
+                                        <th style="display: none"></th>
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -107,8 +105,8 @@
 
 <script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
 
-<script src="../bootstrap/js/project/manage/js/fileinput.min.js"></script>
-<script src="../bootstrap/js/project/manage/js/zh.js"></script>
+<script src="../js/manage/js/fileinput.min.js"></script>
+<script src="../js/manage/js/zh.js"></script>
 <script src="../js/manage/js/processData.js"></script>
 
 
@@ -127,8 +125,9 @@
 
 
     var data;
-    $(document).ready(function () {
 
+    $(document).ready(function () {
+        var trs ;
 
         $("#shopMange").attr("class", "active");
         $("#shopMange_ul").attr("class", "nav nav-second-level collapse in");
@@ -191,11 +190,16 @@
                 {
                     url: "/activiti/modelList",
                     dataSrc:
-
                         function (json) {
-                            return json.modelList;
+                            var date = new Date();
+                            console.log(date);
+                            list=json.modelList;
+                            $.each(list,function(n,value) {
+                                trs= value.deploymentId;
+                                createTime =value.createTime;
+                            });
+                            return list;
                         }
-
                     ,
                     dataType: 'json',
                     type:
@@ -204,13 +208,11 @@
             ,
             columns: [
                 {data: null, orderable: false},
-                {data: "id"},
                 {data: "revision"},
                 {data: "name"},
                 {data: "deploymentId"},
                 {data: "createTime"},
                 {data: "a"},
-                {data: "s"},
                 {data: "tenantId"}
 
             ],
@@ -225,20 +227,29 @@
                     },
                     {
                         "render": function (data, type, row) {
-                            // return '  <button class="btn btn-success"   @click="start"><i class="fa fa-minus-square"></i>&nbsp;启动流程</button>';
-                            // return ' <button class="btn btn-success" onclick="javascript:start(this.data);"><i class="fa fa-close"></i>&nbsp;启动流程</button>';
-                            // onclick ="refund(' + "'" + data.bigOrderCode + "'" + ')"
-
-                            return ' <button class="btn btn-success" onclick="javascript:start(' + "'" + row.deploymentId + "'" + ');"><i class="fa fa-close"></i>&nbsp;启动流程</button>';
+                            trs = row.deploymentId != null ? '已发布' : '未发布' ;
+                            return "<div align='center'><span >"+ trs +"</span></div>";
                         },
-                        "aTargets": 6 //第一列
+                        "aTargets": 3 //第一列
                     },
                     {
                         "render": function (data, type, row) {
-                            // href="xxx.html?id=' + row.id + '"
-                            return ' <a class="btn btn-danger"  href="/process-editor/modeler.html?modelId=' + row.id + '" target="_blank"><i class="fa fa-close"></i>&nbsp;修改流程</a>';
+                             data=row.createTime;
+                            if (data != undefined && data != 'undefined') {
+                                return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+                            } else {
+                                return '';
+                            }
                         },
-                        "aTargets": 7 //第7列
+                        "aTargets": 4 //第一列
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            // return '  <button class="btn btn-success"   @click="start"><i class="fa fa-minus-square"></i>&nbsp;启动流程</button>';
+                            return ' <button class="btn btn-primary btn-xs btn-outline" onclick="javascript:start(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动流程</button>'+'&nbsp'+'&nbsp'+
+                                '<a class="btn btn-primary btn-xs btn-outline"  href="/process-editor/modeler.html?modelId=' + row.id + '" target="_blank"></i>&nbsp;修改流程</ a>';
+                        },
+                        "aTargets": 5 //第一列
                     }
                 ],
 
