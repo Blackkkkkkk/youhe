@@ -33,12 +33,13 @@
                     <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">流程审批</span> <span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" id="approvalProcess_ul">
-                        <li shiro:hasPermission="shop:commodityManage" id="commodityManage"><a
+                        <li shiro:hasPermission="shop:commodityManage" id="process"><a
                                 href="/activiti/ProcessManagement">流程管理</a></li>
                         <li shiro:hasPermission="user:backlog" id="backlog"><a href="/activiti/dealwith">我的待办</a></li>
                         <!--<li shiro:hasPermission="sys:deploy" id="manageProcess"><a href="/activiti/deployList">流程管理</a>-->
                         <!--</li>-->
-                        <li><a href="/activiti/dealwithdo" >我的已办</a></li>
+                        <li shiro:hasPermission="shop:commodityManage" id="backlogdo"><a href="/activiti/dealwithdo" >我的已办</a></li>
+                        <!--<li><a href="/activiti/dealwithdo" >我的已办</a></li>-->
                     </ul>
                 </li>
                 <li shiro:hasPermission="sys:systemManage" id="systemManage">

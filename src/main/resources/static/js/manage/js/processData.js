@@ -43,30 +43,6 @@ var vm = new Vue({
             }
 
         },
-
-        // start: function (id) {
-        //     debugger
-        //     var id = vm.getRowDate();
-        //
-        //     if (id.length > 0) {
-        //         $.get("/activiti/start/" + deploymentId, function (r) {
-        //             console.log(r);
-        //             if (r.Status == 0) {
-        //                 debugger
-        //                 // layer.msg('操作成功', {icon: 1, time: 1000}, function ()
-        //                 layer.msg('操作成功', r.msg, {icon: 1, time: 1000});
-        //                 // 刷新表格
-        //                 var table = $('.dataTables-example').DataTable();
-        //                 table.ajax.reload();
-        //             } else {
-        //                 layer.msg(r.msg, {icon: 2, time: 1000});
-        //             }
-        //         })
-        //     }
-        // },
-
-
-
 //根据选中行获取选择的Id
         getRowDate: function () {
             var radios = document.getElementsByName("radio");
@@ -174,15 +150,12 @@ var FileInput = function () {
             $('#' + previewId).attr('fileid', data.response.result.previewId);
 
             layer.msg('操作成功', {icon: 1, time: 1000}, function () {
-
-
                 $("#myForm").bootstrapValidator('resetForm');
 
                 var table = $('.dataTables-example').DataTable();
                 table.ajax.reload();
 
                 vm.reload();
-
 
                 $(event.target)
                     .fileinput('clear')
