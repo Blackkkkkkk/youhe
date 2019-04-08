@@ -1,23 +1,15 @@
 package com.youhe.controller.loginController;
 
 import com.alibaba.fastjson.JSON;
-import com.youhe.biz.test.TestBiz;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.entity.user.User;
-import com.youhe.mapper.test.TestMapper;
-
-import com.youhe.utils.shiro.AuthRealm;
 import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import com.youhe.utils.workflow.ExportFlow;
-
-
 import org.activiti.engine.ProcessEngine;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +41,7 @@ import java.util.Locale;
  * @author 谢伟强
  * @version 1.0
  */
+
 @Controller
 public class LoginController {
 

@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.youhe.activiti.ext.FelSupport;
 import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
@@ -16,14 +17,14 @@ import com.youhe.exception.YuheOAException;
 import com.youhe.mapper.user.UserMapper;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.Process;
+import org.activiti.bpmn.model.*;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
@@ -41,13 +42,11 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -217,6 +216,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
         final String processInstanceId = flowVariable.getProcessInstanceId(); // 流程实例ID
         final String nextUserId = flowVariable.getNextUserId();   // 下一节点审批人用户ID
+        int nodeNum = flowVariable.getNextNodeNum();
 
         if (StrUtil.isBlank(processInstanceId)) {
             throw new YuheOAException("流程实例ID不允许为空");
@@ -224,15 +224,20 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         if (StrUtil.isBlank(nextUserId)) {
             throw new YuheOAException("下一环节审批人不允许为空");
         }
-        // 提交任务
-        Task task = taskService.createTaskQuery()
-                .processInstanceId(processInstanceId)
-                .taskId(flowVariable.getTaskId()).singleResult();
-        taskService.addComment(task.getId(), processInstanceId,
-                flowVariable.getComment() == null ? Constant.DEFAULT_AGREE_COMMENT : flowVariable.getComment()); // 添加审批意见
-        Authentication.setAuthenticatedUserId(userId);
 
-        taskService.complete(task.getId(), taskFlowData);
+        String comment = StrUtil.isBlank(flowVariable.getComment()) ? Constant.DEFAULT_AGREE_COMMENT : flowVariable.getComment();
+        if (nodeNum == 1) {    // 正常提交任务
+            Task task = taskService.createTaskQuery()
+                    .processInstanceId(processInstanceId)
+                    .taskId(flowVariable.getTaskId()).singleResult();
+            taskService.addComment(task.getId(), processInstanceId, comment); // 添加审批意见
+            Authentication.setAuthenticatedUserId(userId);
+
+            taskService.complete(task.getId(), taskFlowData);
+        } else if (nodeNum > 1) {  // 跳转分支任务
+            this.gotoAnyTask(flowVariable.getTargetTaskDefKey(), taskFlowData, null, comment, Constant.NODE_JUMP_TYPE_GO);
+        }
+
     }
 
     @Override
@@ -378,6 +383,12 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         flowVariable.setExecutionId(task.getExecutionId());
         flowVariable.setUserId(String.valueOf(userId));
         variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
+
+        // 设置下一步路由出口用户任务节点集
+        List<UserTask> nextNodes = this.getNextNode(flowVariable.getProcessDefinitionId(), flowVariable.getCurrentNodeKey(), variables);
+
+        flowVariable.setNextNodeNum(nextNodes.size());
+        flowVariable.setNextNodes(nextNodes);
         LOGGER.info("variables = {}", variables);
         return variables;
     }
@@ -563,6 +574,155 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             comList.add(com);
         });
         return comList;
+    }
+
+    @Override
+    public List<UserTask> getNextNode(String procDefId, String taskDefKey, Map<String, Object> map) {
+        List<UserTask> userTasks = new ArrayList<>();
+        // 获取BpmnModel对象
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
+        // 获取Process对象
+        Process process = bpmnModel.getProcesses().get(bpmnModel.getProcesses().size() - 1);
+        // 获取所有的FlowElement信息
+        Collection<FlowElement> flowElements = process.getFlowElements();
+        // 获取当前节点信息
+        FlowElement flowElement = getFlowElementById(taskDefKey, flowElements);
+
+        getNextNodeRecur(flowElements, flowElement, map, userTasks);
+
+        return userTasks;
+    }
+
+    /**
+     * 查询下一步节点 递归
+     * @param flowElements 全流程节点集合
+     * @param flowElement  当前节点
+     * @param map          业务数据
+     * @param nextUser     下一步用户节点
+     */
+    private void getNextNodeRecur(Collection<FlowElement> flowElements, FlowElement flowElement, Map<String, Object> map, List<UserTask> nextUser) {
+
+        //如果是结束节点
+        if (flowElement instanceof EndEvent) {
+            //如果是子任务的结束节点
+            if (getSubProcess(flowElements, flowElement) != null) {
+                flowElement = getSubProcess(flowElements, flowElement);
+            }
+        }
+
+        //获取Task的出线信息--可以拥有多个
+        List<SequenceFlow> outGoingFlows = null;
+        if (flowElement instanceof Task) {
+            outGoingFlows = ((org.activiti.bpmn.model.Task) flowElement).getOutgoingFlows();
+        } else if (flowElement instanceof Gateway) {
+            outGoingFlows = ((Gateway) flowElement).getOutgoingFlows();
+        } else if (flowElement instanceof StartEvent) {
+            outGoingFlows = ((StartEvent) flowElement).getOutgoingFlows();
+        } else if (flowElement instanceof SubProcess) {
+            outGoingFlows = ((SubProcess) flowElement).getOutgoingFlows();
+        } else if (flowElement instanceof UserTask) {
+            outGoingFlows = ((UserTask) flowElement).getOutgoingFlows();
+        }
+
+        if (outGoingFlows != null && outGoingFlows.size() > 0) {
+            //遍历所有的出线--找到可以正确执行的那一条
+            for (SequenceFlow sequenceFlow : outGoingFlows) {
+
+                //1.有表达式，且为true
+                //2.无表达式
+                String expression = sequenceFlow.getConditionExpression();
+                if (StrUtil.isBlank(expression) ||
+                        Boolean.valueOf(
+                                String.valueOf(
+                                        FelSupport.result(map, expression.substring(expression.lastIndexOf("{") + 1, expression.lastIndexOf("}")))))) {
+                    //出线的下一节点
+                    String nextFlowElementID = sequenceFlow.getTargetRef();
+                    //查询下一节点的信息
+                    FlowElement nextFlowElement = getFlowElementById(nextFlowElementID, flowElements);
+
+                    //用户任务
+                    if (nextFlowElement instanceof UserTask) {
+                        nextUser.add((UserTask) nextFlowElement);
+                    }
+                    //排他网关
+                    else if (nextFlowElement instanceof ExclusiveGateway) {
+                        getNextNodeRecur(flowElements, nextFlowElement, map, nextUser);
+                    }
+                    //并行网关
+                    else if (nextFlowElement instanceof ParallelGateway) {
+                        getNextNodeRecur(flowElements, nextFlowElement, map, nextUser);
+                    }
+                    //接收任务
+                    else if (nextFlowElement instanceof ReceiveTask) {
+                        getNextNodeRecur(flowElements, nextFlowElement, map, nextUser);
+                    }
+                    //子任务的起点
+                    else if (nextFlowElement instanceof StartEvent) {
+                        getNextNodeRecur(flowElements, nextFlowElement, map, nextUser);
+                    }
+                    //结束节点
+                    else if (nextFlowElement instanceof EndEvent) {
+                        getNextNodeRecur(flowElements, nextFlowElement, map, nextUser);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 查询一个节点的是否子任务中的节点，如果是，返回子任务
+     * @param flowElements 全流程的节点集合
+     * @param flowElement  当前节点
+     */
+    private FlowElement getSubProcess(Collection<FlowElement> flowElements, FlowElement flowElement) {
+        for (FlowElement flowElement1 : flowElements) {
+            if (flowElement1 instanceof SubProcess) {
+                for (FlowElement flowElement2 : ((SubProcess) flowElement1).getFlowElements()) {
+                    if (flowElement.equals(flowElement2)) {
+                        return flowElement1;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 根据ID查询流程节点对象, 如果是子任务，则返回子任务的开始节点
+     * @param Id    节点ID
+     * @param flowElements 流程节点集合
+     */
+    private FlowElement getFlowElementById(String Id, Collection<FlowElement> flowElements) {
+        for (FlowElement flowElement : flowElements) {
+            if (flowElement.getId().equals(Id)) {
+                //如果是子任务，则查询出子任务的开始节点
+                if (flowElement instanceof SubProcess) {
+                    return getStartFlowElement(((SubProcess) flowElement).getFlowElements());
+                }
+                return flowElement;
+            }
+            if (flowElement instanceof SubProcess) {
+                FlowElement flowElement1 = getFlowElementById(Id, ((SubProcess) flowElement).getFlowElements());
+                if (flowElement1 != null) {
+                    return flowElement1;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 返回流程的开始节点
+     * @param flowElements 流程节点集合
+     */
+    private FlowElement getStartFlowElement(Collection<FlowElement> flowElements) {
+        for (FlowElement flowElement : flowElements) {
+            if (flowElement instanceof StartEvent) {
+                return flowElement;
+            }
+        }
+        return null;
     }
 
 }

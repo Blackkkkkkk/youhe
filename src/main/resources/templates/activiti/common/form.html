@@ -21,7 +21,18 @@
     </div>
 
     <div th:fragment="hisTaskFormHead">
-        <div class="container" style="">
+        <div class="container" style="padding-left:0!important;padding-right:0!important;background: #999688">
+            <div style="float: left; padding: 8px; color: white;">
+                <span th:text="${taskData.flowVariable['processName']}"></span>
+                <span th:text="${'-当前环节：' + taskData.flowVariable['currentNodeName']}"></span>
+            </div>
+            <div style="float: right;">
+                <!--<button class="btn btn-primary" data-toggle="modal" data-target="#submitTaskModal">办理任务</button>-->
+                <button class="btn btn-info" data-toggle="modal" onclick="showFlowChart()">查看流程图</button>
+                <button class="btn btn-danger" data-toggle="modal" onclick="showComments()">查看流转意见</button>
+            </div>
+        </div>
+        <div class="container" style="padding-left:0!important;padding-right:0!important;">
             <div class="text-center" style="padding: 45px 0 45px 0; background: #eaeaea"><h2 th:text="${taskData.flowVariable['processName']}">请假流程</h2></div>
         </div>
     </div>
@@ -49,18 +60,19 @@
                                 </div>
                             </div>
                             <!--todo 下一节点-->
-                            <!--<div class="form-group">
-                                <label class="col-sm-2 control-label">下一节点</label>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">下一环节</label>
                                 <div class="form-group">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="optionsRadiosinline" id="optionsRadios3" value="option1" checked> 选项 1
+                                    <label class="radio-inline" th:each="nextNode, info: ${taskData.flowVariable['nextNodes']}">
+                                        <input type="radio" name="targetTaskDefKey" th:id="${'nextNode' + info.index}" th:value="${nextNode.id}" th:checked="${info.size==1}">
+                                        <span th:text="${nextNode.name}">选项1</span>
                                     </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="optionsRadiosinline" id="optionsRadios4"  value="option2"> 选项 2
-                                    </label>
+                                    <!--<label class="radio-inline">
+                                        <input type="radio" name="nextNode" id="nextNode2"  value="option2"> 选项 2
+                                    </label>-->
                                 </div>
 
-                            </div>-->
+                            </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">审批意见</label>
                                 <div class="col-sm-10">
@@ -82,6 +94,8 @@
                             <input type="hidden" name="formKey" th:value="${taskData.flowVariable['formKey']}">
                             <input type="hidden" name="mainFormKey" th:value="${taskData.flowVariable['mainFormKey']}">
                             <input type="hidden" name="firstSubmit" th:value="${taskData.flowVariable['firstSubmit']}">
+                            <input type="hidden" name="nextNodeNum" th:value="${taskData.flowVariable['nextNodeNum']}">
+                            <!--<input type="hidden" name="nextNodes" th:value="${taskData.flowVariable['nextNodes']}">-->
                         </form>
                     </div>
                     <!--流程流转按钮-->

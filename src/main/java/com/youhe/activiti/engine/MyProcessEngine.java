@@ -2,6 +2,7 @@ package com.youhe.activiti.engine;
 
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
+import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -168,5 +169,14 @@ public interface MyProcessEngine {
      * @return
      */
      List<MyCommentEntity> findAdvice(String processInstanceId);
+
+    /**
+     * 获取下一步用户任务节点集
+     * @param procDefId  流程定义ID
+     * @param taskDefKey 当前任务KEY
+     * @param map        业务数据
+     * @return list<UserTask>
+     */
+    List<UserTask> getNextNode(String procDefId, String taskDefKey, Map<String, Object> map);
 
 }

@@ -16,7 +16,7 @@ public class ExceptHandler {
 
     @ExceptionHandler(YuheOAException.class)
     public R handleKtException(YuheOAException e) {
-        LOGGER.error("yuheOA异常：{}", e);
+        LOGGER.error("yuheOA异常：", e);
         if (e.getErrorCode() == null) {
             return R.error(e.getMsg());
         }
@@ -25,7 +25,7 @@ public class ExceptHandler {
 
     @ExceptionHandler(Exception.class)
     public R handleException(Exception e) {
-        LOGGER.error("yuheOA异常：{}", e);
+        LOGGER.error("yuheOA异常：", e);
         return R.error(e.getMessage());
     }
 }

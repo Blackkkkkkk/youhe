@@ -1,18 +1,13 @@
 package com.youhe.biz.department;
 
 
-import com.youhe.entity.activitiData.ACT_RE_MODEL_PROCDEF;
 import com.youhe.entity.department.Department;
 import com.youhe.entity.department.User_Department;
-import com.youhe.entity.role.User_Role;
-import com.youhe.mapper.activiti.ActivitiMapper;
 import com.youhe.mapper.department.DepartmentMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
