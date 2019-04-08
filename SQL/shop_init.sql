@@ -1,3 +1,10 @@
+
+-- 清除所有商品数据
+TRUNCATE shop_picture;
+TRUNCATE shop_commodity;
+TRUNCATE shop_commodity_role;
+TRUNCATE shop_index_carousel_text;
+
 -- 商品数据
 INSERT INTO `activiti`.`shop_commodity`(`ID`, `NAME`, `PRICE`, `NUM`, `DETAIL_PICTURE`, `THUMBNAIL`, `TOP`, `STATUS`, `REGISTER`, `ORDER_NUM`, `HOT_SALE`, `IS_NEW_PRODUCT_ORDER_NUM`, `COMMODITY_ID`, `DESCRIBE`, `AVAILABLE`) VALUES (1, '运动水杯', 88, 11, NULL, NULL, 1, 1, '2019-03-31 12:37:14.0000', 1, 0, 1, 1, NULL, NULL);
 INSERT INTO `activiti`.`shop_commodity`(`ID`, `NAME`, `PRICE`, `NUM`, `DETAIL_PICTURE`, `THUMBNAIL`, `TOP`, `STATUS`, `REGISTER`, `ORDER_NUM`, `HOT_SALE`, `IS_NEW_PRODUCT_ORDER_NUM`, `COMMODITY_ID`, `DESCRIBE`, `AVAILABLE`) VALUES (2, '咖啡杯', 118, 23, NULL, NULL, 1, 1, '2019-03-31 12:06:22.0000', 1, 1, 1, 1, NULL, NULL);

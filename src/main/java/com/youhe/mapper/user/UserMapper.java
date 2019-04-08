@@ -2,9 +2,6 @@ package com.youhe.mapper.user;
 
 import com.youhe.entity.user.User;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 

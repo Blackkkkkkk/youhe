@@ -28,6 +28,11 @@ spring:
       pool-prepared-statements: true
       max-open-prepared-statements: 50
       max-pool-prepared-statement-per-connection-size: 20
+      web-stat-filter:
+        # 添加过滤规则
+        url-pattern: /*
+        # 忽略过滤格式
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
   # redis 配置
   redis:
     database: 0
@@ -57,15 +62,18 @@ spring:
 #  mvc:
 #    static-path-pattern: /static/**
 # mybatis配置
-mybatis:
+#mybatis:
+#  mapper-locations: classpath:mapper/**/*.xml
+#  config-location: classpath:mybatis-page-config.xml
+
+# mybatis-plus 配置
+mybatis-plus:
+  check-config-location: false
   mapper-locations: classpath:mapper/**/*.xml
-  config-location: classpath:mybatis-page-config.xml
-
-mapper:
-  mappers: com.youhe.mapper
-
-
-
-
-
-
+  type-aliases-package: com.youhe.entity
+#  configuration:
+#    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+      table-underline: true

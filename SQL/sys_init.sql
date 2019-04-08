@@ -1,3 +1,11 @@
+
+-- 清除用户相关数据
+TRUNCATE sys_permission;
+TRUNCATE sys_role;
+TRUNCATE sys_role_permission;
+TRUNCATE sys_user;
+TRUNCATE sys_user_role;
+
 -- 系统权限数据
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (2, '流程审批', 'menu', NULL, 'user:flow', 0, '0/', '2', '1');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (3, '我的待办', 'menu', NULL, 'user:backlog', 2, '0/2', '1', '1');

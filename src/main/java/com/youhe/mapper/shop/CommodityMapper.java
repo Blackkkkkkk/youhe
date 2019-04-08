@@ -1,8 +1,6 @@
 package com.youhe.mapper.shop;
 
-import com.youhe.entity.role.Role;
 import com.youhe.entity.shop.Commodity;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 

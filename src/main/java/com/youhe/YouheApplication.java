@@ -1,11 +1,9 @@
 package com.youhe;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @SpringBootApplication(exclude = {
@@ -13,9 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         org.activiti.spring.boot.SecurityAutoConfiguration.class,
         DataSourceAutoConfiguration.class
 })
-@EnableTransactionManagement
 @EnableAspectJAutoProxy(exposeProxy = true)
-@MapperScan("com.youhe.mapper")
 public class YouheApplication {
 
     public static void main(String[] args) {
