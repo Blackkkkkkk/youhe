@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 
 @Service
 public class  UserControllerImpl {
@@ -25,8 +27,8 @@ public class  UserControllerImpl {
 
     @Transactional(rollbackFor = Exception.class)
     public void controllerSave(User user) {
-
-        userBiz.save(user);
+        user.setRegisterDate(new Date());
+        userBiz.saveOrUpdate(user);
 
         if (user.getRoleId() != null && !user.getRoleId().equals("0")) {
             User_Role user_role = new User_Role();

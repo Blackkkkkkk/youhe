@@ -1,11 +1,12 @@
 package com.youhe.mapper.user;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youhe.entity.user.User;
 
 import java.util.List;
 
 
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User> {
 
     //根据用户账号查询用户信息
     User findByUserName(String userName);

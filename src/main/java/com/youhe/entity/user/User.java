@@ -1,5 +1,8 @@
 package com.youhe.entity.user;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.youhe.entity.SysBaseEntity;
 import com.youhe.entity.role.Role;
 
@@ -8,10 +11,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@TableName(value = "sys_user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId
     private Long uid;
     private String userAccount;//账号
     private String userName;//姓名
@@ -30,10 +35,12 @@ public class User implements Serializable {
 
 
     //查询属性
+    @TableField(exist=false)
     private String roleName;//角色名
+    @TableField(exist=false)
     private String departmentName;// 部门名字
 
-
+    @TableField(exist=false)
     private Set<Role> roles = new HashSet<>();
 
 

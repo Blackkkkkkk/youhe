@@ -1,6 +1,7 @@
 package com.youhe.biz.user;
 
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.youhe.entity.user.User;
@@ -17,7 +18,7 @@ import java.util.List;
 
 
 @Service
-public class UserBiz {
+public class UserBiz extends ServiceImpl<UserMapper, User> {
     private Logger log = LoggerFactory.getLogger(UserBiz.class);
 
     @Autowired
@@ -48,14 +49,16 @@ public class UserBiz {
     }
 
     //保存用户
-    public void save(User user) {
-        userMapper.save(user);
-    }
+    /*public boolean save(User user) {
+//        userMapper.save(user);
+        return super.saveOrUpdate(user);
+    }*/
 
 
     //删除用户
     public void del(User user) {
-        userMapper.del(user);
+        super.removeById(user.getUid());
+//        userMapper.del(user);
     }
 
 
