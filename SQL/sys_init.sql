@@ -8,7 +8,7 @@ TRUNCATE sys_user_role;
 
 -- 系统权限数据
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (2, '流程审批', 'menu', NULL, 'user:flow', 0, '0/', '2', '1');
-INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (3, '我的待办', 'menu', NULL, 'user:backlog', 2, '0/2', '1', '1');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (3, '我的待办', 'menu', '/activiti/dealwith', 'user:backlog', 2, '0/2', '1', '1');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (4, '流程在线设计', 'menu', '/create', 'sys:flowDesigner', 2, '0/2', '2', '1');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (5, '流程部署模块', 'menu', NULL, 'sys:deploy', 2, '0/2', '3', '1');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (6, '流程部署', 'button', '/activiti/deploy', 'sys:flowDeploy', 2, '0/2', '4', '1');
@@ -25,6 +25,8 @@ INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (17, '商品管理', 'menu', '/shop/index', 'shop:commodityManage', 16, NULL, '1', '1');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (18, '商品首页', 'menu', '/shop/shopPageMange', 'sys:shopPageMange', 16, NULL, '2', '1');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (19, '商品分类', 'menu', '/commodity/index', 'sys:commodity', 16, NULL, '3', '1');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (20, '流程管理', 'menu', '/activiti/ProcessManagement', 'sys:processManagement', 2, '0/2', '6', '1');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`) VALUES (21, '我的已办', 'menu', '/activiti/dealwithdo', 'user:backlogdo', 2, '0/2', '7', '1');
 
 -- 系统角色
 INSERT INTO `activiti`.`sys_role`(`RID`, `RNAME`, `AVAILABLE`, `PARENT_ID`, `ORDER_NUM`) VALUES (1, '超级管理员', '1', 0, 0);
