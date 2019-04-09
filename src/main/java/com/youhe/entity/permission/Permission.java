@@ -4,6 +4,7 @@ import com.youhe.entity.SysBaseEntity;
 import com.youhe.entity.role.Role;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Permission extends SysBaseEntity {
@@ -17,6 +18,40 @@ public class Permission extends SysBaseEntity {
     private String parentids; //父结点id列表串
     private String sortstring;  //排序
     private int available;  // 是否可用
+    //上级菜单名称
+    private String parentName;
+
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public Boolean getOpen() {
+        return open;
+    }
+
+    public void setOpen(Boolean open) {
+        this.open = open;
+    }
+
+    public List<?> getList() {
+        return list;
+    }
+
+    public void setList(List<?> list) {
+        this.list = list;
+    }
+
+    /**
+     * ztree属性
+     */
+    private Boolean open;
+
+    private List<?> list;
 
 
     private Set<Role> roles = new HashSet<>();

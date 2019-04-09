@@ -43,4 +43,30 @@ public class PermissonBiz {
         permissonMapper.del_permission_role(permission_role);
     }
 
+
+    //新增菜单
+    public void add(Permission permission) {
+        log.debug("add:");
+        permissonMapper.add(permission);
+    }
+
+    //修改部门
+    public void update(Permission permission) {
+        log.debug("update:");
+        permissonMapper.update(permission);
+    }
+
+    //查找菜单列表
+    public List<Permission> findDepartMentList(Permission permission) {
+        log.debug("findDepartMentList:");
+        return permissonMapper.findDepartMentList(permission);
+    }
+
+    //删除部门
+    public void del(Permission permission) {
+        log.debug("del:");
+        permissonMapper.del(permission);
+    }
+
+
 }

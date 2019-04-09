@@ -1,5 +1,6 @@
 package com.youhe.mapper.permisson;
 
+import com.youhe.entity.department.Department;
 import com.youhe.entity.permission.Permission;
 import com.youhe.entity.permission.Permission_Role;
 import com.youhe.entity.role.Role;
@@ -22,6 +23,18 @@ public interface PermissonMapper {
 
     //删除权限
     void del_permission_role(Permission_Role permission_role);
+
+    //新增菜单
+    void add(Permission permission);
+
+    //修改菜单
+    void update(Permission permission);
+
+    //查找菜单列表
+    List<Permission> findDepartMentList(Permission permission);
+
+    //删除菜单
+    void del(Permission permission);
 
 
 }

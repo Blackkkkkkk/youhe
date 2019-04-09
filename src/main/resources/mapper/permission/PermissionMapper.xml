@@ -11,6 +11,7 @@
         <result property="percode" column="PERCODE"></result>
         <result property="parentid" column="PARENTID"/>
         <result property="parentids" column="PARENTIDS"/>
+        <result property="parentName" column="PARENT_NAME"/>
         <result property="sortstring" column="SORTSRING"/>
         <result property="available" column="AVAILABLE"/>
     </resultMap>
@@ -24,7 +25,9 @@
 
     <!-- 查询权限-->
     <select id="findPermissionList" parameterType="com.youhe.entity.permission.Permission" resultMap="permission">
-        SELECT * FROM sys_permission
+        SELECT  *,
+        ( SELECT `PNAME` FROM sys_permission WHERE PID = pe.PARENTID ) PARENT_NAME
+        FROM sys_permission pe
         <where>
             <trim prefixOverrides="AND">
                 <if test="pid !=null and pid !=''">
@@ -55,5 +58,45 @@
     <select id="find_permission_roleList" parameterType="com.youhe.entity.permission.Permission_Role" resultMap="save_Permission_Role">
        SELECT * from sys_role_permission where sys_role_id = #{sys_role_id}
     </select>
+
+    <insert id="add" parameterType="com.youhe.entity.permission.Permission" keyProperty="pid"
+            useGeneratedKeys="true">
+               insert into sys_permission (PARENTID,TYPE, PNAME, SORTSRING, AVAILABLE ) value(#{parentid},#{type},#{pname},#{sortstring},1)
+    </insert>
+
+    <update id="update" parameterType="com.youhe.entity.permission.Permission">
+        UPDATE sys_permission
+        SET
+        <trim suffixOverrides=",">
+            <if test="parentid != null">
+                PARENTID =#{parentid},
+            </if>
+            <if test="pname != null and pname!=''">
+                PNAME=#{pname},
+            </if>
+            <if test="sortstring != null">
+                SORTSRING =#{sortstring},
+            </if>
+        </trim>
+        WHERE PID=#{pid}
+    </update>
+
+
+    <select id="findDepartMentList" parameterType="com.youhe.entity.permission.Permission" resultMap="permission">
+        select * , (SELECT `PNAME` from sys_permission where PID = pe.PARENTID) PARENT_NAME from sys_permission pe
+        where
+        1 = 1
+        <if test="parentid != null">
+            AND PARENTID = #{parentid}
+        </if>
+        <if test="pid != null">
+            AND PID = #{pid}
+        </if>
+        and AVAILABLE = 1
+    </select>
+
+    <delete id="del" parameterType="com.youhe.entity.permission.Permission">
+        DELETE from sys_permission where PID=#{pid}
+    </delete>
 
 </mapper>

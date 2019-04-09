@@ -46,6 +46,7 @@
                     <a href=""><i class="fa fa-cog"></i> <span class="nav-label">系统管理</span> <span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" id="systemManage_ul">
+                        <li shiro:hasPermission="sys:deptManage" id="deptManage"><a href="/permission/index">菜单管理</a>
                         <li shiro:hasPermission="sys:deptManage" id="deptManage"><a href="/department/index">部门管理</a>
                         </li>
                         <li shiro:hasPermission="sys:roleManage" id="roleManage"><a href="/role/index">角色管理</a></li>
