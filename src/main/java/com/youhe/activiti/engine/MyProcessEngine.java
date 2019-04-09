@@ -4,6 +4,9 @@ import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -178,5 +181,53 @@ public interface MyProcessEngine {
      * @return list<UserTask>
      */
     List<UserTask> getNextNode(String procDefId, String taskDefKey, Map<String, Object> map);
+
+    /**
+     * 根据任务ID获取任务实例
+     * @param taskId 任务ID
+     * @return
+     */
+    TaskEntity getTaskById(String taskId);
+
+    /**
+     * 根据任务ID获取流程定义
+     * @param taskId 任务ID
+     * @return
+     */
+    ProcessDefinitionEntity getProcessDefinitionByTaskId(String taskId);
+
+    /**
+     * 根据任务ID获取对应的流程实例
+     * @param taskId 任务ID
+     * @return
+     */
+    ProcessInstance getProcessInstanceByTaskId(String taskId);
+
+    /**
+     * 根据任务ID获取当前活动节点
+     * @param taskId 任务ID
+     * @return
+     */
+    ActivityImpl getActivityImpl(String taskId);
+
+    /**
+     * 根据任务ID获取活动节点
+     * @param taskId 任务ID
+     * @param activityId 活动节点ID 为null当前当前节点
+     * @return
+     */
+    ActivityImpl getActivityImpl(String taskId, String activityId);
+
+    /**
+     * 获取可驳回的节点列表
+     * @param taskId 任务ID
+     * @param currActivity 当前节点
+     * @param rtnList  存储回退节点集合
+     * @param tempList 临时存储节点集合（存储一次迭代过程中的同级userTask节点）
+     * @return 可驳回的节点列表
+     */
+    List<ActivityImpl> getCanBackActivity(String taskId, ActivityImpl currActivity, List<ActivityImpl> rtnList, List<ActivityImpl> tempList);
+
+
 
 }

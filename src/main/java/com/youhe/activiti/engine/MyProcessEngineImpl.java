@@ -26,15 +26,18 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 import org.activiti.engine.impl.persistence.entity.CommentEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -157,7 +160,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     @Override
     public List<Model> getDeployedProcesses() {
-        return repositoryService.createModelQuery().deployed().list();
+        return repositoryService.createModelQuery().deployed().orderByLastUpdateTime().desc().list();
     }
 
     @Override
@@ -348,6 +351,12 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             return null;
         }
 
+        // test todo
+        String taskDefinitionKey = this.getTaskById(taskId).getTaskDefinitionKey();
+        ActivityImpl activitiImpl = this.getActivityImpl(taskId, taskDefinitionKey);
+        List<ActivityImpl> activities = this.getCanBackActivity(taskId, activitiImpl, new ArrayList<>(), new ArrayList<>());
+        activities.forEach(activity -> System.out.println("return actId=" + activity.getId()));
+
         // 自定义外置表单（表单都放在templates/activiti/form目录下） todo 还未完善，以后再扩展
         String formKey = task.getFormKey();
 
@@ -478,6 +487,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             String processDefinitionId = flowVariable.getProcessDefinitionId();
             ReadOnlyProcessDefinition processDefinitionEntity = (ReadOnlyProcessDefinition) repositoryService
                     .getProcessDefinition(processDefinitionId);
+            ProcessDefinition processDefinition = repositoryService.getProcessDefinition(processDefinitionId);
             // 目标节点
             ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity(targetTaskDefKey);
             // 优先使用参数过来的审批人
@@ -591,6 +601,136 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         getNextNodeRecur(flowElements, flowElement, map, userTasks);
 
         return userTasks;
+    }
+
+    @Override
+    public TaskEntity getTaskById(String taskId) {
+        TaskEntity task = (TaskEntity) taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (task == null) {
+            throw new YuheOAException("任务实例未找到");
+        }
+        return task;
+    }
+
+    @Override
+    public ProcessDefinitionEntity getProcessDefinitionByTaskId(String taskId) {
+        ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
+                .getDeployedProcessDefinition(getTaskById(taskId)
+                        .getProcessDefinitionId());
+        if (processDefinition == null) {
+            throw new YuheOAException("流程定义未找到");
+        }
+        return processDefinition;
+    }
+
+    @Override
+    public ProcessInstance getProcessInstanceByTaskId(String taskId) {
+        ProcessInstance processInstance = runtimeService
+                .createProcessInstanceQuery().processInstanceId(
+                        getTaskById(taskId).getProcessInstanceId())
+                .singleResult();
+        if (processInstance == null) {
+            throw new YuheOAException("流程实例未找到");
+        }
+        return processInstance;
+    }
+
+    @Override
+    public ActivityImpl getActivityImpl(String taskId) {
+        return this.getActivityImpl(taskId, null);
+    }
+
+    @Override
+    public ActivityImpl getActivityImpl(String taskId, String activityId) {
+        // 取得流程定义
+        ProcessDefinitionEntity processDefinition = this.getProcessDefinitionByTaskId(taskId);
+
+        // 获取当前活动节点ID
+        if (StrUtil.isBlank(activityId)) {
+            activityId = this.getTaskById(taskId).getTaskDefinitionKey();
+        }
+
+        // 根据流程定义，获取该流程实例的结束节点
+        if (activityId.toUpperCase().equals("END")) {
+            for (ActivityImpl activityImpl : processDefinition.getActivities()) {
+                List<PvmTransition> pvmTransitionList = activityImpl
+                        .getOutgoingTransitions();
+                if (pvmTransitionList.isEmpty()) {
+                    return activityImpl;
+                }
+            }
+        }
+
+        // 根据节点定义ID，获取对应的活动节点
+        return processDefinition.findActivity(activityId);
+    }
+
+    @Override
+    public List<ActivityImpl> getCanBackActivity(String taskId, ActivityImpl currActivity, List<ActivityImpl> rtnList, List<ActivityImpl> tempList) {
+        ProcessInstance processInstance = this.getProcessInstanceByTaskId(taskId);
+
+        // 当前节点的流入来源
+        List<PvmTransition> incomingTransitions = currActivity
+                .getIncomingTransitions();
+        // 条件分支节点集合，userTask节点遍历完毕，迭代遍历此集合，查询条件分支对应的userTask节点
+        List<ActivityImpl> exclusiveGateways = new ArrayList<>();
+        // 并行节点集合，userTask节点遍历完毕，迭代遍历此集合，查询并行节点对应的userTask节点
+        List<ActivityImpl> parallelGateways = new ArrayList<>();
+        // 遍历当前节点所有流入路径
+        for (PvmTransition pvmTransition : incomingTransitions) {
+            TransitionImpl transitionImpl = (TransitionImpl) pvmTransition;
+            ActivityImpl activityImpl = transitionImpl.getSource();
+            String type = (String) activityImpl.getProperty("type");
+            /**
+             * 并行节点配置要求：<br>
+             * 必须成对出现，且要求分别配置节点ID为:XXX_start(开始)，XXX_end(结束)
+             */
+            if ("parallelGateway".equals(type)) {// 并行路线
+                String gatewayId = activityImpl.getId();
+                String gatewayType = gatewayId.substring(gatewayId
+                        .lastIndexOf("_") + 1);
+                if ("START".equals(gatewayType.toUpperCase())) {// 并行起点，停止递归
+                    return rtnList;
+                } else {// 并行终点，临时存储此节点，本次循环结束，迭代集合，查询对应的userTask节点
+                    parallelGateways.add(activityImpl);
+                }
+            } else if ("startEvent".equals(type)) {// 开始节点，停止递归
+                return rtnList;
+            } else if ("userTask".equals(type)) {// 用户任务
+                tempList.add(activityImpl);
+            } else if ("exclusiveGateway".equals(type)) {// 分支路线，临时存储此节点，本次循环结束，迭代集合，查询对应的userTask节点
+                currActivity = transitionImpl.getSource();
+                exclusiveGateways.add(currActivity);
+            }
+        }
+
+        // 迭代条件分支集合，查询对应的userTask节点
+        for (ActivityImpl activityImpl : exclusiveGateways) {
+            this.getCanBackActivity(taskId, activityImpl, rtnList, tempList);
+        }
+
+        // 迭代并行集合，查询对应的userTask节点
+        for (ActivityImpl activityImpl : parallelGateways) {
+            this.getCanBackActivity(taskId, activityImpl, rtnList, tempList);
+        }
+
+        // 根据同级userTask集合，过滤最近发生的节点
+        currActivity = filterNewestActivity(processInstance.getProcessInstanceId(), tempList);
+        if (currActivity != null) {
+            // 查询当前节点的流向是否为并行终点，并获取并行起点ID
+            String id = findParallelGatewayId(currActivity);
+            if (StrUtil.isBlank(id)) {// 并行起点ID为空，此节点流向不是并行终点，符合驳回条件，存储此节点
+                rtnList.add(currActivity);
+            } else {// 根据并行起点ID查询当前节点，然后迭代查询其对应的userTask任务节点
+                currActivity = this.getActivityImpl(taskId, id);
+            }
+
+            // 清空本次迭代临时集合
+            tempList.clear();
+            // 执行下次迭代
+            this.getCanBackActivity(taskId, currActivity, rtnList, tempList);
+        }
+        return rtnList;
     }
 
     /**
@@ -720,6 +860,68 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         for (FlowElement flowElement : flowElements) {
             if (flowElement instanceof StartEvent) {
                 return flowElement;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据流入任务集合，查询最近一次的流入任务节点
+     * @param processInstanceId 流程实例ID
+     * @param tempList 流入任务集合
+     * @return
+     */
+    private ActivityImpl filterNewestActivity(String processInstanceId, List<ActivityImpl> tempList) {
+        while (tempList.size() > 0) {
+            ActivityImpl activity_1 = tempList.get(0);
+            HistoricActivityInstance activityInstance_1 = getHisActivityInstance(processInstanceId, activity_1.getId());
+            if (activityInstance_1 == null) {
+                tempList.remove(activity_1);
+                continue;
+            }
+            if (tempList.size() > 1) {
+                ActivityImpl activity_2 = tempList.get(1);
+                HistoricActivityInstance activityInstance_2 = this.getHisActivityInstance(processInstanceId, activity_2.getId());
+                if (activityInstance_2 == null) {
+                    tempList.remove(activity_2);
+                    continue;
+                }
+                if (activityInstance_1.getEndTime().before(
+                        activityInstance_2.getEndTime())) {
+                    tempList.remove(activity_1);
+                } else {
+                    tempList.remove(activity_2);
+                }
+            } else {
+                break;
+            }
+        }
+        if (tempList.size() > 0) {
+            return tempList.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 根据当前节点，查询输出流向是否为并行终点，如果为并行终点，则拼装对应的并行起点ID
+     * @param activityImpl 当前节点
+     * @return
+     */
+    private String findParallelGatewayId(ActivityImpl activityImpl) {
+        List<PvmTransition> incomingTransitions = activityImpl
+                .getOutgoingTransitions();
+        for (PvmTransition pvmTransition : incomingTransitions) {
+            TransitionImpl transitionImpl = (TransitionImpl) pvmTransition;
+            activityImpl = transitionImpl.getDestination();
+            String type = (String) activityImpl.getProperty("type");
+            if ("parallelGateway".equals(type)) {// 并行路线
+                String gatewayId = activityImpl.getId();
+                String gatewayType = gatewayId.substring(gatewayId
+                        .lastIndexOf("_") + 1);
+                if ("END".equals(gatewayType.toUpperCase())) {
+                    return gatewayId.substring(0, gatewayId.lastIndexOf("_"))
+                            + "_start";
+                }
             }
         }
         return null;

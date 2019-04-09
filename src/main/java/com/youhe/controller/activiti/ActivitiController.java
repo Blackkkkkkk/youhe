@@ -26,6 +26,7 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -41,6 +42,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -399,6 +401,28 @@ public class ActivitiController extends BaseController {
             LOGGER.error("【异常】-获取流程图失败！" + e.getMessage());
             throw new YuheOAException("获取流程图失败！" + e.getMessage());
         }
+    }
+
+    /**
+     * 当前节点所有可驳回的节点列表
+     * @param taskId 任务ID
+     * @return
+     */
+    @GetMapping(value = "canBackNodes")
+    public R canBackNodes(String taskId) {
+        ActivityImpl activityImpl = myProcessEngine.getActivityImpl(taskId);
+        List<ActivityImpl> canBackActivity = myProcessEngine.getCanBackActivity(taskId, activityImpl, new ArrayList<>(), new ArrayList<>());
+        String id = myProcessEngine.getProcessInstanceByTaskId(taskId).getId();
+        List<Map<String, String>> rNodes = new ArrayList<>();
+        canBackActivity.forEach(activity -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("id", activity.getId());
+            HistoricActivityInstance hisActivityInstance = myProcessEngine.getHisActivityInstance(id, activity.getId());
+            map.put("name", hisActivityInstance.getActivityName());
+            rNodes.add(map);
+        });
+
+        return R.ok().put("rNodes", rNodes);
     }
 
 

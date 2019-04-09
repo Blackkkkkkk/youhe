@@ -51,16 +51,16 @@
                         <form id="taskForm" class="form-horizontal" role="form">
 
                             <!--todo 选择审批人-->
-                            <div class="form-group">
+                            <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
                                 <label class="col-sm-2 control-label">审批人</label>
                                 <div class="form-group">
-                                    <span class="glyphicon glyphicon-user" onclick="selUser()">
+                                    <span class="glyphicon glyphicon-user" style="margin-top: 6px;" onclick="selUser()">
                                         <input type="text" name="nextUserId" class="icon-user-add" value="1"/>
                                     </span>
                                 </div>
                             </div>
                             <!--todo 下一节点-->
-                            <div class="form-group">
+                            <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
                                 <label class="col-sm-2 control-label">下一环节</label>
                                 <div class="form-group">
                                     <label class="radio-inline" th:each="nextNode, info: ${taskData.flowVariable['nextNodes']}">

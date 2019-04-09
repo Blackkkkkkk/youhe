@@ -154,26 +154,75 @@ function back2PreNode() {
 }
 
 /**
- * todo 驳回任意环节
+ * 驳回任意环节
  */
 function back2AnyNode() {
-    // 需要弹框
-    /*var taskFormData = yuheUtils.getFormJson('taskForm');
-    $.ajax({
-        type: 'POST',
-        url: '../../rollBack/anyTask',
-        dataType:'json',
-        // contentType : 'application/json;charset=utf-8',
-        data: taskFormData,
-        success: function (r) {
-            if (r.Status == 0) {
-                alert('任务已驳回');
-            } else {
-                alert('任务驳回失败');
+
+    var setting = {
+        data: {
+            simpleData: {
+                enable: true,
+                chkStyle: "radio",
+                rootPId: -1
+            },
+            key: {
+                url: "nourl"
             }
         }
-    });*/
-    alert('未实现');
+    };
+
+    var taskId = $('input[name="taskId"]').val();
+    $.ajax({
+        url:"/activiti/canBackNodes",
+        type:"GET",
+        data: {taskId: taskId},
+        dataType: "json",
+        success: function(r){
+            console.log(r);
+            console.log(r.rNodes);
+            var zTree = $.fn.zTree.init($("#backNodeTree"),setting, r.rNodes);
+            // 让第一个父节点展开
+            var rootNode_0 = zTree.getNodeByParam('pid', 0, null);
+            zTree.expandNode(rootNode_0, true, false, false, false);
+
+            layer.open({
+                type: 1,
+                offset: '50px',
+                skin: 'layui-layer-molv',
+                title: "选择驳回节点",
+                maxmin: true,
+                area: ['380px', '380px'],
+                shade: 0,
+                shadeClose: false,
+                content: jQuery("#canBackNodeLayer"),
+                btn: ['确定', '取消'],
+                btn1: function (index) {
+                    var node = zTree.getSelectedNodes();
+                    console.log('选择的nodeID：', node[0].id);
+                    console.log('选择的nodeName：', node[0].name);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '../../rollBack/anyTask',
+                        dataType:'json',
+                        data: {taskId: taskId, targetNode: node[0].id},
+                        success: function (r) {
+                            if (r.Status == 0) {
+                                alert('任务已驳回[' + node[0].name + ']节点');
+                            } else {
+                                alert('任务驳回失败');
+                            }
+                        }
+                    });
+                    layer.close(index);
+                }
+            });
+        },
+        error: function(){
+
+        }
+    });
+
 }
 
 /**

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title th:text="${taskData.flowVariable['currentNodeName']}">当前节点</title>
     <div th:include="common/Head :: headCss"></div>
+    <link rel="stylesheet" th:href="@{/ztree/css/metroStyle/metroStyle.css}">
 </head>
 
 <body style="background: white">
@@ -24,12 +25,21 @@
         <button style="display: none" type="submit" id="busBtn">提交</button>
     </form>
 
+    <!--驳回节点列表弹出框-->
+    <div id="canBackNodeLayer" style="display: none;padding:10px;">
+        <div class="wrapper">
+            <div id="backNodeTree" class="ztree"></div>
+        </div>
+    </div>
+
 </div>
 
 <!--提交任务模态框-->
 <div th:include="activiti/common/form :: submitTaskModal"></div>
 
 <div th:include="common/Head :: mainJs"></div>
+<script th:src="@{/ztree/jquery.ztree.all.min.js}"></script>
+<script th:src="@{/ztree/jquery.ztree.exhide.js}"></script>
 <script th:utext="${script}"></script>
 </body>
 </html>
