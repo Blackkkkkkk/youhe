@@ -20,7 +20,17 @@ public class Permission extends SysBaseEntity {
     private int available;  // 是否可用
     //上级菜单名称
     private String parentName;
+//    菜单类型
+    private String types;
 
+
+    public String getTypes() {
+        return types;
+    }
+
+    public void setTypes(String types) {
+        this.types = types;
+    }
 
     public String getParentName() {
         return parentName;
