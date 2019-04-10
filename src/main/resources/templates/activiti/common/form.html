@@ -100,7 +100,7 @@
                     </div>
                     <!--流程流转按钮-->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submit(preSubmit);" th:text="${taskData.flowVariable['firstNode']?'提交':'同意'}">同意</button>
+                        <button type="button" id="submitBtn" class="btn btn-primary" data-dismiss="modal" onclick="submit(preSubmit);" th:text="${taskData.flowVariable['firstNode']?'提交':'同意'}">同意</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back2PreNode()" th:remove="${taskData.flowVariable['firstNode']?'all':'none'}">驳回</button>
                         <button type="button" class="btn btn-bitbucket" data-dismiss="modal" onclick="back2FirstNode()" th:remove="${taskData.flowVariable['firstNode']?'all':'none'}">回退首环节</button>
                         <button type="button" class="btn btn-pinterest" onclick="back2AnyNode()" th:remove="${taskData.flowVariable['firstNode']?'all':'none'}">回退任意环节</button>

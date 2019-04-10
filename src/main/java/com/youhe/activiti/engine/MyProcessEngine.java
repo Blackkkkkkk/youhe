@@ -9,8 +9,10 @@ import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Attachment;
 import org.activiti.engine.task.Task;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -228,6 +230,46 @@ public interface MyProcessEngine {
      */
     List<ActivityImpl> getCanBackActivity(String taskId, ActivityImpl currActivity, List<ActivityImpl> rtnList, List<ActivityImpl> tempList);
 
+    /**
+     * 创建attachment
+     * @param attachmentType - 类型
+     * @param taskId 任务ID
+     * @param processInstanceId 流程实例ID
+     * @param attachmentName    附件名称
+     * @param attachmentDescription 附件描述
+     * @param url 文件上传成功后返回的可下载的url地址
+     */
+    Attachment createAttachment(String userId, String attachmentType, String taskId, String processInstanceId, String attachmentName, String attachmentDescription, String url);
 
+    /**
+     * 根据附件id返回附件文件流信息
+     * @param attachmentId 附件ID
+     */
+    InputStream getAttachmentContent(String attachmentId);
 
+    /**
+     * 根据attachmenId获取附件对象
+     * @param attachmentId 附件ID
+     */
+    Attachment getAttachment(String attachmentId);
+
+    /**
+     * 查询某个task所关联的附件集合
+     * @param taskId 任务ID
+     * @return
+     */
+    List<Attachment> getTaskAttachments(String taskId);
+
+    /**
+     * 查询某个实例所关联的附件集合（多个task组合成一个实例）
+     * @param processInstanceId 流程实例ID
+     * @return
+     */
+    List<Attachment> getInstanceAttachments(String processInstanceId);
+
+    /**
+     * 根据附件ID删除附件信息
+     * @param attachmentId 附件ID
+     */
+    void deleteAttachment(String attachmentId);
 }

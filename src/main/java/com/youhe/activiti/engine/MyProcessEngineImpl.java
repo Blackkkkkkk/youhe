@@ -42,6 +42,7 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Attachment;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang.StringUtils;
@@ -52,6 +53,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -77,6 +79,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     private FormService formService;
     @Autowired
     private HistoryService historyService;
+    @Autowired
+    private IdentityService identityService;
     @Autowired
     private UserMapper userMapper;
 
@@ -350,12 +354,6 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             // todo 流程完结或当前用户没有权限
             return null;
         }
-
-        // test todo
-        String taskDefinitionKey = this.getTaskById(taskId).getTaskDefinitionKey();
-        ActivityImpl activitiImpl = this.getActivityImpl(taskId, taskDefinitionKey);
-        List<ActivityImpl> activities = this.getCanBackActivity(taskId, activitiImpl, new ArrayList<>(), new ArrayList<>());
-        activities.forEach(activity -> System.out.println("return actId=" + activity.getId()));
 
         // 自定义外置表单（表单都放在templates/activiti/form目录下） todo 还未完善，以后再扩展
         String formKey = task.getFormKey();
@@ -731,6 +729,42 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             this.getCanBackActivity(taskId, currActivity, rtnList, tempList);
         }
         return rtnList;
+    }
+
+    @Override
+    public Attachment createAttachment(String userId, String attachmentType, String taskId, String processInstanceId, String attachmentName, String attachmentDescription, String url) {
+        try{
+            identityService.setAuthenticatedUserId(userId);
+            return taskService.createAttachment(attachmentType, taskId, processInstanceId, attachmentName, attachmentDescription, url);
+        }finally{
+            identityService.setAuthenticatedUserId(null);
+        }
+    }
+
+    @Override
+    public InputStream getAttachmentContent(String attachmentId) {
+        return taskService.getAttachmentContent(attachmentId);
+    }
+
+    @Override
+    public Attachment getAttachment(String attachmentId) {
+        return taskService.getAttachment(attachmentId);
+    }
+
+    @Override
+    public List<Attachment> getTaskAttachments(String taskId) {
+        return taskService.getTaskAttachments(taskId);
+    }
+
+    @Override
+    public List<Attachment> getInstanceAttachments(String processInstanceId) {
+        return taskService.getProcessInstanceAttachments(processInstanceId);
+    }
+
+    @Override
+    public void deleteAttachment(String attachmentId) {
+        // 如果有必要可先删除远程文件
+        taskService.deleteAttachment(attachmentId);
     }
 
     /**
