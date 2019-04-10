@@ -44,9 +44,9 @@
                             <div class="col-sm-2 control-label">菜单类型</div>
                             <div class="col-sm-10">
                                 <!--<input type="text" class="form-control" v-model="dept.type" placeholder="菜单类型"/>-->
-                                <select v-model="dept.type"  style="width:1370px;font-size:22px">
-                                    <option value="menu">菜单</option>
-                                    <option value="button">按钮</option>
+                                <select v-model="dept.type"  style="width:100%;height:30px;font-size:14px;" >
+                                    <option value="menu" style="width:15px;font-size:14px">菜单</option>
+                                    <option value="button" style="width:15px;font-size:14px">按钮</option>
                                 </select>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                         <button class="btn" id="btn" onclick="searchNode()"> 搜索</button>
                     </div>
                     <div class="treeExpandCollapse">
-                        <a href="javascript:" id="btnExpand">展开</a> /
+                        <a href="javascript:" id="btnExpand">展开</a>
                         <a href="javascript:" id="btnCollapse">折叠</a>
                     </div>
                     <div id="deptTree" class="ztree"></div>

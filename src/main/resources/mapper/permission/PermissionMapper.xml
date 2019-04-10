@@ -14,6 +14,7 @@
         <result property="parentName" column="PARENT_NAME"/>
         <result property="sortstring" column="SORTSRING"/>
         <result property="available" column="AVAILABLE"/>
+        <result property="types" column="TYPES"/>
     </resultMap>
 
 
@@ -26,7 +27,17 @@
     <!-- 查询权限-->
     <select id="findPermissionList" parameterType="com.youhe.entity.permission.Permission" resultMap="permission">
         SELECT  *,
-        ( SELECT `PNAME` FROM sys_permission WHERE PID = pe.PARENTID ) PARENT_NAME
+        ( SELECT `PNAME` FROM sys_permission WHERE PID = pe.PARENTID ) PARENT_NAME,
+        (
+        CASE pe.type
+        WHEN "menu" THEN
+        '菜单'
+        WHEN "button" THEN
+        '按钮'
+        ELSE
+        '为空'
+        END
+        ) types
         FROM sys_permission pe
         <where>
             <trim prefixOverrides="AND">

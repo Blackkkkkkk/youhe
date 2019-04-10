@@ -149,7 +149,7 @@ Dept.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
         {title: '菜单名称', field: 'pname', visible: false, align: 'center', valign: 'middle', width: '80px'},
-        {title: '菜单类型', field: 'type', align: 'center', valign: 'middle', sortable: true, width: '180px'},
+        {title: '菜单类型', field: 'types', align: 'center', valign: 'middle', sortable: true, width: '180px'},
         {title: '访问路径', field: 'url', align: 'center', valign: 'middle', sortable: true, width: '100px'},
         {title: '权限代码', field: 'percode', align: 'center', valign: 'middle', sortable: true, width: '100px'},
         {title: '上级菜单', field: 'parentName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
@@ -171,6 +171,7 @@ function getDeptId() {
 
 $(function () {
     $.get("/permission/info", function (r) {
+        var trs ;
         var colunms = Dept.initColumn();
         var table = new TreeTable(Dept.id, "/permission/list", colunms);
         table.setRootCodeValue(r.pid);
@@ -182,6 +183,7 @@ $(function () {
         table.init();
         Dept.table = table;
     });
+
 
 
 });
