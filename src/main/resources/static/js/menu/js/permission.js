@@ -170,8 +170,8 @@ function getDeptId() {
 
 
 $(function () {
+           var trs ;
     $.get("/permission/info", function (r) {
-        var trs ;
         var colunms = Dept.initColumn();
         var table = new TreeTable(Dept.id, "/permission/list", colunms);
         table.setRootCodeValue(r.pid);
@@ -181,7 +181,10 @@ $(function () {
         table.setParentCodeField("parentid");
         table.setExpandAll(false);
         table.init();
+
         Dept.table = table;
+
+
     });
 
 

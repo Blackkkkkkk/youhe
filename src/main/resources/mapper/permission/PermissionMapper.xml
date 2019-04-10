@@ -85,6 +85,9 @@
             <if test="pname != null and pname!=''">
                 PNAME=#{pname},
             </if>
+            <if test="type != null">
+                TYPE =#{type},
+            </if>
             <if test="sortstring != null">
                 SORTSRING =#{sortstring},
             </if>
