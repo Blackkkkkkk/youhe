@@ -133,7 +133,7 @@ function findUser(layero,index) {
     info=info.substring(0, info.lastIndexOf(','));
     infoId=infoId.substring(0, infoId.lastIndexOf(','));
 
-    $("#user").html(info);
+    $(".glyphicon-user").html(info);
     $(".icon-user-add").val(infoId);
 
 }
