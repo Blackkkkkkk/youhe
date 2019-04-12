@@ -43,4 +43,6 @@ public class Constant {
     public final static int NODE_JUMP_TYPE_ROLL = 0;    // 节点跳转类型：回退
     public final static int NODE_JUMP_TYPE_GO = 1;      // 节点跳转类型：前进
 
+    public final static String FILE_UPLOAD_PREFIX = "D://upload/"; // 文件上传前缀 todo
+
 }

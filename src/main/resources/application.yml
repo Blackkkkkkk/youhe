@@ -2,11 +2,8 @@ server:
   port: 80
 
 spring:
+  # druid数据源配置
   datasource:
-    #        url: jdbc:mysql://localhost:3306/activiti?useUnicode=true&characterEncoding=utf8&useSSL=false
-    #        username: root
-    #        password: root123
-    #       driver-class-name: com.mysql.jdbc.Driver
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -64,14 +61,22 @@ spring:
     encoding: utf-8
     basename: i18n/shop/message
 
+  # thymeleaf 模块配置
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: LEGACYHTML5
+    encoding: utf-8
+    cache: false
+    servlet:
+      content-type: text/html
+
   # activiti 配置
   activiti:
     check-process-definitions: false
     database-schema-update: true
     database-schema: ACT
 
-#  mvc:
-#    static-path-pattern: /static/**
 # mybatis配置
 #mybatis:
 #  mapper-locations: classpath:mapper/**/*.xml
@@ -82,9 +87,21 @@ mybatis-plus:
   check-config-location: false
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.youhe.entity
-#  configuration:
-#    map-underscore-to-camel-case: true
+  configuration:
+    map-underscore-to-camel-case: true
   global-config:
     db-config:
       id-type: auto
       table-underline: true
+
+# 日志配置
+logging:
+  level:
+    com:
+      youhe: DEBUG
+    org:
+      activiti:
+        engine:
+          impl:
+            persistence:
+              entity: debug

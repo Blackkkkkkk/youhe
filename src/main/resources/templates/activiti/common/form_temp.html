@@ -5,42 +5,8 @@
     <title th:text="${taskData.flowVariable['currentNodeName']}">当前节点</title>
     <div th:include="common/Head :: headCss"></div>
     <link rel="stylesheet" th:href="@{/ztree/css/metroStyle/metroStyle.css}">
-    <link href="https://cdn.bootcss.com/webuploader/0.1.1/webuploader.css" rel="stylesheet">
-    <style>
-        .webuploader-pick {
-            position: relative;
-            cursor: pointer;
-            background: #047a0a;
-            padding: 5px 8px;
-            color: #fff;
-            text-align: center;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .webuploader-pick-hover {
-            background: #047a0a;
-        }
-
-        .webuploader-pick-disable {
-            opacity: 0.6;
-            pointer-events:none;
-        }
-        .upload-state-done:after {
-            content:'w1';
-            font-family: FontAwesome;
-            font-style: normal;
-            font-weight: normal;
-            line-height: 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            font-size: 32px;
-            position: absolute;
-            bottom: 0;
-            right: 4px;
-            color: #4cae4c;
-            z-index: 99;
-        }
-    </style>
+    <link th:href="@{/web-upload/css/webuploader.css}" rel="stylesheet">
+<!--    <link href="https://cdn.bootcss.com/webuploader/0.1.1/webuploader.css" rel="stylesheet">-->
 </head>
 
 <body style="background: white">
@@ -76,7 +42,9 @@
 <div th:include="common/Head :: mainJs"></div>
 <script th:src="@{/ztree/jquery.ztree.all.min.js}"></script>
 <script th:src="@{/ztree/jquery.ztree.exhide.js}"></script>
-<script src="https://cdn.bootcss.com/webuploader/0.1.1/webuploader.js"></script>
+<script th:src="@{/web-upload/js/webuploader.js}"></script>
+<!--<script src="https://cdn.bootcss.com/webuploader/0.1.1/webuploader.js"></script>-->
+
 <script th:utext="${script}"></script>
 </body>
 </html>

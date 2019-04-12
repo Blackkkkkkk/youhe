@@ -263,3 +263,10 @@ function showComments() {
         // end: callback
     });
 }
+
+/**
+ * 删除附件
+ */
+function delAttachment(fileId) {
+    alert('删除附件:' + fileId);
+}
