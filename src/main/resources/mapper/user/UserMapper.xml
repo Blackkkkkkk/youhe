@@ -165,4 +165,59 @@
 
     </select>
 
+    <!--ztree树形查询出最高级部门下的用户-->
+      <!--查一级-->
+    <resultMap type="com.youhe.entity.department.Department" id="findDeptAndUserList" autoMapping="true">
+        <id property="deptId"   column="dept_id" />
+        <result property="userDepartmentName" column="name" />
+        <collection property="userDept" javaType="java.util.List"
+                    column="dept_id" ofType="com.youhe.entity.department.User_Department" select="findNameOne" />
+    </resultMap>
+
+
+      <!--查二级-->
+    <resultMap type="com.youhe.entity.department.User_Department" id="findDeptAndUserList1" autoMapping="true">
+        <id property="sys_department_id"   column="dept_id" />
+        <result property="userDepartmentName" column="name" />
+        <collection property="user" javaType="java.util.List"
+                    column="dept_id" ofType="com.youhe.entity.department.User_Department" select="findNameTwo" />
+    </resultMap>
+   <!--中间表-->
+    <resultMap type="com.youhe.entity.department.User_Department" id="findDeptAndUserList2" autoMapping="true">
+        <id property="sys_user_id"   column="sys_user_id" />
+        <result property="userDepartmentName" column="user_name" />
+        <collection property="user" javaType="java.util.List"
+                    column="sys_user_id" ofType="com.youhe.entity.user.User" select="findNameThree" />
+    </resultMap>
+     <!--查询用户-->
+    <resultMap type="com.youhe.entity.user.User" id="baseClazzResultMap" autoMapping="true">
+        <id column="uid" property="uid"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="user_name" property="userDepartmentName"/>
+    </resultMap>
+
+
+
+    <select id="findNames"  resultMap="findDeptAndUserList">
+       select dept_id ,name  from sys_department where parent_id='0'
+    </select>
+
+    <select id="findNameOne"  resultMap="findDeptAndUserList1" parameterType="java.lang.String" >
+       select dept_id,name  from sys_department   where parent_id=#{dept_id}
+        union all
+         select dept_id,name  from sys_department   where  dept_id=#{dept_id}
+
+</select>
+
+    <select id="findNameTwo"  resultMap="findDeptAndUserList2" parameterType="java.lang.String"  >
+       select ud.sys_user_id,u.user_name  from sys_user_department ud inner join sys_user u on u.uid=ud.sys_user_id where ud.sys_department_id=#{dept_id}
+
+</select>
+
+    <select id="findNameThree"  resultType="com.youhe.entity.user.User" parameterType="java.lang.String" >
+       select user_name as 'userDepartmentName' ,uid as 'uid',department_id as 'departmentId'
+       from sys_user where uid=#{sys_user_id}
+</select>
+
+
 </mapper>

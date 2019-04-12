@@ -1,6 +1,7 @@
 package com.youhe.entity.department;
 
 import com.youhe.entity.SysBaseEntity;
+import com.youhe.entity.user.User;
 
 import java.util.List;
 
@@ -16,6 +17,29 @@ public class User_Department extends SysBaseEntity {
 
     private String sys_department_id;
 
+    private String userDepartmentName;
+
+
+    private List<User> user;
+
+
+
+    public List<User> getUser() {
+        return user;
+    }
+
+
+    public void setUser(List<User> user) {
+        this.user = user;
+    }
+
+    public String getUserDepartmentName() {
+        return userDepartmentName;
+    }
+
+    public void setUserDepartmentName(String userDepartmentName) {
+        this.userDepartmentName = userDepartmentName;
+    }
 
     public Long getId() {
         return id;

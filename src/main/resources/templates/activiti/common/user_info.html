@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+</head>
+<link rel="stylesheet" href="/ztree/css/metroStyle/metroStyle.css">
+<body>
+
+<div id="tree" class="ztree"></div>
+
+
+<div th:include="common/Head :: mainJs"></div>
+<script   src="/ztree/jquery.ztree.core.js"></script>
+<script   src="/ztree/jquery.ztree.excheck.min.js"></script>
+
+
+
+<script src="/ztree/jquery.ztree.all.min.js"></script>
+
+<script src="/ztree/jquery.ztree.exhide.js"></script>
+
+
+
+<script>
+
+var setting = {
+    check: {
+        enable: true,
+    },
+    data: {
+        key: {
+            name:"userDepartmentName"
+
+        }
+    }
+}
+function zTreeOnCheck(){
+    var treeObj = $.fn.zTree.getZTreeObj("tree");
+    var nodes = treeObj.getCheckedNodes(true);
+    var ids=[];
+
+    for(var i=0;i<nodes.length;i++){
+     if(nodes[i].isParent){
+         ids.push(nodes[i].children)
+      }
+    }
+     return ids;
+}
+
+var zNodes;
+$.ajax({
+    async:false,
+    cache:false,
+    type: "get",
+    url: "/activiti/find/user",
+    dataType: 'json',
+    success: function(data) {
+        for(var i=0;i<data.length;i++){
+            for(var j=0;j<data[i].userDept.length;j++){
+                var userChildren=data[i].userDept[j].user;
+                delete(data[i].userDept[j].user);
+                data[i].userDept[j].children=userChildren;
+            }
+            var deptChildren=data[i].userDept;
+            delete(data[i].userDept);
+            data[i].children=deptChildren;
+            console.log(data);
+        }
+        zNodes=data;
+    }
+});
+$(function() {
+    ztree = $.fn.zTree.init($("#tree"), setting,zNodes);
+});
+
+
+</script>
+</body>
+</html>

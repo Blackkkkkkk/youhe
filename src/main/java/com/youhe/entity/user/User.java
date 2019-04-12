@@ -41,8 +41,19 @@ public class User implements Serializable {
     private String departmentName;// 部门名字
 
     @TableField(exist=false)
+    //ztree属性
+    private String userDepartmentName;//用户和部门公用字段
+
+
     private Set<Role> roles = new HashSet<>();
 
+    public String getUserDepartmentName() {
+        return userDepartmentName;
+    }
+
+    public void setUserDepartmentName(String userDepartmentName) {
+        this.userDepartmentName = userDepartmentName;
+    }
 
     public int getOrderNum() {
         return orderNum;

@@ -188,7 +188,7 @@ var vm = new Vue({
                     } else if (type == 4) {
                         inputValue = "#reportFile_4";
                     }
-                    if (r.Status === 0) {
+                    if (r.Status== 0) {
                         //不上传图片时，不触发bootstrap 上传插件的初始化方法。仅将表单里面的（除图片以外的）内容提交，
                         if ($(inputValue).val() != "") {
                             $(inputValue).fileinput('upload'); //触发插件开始上传。
@@ -241,10 +241,10 @@ var FileInput = function () {
             showCancel: false,                                      //是否显示取消按钮
             browseClass: "btn btn-primary",                         //按钮样式
             dropZoneEnabled: true,                               //是否显示拖拽区域
-            minImageWidth: minImageWidth,                                    //图片的最小宽度
+          minImageWidth: minImageWidth,                                    //图片的最小宽度
             minImageHeight: minImageHeight,                                   //图片的最小高度
             maxImageWidth: maxImageWidth,                                  //图片的最大宽度
-            maxImageHeight: maxImageHeight,                                 //图片的最大高度
+            maxImageHeight: maxImageHeight,                                //图片的最大高度
             maxFileSize: 0,                                       //单位为kb，如果为0表示不限制文件大小
             minFileCount: 0,
             maxFileCount: 1,                                       //表示允许同时上传的最大文件个数

@@ -1,6 +1,7 @@
 package com.youhe.entity.department;
 
 import com.youhe.entity.SysBaseEntity;
+import com.youhe.entity.user.User;
 
 import java.util.List;
 
@@ -22,12 +23,33 @@ public class Department extends SysBaseEntity {
 
     private Integer status;
 
+
     /**
      * ztree属性
      */
     private Boolean open;
 
-    private List<?> list;
+    //二级部门
+    private List<User_Department>  userDept;
+
+
+    private String userDepartmentName;//用户和部门公用字段
+
+    public List<User_Department> getUserDept() {
+        return userDept;
+    }
+
+    public void setUserDept(List<User_Department> userDept) {
+        this.userDept = userDept;
+    }
+
+    public String getUserDepartmentName() {
+        return userDepartmentName;
+    }
+
+    public void setUserDepartmentName(String userDepartmentName) {
+        this.userDepartmentName = userDepartmentName;
+    }
 
     public void setDeptId(Long deptId) {
         this.deptId = deptId;
@@ -103,11 +125,5 @@ public class Department extends SysBaseEntity {
         this.open = open;
     }
 
-    public List<?> getList() {
-        return list;
-    }
 
-    public void setList(List<?> list) {
-        this.list = list;
-    }
 }

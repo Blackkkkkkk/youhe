@@ -12,6 +12,8 @@ import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
+import com.youhe.entity.department.Department;
+import com.youhe.entity.user.User;
 import com.youhe.exception.YuheOAException;
 import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
@@ -72,6 +74,15 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "/dealwith")
     public ModelAndView indexMyDealWith() {
         return new ModelAndView("activiti/manage/MyToDo");
+    }
+
+    /**
+     * 办理任务弹框
+     * @return
+     */
+    @GetMapping(value = "/deal/task")
+    public ModelAndView indexDealTask() {
+        return new ModelAndView("activiti/common/user_info.html");
     }
 
     /**
@@ -425,5 +436,18 @@ public class ActivitiController extends BaseController {
         return R.ok().put("rNodes", rNodes);
     }
 
+    /**
+     * 办理任务审批人选择
+     * @return
+     */
+    @GetMapping(value = "/find/user")
+    @ResponseBody
+    public List<Department> findUserInfo(){
+
+        List<Department> names = myProcessEngine.selectUsers();
+
+         return names;
+
+    }
 
 }

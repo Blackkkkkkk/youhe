@@ -12,9 +12,11 @@ import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
+import com.youhe.entity.department.Department;
 import com.youhe.entity.user.User;
 import com.youhe.exception.YuheOAException;
 import com.youhe.mapper.user.UserMapper;
+import com.youhe.utils.activiti.TimeAsc;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.Process;
@@ -25,6 +27,7 @@ import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.TaskServiceImpl;
@@ -485,7 +488,6 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             String processDefinitionId = flowVariable.getProcessDefinitionId();
             ReadOnlyProcessDefinition processDefinitionEntity = (ReadOnlyProcessDefinition) repositoryService
                     .getProcessDefinition(processDefinitionId);
-            ProcessDefinition processDefinition = repositoryService.getProcessDefinition(processDefinitionId);
             // 目标节点
             ActivityImpl destinationActivity = (ActivityImpl) processDefinitionEntity.findActivity(targetTaskDefKey);
             // 优先使用参数过来的审批人
@@ -579,8 +581,10 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                 com.setUserId(userMapperName.getUserName());
                 com.setCurNoName(ul.getName());
             });
+
             comList.add(com);
         });
+        TimeAsc.getInstance().ListSort(comList);
         return comList;
     }
 
@@ -961,4 +965,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         return null;
     }
 
+    @Override
+    public List<Department> selectUsers(){
+        return userMapper.findNames();
+    };
 }

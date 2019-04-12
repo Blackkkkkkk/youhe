@@ -2,6 +2,7 @@ package com.youhe.activiti.engine;
 
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
+import com.youhe.entity.department.Department;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -272,4 +273,10 @@ public interface MyProcessEngine {
      * @param attachmentId 附件ID
      */
     void deleteAttachment(String attachmentId);
+    /**
+     * 选择审批人
+     * @return
+     */
+     List<Department> selectUsers();
+
 }
