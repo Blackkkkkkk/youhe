@@ -99,7 +99,7 @@ function selUser() {
         btn:['确定', '取消'],
         shade: 0.1,
         scrollbar: true,
-        area: ['30%', '50%'],
+        area:['380px', '380px'],
         content:'/activiti/deal/task',
         yes:function(layero,index){
            findUser(layero,index);
@@ -134,7 +134,7 @@ function findUser(layero,index) {
     infoId=infoId.substring(0, infoId.lastIndexOf(','));
 
     $(".glyphicon-user").html(info);
-    $(".icon-user-add").val(infoId);
+    $("input[name='nextUserId']").val(infoId);
 
 }
 
