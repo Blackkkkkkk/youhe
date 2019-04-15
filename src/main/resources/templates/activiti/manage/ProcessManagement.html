@@ -64,14 +64,14 @@
                             <div class="table-responsive">
                                 <div class="grid-btn">
                                     <a class="btn btn-primary" style="margin-bottom:0" href="/activiti/create" target="_blank"><i
-                                            class="fa fa-plus"></i>&nbsp;新建流程</a>
+                                            class="fa fa-plus"></i>&nbsp;新建</a>
                                     <!--<a class="btn btn-primary" onclick="openCreate();"><i class="fa fa-plus" ></i>&nbsp;新建流程</a>-->
-                                    <a class="btn btn-primary" style="margin-bottom:0" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;发布流程
+                                    <a class="btn btn-primary" style="margin-bottom:0" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;发布
                                     </a>
                                     <a class="btn btn-primary" style="margin-bottom:0"><i class="fa fa-arrow-circle-o-down"></i>&nbsp;导入
                                     </a>
                                 </div>
-                                <table class="table table-striped table-bordered table-hover dataTables-example">
+                                <table class="table table-striped table-bordered table-hover dataTables-example" style="width:100%;">
                                     <thead>
                                     <tr>
                                         <th></th>
@@ -256,8 +256,8 @@
                     {
                         "render": function (data, type, row) {
                             // return '  <button class="btn btn-success"   @click="start"><i class="fa fa-minus-square"></i>&nbsp;启动流程</button>';
-                            return ' <button class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0" onclick="javascript:start(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动流程</button>'+'&nbsp'+'&nbsp'+
-                                '<a class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0"  href="/process-editor/modeler.html?modelId=' + row.id + '" target="_blank"></i>&nbsp;修改流程</a>'+'&nbsp'+'&nbsp'+'&nbsp'+
+                            return ' <button class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0" onclick="javascript:start(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动</button>'+'&nbsp'+'&nbsp'+
+                                '<a class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0"  href="/process-editor/modeler.html?modelId=' + row.id + '" target="_blank"></i>&nbsp;修改</a>'+'&nbsp'+'&nbsp'+'&nbsp'+
                                 // ' <button class="btn btn-primary btn-xs btn-outline" onclick="javascript:exports(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动流程</button>';
                                 '<button class="btn btn-primary btn-xs btn-outline"  style="margin-bottom:0" onclick="javascript:exports(' + "'" + row.id + "'" + ');"></i>&nbsp;导出</button>';
                         },
