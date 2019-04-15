@@ -7,8 +7,20 @@
 <link rel="stylesheet" href="/ztree/css/metroStyle/metroStyle.css">
 <body>
 
-<div id="tree" class="ztree"></div>
-
+<div style="margin-left: 50px" class="wrapper">
+    <div class="treeShowHideButton" onclick="search();">
+        <label id="btnShow" title="显示搜索" style="display:none;">︾</label>
+        <label id="btnHide" title="隐藏搜索">︽</label>
+    </div>
+    <div class="treeSearchInput" id="search">
+        <label for="key">搜索：</label><input type="text" class="empty" id="key" maxlength="50" >
+    </div>
+    <div class="treeExpandCollapse">
+        <a href="javascript:" id="btnExpand">展开</a> /
+        <a href="javascript:" id="btnCollapse">折叠</a>
+    </div>
+    <div  style="margin-left: 10px" id="tree" class="ztree"></div>
+</div>
 
 <div th:include="common/Head :: mainJs"></div>
 <script   src="/ztree/jquery.ztree.core.js"></script>
@@ -28,13 +40,22 @@ var setting = {
     check: {
         enable: true,
     },
+    view: {
+        fontCss: setFontCss
+    },
     data: {
         key: {
             name:"userDepartmentName"
-
         }
     }
 }
+function search($this) {
+    $('#search').slideToggle(200);
+    $('#btnShow').toggle();
+    $('#btnHide').toggle();
+    $('#key').focus();
+}
+
 function zTreeOnCheck(){
     var treeObj = $.fn.zTree.getZTreeObj("tree");
     var nodes = treeObj.getCheckedNodes(true);
@@ -65,15 +86,89 @@ $.ajax({
             var deptChildren=data[i].userDept;
             delete(data[i].userDept);
             data[i].children=deptChildren;
-            console.log(data);
+            console.log(deptChildren);
         }
         zNodes=data;
     }
 });
+
 $(function() {
     ztree = $.fn.zTree.init($("#tree"), setting,zNodes);
-});
+    document.getElementById("key").value = ""; //清空搜索框中的内容
+    //绑定事件
+    key = $("#key");
+    key.bind("focus", focusKey)
+        .bind("blur", blurKey)
+        .bind("propertychange", searchNode) //property(属性)change(改变)的时候，触发事件
+        .bind("input", searchNode);
 
+    //展开 折叠
+    $('#btnCollapse').click(function () {
+        ztree.expandAll(false);
+    });
+    $('#btnExpand').click(function () {
+        ztree.expandAll(true);
+    });
+});
+    var lastValue = "", nodeList = [], fontCss = {},hiddenNodes=[];
+
+    function focusKey(e) {
+        if (key.hasClass("empty")) {
+            key.removeClass("empty");
+        }
+    }
+    function blurKey(e) {
+        if (key.get(0).value === "") {
+            key.addClass("empty");
+        }
+    }
+    //搜索节点
+    function searchNode(e) {
+        var zTree = $.fn.zTree.getZTreeObj("tree");
+        var value = $.trim(key.get(0).value);
+        var keyType = "userDepartmentName";
+
+        if (key.hasClass("empty")) {
+            value = "";
+        }
+
+        //显示上次搜索后背隐藏的结点
+        zTree.showNodes(hiddenNodes);
+        //查找不符合条件的叶子节点
+        function filterFunc(node){
+            var _keywords=$("#key").val();
+            if(node.isParent||node.userDepartmentName.indexOf(_keywords)!=-1) return false;
+            return true;
+        };
+        //获取不符合条件的叶子结点
+        hiddenNodes=zTree.getNodesByFilter(filterFunc);
+        //隐藏不符合条件的叶子结点
+        zTree.hideNodes(hiddenNodes);
+
+        if (lastValue === value) return;
+        lastValue = value;
+        if (value === ""){
+            updateNodes(false);
+            return;
+        };
+        updateNodes(false);
+        nodeList = zTree.getNodesByParamFuzzy(keyType, value); //调用ztree的模糊查询功能，得到符合条件的节点
+        updateNodes(true); //更新节点
+    }
+
+    //高亮显示被搜索到的节点
+    function updateNodes(highlight) {
+        var zTree = $.fn.zTree.getZTreeObj("tree");
+        for( var i=0;i<nodeList.length; i++) {
+            nodeList[i].highlight = highlight; //高亮显示搜索到的节点(highlight是自己设置的一个属性)
+            zTree.expandNode(nodeList[i].getParentNode(), true, false, false); //将搜索到的节点的父节点展开
+            zTree.updateNode(nodeList[i]); //更新节点数据，主要用于该节点显示属性的更新
+        }
+    }
+    //设置颜色
+function setFontCss(treeId, treeNode) {
+    return (!!treeNode.highlight) ? {color:"#A60000", "font-weight":"bold"} : {color:"#333", "font-weight":"normal"};
+}
 
 </script>
 </body>
