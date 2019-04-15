@@ -77,7 +77,7 @@
             console.log('response=', response);
             if (response.Status === 0) {
                 $list.append( '<div id="' + file.id + '" class="item" data-field-id="">' +
-                    '<h4 class="info">' + file.name + '<span onclick="delAttachment(' + "'" + file.id + "'" + ')" style="margin-left: 3px;color: #e6131377;font-size: 14px;" class="glyphicon glyphicon-remove"></span></h4>' +
+                    '<a href="http://www.baidu.com" target="_blank" style="color: #0d6aad"><h4 class="info">' + file.name + '<span onclick="delAttachment(' + "'" + file.id + "'" + ')" style="margin-left: 3px;color: #e6131377;font-size: 14px;" class="glyphicon glyphicon-remove"></span></h4></a>' +
                     '</div>' );
                 var upload = response.upload;
                 console.log('upload=', upload);

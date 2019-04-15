@@ -82,7 +82,11 @@ public class FormParseUtils {
 
                 if (!"hidden".equals(type)) {   // 非隐藏的字段都需要处理
                     if (StrUtil.isBlank(edit)) {    // 没有配置data-edit属性，设置只读
-                        control.replaceWith(element);
+                        if ("file".equals(type)) {
+                            createAttachmentEl(control, map, flowVariable, false);
+                        } else {
+                            control.replaceWith(element);
+                        }
                     } else {    // 配置了data-edit属性，根据节点key判断
                         String currentTaskKey = flowVariable.getCurrentNodeKey();
                         if (!edit.contains(currentTaskKey)) {    // 当前节点没有设置可编辑，依然设置只读
@@ -160,7 +164,7 @@ public class FormParseUtils {
      * @param isEdit    是否可编辑
      */
     private static void createAttachmentEl(Element control, Map<String, Object> map, FlowVariable flowVariable, boolean isEdit) {
-        List<Attachment> taskAttachments = myProcessEngine.getTaskAttachments(flowVariable.getTaskId());
+        List<Attachment> taskAttachments = myProcessEngine.getInstanceAttachments(flowVariable.getProcessInstanceId());
         Element uploaderDivEl = new Element("div").attr("class", "wu-example");
         Element uploaderListEl = new Element("div")
                 .attr("id", "thelist")  // todo 多个附件控件的情况
@@ -193,6 +197,11 @@ public class FormParseUtils {
             Element itemDivEl = new Element("div")
                     .attr("class", "item")
                     .attr("id", attachment.getId());    // 附件ID
+            // <a href="http://www.baidu.com" target="_blank" style="color: #0d6aad">
+            Element downloadAEl = new Element("a")
+                    .attr("href", "")       // 文件下载url
+                    .attr("target", "_blank")
+                    .attr("style", "color: #0d6aad");
             Element infoH4El = new Element("h4")
                     .attr("class", "info")
                     .text(i + "." + attachment.getName());  // 附件名称
