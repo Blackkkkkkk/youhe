@@ -3,15 +3,21 @@ package com.youhe.utils.activiti;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
+import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
+import com.youhe.utils.spring.SpringContextUtils;
+import org.activiti.engine.task.Attachment;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,10 +29,13 @@ import java.util.Map;
  */
 public class FormParseUtils {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(FormParseUtils.class);
+    private static MyProcessEngine myProcessEngine = SpringContextUtils.bean(MyProcessEngine.class);
+
     /**
      * 获取任务表单代码
-     * @param formKey
-     * @param map
+     * @param formKey 业务表单key
+     * @param map 业务数据
      * @return
      */
     public static FormCodeData getTaskFormCode(String formKey, Map<String, Object> map) {
@@ -67,40 +76,49 @@ public class FormParseUtils {
             } else {
                 element.text(val);
             }
+
+            String type = control.attr("type");
             if (!flowVariable.isFirstNode()) {  // 不是首环节
 
-                String type = control.attr("type");
-                if (!type.equals("hidden")) {   // 非隐藏的字段都需要处理
+                if (!"hidden".equals(type)) {   // 非隐藏的字段都需要处理
                     if (StrUtil.isBlank(edit)) {    // 没有配置data-edit属性，设置只读
                         control.replaceWith(element);
                     } else {    // 配置了data-edit属性，根据节点key判断
                         String currentTaskKey = flowVariable.getCurrentNodeKey();
                         if (!edit.contains(currentTaskKey)) {    // 当前节点没有设置可编辑，依然设置只读
-                            control.replaceWith(element);
-                        } else {   // 可编辑
-                            if ("select".equals(control.nodeName())) {
-                                Elements options = control.select("option");
-                                options.forEach(option -> {
-                                    if (val.equals(option.val())) {
-                                        option.attr("selected", true);
-                                    }
-                                });
+                            if ("file".equals(type)) {  // 附件
+                                createAttachmentEl(control, map, flowVariable, false);
                             } else {
-                                control.val(val);
+                                control.replaceWith(element);
                             }
+                        } else {   // 可编辑
+                            parseEditEl(control, map, flowVariable);
                         }
                     }
                 }
-            } else if (!flowVariable.isFirstSubmit()) { // 首环节，回退情况
-                if ("select".equals(control.nodeName())) {
-                    Elements options = control.select("option");
-                    options.forEach(option -> {
-                        if (val.equals(option.val())) {
-                            option.attr("selected", true);
-                        }
-                    });
-                } else {
-                    control.val(val);
+            } else if (!flowVariable.isFirstSubmit()) { // 首环节 回退情况
+                    /*
+                    <div id="uploader" class="wu-example">
+                        <!--用来存放文件信息-->
+                        <div id="thelist" class="uploader-list">
+                            <input type="hidden" name="filePath" value="">
+                            <input type="hidden" name="fileName" value="">
+                            <div id="WU_FILE_0" class="item" data-field-id="">
+                                <h4 class="info">流程.xml
+                                    <span onclick="delAttachment('WU_FILE_0')" style="margin-left: 3px;color: #e6131377;font-size: 14px;" class="glyphicon glyphicon-remove">
+                                    </span>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="btns">
+                            <div id="picker">选择文件</div>
+                        </div>
+                    </div>
+                    * */
+                parseEditEl(control, map, flowVariable);
+            } else {    // 首环节
+                if ("file".equals(type)) {   // 解析附件控件
+                    createAttachmentEl(control, map, flowVariable, true);
                 }
             }
         });
@@ -108,6 +126,91 @@ public class FormParseUtils {
         Elements table = doc.select("table");
 
         return new FormCodeData(table.toString(), script);
+    }
+
+    /**
+     * 解析可编辑控件
+     * @param control 控制对象
+     * @param map   业务数据
+     * @param flowVariable  流程流转数据
+     */
+    private static void parseEditEl(Element control, Map<String, Object> map, FlowVariable flowVariable) {
+        String name = control.attr("name");
+        String val = map.get(name) == null ? "" : map.get(name).toString();
+        String type = control.attr("type");
+        if ("select".equals(control.nodeName())) {
+            Elements options = control.select("option");
+            options.forEach(option -> {
+                if (val.equals(option.val())) {
+                    option.attr("selected", true);
+                }
+            });
+        } else if ("file".equals(type)) {   // 解析附件控件
+            createAttachmentEl(control, map, flowVariable, true);
+        } else {
+            control.val(val);
+        }
+    }
+
+    /**
+     * 创建附件控件
+     * @param control 控制对象
+     * @param map   业务数据
+     * @param flowVariable  流程流转数据
+     * @param isEdit    是否可编辑
+     */
+    private static void createAttachmentEl(Element control, Map<String, Object> map, FlowVariable flowVariable, boolean isEdit) {
+        List<Attachment> taskAttachments = myProcessEngine.getTaskAttachments(flowVariable.getTaskId());
+        Element uploaderDivEl = new Element("div").attr("class", "wu-example");
+        Element uploaderListEl = new Element("div")
+                .attr("id", "thelist")  // todo 多个附件控件的情况
+                .attr("class", "uploader-list");
+        String filePath = map.get("filePath") == null ? "" : map.get("filePath").toString();
+        String fileName = map.get("fileName") == null ? "" : map.get("fileName").toString();
+        Element filePathInputEL = new Element("input")
+                .attr("name", "filePath")
+                .attr("type", "hidden")
+                .attr("value", filePath);
+        Element fileNameInputEL = new Element("input")
+                .attr("name", "fileName")
+                .attr("type", "hidden")
+                .attr("value", fileName);
+
+        Element btnDivEl = new Element("div").attr("class", "btns");
+
+        // 元素节点组装
+        if (isEdit) { // 可编辑，加上选择文件按钮
+            Element pickerDivEl = new Element("div")
+                    .attr("id", control.attr("name"))    // todo
+                    .text("选择文件");
+            btnDivEl.appendChild(pickerDivEl);
+        }
+
+        uploaderListEl.appendChild(filePathInputEL).appendChild(fileNameInputEL);
+        int i = 0;
+        for (Attachment attachment : taskAttachments) {
+            i++;
+            Element itemDivEl = new Element("div")
+                    .attr("class", "item")
+                    .attr("id", attachment.getId());    // 附件ID
+            Element infoH4El = new Element("h4")
+                    .attr("class", "info")
+                    .text(i + "." + attachment.getName());  // 附件名称
+
+            if (isEdit) {   // 可编辑，加上删除附件按钮
+                Element removeSpanEl = new Element("span")
+                        .attr("onclick", "delAttachment('" + attachment.getId() + "')")
+                        .attr("style", "margin-left: 3px;color: #e6131377;font-size: 14px;")
+                        .attr("class", "glyphicon glyphicon-remove");
+                infoH4El.appendChild(removeSpanEl);
+            }
+            itemDivEl.appendChild(infoH4El);
+            uploaderListEl.appendChild(itemDivEl);
+        }
+
+        uploaderDivEl.appendChild(uploaderListEl).appendChild(btnDivEl);
+        LOGGER.info("uploaderHtml={}", uploaderDivEl.toString());
+        control.replaceWith(uploaderDivEl);
     }
 
     // todo 测试用，以后再删除

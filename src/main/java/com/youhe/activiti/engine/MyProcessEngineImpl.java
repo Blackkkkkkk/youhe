@@ -27,7 +27,6 @@ import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.TaskServiceImpl;
@@ -240,6 +239,16 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             Task task = taskService.createTaskQuery()
                     .processInstanceId(processInstanceId)
                     .taskId(flowVariable.getTaskId()).singleResult();
+
+            // 创建附件
+            String filePaths = (String) taskFlowData.get("filePath");
+            String fileNames = (String) taskFlowData.get("fileName");
+            String[] filePathArr = filePaths.split(",");
+            String[] fileNameArr = fileNames.split(",");
+            for (int i = 0; i < filePathArr.length; i++) {
+                this.createAttachment(userId, "", task.getId(), processInstanceId, fileNameArr[i], "", filePathArr[i]);
+            }
+
             taskService.addComment(task.getId(), processInstanceId, comment); // 添加审批意见
             Authentication.setAuthenticatedUserId(userId);
 

@@ -27,13 +27,17 @@
     <tr>
         <td>证明文件</td>
         <td colspan="4">
-            <div id="uploader" class="wu-example">
-                <!--用来存放文件信息-->
-                <div id="thelist" class="uploader-list"></div>
+            <input type="file" class="form-control" name="picker">
+            <!--<div id="uploader" class="wu-example">
+                &lt;!&ndash;用来存放文件信息&ndash;&gt;
+                <div id="thelist" class="uploader-list">
+                    <input type="hidden" name="filePath" value="">
+                    <input type="hidden" name="fileName" value="">
+                </div>
                 <div class="btns">
                     <div id="picker">选择文件</div>
                 </div>
-            </div>
+            </div>-->
         </td>
     </tr>
     </tbody>
@@ -75,6 +79,17 @@
                 $list.append( '<div id="' + file.id + '" class="item" data-field-id="">' +
                     '<h4 class="info">' + file.name + '<span onclick="delAttachment(' + "'" + file.id + "'" + ')" style="margin-left: 3px;color: #e6131377;font-size: 14px;" class="glyphicon glyphicon-remove"></span></h4>' +
                     '</div>' );
+                var upload = response.upload;
+                console.log('upload=', upload);
+                var filePath = $list.find('input[name="filePath"]').val();
+                var fileName = $list.find('input[name="fileName"]').val();
+                if (filePath) {
+                    filePath += ',';
+                    fileName += ',';
+                }
+                $list.find('input[name="filePath"]').val(filePath + upload.filePath);
+                $list.find('input[name="fileName"]').val(filePath + fileName + file.name);
+
             } else {
                 alert('上传失败，请重新上传');
             }
