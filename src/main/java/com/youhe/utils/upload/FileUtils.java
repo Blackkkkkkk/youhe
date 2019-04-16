@@ -41,7 +41,12 @@ public class FileUtils {
                 fn = filename.substring(0, index) + "_" + hhmmss;
             }
             String path = fileType.getPath();
-            String filePath = path + "/" + datePath + "/" + fn + suffix;
+            String filePath;
+            if ("F_ATT".equals(fileType.getType())) {
+                filePath = path + "/" + datePath + "/" + fn + suffix;
+            } else {
+                filePath = path + "/" + fn + suffix;
+            }
             String url = Constant.FILE_UPLOAD_PREFIX + filePath;
             LOGGER.info("upload url={}", url);
             File lFile = new File(url);

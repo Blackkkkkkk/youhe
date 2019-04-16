@@ -3,15 +3,19 @@ package com.youhe.controller.comm;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.youhe.activiti.engine.MyProcessEngine;
+import com.youhe.common.Constant;
 import com.youhe.common.FileTypeEnum;
 import com.youhe.entity.file.UploadFile;
+import com.youhe.exception.YuheOAException;
 import com.youhe.utils.R;
 import com.youhe.utils.spring.HttpServletContextKit;
 import com.youhe.utils.upload.FileUtils;
+import org.activiti.engine.task.Attachment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.InputStream;
 
 /**
@@ -49,14 +53,20 @@ public class FileUploadController extends BaseController {
      */
     @GetMapping(value = "download")
     public void download(String filename, String attachmentId, @RequestParam(value = "fType") String fType) {
-        if (StrUtil.isNotBlank(filename) && StrUtil.isNotBlank(attachmentId)) {
+        if ((StrUtil.isNotBlank(filename) && StrUtil.isNotBlank(attachmentId)) || StrUtil.isNotBlank(attachmentId)) {
             // 默认使用attachmentId
-            InputStream attachmentContent = myProcessEngine.getAttachmentContent(attachmentId);
-            ServletUtil.write(HttpServletContextKit.getHttpServletResponse(), attachmentContent);
+            Attachment attachment = myProcessEngine.getAttachment(attachmentId);
+            String realFilePath = Constant.FILE_UPLOAD_PREFIX + attachment.getUrl();
+            File file = new File(realFilePath);
+            ServletUtil.write(HttpServletContextKit.getHttpServletResponse(), file);
         } else if (StrUtil.isNotBlank(filename)) {
-
-        } else {
-
+            FileTypeEnum fileTypeEnum = FileTypeEnum.getByType(fType);
+            if (fileTypeEnum == null) {
+                throw new YuheOAException("fType 参数异常");
+            }
+            String realFilePath = Constant.FILE_UPLOAD_PREFIX + fileTypeEnum.getPath() + "/" + filename;
+            File file = new File(realFilePath);
+            ServletUtil.write(HttpServletContextKit.getHttpServletResponse(), file);
         }
     }
 }

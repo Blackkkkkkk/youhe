@@ -8,6 +8,7 @@ import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
 import com.youhe.controller.user.shop.index.IndexController;
 import com.youhe.entity.order.Order;
+import com.youhe.entity.order.OrderDetail;
 import com.youhe.entity.order.OrderDetails;
 import com.youhe.entity.pay.Refund;
 import com.youhe.entity.permission.Permission_Role;
@@ -16,6 +17,7 @@ import com.youhe.entity.shop.PayResult;
 import com.youhe.entity.shop.Shop;
 import com.youhe.initBean.redis.CartPrefix;
 import com.youhe.initBean.websocket.WebSocketServer;
+import com.youhe.service.shop.OrderService;
 import com.youhe.utils.R;
 import com.youhe.utils.pay.PayUtil;
 import com.youhe.utils.pay.sdk.domain.Response;
@@ -50,7 +52,7 @@ public class OrderControllerImpl {
     private RedisBiz redisBiz;
 
     @Autowired
-    private OrderBiz orderBiz;
+    private OrderService orderBiz;
 
     @Transactional(rollbackFor = Exception.class)
     public void save(PayResult payResult, String userAccount) {
@@ -61,17 +63,18 @@ public class OrderControllerImpl {
         List<Shop> shopList = searchSaveList(userAccount);
 
         long payAmount = 0; //支付金额
-        OrderDetails orderDetails = new OrderDetails();
+        OrderDetail orderDetails = new OrderDetail();
         if (!CollectionUtils.isEmpty(shopList)) {
             for (Shop shop : shopList) {
 
-                orderDetails.setBigOrderCode(payResult.getOutTradeNo())
-                        .setOrderCode("DH-" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + (int) ((Math.random() * 9 + 1) * 10000))
-                        .setName(shop.getName())
+                orderDetails
+                        .setBOrderNum(payResult.getOutTradeNo())
+                        .setSOrderNum("DH-" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + (int) ((Math.random() * 9 + 1) * 10000))
+                        .setCommodityName(shop.getName())
                         .setNum(shop.getNum())
-                        .setPirce(shop.getPirce())
+                        .setPrice(shop.getPirce())
                         .setRemark(shop.getRemark());
-                orderBiz.saveOrderDetails(orderDetails);
+                orderBiz.saveOrderDetail(orderDetails);
 
 
                 //对应扣除库存
@@ -83,16 +86,15 @@ public class OrderControllerImpl {
 
             //保存到数据表的大订单号
             Order order = new Order();
-            order.setBigOrderCode(payResult.getOutTradeNo())
+            order.setBOrderNum(payResult.getOutTradeNo())
                     .setStatus(payResult.getPayState())
-                    .setOrderEndTime(new Date())
                     .setTotalPrice(Integer.parseInt(payAmount + ""));
 
             orderBiz.saveOrder(order);
 
             //固定写死 id 20
             try {
-                WebSocketServer.sendInfo(order.getBigOrderCode(), "20");
+                WebSocketServer.sendInfo(order.getBOrderNum(), "20");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -111,7 +113,7 @@ public class OrderControllerImpl {
     public void refund(Refund refund, Long userId) {
 
         Order order = new Order();
-        order.setBigOrderCode(refund.getOutTradeNo());
+        order.setBOrderNum(refund.getOutTradeNo());
 
         List<Order> list = orderBiz.findOrder(order);
 

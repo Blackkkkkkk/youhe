@@ -2,18 +2,17 @@ package com.youhe.controller.user.shop.index;
 
 
 import com.github.pagehelper.PageInfo;
-import com.youhe.biz.order.OrderBiz;
 import com.youhe.biz.redis.RedisBiz;
 import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
 import com.youhe.entity.order.Order;
 import com.youhe.entity.pay.Refund;
-import com.youhe.entity.shop.PayResult;
 import com.youhe.entity.shop.Picture;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.shop.Shop_index_carousel;
 import com.youhe.initBean.redis.CartPrefix;
+import com.youhe.service.shop.OrderService;
 import com.youhe.serviceImpl.Controller.orderController.OrderControllerImpl;
 import com.youhe.utils.R;
 import com.youhe.utils.pay.PayUtil;
@@ -26,7 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +62,7 @@ public class IndexController {
     private OrderControllerImpl orderController;
 
     @Autowired
-    private OrderBiz orderBiz;
+    private OrderService orderBiz;
 
     @RequestMapping(value = "/index")
     public String index(Model model, Shop_index_carousel shop_index_carousel) {
@@ -293,7 +295,7 @@ public class IndexController {
         try {
             Order order = new Order();
 
-            order.setBigOrderCode(refund.getOutTradeNo());
+            order.setBOrderNum(refund.getOutTradeNo());
 
             List<Order> list = orderBiz.findOrder(order);
 

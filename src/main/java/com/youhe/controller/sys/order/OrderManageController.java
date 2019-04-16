@@ -1,9 +1,9 @@
 package com.youhe.controller.sys.order;
 
 import com.github.pagehelper.PageInfo;
-import com.youhe.biz.order.OrderBiz;
 import com.youhe.entity.order.Order;
-import com.youhe.entity.order.OrderDetails;
+import com.youhe.entity.order.OrderDetail;
+import com.youhe.service.shop.OrderService;
 import com.youhe.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class OrderManageController {
 
     @Autowired
-    private OrderBiz orderBiz;
+    private OrderService orderBiz;
 
     @GetMapping(value = "list")
     public ModelAndView list() {
@@ -45,12 +45,12 @@ public class OrderManageController {
 
     /**
      * 订单详情列表数据接口
-     * @param orderDetails
+     * @param orderDetail
      * @return R
      */
     @PostMapping(value = "detailListData")
-    public R detailListData(OrderDetails orderDetails) {
-        PageInfo<OrderDetails> page = orderBiz.findOrderDetailByPage(orderDetails);
+    public R detailListData(OrderDetail orderDetail) {
+        PageInfo<OrderDetail> page = orderBiz.findOrderDetailByPage(orderDetail);
         return R.ok().put("page", page);
     }
 }

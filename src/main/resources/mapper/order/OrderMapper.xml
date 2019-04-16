@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youhe.mapper.order.OrdertMapper">
+<mapper namespace="com.youhe.mapper.order.OrderMapper">
 
-    <resultMap type="com.youhe.entity.order.Order" id="orderList">
-        <id property="id" column="id"/>
-        <result property="bigOrderCode" column="bigOrderCode"/>
-        <result property="status" column="status"/>
-        <result property="orderEndTime" column="orderEndTime"/>
-        <result property="totalPrice" column="totalPrice"></result>
-        <result property="transportStatus" column="transportStatus"></result>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.youhe.entity.order.Order">
+        <id column="id" property="id" />
+        <result column="b_order_num" property="bOrderNum" />
+        <result column="total_price" property="totalPrice" />
+        <result column="status" property="status" />
+        <result column="end_time" property="endTime" />
+        <result column="create_time" property="createTime" />
     </resultMap>
 
-    <resultMap type="com.youhe.entity.order.OrderDetails" id="orderDetailsList">
-        <id property="id" column="id"/>
-        <result property="bigOrderCode" column="bigOrderCode"/>
-        <result property="orderCode" column="orderCode"/>
-        <result property="name" column="name"/>
-        <result property="pirce" column="pirce"/>
-        <result property="num" column="num"/>
-        <result property="remark" column="remark"/>
-    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, b_order_num, total_price, status, end_time, create_time
+    </sql>
 
     <sql id="order_Column_List">
         id, bigOrderCode, status, orderEndTime, totalPrice, transportStatus
@@ -29,19 +25,19 @@
         id, bigOrderCode, orderCode, name, pirce, num, remark
     </sql>
 
-    <select id="findOrder" parameterType="com.youhe.entity.order.Order" resultMap="orderList">
+    <select id="findOrder" parameterType="com.youhe.entity.order.Order" resultMap="BaseResultMap">
         select <include refid="order_Column_List"/> from order_order
         where 1=1
         <if test="id != null">
             AND id = #{id}
         </if>
-        <if test="bigOrderCode != null">
-            AND bigOrderCode = #{bigOrderCode}
+        <if test="bOrderNum != null">
+            AND b_order_num = #{bOrderNum}
         </if>
     </select>
 
 
-    <update id="updateOrder" parameterType="com.youhe.entity.order.Order">
+    <!--<update id="updateOrder" parameterType="com.youhe.entity.order.Order">
         UPDATE order_order
         SET
         <trim suffixOverrides=",">
@@ -84,9 +80,9 @@
                    #{totalPrice},
                    0
             )
-    </insert>
+    </insert>-->
 
-    <delete id="delOrder" parameterType="com.youhe.entity.order.Order">
+    <!--<delete id="delOrder" parameterType="com.youhe.entity.order.Order">
         DELETE
         from order_order
         where
@@ -180,7 +176,7 @@
         <if test="orderCode != null and  !=''">
             AND orderCode = #{orderCode}
         </if>
-    </delete>
+    </delete>-->
 
 
 </mapper>
