@@ -72,7 +72,7 @@
 
     <insert id="add" parameterType="com.youhe.entity.permission.Permission" keyProperty="pid"
             useGeneratedKeys="true">
-               insert into sys_permission (PARENTID,TYPE, PNAME, SORTSRING, AVAILABLE ) value(#{parentid},#{type},#{pname},#{sortstring},1)
+               insert into sys_permission ( PARENTID, TYPE, PNAME,URL,PERCODE, SORTSRING, AVAILABLE )  value(#{parentid},#{type},#{pname},#{url},#{percode},#{sortstring},1)
     </insert>
 
     <update id="update" parameterType="com.youhe.entity.permission.Permission">
@@ -85,8 +85,14 @@
             <if test="pname != null and pname!=''">
                 PNAME=#{pname},
             </if>
-            <if test="type != null">
+            <if test="type != null and type!=''">
                 TYPE =#{type},
+            </if>
+            <if test="url != null and url!=''">
+                URL=#{url},
+            </if>
+            <if test="percode != null and percode!=''">
+                PERCODE=#{percode},
             </if>
             <if test="sortstring != null">
                 SORTSRING =#{sortstring},
