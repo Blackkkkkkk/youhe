@@ -1,6 +1,7 @@
 
 CREATE TABLE `shop_order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` int(11) NOT NULL COMMENT '用户UID',
   `b_order_num` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '大订单号',
   `total_price` int(11) NOT NULL DEFAULT '0' COMMENT '订单总金额：单位分',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '订单状态：0-已取消；30-待支付；60-已支付待发货；90-已发货',

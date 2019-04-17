@@ -1,5 +1,7 @@
 package com.youhe.utils.page;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 
 /**
@@ -17,15 +19,21 @@ public class Page implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    @TableField(exist = false)
     private int pageNum = 1;
 
+    @TableField(exist = false)
     private int pageSize = 10;
 
+    @TableField(exist = false)
     private int fromRow;
 
+    @TableField(exist = false)
     private int endRow;
 
+    @TableField(exist = false)
     private int page;
+    @TableField(exist = false)
     private int limit;
 
 

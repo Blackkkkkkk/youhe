@@ -86,9 +86,9 @@ public class OrderControllerImpl {
 
             //保存到数据表的大订单号
             Order order = new Order();
-            order.setBOrderNum(payResult.getOutTradeNo())
-                    .setStatus(payResult.getPayState())
-                    .setTotalPrice(Integer.parseInt(payAmount + ""));
+            order.setBOrderNum(payResult.getOutTradeNo());
+            order.setStatus(payResult.getPayState());
+            order.setTotalPrice(Integer.parseInt(payAmount + ""));
 
             orderBiz.saveOrder(order);
 
