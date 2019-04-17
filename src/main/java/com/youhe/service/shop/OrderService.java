@@ -20,8 +20,6 @@ public interface OrderService extends IService<Order> {
 
     List<Order> findOrder(Order order);
 
-    void updateOrder(Order order);
-
     void saveOrder(Order order);
 
     void saveOrderDetail(OrderDetail orderDetail);

@@ -34,11 +34,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public void updateOrder(Order order) {
-        super.updateById(order);
-    }
-
-    @Override
     public void saveOrder(Order order) {
         super.save(order);
     }

@@ -46,4 +46,10 @@ public class Constant {
 
     public final static String FILE_UPLOAD_PREFIX = "D://upload/"; // 文件上传前缀 todo
 
+    // 订单状态
+    public final static Integer ORRDER_STATUS_0 = 0;    // 已取消
+    public final static Integer ORRDER_STATUS_30 = 30;  // 已下单，待支付
+    public final static Integer ORRDER_STATUS_60 = 60;  // 已支付，待发货
+    public final static Integer ORRDER_STATUS_90 = 90;  // 已发货
+
 }
