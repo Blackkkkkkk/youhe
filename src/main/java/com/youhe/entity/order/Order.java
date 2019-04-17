@@ -56,6 +56,11 @@ public class Order extends SysBaseEntity implements Serializable {
     private Integer status;
 
     /**
+     * 收货地址
+     */
+    private String deliveryAddr;
+
+    /**
      * 完成时间
      */
     private LocalDateTime endTime;

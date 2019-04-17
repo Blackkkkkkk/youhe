@@ -5,6 +5,7 @@ CREATE TABLE `shop_order` (
   `b_order_num` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '大订单号',
   `total_price` int(11) NOT NULL DEFAULT '0' COMMENT '订单总金额：单位分',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '订单状态：0-已取消；30-待支付；60-已支付待发货；90-已发货',
+  `delivery_addr` varchar(255) NOT NULL COMMENT '收货地址',
   `end_time` datetime DEFAULT NULL COMMENT '完成时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)

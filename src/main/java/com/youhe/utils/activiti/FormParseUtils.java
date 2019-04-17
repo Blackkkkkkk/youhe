@@ -199,7 +199,7 @@ public class FormParseUtils {
                     .attr("id", attachment.getId());    // 附件ID
             // <a href="http://www.baidu.com" target="_blank" style="color: #0d6aad">
             Element downloadAEl = new Element("a")
-                    .attr("href", "")       // 文件下载url
+                    .attr("href", "/file/download?attachmentId=" + attachment.getId())       // 文件下载url
                     .attr("target", "_blank")
                     .attr("style", "color: #0d6aad");
             Element infoH4El = new Element("h4")

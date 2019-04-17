@@ -9,6 +9,7 @@
         <result column="b_order_num" property="BOrderNum" />
         <result column="total_price" property="totalPrice" />
         <result column="status" property="status" />
+        <result column="delivery_addr" property="deliveryAddr" />
         <result column="end_time" property="endTime" />
         <result column="create_time" property="createTime" />
     </resultMap>
