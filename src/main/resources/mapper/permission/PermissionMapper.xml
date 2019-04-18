@@ -119,4 +119,16 @@
         DELETE from sys_permission where PID=#{pid}
     </delete>
 
+    <select id="selectMentList"
+            resultType="com.youhe.entity.permission.Permission">
+    select pid as 'pid',
+           pname as 'pname',
+           type as 'type',
+           url as 'url',
+           percode as 'percode',
+           parentid as 'parentid'
+           from sys_permission
+    </select>
+
+
 </mapper>

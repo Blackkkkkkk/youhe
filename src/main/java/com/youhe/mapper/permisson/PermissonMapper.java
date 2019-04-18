@@ -36,5 +36,6 @@ public interface PermissonMapper {
     //删除菜单
     void del(Permission permission);
 
-
+    //查询菜单信息
+    List<Permission> selectMentList();
 }

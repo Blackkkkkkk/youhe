@@ -1,7 +1,9 @@
 package com.youhe.controller.loginController;
 
 import com.alibaba.fastjson.JSON;
+import com.youhe.biz.permisson.PermissonBiz;
 import com.youhe.biz.user.UserBiz;
+import com.youhe.entity.permission.Permission;
 import com.youhe.entity.user.User;
 import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
@@ -20,11 +22,18 @@ import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+
+import javax.annotation.Resource;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -46,8 +55,10 @@ import java.util.Locale;
 public class LoginController {
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
-
-
+    @Resource
+    private ThymeleafViewResolver thymeleafViewResolver;
+    @Autowired
+    private PermissonBiz permissonBiz;
     @Autowired
     private UserBiz userBiz;
 
@@ -58,12 +69,12 @@ public class LoginController {
     @RequestMapping(value = "/")
     public String login() {
 
-
         return "login/login";
     }
 
     @RequestMapping(value = "/login")
-    public String index(Model model, User user) {
+    public String index(Model model, User user, HttpServletRequest request, HttpServletResponse response) {
+
 
         //  ShiroUserUtils.encryptPassword(user);
         // userService.update(user);
@@ -79,6 +90,7 @@ public class LoginController {
             List<User> list = userBiz.findOnlyUserList(userLogin);
             if (!CollectionUtils.isEmpty(list)) {
                 userLogin = list.get(0);
+
 
             }
 
@@ -114,6 +126,7 @@ public class LoginController {
         return "redirect:index";
     }
 
+
     @RequestMapping(value = "/index")
     public String index() {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
@@ -123,6 +136,13 @@ public class LoginController {
         //  export.Export(processEngine,"4");
 
         log.debug(shiroUser.getUserName() + ">>>>>>>>>>>>登录成功");
+
+
+        Map<String, Object> vars = new HashMap<>();
+        List<Permission> mentList = permissonBiz.selectMentLists();
+        vars.put("mentlist",mentList);
+        thymeleafViewResolver.setStaticVariables(vars);
+
 
         return "index/index";
     }
