@@ -213,7 +213,8 @@ public class FormParseUtils {
                         .attr("class", "glyphicon glyphicon-remove");
                 infoH4El.appendChild(removeSpanEl);
             }
-            itemDivEl.appendChild(infoH4El);
+            downloadAEl.appendChild(infoH4El);
+            itemDivEl.appendChild(downloadAEl);
             uploaderListEl.appendChild(itemDivEl);
         }
 
