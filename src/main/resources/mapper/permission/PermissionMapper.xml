@@ -15,6 +15,7 @@
         <result property="sortstring" column="SORTSRING"/>
         <result property="available" column="AVAILABLE"/>
         <result property="types" column="TYPES"/>
+        <result property="icon" column="MENUICON"/>
     </resultMap>
 
 
@@ -72,7 +73,7 @@
 
     <insert id="add" parameterType="com.youhe.entity.permission.Permission" keyProperty="pid"
             useGeneratedKeys="true">
-               insert into sys_permission ( PARENTID, TYPE, PNAME,URL,PERCODE, SORTSRING, AVAILABLE )  value(#{parentid},#{type},#{pname},#{url},#{percode},#{sortstring},1)
+               insert into sys_permission ( PARENTID, TYPE, PNAME,URL,PERCODE, SORTSRING, AVAILABLE,MENUICON)  value(#{parentid},#{type},#{pname},#{url},#{percode},#{sortstring},1,#{icon})
     </insert>
 
     <update id="update" parameterType="com.youhe.entity.permission.Permission">
@@ -96,6 +97,9 @@
             </if>
             <if test="sortstring != null">
                 SORTSRING =#{sortstring},
+            </if>
+            <if test="icon != null">
+                MENUICON =#{icon},
             </if>
         </trim>
         WHERE PID=#{pid}
@@ -126,7 +130,8 @@
            type as 'type',
            url as 'url',
            percode as 'percode',
-           parentid as 'parentid'
+           parentid as 'parentid',
+           menuicon as 'icon'
            from sys_permission
     </select>
 

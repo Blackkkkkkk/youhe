@@ -1,4 +1,6 @@
+
 var setting = {
+
     data: {
         simpleData: {
             enable: true,
@@ -12,7 +14,6 @@ var setting = {
     }
 };
 var ztree;
-
 var vm = new Vue({
     el: '#wrapper',
     data: {
@@ -21,7 +22,7 @@ var vm = new Vue({
         dept: {
             parentName: null,
             parentid: 0,
-            sortstring: 0
+            sortstring: 0,
         }
     },
     methods: {
@@ -71,6 +72,7 @@ var vm = new Vue({
         },
         saveOrUpdate: function (event) {
             var url = vm.dept.pid == null ? "/permission/save" : "/permission/update";
+            vm.dept.icon=$('#picker').val();
             console.log(JSON.stringify(vm.dept));
             console.log(url);
             $.ajax({
@@ -79,11 +81,14 @@ var vm = new Vue({
                 contentType: "application/json",
                 data: JSON.stringify(vm.dept),
                 success: function (r) {
-                    if (r.code === 0) {
+                    console.log(r)
+                    if (r.Status===0) {
+
                         layer.msg('操作成功', {icon: 1, time: 1000}, function () {
                             vm.reload();
                         });
                     } else {
+
                         layer.msg(r.msg, {icon: 2, time: 1000});
                     }
                 }
@@ -119,10 +124,11 @@ var vm = new Vue({
                     data: {"pid": pid},
                     success: function (r) {
 
-                        if (r.code === 0) {
+                        if (r.Status===0 ) {
                             layer.msg('操作成功', {icon: 1, time: 1000}, function () {
-                                vm.reload();
+
                             });
+                            vm.reload();
                         } else {
                             layer.msg(r.msg, {icon: 2, time: 1000});
                         }
@@ -153,7 +159,8 @@ Dept.initColumn = function () {
         {title: '访问路径', field: 'url', align: 'center', valign: 'middle', sortable: true, width: '100px'},
         {title: '权限代码', field: 'percode', align: 'center', valign: 'middle', sortable: true, width: '100px'},
         {title: '上级菜单', field: 'parentName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
-        {title: '排序号', field: 'sortstring', align: 'center', valign: 'middle', sortable: true, width: '100px'}]
+        {title: '排序号', field: 'sortstring', align: 'center', valign: 'middle', sortable: true, width: '100px'}
+        ]
     return columns;
 };
 

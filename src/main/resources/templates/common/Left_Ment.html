@@ -33,8 +33,8 @@
                     </div>
                 </li>
 
-                <li  th:each="ment:${mentlist}" th:if="${ment.parentid}==0"  id="approvalProcess">
-                    <a href="#" ><i class="fa fa-th-large"></i>
+                <li    th:each="ment:${mentlist}" th:if="${ment.parentid}==0"  id="approvalProcess">
+                    <a href="#" ><i th:class="${ment.icon}"></i>
                         <span class="nav-label"   th:text="${ment.pname}" ></span>
                         <span class="fa arrow"></span></a>
                     <ul  class="nav nav-second-level collapse" id="approvalProcess_ul">

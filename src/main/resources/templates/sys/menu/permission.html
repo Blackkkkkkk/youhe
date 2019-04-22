@@ -7,10 +7,17 @@
 
     </head>
     <div>
-        <link rel="stylesheet" href="../bootstrap/js/dept/css/bootstrap-table.min.css">
-        <link rel="stylesheet" href="../bootstrap/js/dept/css/jquery.treegrid.css">
+       <!-- <link rel="stylesheet" href="../bootstrap/js/dept/css/bootstrap-table.min.css">-->
+       <!-- <link rel="stylesheet" href="../bootstrap/js/dept/css/jquery.treegrid.css">-->
+       <!-- <link rel="stylesheet" href="../ztree/css/metroStyle/metroStyle.css">-->
         <link rel="stylesheet" href="../ztree/css/metroStyle/metroStyle.css">
-        <link rel="stylesheet" href="../ztree/css/metroStyle/metroStyle.css">
+        <link rel="stylesheet"   href="/ztree/css/jquery.fonticonpicker.min.css">
+        <link rel="stylesheet" href="/ztree/css/jquery.fonticonpicker.grey.min.css">
+        <link rel="stylesheet" href="/ztree/css/jquery.fonticonpicker.bootstrap.min.css">
+        <link rel="stylesheet" href="/ztree/css/font-awesome/css/font-awesome.css">
+
+
+
     </div>
     <body>
         <div id="wrapper">
@@ -31,6 +38,7 @@
                         </thead>
                     </table>
                 </div>
+
                 <div v-show="!showList" class="panel panel-default">
                     <div class="panel-heading">{{title}}</div>
                     <form class="form-horizontal">
@@ -77,6 +85,13 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <div class="col-sm-2 control-label">菜单图标</div>
+                            <div class="col-sm-10">
+                               <input type="text"  id="picker"  class="form-control"   v-model="dept.icon" placeholder="菜单图标"/>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <div class="col-sm-2 control-label"></div>
                             <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
                             &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
@@ -105,25 +120,35 @@
             </div>
         </div>
 
-        <div th:include="common/Head :: js"></div>
+        <div th:include="common/Head :: mainJs"></div>
 
         <script src="../ztree/jquery.ztree.all.min.js"></script>
         <script src="../ztree/jquery.ztree.exhide.js"></script>
 
 
-        <script src="../bootstrap/js/dept/js/jquery.treegrid.min.js"></script>
+      <script src="../bootstrap/js/dept/js/jquery.treegrid.min.js"></script>
         <script src="../bootstrap/js/dept/js/jquery.treegrid.bootstrap3.js"></script>
         <script src="../bootstrap/js/dept/js/jquery.treegrid.extension.js"></script>
         <script src="../bootstrap/js/dept/js/tree.table.js"></script>
 
-        <script src="../bootstrap/js/dept/js/vue.min.js"></script>
+        <script src="/bootstrap/js/dept/js/vue.min.js"></script>
         <script src="../js/menu/js/permission.js"></script>
         <script src="../bootstrap/js/dept/js/ztree.js"></script>
+        <script src="/ztree/jquery.fonticonpicker.min.js"></script>
+        <script src="/ztree/fa-icon-source.js"></script>
 
 
         <script>
 
-
+            $(function() {
+                $('#picker').fontIconPicker({
+                    source: fa_icons,
+                    theme: 'fip-bootstrap',
+                    emptyIconValue:'none',
+                    hasSearch: true,
+                    emptyIcon: true  //是否显示空
+                });
+            });
             var lastValue = "", nodeList = [], key = $("#keyword");
             key.bind("focus", focusKey).bind("blur", blurKey).bind("change cut input propertychange", searchNode);
             key.bind("keydown", function (e) {

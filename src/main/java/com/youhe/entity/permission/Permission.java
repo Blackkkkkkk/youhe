@@ -22,7 +22,16 @@ public class Permission extends SysBaseEntity {
     private String parentName;
 //    菜单类型
     private String types;
+    //图标
+    private String icon;
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     public String getTypes() {
         return types;
