@@ -49,6 +49,7 @@ public class Shop extends SysBaseEntity {
 
 
     private int cartNum;  //查询购物车时的数量
+    private int cartPrices;//
 
     private int carNumUD;// 购物车数量的增减
 

@@ -4,22 +4,23 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youhe.biz.redis.RedisBiz;
+import com.youhe.biz.shop.ShopBiz;
 import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.order.OrderDetails;
 import com.youhe.entity.shop.PayResult;
 import com.youhe.entity.shop.Shop;
+import com.youhe.entity.shop.Shop_index_carousel;
 import com.youhe.initBean.redis.CartPrefix;
+import com.youhe.service.shop.OrderService;
 import com.youhe.serviceImpl.Controller.orderController.OrderControllerImpl;
 import com.youhe.utils.R;
 import com.youhe.utils.pay.PayUtil;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -41,7 +42,11 @@ public class OrderController extends BaseController {
     private OrderControllerImpl orderController;
     @Autowired
     private RedisBiz redisBiz;
+    @Autowired
+    private OrderService orderService;
 
+    @Autowired
+    private ShopBiz shopBiz;
     /**
      * 统一下单接口（不包含分账）
      */
@@ -71,6 +76,7 @@ public class OrderController extends BaseController {
 
     /**
      * 支付成功的同步接口
+     *
      * @param payResult 支付结果
      * @param model
      * @return
@@ -91,9 +97,70 @@ public class OrderController extends BaseController {
 
     /**
      * 异步通知接口
+     *
      * @return
      */
     public R asyncNotifyUrl() {
         return R.ok();
     }
+    // 查询购物车的信息
+    /*
+     * key : 查询的键 购物车主要是用户的登录账户
+     */
+    public List<Shop> searchList(String key) {
+        return redisBiz.hscan(CartPrefix.getCartList, key);
+    }
+
+
+    @RequestMapping(value = "/shoppingOrder")
+    @ResponseBody
+    public ModelAndView shoppingOrder(Model model, Shop_index_carousel shop_index_carousel) {
+        model.addAttribute("shopList", orderService.shoppingOrder());
+        return  new ModelAndView ("user/shop/shoppingOrder/shopping-order");
+    }
+
+//    立即购买
+    @RequestMapping(value = "/shoppingPurchase")
+    public ModelAndView shoppingPurchase( Model model,Shop_index_carousel shop_index_carousel,Shop shop) {
+        shop.setIsIndex(1);
+        shop.setStatus(1).
+                setRegister_Sort(1).
+                setTop_Sort(1).
+                setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
+        model.addAttribute("shopList", orderService.shoppingPurchase(shop));
+        return  new ModelAndView ("user/shop/shoppingOrder/shopping-order");
+    }
+
+
+//    @RequestMapping(value = "/shoppingOrder")
+//    @ResponseBody
+//    public ModelAndView shoppingOrder(Model model, Shop_index_carousel shop_index_carousel) {
+//
+//        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+//
+//        System.out.println(shiroUser.getUserAccount() == null || shiroUser.getUserAccount() == "");
+//        if (shiroUser.getUserAccount() != null || shiroUser.getUserAccount() != "") {
+//            try {
+//                List<Shop> shopList = searchList(shiroUser.getUserAccount());
+//                model.addAttribute("shopList", shopList);
+//
+//            } catch (Exception e) {
+//                System.out.println(e.toString());
+//            }
+//
+//        }
+//
+//        return  new ModelAndView ("user/shop/shoppingOrder/shopping-order");
+//    }
+
+
+//    @RequestMapping(value = "/shoppingOrder")
+//    @ResponseBody
+//    public ModelAndView shoppingOrder(Model model, Shop_index_carousel shop_index_carousel) {
+//        model.addAttribute("shopList", orderService.shoppingOrder());
+//        return  new ModelAndView ("user/shop/shoppingOrder/shopping-order");
+//    }
+
+
+
 }

@@ -5,8 +5,10 @@ import com.youhe.entity.order.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youhe.entity.order.OrderDetail;
 import com.youhe.entity.order.OrderDetails;
+import com.youhe.entity.shop.Shop;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -37,6 +39,16 @@ public interface OrderService extends IService<Order> {
      * @return pageInfo
      */
     PageInfo<OrderDetail> findOrderDetailByPage(OrderDetail orderDetail);
+
+//    void shoppingOrder();
+
+     List<Shop> shoppingOrder();
+
+    List<Shop> shoppingPurchase(Shop shop);
+
+
+
+
 
 
 }

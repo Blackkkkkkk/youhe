@@ -82,16 +82,25 @@ License: You must have a valid license purchased only from themeforest(the above
             <!-- BEGIN SIDEBAR & CONTENT -->
             <div class="row margin-bottom-40">
                 <!-- BEGIN CONTENT -->
+
                 <div class="col-md-12 col-sm-12">
-                    <h1>Shopping cart</h1>
+                    <div class="form-group">
+                        <h3 style="margin-bottom:0.1cm">填写收货地址</h3>
+                        <div class="" style="margin-bottom:0.5cm"  >
+                            <input type="text" class="form-control"  placeholder="收货地址"/>
+                        </div>
+                    </div>
+                    <h2 style="margin-bottom:0.2cm">确认订单信息</h2>
+
+
                     <div class="shopping-cart-page">
                         <div class="shopping-cart-data clearfix">
                             <div class="table-wrapper-responsive">
 
-                                <table summary="Shopping cart">
+                                <table summary="Shopping cart111">
                                     <tr>
                                         <th class="shopping-cart-image">图片</th>
-                                        <th class="shopping-cart-description" style=" text-align:center; ">描述</th>
+                                        <th class="shopping-cart-description" style=" text-align:center; ">商品属性</th>
                                         <th class="shopping-cart-quantity">数量</th>
                                         <th class="shopping-cart-price">单价</th>
                                         <th class="shopping-cart-total" colspan="2">总价</th>
@@ -158,124 +167,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </ul>
                             </div>
                         </div>
-                        <button class="btn btn-default" type="submit"
-                                @click="goShop()">继续购物 <i
-                                class="fa fa-shopping-cart"></i>
-                        </button>
-                        <button class="btn btn-primary" type="submit" @click="pay">结算 <i class="fa fa-check"></i>
+
+                        <button class="btn btn-primary" type="submit" @click="pay">提交订单 <i class="fa fa-check"></i>
                         </button>
                     </div>
                 </div>
                 <!-- END CONTENT -->
             </div>
-            <!-- END SIDEBAR & CONTENT -->
 
-            <!-- BEGIN SIMILAR PRODUCTS -->
-            <div class="row margin-bottom-40">
-                <div class="col-md-12 col-sm-12 bxslider-wrapper bxslider-wrapper-similar-products">
-                    <h2>Most popular products</h2>
-                    <ul class="bxslider bxslider-similar-products" data-slides-phone="1" data-slides-tablet="2"
-                        data-slides-desktop="4" data-slide-margin="20">
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="/templates/upload/k4.jpg"
-                                         class="img-responsive" alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="/templates/upload/k4.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="/templates/upload/k1.jpg"
-                                         class="img-responsive" alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="/templates/upload/k1.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress2</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="/templates/upload/k2.jpg"
-                                         class="img-responsive" alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="/templates/upload/k2.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress3</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="/templates/upload/k3.jpg"
-                                         class="img-responsive" alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="/templates/upload/k3.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress4</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="/templates/upload/k4.jpg"
-                                         class="img-responsive" alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="/templates/upload/k4.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress5</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="product-item">
-                                <div class="pi-img-wrapper">
-                                    <img src="/templates/upload/k1.jpg"
-                                         class="img-responsive" alt="Berry Lace Dress">
-                                    <div>
-                                        <a href="/templates/upload/k1.jpg"
-                                           class="btn btn-default fancybox-button">Zoom</a>
-                                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                                    </div>
-                                </div>
-                                <h3><a href="item.html">Berry Lace Dress6</a></h3>
-                                <div class="pi-price">$29.00</div>
-                                <a href="#" class="btn btn-default add2cart">Add to cart</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!-- END SIMILAR PRODUCTS -->
         </div>
     </div>
 
@@ -549,7 +448,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
 <!--<script type="text/javascript" src="../bootstrap/user/scripts/app.js"></script> -->
-<script src="../bootstrap/js/project/user/shop/shoppingCart/js/shoppingCart.js"></script>
+<script src="../js/shoppingOrder/js/shoppingOrder.js"></script>
 <script th:inline="javascript">
     var layer;
     jQuery(document).ready(function () {
