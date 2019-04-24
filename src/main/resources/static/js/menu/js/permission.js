@@ -27,6 +27,7 @@ var vm = new Vue({
     },
     methods: {
         add: function () {
+            $("span.selected-icon i:first-child").removeClass();
             vm.showList = false;
             vm.title = "新增";
             vm.dept = {parentName: null, parentid: 0, sortstring: 0};
@@ -100,6 +101,9 @@ var vm = new Vue({
                 return;
             }
             $.get("/permission/info/" + pid, function (r) {
+                console.log(r.dept.icon)
+                $("span.selected-icon i:first-child").removeClass();
+                $("span.selected-icon i:first-child").addClass(r.dept.icon);
                 vm.showList = false;
                 vm.title = "修改";
                 vm.dept = r.dept;

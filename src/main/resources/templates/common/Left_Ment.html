@@ -32,21 +32,15 @@
                         IN+
                     </div>
                 </li>
-
-                <li    th:each="ment:${mentlist}" th:if="${ment.parentid}==0"  id="approvalProcess">
+                <li    th:each="ment:${mentlist}" th:if="${ment.parentid}==0" shiro:hasPermission="${ment.percode}" id="approvalProcess">
                     <a href="#" ><i th:class="${ment.icon}"></i>
                         <span class="nav-label"   th:text="${ment.pname}" ></span>
                         <span class="fa arrow"></span></a>
                     <ul  class="nav nav-second-level collapse" id="approvalProcess_ul">
-                        <li   id="process" th:each="childrenMent:${mentlist}" >
-                            <a th:href="${childrenMent.url}" th:if="${childrenMent.parentid}==${ment.pid} and ${childrenMent.type}=='menu'"
-                                th:text="${childrenMent.pname}"></a></li>
+                        <li   id="process" th:each="childrenMent:${mentlist}" shiro:hasPermission="${childrenMent.percode}" th:if="${childrenMent.parentid}==${ment.pid} and ${childrenMent.type}=='menu'">
+                            <a th:href="${childrenMent.url}" ><i th:class="${childrenMent.icon}"></i><span class="nav-label" th:text="${childrenMent.pname}"></span></a></li>
                     </ul>
                 </li>
-
-
-
-
             </ul>
         </div>
 
