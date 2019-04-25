@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>加班申请</title>
+</head>
+<body>
+<div class="container" style="padding-left:0!important;padding-right:0!important;">
+    <!--下面是业务表单-->
+    <form name="businessForm" id="businessForm">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td>申请人</td>
+                    <td><input type="text" class="form-control" id="propeople" name="propeople" /></td>
+                    <td>填表日期</td>
+                    <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/></td>
+                </tr>
+                <tr>
+                    <td>加班员工姓名</td>
+                    <td><input type="text" class="form-control" id="jobspeople" name="propeople" /></td>
+                    <td>部门</td>
+                    <td><input type="text" class="form-control" id="depart" name="propeople" /></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><textarea placeholder="部门负责人签字" class="form-control" name="reason" ></textarea></td>
+                </tr>
+                <td><span style="color:red;">加班证明人需由部门负责人确认（可加签确认)</span></td>
+                <td>合计加班时间</td>
+                <td><input type="text" class="form-control" id="jobTime" name="jobTime" />小时</td>
+                </tr>
+                <tr>
+                    <td>人事部核准对应加班时间数：<input type="text" class="form-control" id="checkJobTime" name="checkJobTime" /></td>
+                </tr>
+                <tr>
+                    <td>发放对应调休条签收：<input type="text" class="form-control" id="rest" name="rest" /></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -241,13 +241,13 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                     .taskId(flowVariable.getTaskId()).singleResult();
 
             // 创建附件
-            String filePaths = (String) taskFlowData.get("filePath");
+           /* String filePaths = (String) taskFlowData.get("filePath");
             String fileNames = (String) taskFlowData.get("fileName");
             String[] filePathArr = filePaths.split(",");
             String[] fileNameArr = fileNames.split(",");
             for (int i = 0; i < filePathArr.length; i++) {
                 this.createAttachment(userId, "", task.getId(), processInstanceId, fileNameArr[i], "", filePathArr[i]);
-            }
+            }*/
 
             taskService.addComment(task.getId(), processInstanceId, comment); // 添加审批意见
             Authentication.setAuthenticatedUserId(userId);

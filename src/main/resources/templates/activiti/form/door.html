@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>门禁申请</title>
+    <div th:include="common/Head :: headCss"></div>
+</head>
+<body>
+<div class="container" style="padding-left:0!important;padding-right:0!important;">
+<form name="businessForm" id="businessForm">
+    <div class="table-responsive">
+<table class="table table-bordered" >
+    <tbody>
+    <tr>
+        <td>流水号</td>
+        <td><input type="text" class="form-control" id="number" name="number" /></td>
+    </tr>
+    <tr>
+        <td>申请部门</td>
+        <td><input type="text" class="form-control" id="dept" name="dept" /></td>
+        <td>申请人</td>
+        <td><input type="text" class="form-control" id="people" name="people" /></td>
+        <td>申请时间</td>
+        <td><input type="text" class="form-control" oninvalid="setCustomValidity('申请时间不允许为空')" id="startTime" name="startTime" /></td>
+    </tr>
+    <tr>
+        <td>使用人</td>
+        <td><input type="text" class="form-control" id="dopeople" name="dopeople" /></td>
+        <td>申请类型</td>
+        <td><select class="form-control" name="leaveType">
+            <option>请选择</option>
+            <option value="1" >员工通道卡</option>
+            <option value="2" >楼层工作卡</option>
+            </select>
+        </td>
+        <td>
+            <span style="color: red;">注:楼层工作卡及应急卡均需总经理审批</span>
+        </td>>
+    </tr>
+    <tr>
+        <td>申请原因</td>
+        <td colspan="4"><textarea class="form-control" name="reason"></textarea></td>
+    </tr>
+    <tr>
+        <td>员工通道卡</td>
+         <td>
+            <input  type="checkbox"  id="block1" name="block1" value="1号公共门--友和酒店与友和公寓C栋过道门禁"/>1号公共门--友和酒店与友和公寓C栋过道门禁<br/>
+
+            <input type="checkbox"  id="block2" name="block2" value="2号公共门-- 公寓C栋长廊门禁"/>2号公共门--公寓C栋长廊门禁
+
+            <input type="checkbox"  id="block3" name="block3" value="3号公共门-- 公寓A,B栋地下室及二楼AB栋连廊门禁"/>3号公共门--公寓A,B栋地下室及二楼AB栋连廊门禁
+
+            <input type="checkbox"  id="block4" name="block4" value="4号公共门-- 公寓C栋地下室门禁"/>4号公共门--公寓C栋地下室门禁
+
+            <input type="checkbox"  id="block5" name="block5" value="5号公共门-- 酒店二楼至农垦总局门禁"/>5号公共门--酒店二楼至农垦总局门禁
+
+            <input type="checkbox"  id="block6" name="block6" value="6号公共门-- 酒店二楼健身房通道"/>6号公共门--酒店二楼健身房通道
+
+            <input type="checkbox"  id="block7" name="block7" value="公司办公室-- 公司二楼办公室门禁"/>公司办公室--公司二楼办公室门禁
+
+            <input type="checkbox"  id="block8" name="block8" value="公司办公室-- 公司二楼办公室后门门禁（即人事部后边的门禁）"/>公司办公室--公司二楼办公室后门门禁（即人事部后边的门禁）
+
+
+        </td>
+        <td><span style="color: red;">注：请根据相关规定选择正确的门禁通道，部门负责人需承担核实通道权限的责任。</span><td>
+    </tr>
+    <tr>
+        <td>楼层工作卡</td>
+        <td colspan="4"><textarea class="form-control" name="job"></textarea>
+            <span style="color: red;">注：请具体说明需开通的楼层卡。</span></td>
+
+    </tr>
+    <tr>
+        <td>备注</td>
+        <td colspan="4"><textarea class="form-control" name="remark"></textarea></td>
+    </tr>
+    </tbody>
+</table>
+    </div>
+</form>
+</div>
+<div th:include="common/Head :: mainJs"></div>
+</body>
+</html>
