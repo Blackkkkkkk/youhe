@@ -230,12 +230,12 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         if (StrUtil.isBlank(processInstanceId)) {
             throw new YuheOAException("流程实例ID不允许为空");
         }
-        if (StrUtil.isBlank(nextUserId)) {
+        if (StrUtil.isBlank(nextUserId) && nodeNum != 0) {
             throw new YuheOAException("下一环节审批人不允许为空");
         }
 
         String comment = StrUtil.isBlank(flowVariable.getComment()) ? Constant.DEFAULT_AGREE_COMMENT : flowVariable.getComment();
-        if (nodeNum == 1) {    // 正常提交任务
+        if (nodeNum == 0 || nodeNum == 1) {    // 正常提交任务
             Task task = taskService.createTaskQuery()
                     .processInstanceId(processInstanceId)
                     .taskId(flowVariable.getTaskId()).singleResult();
@@ -255,6 +255,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             taskService.complete(task.getId(), taskFlowData);
         } else if (nodeNum > 1) {  // 跳转分支任务
             this.gotoAnyTask(flowVariable.getTargetTaskDefKey(), taskFlowData, null, comment, Constant.NODE_JUMP_TYPE_GO);
+        } else {
+            throw new YuheOAException("提交任务异常");
         }
 
     }

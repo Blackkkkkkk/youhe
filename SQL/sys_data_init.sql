@@ -11,10 +11,6 @@ INSERT INTO `activiti`.`sys_permission` VALUES ('2', '流程审批', 'menu', nul
 INSERT INTO `activiti`.`sys_permission` VALUES ('3', '流程管理', 'menu', '/activiti/ProcessManagement', 'sys:processManagement', '2', '0/2', '6', '1', 'fa fa-thumb-tack');
 INSERT INTO `activiti`.`sys_permission` VALUES ('4', '我的待办', 'menu', '/activiti/dealwith', 'user:backlog', '2', '0/2', '1', '1', 'fa fa-undo');
 INSERT INTO `activiti`.`sys_permission` VALUES ('5', '我的已办', 'menu', '/activiti/dealwithdo', 'user:backlogdo', '2', '0/2', '7', '1', 'fa fa-handshake-o');
-INSERT INTO `activiti`.`sys_permission` VALUES ('6', '流程在线设计', 'menu', '/create', 'sys:flowDesigner', '2', '0/2', '2', '1', 'fa fa-map');
-INSERT INTO `activiti`.`sys_permission` VALUES ('7', '流程部署模块', 'menu', null, 'sys:deploy', '2', '0/2', '3', '1', 'fa fa-modx');
-INSERT INTO `activiti`.`sys_permission` VALUES ('8', '流程部署', 'button', '/activiti/deploy', 'sys:flowDeploy', '2', '0/2', '4', '1', null);
-INSERT INTO `activiti`.`sys_permission` VALUES ('9', '启动流程', 'button', null, 'user:startFlow', '2', '0/2', '5', '1', null);
 INSERT INTO `activiti`.`sys_permission` VALUES ('10', '系统管理', 'menu', null, 'sys:systemManage', '0', '0/', '1', '1', 'fa fa-user');
 INSERT INTO `activiti`.`sys_permission` VALUES ('11', '部门管理', 'menu', '/department/index', 'sys:deptManage', '10', '0/8/', '0', '1', 'fa fa-user-secret');
 INSERT INTO `activiti`.`sys_permission` VALUES ('12', '用户管理', 'menu', '/user/index', 'sys:userManage', '10', '0/8/', '1', '1', 'fa fa-user-circle-o');
