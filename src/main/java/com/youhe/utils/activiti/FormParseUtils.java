@@ -5,6 +5,7 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.common.Constant;
+import com.youhe.common.ControlEnum;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
 import com.youhe.utils.spring.SpringContextUtils;
@@ -59,7 +60,7 @@ public class FormParseUtils {
          **/
         controls.forEach(control -> {
             String edit = control.attr("data-edit");
-            Element element = new Element("span");
+            /*Element element = new Element("span");
 
             // 设置属性
             String name = control.attr("name");
@@ -70,31 +71,23 @@ public class FormParseUtils {
             }
             // 设置值
             String val = map.get(name) == null ? "" : map.get(name).toString();
-            if ("select".equals(control.nodeName())) {
+            if (ControlEnum.SELECT.getType().equals(control.nodeName())) {
                 String valShow = map.get(name) == null ? "" : map.get(name + "_show").toString();
                 element.text(valShow);
             } else {
                 element.text(val);
-            }
+            }*/
 
             String type = control.attr("type");
             if (!flowVariable.isFirstNode()) {  // 不是首环节
 
                 if (!"hidden".equals(type)) {   // 非隐藏的字段都需要处理
                     if (StrUtil.isBlank(edit)) {    // 没有配置data-edit属性，设置只读
-                        if ("file".equals(type)) {
-                            createAttachmentEl(control, map, flowVariable, false);
-                        } else {
-                            control.replaceWith(element);
-                        }
+                        parseReadOnlyEl(control, map, flowVariable);
                     } else {    // 配置了data-edit属性，根据节点key判断
                         String currentTaskKey = flowVariable.getCurrentNodeKey();
                         if (!edit.contains(currentTaskKey)) {    // 当前节点没有设置可编辑，依然设置只读
-                            if ("file".equals(type)) {  // 附件
-                                createAttachmentEl(control, map, flowVariable, false);
-                            } else {
-                                control.replaceWith(element);
-                            }
+                            parseReadOnlyEl(control, map, flowVariable);
                         } else {   // 可编辑
                             parseEditEl(control, map, flowVariable);
                         }
@@ -121,7 +114,7 @@ public class FormParseUtils {
                     * */
                 parseEditEl(control, map, flowVariable);
             } else {    // 首环节
-                if ("file".equals(type)) {   // 解析附件控件
+                if (ControlEnum.FILE.getType().equals(type)) {   // 解析附件控件
                     createAttachmentEl(control, map, flowVariable, true);
                 }
             }
@@ -142,19 +135,62 @@ public class FormParseUtils {
         String name = control.attr("name");
         String val = map.get(name) == null ? "" : map.get(name).toString();
         String type = control.attr("type");
-        if ("select".equals(control.nodeName())) {
+        if (ControlEnum.SELECT.getType().equals(control.nodeName())) {
             Elements options = control.select("option");
             options.forEach(option -> {
                 if (val.equals(option.val())) {
                     option.attr("selected", true);
                 }
             });
-        } else if ("file".equals(type)) {   // 解析附件控件
+        } else if (ControlEnum.FILE.getType().equals(type)) {   // 解析附件控件
             createAttachmentEl(control, map, flowVariable, true);
+        } else if (ControlEnum.CHECKBOX.getType().equals(type) || ControlEnum.RADIO.getType().equals(type)) {
+            if (val.equals(control.val())) {
+                control.attr("checked", true);
+            }
         } else {
             control.val(val);
         }
+
     }
+
+    /**
+     * 控件解析成不可编辑或只读
+     * @param control 控制对象
+     * @param map   业务数据
+     * @param flowVariable  流程流转数据
+     */
+    private static void parseReadOnlyEl(Element control, Map<String, Object> map, FlowVariable flowVariable) {
+        String name = control.attr("name");
+        String val = map.get(name) == null ? "" : map.get(name).toString();
+        String type = control.attr("type");
+
+        if (ControlEnum.FILE.getType().equals(type)) {  // 附件
+            createAttachmentEl(control, map, flowVariable, false);
+        } else if (ControlEnum.CHECKBOX.getType().equals(type)
+                || ControlEnum.RADIO.getType().equals(type)) {
+            control.attr("disabled", true);
+            if (val.equals(control.val())) {
+                control.attr("checked", true);
+            }
+        } else {    // 替换成span标签
+            Element element = new Element("span");
+            element.attr("name", control.attr("name"));
+            String id = control.attr("id");
+            if (StrUtil.isNotBlank(id)) {
+                element.attr("id", control.attr("id"));
+            }
+            // 设置值
+            if (ControlEnum.SELECT.getType().equals(control.nodeName())) {
+                String valShow = map.get(name) == null ? "" : map.get(name + "_show").toString();
+                element.text(valShow);
+            } else {
+                element.text(val);
+            }
+            control.replaceWith(element);
+        }
+    }
+
 
     /**
      * 创建附件控件
