@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * 作用：文件上传 控制层<br>
@@ -49,10 +51,10 @@ public class FileUploadController extends BaseController {
      * 下载文件。若同时传了两个可选参数，默认使用attachmentId
      * @param filename 下载的文件名称：可选。不是流程的附件传它
      * @param attachmentId 下载的附件ID：可选。流程相关附件传它
-     * @param fType 附件类型：必要，否则无法找到文件的路径。请看FileTypeEnum类
+     * @param fType 附件类型：filename时必要，否则无法找到文件的路径。请看FileTypeEnum类
      */
     @GetMapping(value = "download")
-    public void download(String filename, String attachmentId, @RequestParam(value = "fType") String fType) {
+    public void download(String filename, String fType, String attachmentId) {
         if ((StrUtil.isNotBlank(filename) && StrUtil.isNotBlank(attachmentId)) || StrUtil.isNotBlank(attachmentId)) {
             // 默认使用attachmentId
             Attachment attachment = myProcessEngine.getAttachment(attachmentId);

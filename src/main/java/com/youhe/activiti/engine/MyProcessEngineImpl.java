@@ -85,6 +85,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     private IdentityService identityService;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public String createModel() {
@@ -782,6 +784,32 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     public void deleteAttachment(String attachmentId) {
         // 如果有必要可先删除远程文件
         taskService.deleteAttachment(attachmentId);
+    }
+
+    @Override
+    public void importProcess(InputStream in) {
+        try {
+            JsonNode jsonNode = new ObjectMapper().readTree(in);
+            String modelId = this.createModel();
+            String name = jsonNode.get("properties").get("name").toString();
+            String jsonXml = jsonNode.toString();
+            Model model = repositoryService.getModel(modelId);
+
+            ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
+
+            modelJson.put(ModelDataJsonConstants.MODEL_NAME, name);
+            modelJson.put(ModelDataJsonConstants.MODEL_DESCRIPTION, "导入流程");
+            model.setMetaInfo(modelJson.toString());
+            model.setName(name);
+
+            repositoryService.saveModel(model);
+
+            repositoryService.addModelEditorSource(model.getId(), jsonXml.getBytes(StandardCharsets.UTF_8));
+            repositoryService.addModelEditorSourceExtra(model.getId(), null);   // todo 流程图片资源还没有保存
+        } catch (Exception e) {
+            throw new YuheOAException("导入流程失败");
+        }
+
     }
 
     /**

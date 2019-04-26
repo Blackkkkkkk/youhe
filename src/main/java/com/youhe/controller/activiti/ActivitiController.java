@@ -1,11 +1,15 @@
 package com.youhe.controller.activiti;
 
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.activiti.ext.ProcessDiagramGenerator;
+import com.youhe.activiti.rest.editor.ModelSaveRestResource;
 import com.youhe.common.Constant;
 import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.activiti.FlowVariable;
@@ -13,11 +17,12 @@ import com.youhe.entity.activiti.FormCodeData;
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.entity.department.Department;
-import com.youhe.entity.user.User;
 import com.youhe.exception.YuheOAException;
 import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import com.youhe.utils.spring.HttpServletContextKit;
+import com.youhe.utils.spring.SpringContextUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
@@ -29,20 +34,23 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +68,8 @@ public class ActivitiController extends BaseController {
     private RepositoryService repositoryService;
     @Autowired
     private HistoryService historyService;
+    @Autowired
+    private ModelSaveRestResource modelSaveRestResource;
 
 
     @GetMapping(value = "ProcessManagement")
@@ -449,5 +459,51 @@ public class ActivitiController extends BaseController {
          return names;
 
     }
+
+    /**
+     * 导入流程
+     * @param file 使用流程导出的流程.xml文件
+     * @return
+     */
+    @PostMapping(value = "import/process")
+    public R importProcess(@RequestParam(value = "file") MultipartFile file) {
+        try {
+            myProcessEngine.importProcess(file.getInputStream());
+        } catch (IOException e) {
+            return R.error("导入流程失败：" + e.getMessage());
+        }
+        return R.ok();
+    }
+
+    // todo 以后或许还有用，先不删除
+    /*@GetMapping(value = "dep")
+    public void dep() {
+        InputStream inputStream = FileUtil.getInputStream("C:\\Users\\admin\\Desktop\\请假申请.bpmn20.xml");
+        byte[] modelEditorSource = repositoryService.getModelEditorSource("37501");
+        byte[] modelEditorSourceExtra = repositoryService.getModelEditorSourceExtra("37501");
+
+        JsonNode jsonNode = null;
+        JsonNode jsonNode2 = null;
+        try {
+            jsonNode = new ObjectMapper().readTree(modelEditorSource);
+            ObjectNode objectNode = new ObjectMapper().createObjectNode();
+            objectNode.put("bpm", jsonNode.toString());
+            objectNode.put("png", modelEditorSourceExtra);
+
+//            jsonNode2 = new ObjectMapper().readTree(modelEditorSourceExtra);
+            LOGGER.info("es={}", jsonNode.toString());
+            File file = FileUtil.writeUtf8String(objectNode.toString(), "C:\\Users\\admin\\Desktop\\ms.json");
+//            File file = FileUtil.writeBytes(modelEditorSource, "C:\\Users\\admin\\Desktop\\ms.json");
+            FileInputStream fileInputStream = new FileInputStream(file);
+            HttpServletResponse response = HttpServletContextKit.getHttpServletResponse();
+            response.setCharacterEncoding("utf-8");
+            response.setHeader("Content-Disposition", "attachment;filename=ms.json");
+
+            ServletUtil.write(response, fileInputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }*/
 
 }

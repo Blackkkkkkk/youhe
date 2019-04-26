@@ -273,6 +273,13 @@ public interface MyProcessEngine {
      * @param attachmentId 附件ID
      */
     void deleteAttachment(String attachmentId);
+
+    /**
+     * 导入流程
+     * @param in 输入流
+     */
+    void importProcess(InputStream in);
+
     /**
      * 选择审批人
      * @return
