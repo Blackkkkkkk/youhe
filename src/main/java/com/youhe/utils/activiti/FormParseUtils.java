@@ -3,11 +3,13 @@ package com.youhe.utils.activiti;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
+import com.youhe.YouheApplication;
 import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.common.Constant;
 import com.youhe.common.ControlEnum;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
+import com.youhe.exception.YuheOAException;
 import com.youhe.utils.spring.SpringContextUtils;
 import org.activiti.engine.task.Attachment;
 import org.jsoup.Jsoup;
@@ -17,6 +19,11 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +48,20 @@ public class FormParseUtils {
      */
     public static FormCodeData getTaskFormCode(String formKey, Map<String, Object> map) {
         String formUrl = ClassUtil.getClassPath() + "templates/activiti/form/" + formKey + ".html";
-        String formHtml = FileUtil.readString(formUrl, "UTF-8");
+        InputStream resourceAsStream = YouheApplication.class.getResourceAsStream("../../templates/activiti/form/" + formKey + ".html");
+
+        byte[] bytes;
+        try {
+            int available = resourceAsStream.available();
+            bytes = new byte[available];
+            resourceAsStream.read(bytes);
+        } catch (IOException e) {
+            LOGGER.error("解析表单时发生异常：", e);
+            throw new YuheOAException("解析表单时发生异常:" +  e.getMessage());
+        }
+
+        String formHtml;//FileUtil.readString(formUrl, "UTF-8");
+        formHtml = new String(bytes, StandardCharsets.UTF_8);
 
         Document doc = Jsoup.parse(formHtml);
         // 获取业务表单中所有组件
@@ -60,23 +80,6 @@ public class FormParseUtils {
          **/
         controls.forEach(control -> {
             String edit = control.attr("data-edit");
-            /*Element element = new Element("span");
-
-            // 设置属性
-            String name = control.attr("name");
-            element.attr("name", control.attr("name"));
-            String id = control.attr("id");
-            if (StrUtil.isNotBlank(id)) {
-                element.attr("id", control.attr("id"));
-            }
-            // 设置值
-            String val = map.get(name) == null ? "" : map.get(name).toString();
-            if (ControlEnum.SELECT.getType().equals(control.nodeName())) {
-                String valShow = map.get(name) == null ? "" : map.get(name + "_show").toString();
-                element.text(valShow);
-            } else {
-                element.text(val);
-            }*/
 
             String type = control.attr("type");
             if (!flowVariable.isFirstNode()) {  // 不是首环节
@@ -94,24 +97,6 @@ public class FormParseUtils {
                     }
                 }
             } else if (!flowVariable.isFirstSubmit()) { // 首环节 回退情况
-                    /*
-                    <div id="uploader" class="wu-example">
-                        <!--用来存放文件信息-->
-                        <div id="thelist" class="uploader-list">
-                            <input type="hidden" name="filePath" value="">
-                            <input type="hidden" name="fileName" value="">
-                            <div id="WU_FILE_0" class="item" data-field-id="">
-                                <h4 class="info">流程.xml
-                                    <span onclick="delAttachment('WU_FILE_0')" style="margin-left: 3px;color: #e6131377;font-size: 14px;" class="glyphicon glyphicon-remove">
-                                    </span>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="btns">
-                            <div id="picker">选择文件</div>
-                        </div>
-                    </div>
-                    * */
                 parseEditEl(control, map, flowVariable);
             } else {    // 首环节
                 if (ControlEnum.FILE.getType().equals(type)) {   // 解析附件控件

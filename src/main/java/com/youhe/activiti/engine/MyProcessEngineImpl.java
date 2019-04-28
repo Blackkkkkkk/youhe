@@ -1,6 +1,7 @@
 package com.youhe.activiti.engine;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -54,8 +55,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -789,10 +792,20 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public void importProcess(InputStream in) {
         try {
-            JsonNode jsonNode = new ObjectMapper().readTree(in);
+//            JsonNode jsonNode = new ObjectMapper().readTree(in);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            String s = StrUtil.toString(in);
+            JSONObject jsonObject = JSONUtil.xmlToJson(sb.toString());
+            LOGGER.info("bytes={}", sb.toString());
+            JSON jsonNode = JSONUtil.parse(in);
             String modelId = this.createModel();
-            String name = jsonNode.get("properties").get("name").toString();
-            String jsonXml = jsonNode.toString();
+            String name = jsonObject.getByPath("definitions.process.-name").toString();
+            String jsonXml = jsonObject.toString();
             Model model = repositoryService.getModel(modelId);
 
             ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
@@ -807,7 +820,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             repositoryService.addModelEditorSource(model.getId(), jsonXml.getBytes(StandardCharsets.UTF_8));
             repositoryService.addModelEditorSourceExtra(model.getId(), null);   // todo 流程图片资源还没有保存
         } catch (Exception e) {
-            throw new YuheOAException("导入流程失败");
+            LOGGER.error("导入流程失败", e);
+            throw new YuheOAException("导入流程失败" + e.getMessage());
         }
 
     }

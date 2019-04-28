@@ -476,10 +476,12 @@ public class ActivitiController extends BaseController {
     }
 
     // todo 以后或许还有用，先不删除
-    /*@GetMapping(value = "dep")
+    @GetMapping(value = "dep")
     public void dep() {
+//        InputStream inputStream = FileUtil.getInputStream("C:\\Users\\admin\\Desktop\\加班生情.bpmn20.xml");
         InputStream inputStream = FileUtil.getInputStream("C:\\Users\\admin\\Desktop\\请假申请.bpmn20.xml");
-        byte[] modelEditorSource = repositoryService.getModelEditorSource("37501");
+        myProcessEngine.importProcess(inputStream);
+        /*byte[] modelEditorSource = repositoryService.getModelEditorSource("37501");
         byte[] modelEditorSourceExtra = repositoryService.getModelEditorSourceExtra("37501");
 
         JsonNode jsonNode = null;
@@ -502,8 +504,8 @@ public class ActivitiController extends BaseController {
             ServletUtil.write(response, fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
-    }*/
+    }
 
 }
