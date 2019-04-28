@@ -25,11 +25,7 @@
 <div th:include="common/Head :: mainJs"></div>
 <script   src="/ztree/jquery.ztree.core.js"></script>
 <script   src="/ztree/jquery.ztree.excheck.min.js"></script>
-
-
-
 <script src="/ztree/jquery.ztree.all.min.js"></script>
-
 <script src="/ztree/jquery.ztree.exhide.js"></script>
 
 
@@ -45,6 +41,7 @@ var setting = {
     },
     data: {
         key: {
+
             name:"userDepartmentName"
         }
     }
@@ -77,17 +74,23 @@ $.ajax({
     url: "/activiti/find/user",
     dataType: 'json',
     success: function(data) {
+
         for(var i=0;i<data.length;i++){
-            for(var j=0;j<data[i].userDept.length;j++){
-                var userChildren=data[i].userDept[j].user;
-                delete(data[i].userDept[j].user);
-                data[i].userDept[j].children=userChildren;
+            for(var j=0;j<data[i].dept.length;j++){
+                var userChildren=data[i].dept[j].user;
+                delete(data[i].dept[j].user);
+                data[i].dept[j].children=userChildren;
+               /* console.log(data[i].dept[j].parentId)*/
+              if(data[i].dept[j].parentId==0){
+                   delete(data[i].dept[j].children)
+               }
             }
-            var deptChildren=data[i].userDept;
-            delete(data[i].userDept);
+            var deptChildren=data[i].dept;
+            delete(data[i].dept);
             data[i].children=deptChildren;
-            console.log(deptChildren);
+
         }
+        /*console.log(data)*/
         zNodes=data;
     }
 });

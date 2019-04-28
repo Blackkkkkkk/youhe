@@ -90,6 +90,8 @@ $('#businessForm').submit(function () {
  * 审批用户选择
  */
 function selUser() {
+    $(".glyphicon-user").html("");
+    $("input[name='nextUserId']").val("");
     layer.open({
         type: 2,
         title: '选择用户',
@@ -111,11 +113,13 @@ function selUser() {
 function findUser(layero,index) {
     var info="";
     var infoId="";
+    var info1="";
+    var infoId1="";
     var id;
     var id1;
     var name = window[index.find('iframe')[0]['name']];
     var value=name.zTreeOnCheck();
-
+console.log(value)
     for(var i=0;i<value.length;i++){
          id=value[i];
         for(var j=0;j<id.length;j++){
@@ -124,18 +128,33 @@ function findUser(layero,index) {
                         id1=id[j].children
                    for(var h=0;h<id1.length;h++){
                        info += id1[h].userDepartmentName+ ","
-                       infoId += id1[h].sys_user_id + ","
+                       infoId += id1[h].uid + ","
                       }
+                    }else if(id[j].parentId==0){
+                            info1+=id[j].userDepartmentName+","
+                            infoId1+=id[j].deptId+","
+
                     }
                 }
         }
     }
-    info=info.substring(0, info.lastIndexOf(','));
-    infoId=infoId.substring(0, infoId.lastIndexOf(','));
-
-    $(".glyphicon-user").html(info);
-    $("input[name='nextUserId']").val(infoId);
-
+    if(info1==""&&infoId1==""){
+        info=info.substring(0, info.lastIndexOf(','));
+        infoId=infoId.substring(0, infoId.lastIndexOf(','));
+        $(".glyphicon-user").html(info).append(info1);
+        $("input[name='nextUserId']").val(infoId+ infoId1);
+    }
+    else if(info==""&&infoId==""){
+        info1=info1.substring(0, info1.lastIndexOf(','));
+        infoId1=infoId1.substring(0, infoId1.lastIndexOf(','));
+        $(".glyphicon-user").html(info).append(info1);
+        $("input[name='nextUserId']").val(infoId+infoId1);
+    }else {
+        info1 = info1.substring(0, info1.lastIndexOf(','));
+        infoId1 = infoId1.substring(0, infoId1.lastIndexOf(','));
+        $(".glyphicon-user").html(info).append(info1);
+        $("input[name='nextUserId']").val(infoId+ infoId1);
+    }
 }
 
 /**

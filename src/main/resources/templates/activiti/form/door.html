@@ -48,14 +48,14 @@
                 <tr >
                     <td >员工通道卡</td>
                     <td  colspan="4">
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-490px" type="checkbox" class="form-control" id="block1" name="block1" value="1号公共门--友和酒店与友和公寓C栋过道门禁"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-490px" type="checkbox" class="form-control" id="block2" name="block2" value="2号公共门-- 公寓C栋长廊门禁"/><br/>
-                        <input  style="margin-top:30px;zoom:30%;margin-left:-490px" type="checkbox" class="form-control" id="block3" name="block3" value="3号公共门-- 公寓A,B栋地下室及二楼AB栋连廊门禁"/><br/>
-                        <input  style="margin-top:60px;zoom:30%;margin-left:-490px" type="checkbox" class="form-control" id="block4" name="block4" value="4号公共门-- 公寓C栋地下室门禁"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-490px" type="checkbox" class="form-control" id="block5" name="block5" value="5号公共门-- 酒店二楼至农垦总局门禁"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-490px" type="checkbox" class="form-control" id="block6" name="block6" value="6号公共门-- 酒店二楼健身房通道"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-490px" type="checkbox" class="form-control" id="block7" name="block7" value="公司办公室-- 公司二楼办公室门禁"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-490px" type="checkbox" class="form-control" id="block8" name="block8" value="公司办公室-- 公司二楼办公室后门门禁（即人事部后边的门禁）"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block1" name="block1" value="1号公共门--友和酒店与友和公寓C栋过道门禁"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block2" name="block2" value="2号公共门-- 公寓C栋长廊门禁"/><br/>
+                        <input  style="margin-top:30px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block3" name="block3" value="3号公共门-- 公寓A,B栋地下室及二楼AB栋连廊门禁"/><br/>
+                        <input  style="margin-top:60px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block4" name="block4" value="4号公共门-- 公寓C栋地下室门禁"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block5" name="block5" value="5号公共门-- 酒店二楼至农垦总局门禁"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block6" name="block6" value="6号公共门-- 酒店二楼健身房通道"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block7" name="block7" value="公司办公室-- 公司二楼办公室门禁"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block8" name="block8" value="公司办公室-- 公司二楼办公室后门门禁（即人事部后边的门禁）"/><br/>
                     </td>
                     <td width="300px"  >
                     <label style="margin-left: -520px">1号公共门--友和酒店与友和公寓C栋过道门禁</label><br/>
@@ -107,6 +107,20 @@
             // alert('不允许提交');
             // return false;   // 返回false可阻止继续表单提交
         }
+$(function () {
+    function S4() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
+
+    function guid() {
+        return (S4() + S4() + S4());
+    }
+
+    var myID =guid();
+    console.log(myID)
+    $("#number").val(myID)
+
+})
 
     </script>
 </body>

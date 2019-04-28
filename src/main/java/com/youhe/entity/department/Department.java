@@ -23,6 +23,7 @@ public class Department extends SysBaseEntity {
 
     private Integer status;
 
+    private String uid;
 
     /**
      * ztree属性
@@ -30,17 +31,34 @@ public class Department extends SysBaseEntity {
     private Boolean open;
 
     //二级部门
-    private List<User_Department>  userDept;
-
+    private List<Department>  dept;
+    //用户
+    private List<User>  user;
 
     private String userDepartmentName;//用户和部门公用字段
 
-    public List<User_Department> getUserDept() {
-        return userDept;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserDept(List<User_Department> userDept) {
-        this.userDept = userDept;
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public List<User> getUser() {
+        return user;
+    }
+
+    public void setUser(List<User> user) {
+        this.user = user;
+    }
+
+    public List<Department> getDept() {
+        return dept;
+    }
+
+    public void setDept(List<Department> dept) {
+        this.dept = dept;
     }
 
     public String getUserDepartmentName() {
