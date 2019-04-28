@@ -67,4 +67,11 @@ public class OrderDetail extends SysBaseEntity implements Serializable {
      */
     private LocalDateTime createTime;
 
+    /*
+     * 关联照片表的字段
+     **/
+    private String saveFileName; // 照片名字
+
+    private String pageaddr; // 页面显示路径
+
 }

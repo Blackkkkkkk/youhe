@@ -42,7 +42,7 @@ public interface OrderService extends IService<Order> {
 
 //    void shoppingOrder();
 
-     List<Shop> shoppingOrder();
+    Map<String,Object> shoppingOrder();
 
     List<Shop> shoppingPurchase(Shop shop);
 

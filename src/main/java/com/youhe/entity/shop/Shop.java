@@ -89,5 +89,7 @@ public class Shop extends SysBaseEntity {
     private String color;
     private String size;
 
+    private int AllPrices;
+
 
 }

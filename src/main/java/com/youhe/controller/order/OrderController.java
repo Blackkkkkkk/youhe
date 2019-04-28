@@ -3,10 +3,12 @@ package com.youhe.controller.order;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.youhe.biz.order.OrderBiz;
 import com.youhe.biz.redis.RedisBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.controller.comm.BaseController;
 import com.youhe.entity.order.OrderDetails;
+import com.youhe.entity.permission.Permission;
 import com.youhe.entity.shop.PayResult;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.shop.Shop_index_carousel;
@@ -23,9 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 【作用】商品订单接口<br>
@@ -44,6 +44,8 @@ public class OrderController extends BaseController {
     private RedisBiz redisBiz;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    OrderBiz orderBiz;
 
     @Autowired
     private ShopBiz shopBiz;
@@ -111,25 +113,40 @@ public class OrderController extends BaseController {
         return redisBiz.hscan(CartPrefix.getCartList, key);
     }
 
-
+    //   结算
     @RequestMapping(value = "/shoppingOrder")
     @ResponseBody
     public ModelAndView shoppingOrder(Model model, Shop_index_carousel shop_index_carousel) {
-        model.addAttribute("shopList", orderService.shoppingOrder());
-        return  new ModelAndView ("user/shop/shoppingOrder/shopping-order");
+        ModelAndView models = new ModelAndView();
+        Map<String,Object> resultMap = orderService.shoppingOrder();
+        models.addObject("shopList", resultMap);
+        models.setViewName("user/shop/shoppingOrder/shopping-order");
+        return models;
     }
 
-//    立即购买
+////           结算
+//    @RequestMapping(value = "/shoppingOrder")
+//    @ResponseBody
+//    public  Map<String,Object> shoppingOrder(Model model, Shop_index_carousel shop_index_carousel) {
+//        ModelAndView models = new ModelAndView();
+//        Map<String,Object> resultMap = orderService.shoppingOrder();
+////        models.addObject("shopList", orderService.shoppingOrder());
+//        models.addObject("shopList", resultMap);
+////        models.setViewName("user/shop/shoppingOrder/shopping-order");
+////        model.addAttribute("shopList", orderService.shoppingOrder());
+////        return  new ModelAndView ("user/shop/shoppingOrder/shopping-order");
+//        return resultMap;
+//    }
+    //    立即购买
     @RequestMapping(value = "/shoppingPurchase")
-    public ModelAndView shoppingPurchase( Model model,Shop_index_carousel shop_index_carousel,Shop shop) {
-        shop.setIsIndex(1);
-        shop.setStatus(1).
-                setRegister_Sort(1).
-                setTop_Sort(1).
-                setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
-        model.addAttribute("shopList", orderService.shoppingPurchase(shop));
-        return  new ModelAndView ("user/shop/shoppingOrder/shopping-order");
+    @ResponseBody
+    public ModelAndView shoppingPurchase(Shop_index_carousel shop_index_carousel,Shop shop) {
+        ModelAndView model = new ModelAndView();
+        model.addObject("shopList", orderService.shoppingPurchase(shop));
+        model.setViewName("user/shop/shoppingOrder/shopping-order");
+        return  model;
     }
+
 
 
 //    @RequestMapping(value = "/shoppingOrder")

@@ -106,43 +106,48 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <th class="shopping-cart-total" colspan="2">总价</th>
                                     </tr>
 
-                                    <tr v-for="(item,index) in shopList">
+                                    <tr th:each="com_list:${shopList}">
+                                    </tr>
+                                    <tr th:each="com_list:${shopList}">
                                         <td class="shopping-cart-image">
+                                            <!--<a href="#"><img-->
+                                                    <!--:src="item.pageaddr+item.saveFileName"-->
+                                                    <!--alt="Berry Lace Dress"></a>-->
                                             <a href="#"><img
-                                                    :src="item.pageaddr+item.saveFileName"
+                                                    th:src="@{${com_list.pageaddr}+${com_list.saveFileName}}"
                                                     alt="Berry Lace Dress"></a>
                                         </td>
                                         <td class="shopping-cart-description" style=" text-align:center; ">
-                                            <h3><a href="#">Cool green dress with red bell</a></h3>
-                                            <p><strong>Item 1</strong> - Color: Green; Size: S</p>
-                                            <em>More info is here</em>
+                                            <!--<h3><a href="#">Cool green dress with red bell</a></h3>-->
+                                            <!--<p><strong>Item 1</strong> - Color: Green; Size: S</p>-->
+                                            <!--<em>More info is here</em>-->
+                                            <strong><span></span><span th:text="${com_list.remark}"></span></strong>
                                         </td>
 
                                         <td class="shopping-cart-quantity">
                                             <div class="product-quantity">
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-up bootstrap-touchspin-up" type="button"
-                                                        @click="addCardNum($event,index)"><i
+                                                        @click="addCardNum($event,0)"><i
                                                         class="fa fa-angle-up"></i></button></span>
-                                                <input v-if="index == 0" id="product-quantity" type="text"
-                                                       :value="item.cartNum"
+                                                <input v-if="0 == 0" id="product-quantity" type="text"
                                                        readonly
                                                        class="form-control input-sm" ref="input1">
-                                                <input v-if="index != 0" :id="'product-quantity'+(index+1)" type="text"
+                                                <input v-if="0 != 0" :id="'product-quantity'+(0+1)" type="text"
                                                        :value="item.cartNum"
                                                        readonly
                                                        class="form-control input-sm">
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-down bootstrap-touchspin-down"
-                                                        type="button" @click="delCardNum($event,index)"><i
+                                                        type="button" @click="delCardNum($event,0)"><i
                                                         class="fa fa-angle-down"></i></button></span>
                                             </div>
                                         </td>
                                         <td class="shopping-cart-price">
-                                            <strong><span>¥</span>{{item.pirce}}</strong>
+                                            <strong><span th:text="${com_list.pirce}">¥</span></strong>
                                         </td>
                                         <td class="shopping-cart-total">
-                                            <strong><span>¥</span>{{item.pirce * item.cartNum}}</strong>
+                                            <strong><span th:text="${com_list.AllPrices}">¥</span></strong>
                                         </td>
                                         <td class="del-goods-col">
                                             <a class="del-goods" href="#"><i class="fa fa-times"></i></a>
@@ -151,18 +156,19 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </table>
                             </div>
                             <div class="shopping-total">
-                                <ul>
+                                <ul th:each="com_list:${shopList}">
                                     <li>
                                         <em>小计</em>
-                                        <strong class="price"><span>¥</span>{{carData.prices}}</strong>
+                                        <strong><span th:text="${com_list.pirce}">¥</span></strong>
+                                        <!--<strong class="price"><span>¥</span>{{carData.prices}}</strong>-->
                                     </li>
                                     <li>
                                         <em>运费</em>
-                                        <strong class="price"><span>¥</span>{{cartPrices.shipping}}</strong>
+                                        <strong class="price"><span>¥</span>0</strong>
                                     </li>
                                     <li class="shopping-total-price">
                                         <em>总计</em>
-                                        <strong class="price"><span>¥</span>{{cartPrices.allPrice}}</strong>
+                                        <strong><span th:text="${com_list.pirce}">¥</span></strong>
                                     </li>
                                 </ul>
                             </div>

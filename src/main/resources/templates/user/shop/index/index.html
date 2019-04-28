@@ -801,7 +801,15 @@
                                         type="button" @click="delCardNum($event,0)" th:id="${shopList.id}"><i
                                         class="fa fa-angle-down"></i></button></span>
                             </div>
-                            <a th:id="${shopList.id}"  class="btn btn-primary"  th:href="@{'/order/shoppingPurchase?id='+${shopList.id}}">立即购买</a>
+
+                            <!--<a href="#product-pop-up"-->
+                               <!--class="btn btn-default fancybox-fast-view11"-->
+                               <!--th:onclick="'javascript:shoppingPurchase('+${shopList.id}+')'"-->
+                            <!--&gt;View</a>-->
+
+                            <a  class="btn btn-primary"  th:onclick="'javascript:shoppingPurchase('+${shopList.id}+')'">立即购买</a>
+
+
                             <a @click="addCar($event,2)" class="btn btn-primary"
                                th:id="${shopList.id}">添加到购物车</a>
                         </div>
@@ -883,6 +891,28 @@
     }
 
 
+
+    // function shoppingPurchase(id) {
+    //     //初始化
+    //     cartNum=vm.addcar.cartNum = 0;
+    //     remark=vm.addcar.remark = "";
+    //     $.ajax({
+    //         data: {"id": id},
+    //         type: "POST",
+    //         dataType: 'json',
+    //         url: "/order/shoppingPurchase",
+    //     });
+    // }
+   //立即购买
+    function shoppingPurchase(id) {
+        // cartNum=vm.addcar.cartNum = 0;
+        id=id;
+        remark=vm.addcar.remark;
+        debugger
+        if (id && id != 'null') {
+            window.location.href="/order/shoppingPurchase?id=" + id +"&remark="+remark;
+        }
+    }
 
     var layer;
     /*
