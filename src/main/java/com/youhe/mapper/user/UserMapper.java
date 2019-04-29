@@ -34,12 +34,12 @@ public interface UserMapper extends BaseMapper<User> {
   //根据用户id查询用户名称
     User findName(String userId);
 
-    //查询出子菜单
+    //查询出一级菜单
     List<Department> findNames();
     //查询出父级菜单的用户
-    List<User_Department> findNameOne(String dept_id);
+    List<Department> findNameOne(String dept_id);
     //中间表关联信息
-    List<User_Department> findNameTwo (String dept_id);
+   /* List<User_Department> findNameTwo (String dept_id);*/
     //查询出用户
-    List<User> findNameThree(String sys_user_id);
+    List<User> findNameTwo(String dept_id);
 }
