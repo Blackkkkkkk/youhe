@@ -68,7 +68,7 @@
                                     <!--<a class="btn btn-primary" onclick="openCreate();"><i class="fa fa-plus" ></i>&nbsp;新建流程</a>-->
                                     <a class="btn btn-primary" style="margin-bottom:0" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;发布
                                     </a>
-                                    <a class="btn btn-primary" style="margin-bottom:0"><i class="fa fa-arrow-circle-o-down"></i>&nbsp;导入
+                                    <a class="btn btn-primary" style="margin-bottom:0" onclick="importModel()"><i class="fa fa-arrow-circle-o-down"></i>&nbsp;导入
                                     </a>
                                 </div>
                                 <table class="table table-striped table-bordered table-hover dataTables-example" style="width: 100%" >
@@ -90,6 +90,22 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+<!--        导入流程模型弹出层-->
+        <div class="layui-container" style="display: none; width: 300px" id="uploadLayout">
+            <div class="layui-upload" style="margin-top: 30px;">
+                <div class="layui-row" style="text-align: center">
+                    <div class="layui-col-md12">
+                        <button type="button" class="layui-btn layui-btn-normal" id="pick">选择文件(可多选)</button>
+                    </div>
+                </div>
+                <div class="layui-row" style="margin-top: 30px;text-align: center;">
+                    <div class="layui-col-md12">
+                        <button type="button" class="layui-btn layui-btn-sm" id="upload">上传并导入</button>
+                    </div>
+                </div>
+
             </div>
         </div>
         <div class="footer">
@@ -128,11 +144,58 @@
     //导出
     function exports(id) {
         modelId=id;
-        if (modelId && modelId != 'null') {   // 已导出
-            window.open("/activiti/export/processXml?modelId=" + modelId);
+        if (modelId && modelId !== 'null') {   // 已导出
+            window.open("/activiti/export/model/" + modelId);
         } else { // 流程未发布，提示发布
             alert('导出失败');
         }
+    }
+    var idx;
+    layui.use('upload', function () {
+        var $ = layui.jquery
+            ,upload = layui.upload;
+        //选完文件后不自动上传
+        upload.render({
+            elem: '#pick'
+            ,url: '/activiti/import/model'
+            ,auto: false
+            ,accept: 'file'
+            ,multiple: true
+            ,bindAction: '#upload'
+            ,done: function(r){
+                if (r.Status === 0) {
+                    layer.open({
+                        type: 0,
+                        content: '导入成功'
+                    });
+                    layer.close(idx);
+                } else {
+                    layer.open({
+                        type: 0,
+                        content: '导入失败：' + r.msg
+                    });
+                }
+            }
+        });
+
+    });
+
+    function importModel() {
+        idx = layer.open({
+            type: 1,
+            title: '选择需要导入的流程模型JSON',
+            resize: true,
+            fixed: true,
+            shadeClose: true,
+            shade: 0.1,
+            scrollbar: false,
+            area: ['400px', '250px'],
+            content: $('#uploadLayout'),
+            /*btn: ['上传并导入'],
+            end: function (index) {
+                console.log('index', index);
+            }*/
+        });
     }
 
     var data;
