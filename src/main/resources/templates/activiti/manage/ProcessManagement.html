@@ -208,78 +208,21 @@
 
         $("#process").attr("class", "active");
 
-
-        $('.dataTables-example').DataTable({
-            pageLength: 10,
-            responsive: true,
-            //  dom: '<"html5buttons"B>f',
-            dom: '<"html5buttons"B>f<"top">rt<"bottom"lp>i<"clear">',
-            pagingType: "full_numbers",
-            destroy: true,
-            colReorder: true,
-            responsive: true,
-            language: {
-                "sLengthMenu": "每页显示 _MENU_条",
-                "paginate": {
-                    "last": "最后一页",
-                    "first": "第一页",
-                    "next": "下一页",
-                    "previous": "上一页",
-                    "show": "显示"
-                },
-                zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
-                //下面三者构成了总体的左下角的内容。
-                info: "总共_PAGES_ 页，显示第_START_ 到第 _END_ ，筛选之后得到 _TOTAL_ 条，初始_MAX_ 条 ",//左下角的信息显示，大写的词为关键字。
-                infoEmpty: "0条记录",//筛选为空时左下角的显示。
-                infoFiltered: "",//筛选之后的左下角筛选提示，
-                buttons: {
-                    "colvis": "列可见性",
-                    "print": "打印",
-                    "copy": "复制数据",
-                },
-                editor: {
-                    "Update": "更新",
+        // 初始化表格dataTable。一般只传ajax（数据）、columns（列）、aoColumnDefs（列格式化操作，若无不需要）
+        yuheUtils.initDataTable('.dataTables-example', {
+            ajax: {
+                url: "/activiti/modelList",
+                dataSrc: function (json) {
+                    var date = new Date();
+                    console.log(date);
+                    list=json.modelList;
+                    $.each(list,function(n,value) {
+                        trs= value.deploymentId;
+                        createTime =value.createTime;
+                    });
+                    return list;
                 }
-
             },
-            buttons: [
-                {extend: 'colvis'},
-                {
-                    extend: 'print',
-                    customize: function (win) {
-                        $(win.document.body).addClass('white-bg');
-                        $(win.document.body).css('font-size', '10px');
-
-                        $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', 'inherit');
-                    }
-                },
-                {extend: 'copy'},
-                {extend: 'csv'},
-                {extend: 'excel', title: 'ExampleFile'},
-                {extend: 'pdf', title: 'ExampleFile'}
-            ],
-            ajax:
-                {
-                    url: "/activiti/modelList",
-                    dataSrc:
-                        function (json) {
-                            var date = new Date();
-                            console.log(date);
-                            list=json.modelList;
-                            $.each(list,function(n,value) {
-                                trs= value.deploymentId;
-                                createTime =value.createTime;
-                            });
-                            return list;
-                        }
-                    ,
-                    dataType: 'json',
-                    type:
-                        "get",
-                }
-            ,
             columns: [
                 {data: null, orderable: false},
                 {data: "revision"},
@@ -289,53 +232,44 @@
                 {data: "a"}
 
             ],
+            aoColumnDefs: [
+                {
+                    "render": function (data, type) {
+                        return "<div align='center'><input type='radio'   name='radio' value='" + data.id + "' ></div>";
+                    },
+                    "aTargets": 0 //第一列
+                },
+                {
+                    "render": function (data, type, row) {
+                        trs = row.deploymentId != null ? '已发布' : '未发布' ;
+                        return "<div align='center'><span >"+ trs +"</span></div>";
+                    },
+                    "aTargets": 3 //第一列
+                },
+                {
+                    "render": function (data, type, row) {
+                        data=row.createTime;
+                        if (data != undefined && data != 'undefined') {
+                            return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+                        } else {
+                            return '';
+                        }
+                    },
+                    "aTargets": 4 //第一列
+                },
+                {
+                    "render": function (data, type, row) {
+                        // return '  <button class="btn btn-success"   @click="start"><i class="fa fa-minus-square"></i>&nbsp;启动流程</button>';
+                        return ' <button class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0" onclick="javascript:start(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动</button>'+'&nbsp'+'&nbsp'+'&nbsp'+'&nbsp'+'&nbsp'+
+                            '<a class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0"  href="/process-editor/modeler.html?modelId=' + row.id + '" target="_blank"></i>&nbsp;修改</a>'+'&nbsp'+'&nbsp'+'&nbsp'+'&nbsp'+'&nbsp'+
+                            // ' <button class="btn btn-primary btn-xs btn-outline" onclick="javascript:exports(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动流程</button>';
+                            '<button class="btn btn-primary btn-xs btn-outline"  style="margin-bottom:0" onclick="javascript:exports(' + "'" + row.id + "'" + ');"></i>&nbsp;导出</button>';
+                    },
+                    "aTargets": 5 //第一列
+                }
+            ]
+        });
 
-            aoColumnDefs:
-                [
-                    {
-                        "render": function (data, type) {
-                            return "<div align='center'><input type='radio'   name='radio' value='" + data.id + "' ></div>";
-                        },
-                        "aTargets": 0 //第一列
-                    },
-                    {
-                        "render": function (data, type, row) {
-                            trs = row.deploymentId != null ? '已发布' : '未发布' ;
-                            return "<div align='center'><span >"+ trs +"</span></div>";
-                        },
-                        "aTargets": 3 //第一列
-                    },
-                    {
-                        "render": function (data, type, row) {
-                             data=row.createTime;
-                            if (data != undefined && data != 'undefined') {
-                                return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
-                            } else {
-                                return '';
-                            }
-                        },
-                        "aTargets": 4 //第一列
-                    },
-                    {
-                        "render": function (data, type, row) {
-                            // return '  <button class="btn btn-success"   @click="start"><i class="fa fa-minus-square"></i>&nbsp;启动流程</button>';
-                            return ' <button class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0" onclick="javascript:start(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动</button>'+'&nbsp'+'&nbsp'+'&nbsp'+'&nbsp'+'&nbsp'+
-                                '<a class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0"  href="/process-editor/modeler.html?modelId=' + row.id + '" target="_blank"></i>&nbsp;修改</a>'+'&nbsp'+'&nbsp'+'&nbsp'+'&nbsp'+'&nbsp'+
-                                // ' <button class="btn btn-primary btn-xs btn-outline" onclick="javascript:exports(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动流程</button>';
-                                '<button class="btn btn-primary btn-xs btn-outline"  style="margin-bottom:0" onclick="javascript:exports(' + "'" + row.id + "'" + ');"></i>&nbsp;导出</button>';
-                        },
-                        "aTargets": 5 //第一列
-                    }
-                ],
-
-            columnDefs:
-                [
-                    {orderable: false, targets: 0},
-                    {width: "15%", orderable: false, targets: 5}
-                ],
-            order:
-                [1, 'asc']
-        })
     });
     //对Date 类进行扩展
     Date.prototype.Format = function (fmt) {
