@@ -35,16 +35,16 @@ public class User implements Serializable {
 
 
     //查询属性
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String roleName;//角色名
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String departmentName;// 部门名字
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     //ztree属性
     private String userDepartmentName;//用户和部门公用字段
 
-
+    @TableField(exist = false)
     private Set<Role> roles = new HashSet<>();
 
     public String getUserDepartmentName() {
