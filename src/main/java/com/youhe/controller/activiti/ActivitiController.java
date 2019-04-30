@@ -1,12 +1,12 @@
 package com.youhe.controller.activiti;
 
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.activiti.ext.ProcessDiagramGenerator;
 import com.youhe.activiti.rest.editor.ModelSaveRestResource;
@@ -22,7 +22,6 @@ import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import com.youhe.utils.spring.HttpServletContextKit;
-import com.youhe.utils.spring.SpringContextUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
@@ -34,7 +33,6 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -45,12 +43,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -266,6 +260,7 @@ public class ActivitiController extends BaseController {
      * @param response resp
      */
     @GetMapping(value = "export/processXml")
+    @Deprecated
     public void exportProcessXml(String modelId, HttpServletResponse response) {
         BufferedOutputStream bos = null;
         try {
@@ -461,51 +456,37 @@ public class ActivitiController extends BaseController {
     }
 
     /**
-     * 导入流程
-     * @param file 使用流程导出的流程.xml文件
-     * @return
+     * 导出流程模型JSON数据
+     * @param modelId 模型ID
      */
-    @PostMapping(value = "import/process")
-    public R importProcess(@RequestParam(value = "file") MultipartFile file) {
+    @GetMapping(value = "export/model/{modelId}")
+    public void exportModel(@PathVariable String modelId) {
+        String json = myProcessEngine.exportModelJson(modelId);
+        JSONObject jsonObject = JSONUtil.parseObj(json);
+        String name = jsonObject.get("modelName").toString();
+        String rev = jsonObject.get("modelRev").toString();
+        HttpServletResponse response = HttpServletContextKit.getHttpServletResponse();
         try {
-            myProcessEngine.importProcess(file.getInputStream());
-        } catch (IOException e) {
-            return R.error("导入流程失败：" + e.getMessage());
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(name, "UTF-8") + "_v" + rev + ".json");
+        } catch (UnsupportedEncodingException e) {
+            throw new YuheOAException(e.getMessage());
         }
-        return R.ok();
+        ServletUtil.write(response, json, "application/json;charset=UTF-8");
     }
 
-    // todo 以后或许还有用，先不删除
-    @GetMapping(value = "dep")
-    public void dep() {
-//        InputStream inputStream = FileUtil.getInputStream("C:\\Users\\admin\\Desktop\\加班生情.bpmn20.xml");
-        InputStream inputStream = FileUtil.getInputStream("C:\\Users\\admin\\Desktop\\请假申请.bpmn20.xml");
-        myProcessEngine.importProcess(inputStream);
-        /*byte[] modelEditorSource = repositoryService.getModelEditorSource("37501");
-        byte[] modelEditorSourceExtra = repositoryService.getModelEditorSourceExtra("37501");
-
-        JsonNode jsonNode = null;
-        JsonNode jsonNode2 = null;
+    /**
+     * 导入流程模型
+     * @param file 使用流程导出的(流程_v.json)文件
+     * @return
+     */
+    @PostMapping(value = "import/model")
+    public R importModel(@RequestParam(value = "file") MultipartFile file) {
         try {
-            jsonNode = new ObjectMapper().readTree(modelEditorSource);
-            ObjectNode objectNode = new ObjectMapper().createObjectNode();
-            objectNode.put("bpm", jsonNode.toString());
-            objectNode.put("png", modelEditorSourceExtra);
-
-//            jsonNode2 = new ObjectMapper().readTree(modelEditorSourceExtra);
-            LOGGER.info("es={}", jsonNode.toString());
-            File file = FileUtil.writeUtf8String(objectNode.toString(), "C:\\Users\\admin\\Desktop\\ms.json");
-//            File file = FileUtil.writeBytes(modelEditorSource, "C:\\Users\\admin\\Desktop\\ms.json");
-            FileInputStream fileInputStream = new FileInputStream(file);
-            HttpServletResponse response = HttpServletContextKit.getHttpServletResponse();
-            response.setCharacterEncoding("utf-8");
-            response.setHeader("Content-Disposition", "attachment;filename=ms.json");
-
-            ServletUtil.write(response, fileInputStream);
+            myProcessEngine.importModel(file.getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
+            return R.error("导入流程模型失败：" + e.getMessage());
+        }
+        return R.ok();
     }
 
 }

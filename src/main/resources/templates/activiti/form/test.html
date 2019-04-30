@@ -65,6 +65,7 @@
         // alert('不允许提交');
         // return false;   // 返回false可阻止继续表单提交
     }
+
     var uploader;
     $(function () {
 
@@ -76,10 +77,11 @@
             console.log(file);
             console.log('response=', response);
             if (response.Status === 0) {
-                $list.append( '<div id="' + file.id + '" class="item" data-field-id="">' +
-                    '<a href="http://www.baidu.com" target="_blank" style="color: #0d6aad"><h4 class="info">' + file.name + '<span onclick="delAttachment(' + "'" + file.id + "'" + ')" style="margin-left: 3px;color: #e6131377;font-size: 14px;" class="glyphicon glyphicon-remove"></span></h4></a>' +
-                    '</div>' );
                 var upload = response.upload;
+                $list.append( '<div id="' + file.id + '" class="item" data-field-id="">' +
+                    '<a href="javascript:void();" target="_blank" style="color: #0d6aad"><h4 class="info">' + file.name + '<span onclick="delAttachment(' + "'" + file.id + "'" + ')" style="margin-left: 3px;color: #e6131377;font-size: 14px;" class="glyphicon glyphicon-remove"></span></h4></a>' +
+                    '</div>' );
+
                 console.log('upload=', upload);
                 var filePath = $list.find('input[name="filePath"]').val();
                 var fileName = $list.find('input[name="fileName"]').val();

@@ -34,6 +34,7 @@ import org.activiti.engine.impl.TaskServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 import org.activiti.engine.impl.persistence.entity.CommentEntity;
+import org.activiti.engine.impl.persistence.entity.ModelEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
@@ -55,10 +56,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -787,6 +785,63 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     public void deleteAttachment(String attachmentId) {
         // 如果有必要可先删除远程文件
         taskService.deleteAttachment(attachmentId);
+    }
+
+    @Override
+    public String exportModelJson(String modelId) {
+        ModelEntity model = (ModelEntity) repositoryService.getModel(modelId);
+        if (model == null || !model.hasEditorSource()) {
+            throw new YuheOAException("导出模型数据失败，模型数据不存在");
+        }
+        byte[] modelEditorSource = repositoryService.getModelEditorSource(modelId);
+        byte[] modelEditorSourceExt = repositoryService.getModelEditorSourceExtra(modelId);
+        JSONObject obj = JSONUtil.createObj();
+        obj.put("modelId", model.getId());
+        obj.put("modelName", model.getName());
+        obj.put("modelRev", model.getRevision());
+        obj.put("modelKey", model.getKey());
+        obj.put("modelMetaInfo", model.getMetaInfo());
+        obj.put("editorSourceValueId", model.getEditorSourceValueId());
+        obj.put("editorSourceExtValueId", model.getEditorSourceExtraValueId());
+        obj.put("modelEditorSource", new String(modelEditorSource, StandardCharsets.UTF_8));
+        obj.put("modelEditorSourceExt", new String(modelEditorSourceExt, StandardCharsets.UTF_8));
+        LOGGER.info("json={}", obj.toString());
+
+        return obj.toString();
+    }
+
+    @Override
+    public void importModel(InputStream in) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int i;
+            while ((i = in.read()) != -1) {
+                baos.write(i);
+            }
+            String jsonStr = baos.toString("utf-8");
+            JSONObject jsonObject = JSONUtil.parseObj(jsonStr);
+            String modelId = jsonObject.get("modelId").toString();
+            LOGGER.info("import modelId={}", modelId);
+            Model modelEntity = repositoryService.getModel(modelId);
+            if (modelEntity == null) {
+                modelEntity = repositoryService.newModel();
+            }
+
+            // 新增/更新
+            modelEntity.setName(jsonObject.get("modelName").toString());
+            modelEntity.setKey(jsonObject.get("modelKey").toString());
+            modelEntity.setMetaInfo(jsonObject.get("modelMetaInfo").toString());
+            repositoryService.saveModel(modelEntity);
+
+            // 新增/更新二进制数据
+            byte[] modelEditorSources = jsonObject.get("modelEditorSource").toString().getBytes(StandardCharsets.UTF_8);
+            byte[] modelEditorSourceExts = jsonObject.get("modelEditorSourceExt").toString().getBytes(StandardCharsets.UTF_8);
+            repositoryService.addModelEditorSource(modelEntity.getId(), modelEditorSources);
+            repositoryService.addModelEditorSourceExtra(modelEntity.getId(), modelEditorSourceExts);
+        } catch (IOException e) {
+            throw new YuheOAException("导入流程模型失败，模型数据格式不正确。");
+        }
+
     }
 
     @Override

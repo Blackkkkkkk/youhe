@@ -275,9 +275,23 @@ public interface MyProcessEngine {
     void deleteAttachment(String attachmentId);
 
     /**
+     * 导出流程模型JSON数据
+     * @param modelId 模型ID
+     * @return
+     */
+    String exportModelJson(String modelId);
+
+    /**
+     * 导入流程设计模型
+     * @param in 模型数据输入流
+     */
+    void importModel(InputStream in);
+
+    /**
      * 导入流程
      * @param in 输入流
      */
+    @Deprecated
     void importProcess(InputStream in);
 
     /**
