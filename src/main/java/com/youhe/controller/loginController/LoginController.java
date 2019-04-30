@@ -59,6 +59,11 @@ public class LoginController {
 
     @RequestMapping(value = "/")
     public String login() {
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated) {
+            return "redirect:index";
+        }
         return "login/login";
     }
 
