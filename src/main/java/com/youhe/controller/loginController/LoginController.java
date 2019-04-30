@@ -1,6 +1,7 @@
 package com.youhe.controller.loginController;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youhe.biz.permisson.PermissonBiz;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.entity.permission.Permission;
@@ -8,8 +9,6 @@ import com.youhe.entity.user.User;
 import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
-import com.youhe.utils.workflow.ExportFlow;
-import org.activiti.engine.ProcessEngine;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
@@ -19,17 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.annotation.Resource;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -62,46 +57,21 @@ public class LoginController {
     @Autowired
     private UserBiz userBiz;
 
-    @Autowired
-    ProcessEngine processEngine;
-
-
     @RequestMapping(value = "/")
     public String login() {
-
         return "login/login";
     }
 
     @RequestMapping(value = "/login")
-    public String index(Model model, User user, HttpServletRequest request, HttpServletResponse response) {
-
-
-        //  ShiroUserUtils.encryptPassword(user);
-        // userService.update(user);
-
+    public String index(Model model, User user) {
 
         Subject subject = SecurityUtils.getSubject();
         try {
-            User userLogin = new User();
+            User userInfo = userBiz.getOne(new QueryWrapper<User>().lambda().eq(User::getUserAccount, user.getUserAccount()));
 
-            userLogin.setUserAccount(user.getUserAccount());
-            userBiz.findUserList(userLogin);
-
-            List<User> list = userBiz.findOnlyUserList(userLogin);
-            if (!CollectionUtils.isEmpty(list)) {
-                userLogin = list.get(0);
-
-
-            }
-
-            InitUsernamePasswordToken initUsernamePasswordToken = new InitUsernamePasswordToken(userLogin.getUserAccount(), user.getUserPassword(), 1, userLogin.getSalt());
-
-
+            InitUsernamePasswordToken initUsernamePasswordToken = new InitUsernamePasswordToken(user.getUserAccount(), user.getUserPassword(), 1, userInfo.getSalt());
             subject.login(initUsernamePasswordToken);   //完成登录
-
-
             model.addAttribute("message", "0");
-
 
         } catch (AuthenticationException e) {
             String error = e.getClass().toString();
@@ -122,7 +92,6 @@ public class LoginController {
             log.error(error + ">>>>>>>>>>>>登录出错");
         }
 
-
         return "redirect:index";
     }
 
@@ -131,26 +100,17 @@ public class LoginController {
     public String index() {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
 
-        ExportFlow export = new ExportFlow();
-
-        //  export.Export(processEngine,"4");
-
-        log.debug(shiroUser.getUserName() + ">>>>>>>>>>>>登录成功");
-
-
         Map<String, Object> vars = new HashMap<>();
         List<Permission> mentList = permissonBiz.selectMentLists();
         vars.put("mentlist",mentList);
         thymeleafViewResolver.setStaticVariables(vars);
-
-
+        log.debug(shiroUser.getUserName() + ">>>>>>>>>>>>登录成功");
         return "index/index";
     }
 
 
     @RequestMapping(value = "/bootm.do")
     public String bootm() {
-
         return "index/bootm";
     }
 
@@ -192,8 +152,6 @@ public class LoginController {
 
     @RequestMapping(value = "/skin-config")
     public String skin() {
-
-
         return "skin-config";
     }
 

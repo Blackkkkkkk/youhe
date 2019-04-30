@@ -229,7 +229,7 @@ var yuheUtils = {
                     {orderable: false, targets: 0}
                     // {width: "15%", orderable: false, targets: 5}
                 ],
-            order: [1, 'asc']
+            order: []
         });
     }
 };

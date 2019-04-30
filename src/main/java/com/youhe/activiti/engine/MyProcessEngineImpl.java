@@ -122,7 +122,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     @Override
     public List<Model> getModelList() {
-        return repositoryService.createModelQuery().list();
+        return repositoryService.createModelQuery().orderByCreateTime().desc().list();
     }
 
     @Override
