@@ -1,0 +1,168 @@
+<table class="table table-bordered">
+                <table class="table table-bordered">
+                    <tr>
+                        <td style="width: 3cm">申请人</td>
+                        <td><input type="text" class="form-control" name="person"/></td>
+                        <td>职务/岗位</td>
+                        <td><input type="text" class="form-control" name="post"/></td>
+                        <td style="width: 2cm">申请部门</td>
+                        <td><input type="text" class="form-control" name="bumen"/></td>
+                        <td style="width: 2cm">申请日期</td>
+                        <td><input  type="text" class="form-control" style="width:220px" required id="startTime" name="startTime"/></td>
+                    </tr>
+                    <tr>
+                        <td>所查员工</td>
+                        <td><input type="text" class="form-control" name="staff"/></td>
+                        <td colspan="6"><a style="color:red;font-size:20px">所查询内容如有时间选择的请选择起始时间及结束时间，否则将会被人事部退回申请表</a></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="7" >查询内容</td>
+                       <tr>
+                        <td  class='form-inline' colspan="8">
+                        <label><input  type="checkbox" class="form-control" value="jiben" name="jiben" />员工基本信息（年龄、学历、籍贯、地址、入职信息等） </label>
+                        </td>
+                       </tr>
+                    <tr><td  class='form-inline' colspan="3">
+                        <label><input  type="checkbox" class="form-control" value="xinzi" name="xinzi" />员工薪资信息（薪资水平、薪资组成、薪资调整信息等） </label>
+                    </td>
+                        <td>起始时间</td>
+                        <td><input  type="text" class="form-control"  required id="xinziStartTime" name="xinziStartTime"/></td>
+                        <td colspan="1">结束时间</td>
+                        <td><input  type="text" class="form-control" required id="xinziEndTime" name="xinziEndTime"/></td>
+                    </tr>
+                        <tr><td  class='form-inline' colspan="3">
+                            <label><input  type="checkbox" class="form-control" value="laodong" name="laodong" />员工劳动合同信息（合同期限、合同次数、具体条款等）</label>
+                        </td>
+                            <td>起始时间</td>
+                            <td><input  type="text" class="form-control"  required id="laodongStartTime" name="laodongStartTime"/></td>
+                            <td colspan="1">结束时间</td>
+                            <td><input  type="text" class="form-control" required id="laodongEndTime" name="laodongEndTime"/></td>
+                        </tr>
+                        <tr><td  class='form-inline' colspan="3">
+                            <label><input  type="checkbox" class="form-control" value="fuli" name="fuli" />员工福利信息</label>
+                        </td>
+                            <td>起始时间</td>
+                            <td><input  type="text" class="form-control"  required id="fuliStartTime" name="fuliStartTime"/></td>
+                            <td colspan="1">结束时间</td>
+                            <td><input  type="text" class="form-control" required id="fuliEndTime" name="fuliEndTime"/></td>
+                        </tr>
+                    <tr><td  class='form-inline' colspan="3">
+                        <label><input  type="checkbox" class="form-control" value="xinxi" name="xinxi" />员工福利信息</label>
+                    </td>
+                        <td>起始时间</td>
+                        <td><input  type="text" class="form-control"  required id="xinxiStartTime" name="xinxiStartTime"/></td>
+                        <td colspan="1">结束时间</td>
+                        <td><input  type="text" class="form-control" required id="xinxiEndTime" name="xinxiEndTime"/></td>
+                    </tr>
+                    <tr><td  class='form-inline' colspan="3">
+                        <label><input  type="checkbox" class="form-control" value="fulis" name="fulis" />员工福利信息</label>
+                    </td>
+                        <td>起始时间</td>
+                        <td><input  type="text" class="form-control"  required id="fulisStartTime" name="fulisStartTime"/></td>
+                        <td colspan="1">结束时间</td>
+                        <td><input  type="text" class="form-control" required id="fulisEndTime" name="fulisEndTime"/></td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <td>申请事由</td>
+                        <td colspan="8" style="height: 3cm"><textarea class="form-control" name="apply" style="height: 2.5cm"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">部门负责人意见</td>
+                        <td colspan="3" style="text-align: center;">事业部审批意见</td>
+                        <td  colspan="6" style="text-align: center;">人力资源部审批意见</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input  type="text" class="form-control" name="opinion" style="height: 2cm"/></td>
+                        <td colspan="3"><input  type="text" class="form-control" name="affairs" style="height: 2cm"/></td>
+                        <td colspan="6"><input  type="text" class="form-control" name="resources" style="height: 2cm"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="text-align: center;">总经理审批意见</td>
+                        <td colspan="3" style="text-align: center;">人力资源部落实情况</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"  ><input  type="text" class="form-control" name="manager" style="height: 2cm"/></td>
+                        <td colspan="3"><input  type="text" class="form-control" name="situation" style="height: 2cm"/></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </table>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#xinziStartTime'
+        });
+        laydate.render({
+            elem: '#xinziEndTime'
+        });
+        laydate.render({
+            elem: '#laodongStartTime'
+        });
+        laydate.render({
+            elem: '#laodongEndTime'
+        });
+        laydate.render({
+            elem: '#fuliStartTime'
+        });
+        laydate.render({
+            elem: '#fuliEndTime'
+        });
+        laydate.render({
+            elem: '#xinxiStartTime'
+        });
+        laydate.render({
+            elem: '#xinxiEndTime'
+        });
+        laydate.render({
+            elem: '#fulisStartTime'
+        });
+        laydate.render({
+            elem: '#fulisEndTime'
+        });
+
+        laydate.render({
+            elem: '#startTimes'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+
+    });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit() {
+        console.log('重写表单提交前事件...');
+        var startTimes  = $(" input[ name='startTimes' ] ").val();
+        var endTime  = $(" input[ name='endTime' ] ").val();
+        var bd = daysBetween(startTimes, endTime);
+        console.log('bd=', bd);
+        $("#nDays").val(bd);
+        // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
+        // alert('不允许提交');
+        // return false;   // 返回false可阻止继续表单提交
+    }
+
+    function daysBetween(startTimes,endTime){
+//Date.parse() 解析一个日期时间字符串，并返回1970/1/1 午夜距离该日期时间的毫秒数
+        var time1 = Date.parse(new Date(startTimes));
+        var time2 = Date.parse(new Date(endTime));
+        var nDays = Math.abs(parseInt((time2 - time1)/1000/3600/24));
+        return  nDays;
+    };
+
+    $(function () {
+
+    });
+</script>
+</body>
+</html>

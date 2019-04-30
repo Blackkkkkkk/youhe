@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>申请信息</title>
+    <div th:include="common/Head :: headCss"></div>
+</head>
+
+<body style="background: white">
+
+<!--todo 流程表单头部， 还未完成-->
+<div th:include="activiti/common/form :: formHeadView"></div>
+
+<div class="container" style="padding-left:0!important;padding-right:0!important;">
+    <!--下面是业务表单-->
+    <form name="businessForm" id="businessForm">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td >姓名</td>
+                        <td><input type="text" class="form-control" name="name"/></td>
+                        <td >所属部门</td>
+                        <td><input type="text" class="form-control" name="department"/></td>
+                        <td>职位</td>
+                        <td><input type="text" class="form-control" name="position"/></td>
+                    </tr>
+                    <tr>
+                        <td>入职日期</td>
+                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="entryTime" name="entryTime"/></td>
+                        <td>约定转正日期</td>
+                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="workerTime" name="workerTime"/></td>
+                        <td>评估日期</td>
+                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="assessmentTime" name="assessmentTime"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" rowspan="3" style="text-align: center;">评核要素</td>
+                    <tr><td colspan="4">分值范围</td></tr>
+                    <tr>
+                        <td style="width: 5cm;text-align: center;">优秀（10分）</td>
+                        <td style="width: 5cm;text-align: center;">良好（8-9分）</td>
+                        <td style="width: 5cm;text-align: center;">一般（6-7分）</td>
+                        <td style="width: 5cm;text-align: center;">不合格（0-5分）</td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">1、语言沟通：思路清晰，表达有条理、流畅</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="goutong1" name="goutong1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="goutong2" name="goutong2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="goutong3" name="goutong3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="goutong4" name="goutong4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">2、业务能力：专业知识熟悉，工作进展迅速</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yewu1" name="yewu1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yewu2" name="yewu2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yewu3" name="yewu3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yewu4" name="yewu4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">3、工作效率：效率高，能够及时有效的完成工作任务</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="xiaolv1" name="xiaolv1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="xiaolv2" name="xiaolv2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="xiaolv3" name="xiaolv3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="xiaolv4" name="xiaolv4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">4、工作质量：日常工作结果令人满意，能够达到预期值</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="richang1" name="richang1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="richang2" name="richang2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="richang3" name="richang3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="richang4" name="richang4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">5、工作态度：工作认真负责、积极主动，充满热情</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="zhudong1" name="zhudong1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="zhudong2" name="zhudong2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="zhudong3" name="zhudong3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="zhudong4" name="zhudong4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">6、应变能力：对突发事件能够做出相应处理，得心应手</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yinbian1" name="yinbian1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yinbian2" name="yinbian2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yinbian3" name="yinbian3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yinbian4" name="yinbian4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">7、责任心：严守工作承诺，并为实现承诺想尽办法</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="chengluo1" name="chengluo1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="chengluo2" name="chengluo2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="chengluo3" name="chengluo3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="chengluo4" name="chengluo4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">8、决策力：有主见，对日常管理事务能做出正确判断</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="guanli1" name="guanli1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="guanli2" name="guanli1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="guanli3" name="guanli3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="guanli4" name="guanli4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">9、组织控制力：工作计划性强，有效调配属下员工做好工作</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="zuzhi1" name="zuzhi1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="zuzhi2" name="zuzhi2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="zuzhi3" name="zuzhi3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="zuzhi4" name="zuzhi4" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">10、纪律言行：纪律性好，严格遵守公司规章制度</td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yange1" name="yange1" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yange2" name="yange2" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yange3" name="yange3" /></td>
+                        <td> <input  type="text" class="form-control" style="width:220px" id="yange4" name="yange4" /></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="text-align: center;">评价得分</td>
+                        <td colspan="8"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">部门等级</td>
+                        <td colspan="8" class='form-inline' >
+                            &nbsp;&nbsp;<label><input  type="checkbox" class="form-control" value="youxiu" name="youxiu" />&nbsp;&nbsp;A. 优秀，90-100分，继续保持</label><p>
+                            &nbsp;&nbsp;<label><input  type="checkbox" class="form-control" value="lianghao" name="lianghao"/>&nbsp;&nbsp;B. 良好，80-89分，可努力争取更好成绩 </label><p>
+                            &nbsp;&nbsp;<label><input  type="checkbox" class="form-control" value="yiban" name="yiban"/>&nbsp;&nbsp;C.一般，60-79分，需进一步努力</label><p>
+                            &nbsp;&nbsp;<label><input  type="checkbox" class="form-control" value="buhege" name="buhege"/>&nbsp;&nbsp;D.不合格，59分以下，做解雇处理</label><p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" colspan="8" style="text-align: center;"> 意见评估</td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" colspan="8"  class='form-inline' style="text-align: center;"> 转正日期：
+                      <input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;试用期薪资为：
+                            <input type="text" class="form-control"  name="salary"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" colspan="8"  class='form-inline' style="text-align: center;"> 转正工资调整为：
+                            <input type="text" class="form-control"  name="salary1"/> &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;补贴/ 福利待遇：
+                            <input type="text" class="form-control"  name="subsidy"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </table>
+        </div>
+
+        <!--隐藏字段，用于路由条件变量判断-->
+        <div id="hideDiv">
+            <input type="hidden" name="userId" value="">
+            <input type="hidden" name="type" value="2">
+        </div>
+        <!--用于表单必填验证-->
+        <div th:include="activiti/common/form :: busBtn"></div>
+    </form>
+</div>
+
+<!--提交任务模态框-->
+<div th:include="activiti/common/form :: submitTaskModal"></div>
+
+<div th:include="common/Head :: mainJs"></div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#entryTime'
+        });
+        laydate.render({
+            elem: '#workerTime'
+        });
+        laydate.render({
+            elem: '#assessmentTime'
+        });
+
+        laydate.render({
+            elem: '#createTime'
+        });
+
+
+    });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit() {
+        console.log('重写表单提交前事件...');
+        var startTimes  = $(" input[ name='startTimes' ] ").val();
+        var endTime  = $(" input[ name='endTime' ] ").val();
+        var bd = daysBetween(startTimes, endTime);
+        console.log('bd=', bd);
+        $("#nDays").val(bd);
+        // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
+        // alert('不允许提交');
+        // return false;   // 返回false可阻止继续表单提交
+    }
+
+    function daysBetween(startTimes,endTime){
+//Date.parse() 解析一个日期时间字符串，并返回1970/1/1 午夜距离该日期时间的毫秒数
+        var time1 = Date.parse(new Date(startTimes));
+        var time2 = Date.parse(new Date(endTime));
+        var nDays = Math.abs(parseInt((time2 - time1)/1000/3600/24));
+        return  nDays;
+    };
+
+    $(function () {
+
+    });
+</script>
+</body>
+</html>

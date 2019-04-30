@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>加班申请</title>
+    <div th:include="common/Head :: headCss"></div>
+</head>
+<body>
+<div class="container" style="padding-left:0!important;padding-right:0!important;">
+    <!--下面是业务表单-->
+    <form name="businessForm" id="businessForm">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td style="width: 4.5cm">制单人</td>
+                        <td><input type="text" class="form-control" id="propeople" name="propeople" /></td>
+                        <td>填表日期</td>
+                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/></td>
+                    </tr>
+                    <tr>
+                        <td>项目</td>
+                        <td colspan="8" class='form-inline' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label>新增品种<input  type="checkbox" class="form-control" value="huiyi" name="huiyi" /> </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label>单价变更<input  type="checkbox" class="form-control" value="huiyi" name="peixun"/></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label>产品质量<input  type="checkbox" class="form-control" value="huiyi" name="yewu"/></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label>其他<input  type="checkbox" class="form-control" value="huiyi" name="qitaa" /></label>
+                        </td>
+                    </tr>
+                    <tr>
+                    <td colspan="8" class='form-inline' style="text-align: center;">&nbsp;&nbsp;
+                        物品明细<a style="color:red;">（限制4行）</a>
+                    </td>
+                    <tr>
+                        <td colspan="8" class='form-inline' style="height:100px;" >
+                        <textarea  maxlength="207" class="form-control"  name="details" style="min-height: 3.0cm;width: 30cm" ></textarea>
+                        </td>
+                        </tr>
+
+                    <tr>
+                        <td valign="middle">产品描述<a style="color:red;">（限制4行）</a></td>
+                        <td colspan="8" style="height: 3cm"><textarea class="form-control" name="description" style="min-height: 2.5cm"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">部门负责人意见</td>
+                        <td colspan="2" style="text-align: center;">接收部门意见</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"><textarea class="form-control" name="charge" style="min-height: 3.0cm"></textarea></td>
+                        <td colspan="2"><textarea class="form-control" name="receive" style="min-height: 3.0cm"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="text-align: center;">财务部资产组意见</td>
+                        <td colspan="2" style="text-align: center;">采购部意见</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea class="form-control" name="departments" style="min-height: 3.0cm"></textarea></td>
+                        <td colspan="2"><textarea class="form-control" name="purchase" style="min-height: 3.0cm"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">后勤服务中心意见</td>
+                        <td colspan="2" style="text-align: center;">发起人</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height: 3cm"><textarea class="form-control" name="logistical" style="min-height: 3.0cm"></textarea></td>
+                        <td colspan="2" style="height: 3cm"><textarea class="form-control" name="originator" style="min-height: 3.0cm"></textarea></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </table>
+        </div>
+    </form>
+</div>
+<div th:include="common/Head :: mainJs"></div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#createTime'
+        });
+    });
+
+    // $("#demo").on("input",function(){
+    //     var realHeight = document.getElementById("demo").scrollHeight;
+    //     document.getElementById("demo").scrollTop=realHeight;
+    //     if($(this).scrollTop>0){
+    //         alert("超过了")
+    //         //TODO:超过行数
+    //     }else{
+    //         //TODO:没有超过行数
+    //     }
+    // });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit() {
+        console.log('重写表单提交前事件...');
+        // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
+        // alert('不允许提交');
+        // return false;   // 返回false可阻止继续表单提交
+    }
+
+</script>
+</body>
+</html>
