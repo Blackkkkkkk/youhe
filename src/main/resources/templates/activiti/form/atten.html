@@ -1,0 +1,79 @@
+<table class="table table-bordered">
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td >填表人</td>
+            <td><input type="text" class="form-control" name="person"/></td>
+            <td>部门</td>
+            <td><input type="text" class="form-control" name="department"/></td>
+            <td>填表日期</td>
+            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/></td>
+        </tr>
+        <tr>
+            <td >补勤员工姓名</td>
+            <td><input type="text" class="form-control" name="atten"/></td>
+            <td>证明人</td>
+            <td><input type="text" class="form-control" name="witness"/></td>
+            <td>补考时间</td>
+            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="repairCreateTime" name="repairCreateTime"/></td>
+        </tr>
+        <tr>
+            <td>未按时考勤原因</td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="reason" style="height: 2.5cm"></textarea></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center;">部门领导/直属上司审核</td>
+            <td colspan="4" style="text-align: center;">人事部存档</td>
+        </tr>
+        <tr>
+
+            <td colspan="3">  <input type="text" class="form-control" name="center" style="height: 2.5cm"/></td>
+            <td colspan="4">  <input type="text" class="form-control" name="zmanager" style="height: 2.5cm"/></td>
+        </tr>
+        <tr>
+            <td  colspan="8" style="color:red;height: 4cm">
+                <br>注:</br>
+                <br>1.员工未能按时考勤须在事后一个工作日内补单，过期视为无效。</br>
+                <br>2.证明人由部门负责人加签或负责核实，无证明人又无法提供其他证明的视为无效。</br>
+                <br>3.总监有权授权副总监代为审批同意。</br>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</table>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#createTime'
+        });
+        laydate.render({
+            elem: '#repairCreateTime'
+        });
+    });
+
+    // $("#demo").on("input",function(){
+    //     var realHeight = document.getElementById("demo").scrollHeight;
+    //     document.getElementById("demo").scrollTop=realHeight;
+    //     if($(this).scrollTop>0){
+    //         alert("超过了")
+    //         //TODO:超过行数
+    //     }else{
+    //         //TODO:没有超过行数
+    //     }
+    // });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit() {
+        console.log('重写表单提交前事件...');
+        // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
+        // alert('不允许提交');
+        // return false;   // 返回false可阻止继续表单提交
+    }
+
+</script>
+</body>
+</html>

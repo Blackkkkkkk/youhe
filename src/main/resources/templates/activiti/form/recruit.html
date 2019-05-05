@@ -1,0 +1,166 @@
+<table class="table table-bordered">
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td colspan="8"><a style="color:red;">&nbsp;&nbsp;致各部门：当您填写本申请之前，请全面考虑能否在本部门现有人员中开发潜在资源，唯在否定之前提下，才提出此申请。</a></td>
+        </tr>
+        <tr>
+         <td colspan="8" style="text-align: center" class='form-inline'>申请部门：<input type="text" class="form-control" name="department"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             申请日期： <input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="applyTime" name="applyTime"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             流水号：<input type="text" class="form-control" name="number"/>
+         </td>
+        </tr>
+        <tr>
+            <td style="width: 4cm;text-align: center">职位</td>
+            <td><input type="text" class="form-control" name="position" style="width: 7cm"/></td>
+            <td class='form-inline' style="width: 7cm">
+                <select class="form-control">
+                    <option value="buchong" name="buchong" style="width: 2cm">补充</option>
+                    <option value="xinzheng" name="xinzheng">新增</option>
+                    <!--<option value="3" >调休</option>-->
+                </select>
+                &nbsp;&nbsp;共<input type="text" class="form-control" name="persons" style="width: 2cm"/>人
+            </td>
+            <td style="width: 4cm;text-align: center">到位日期</td>
+            <td colspan="3"><input  type="text" class="form-control"  required id="entryTime" name="entryTime"/></td>
+        </tr>
+        <tr>
+            <td style="text-align: center">招聘原因<a style="color:red;">（限制5行）</a></td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="recruitReason" style="height: 2.5cm"></textarea></td>
+        </tr>
+        <tr>
+            <td style="text-align: center">工作范围<a style="color:red;">（限制5行）</a></td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="work" style="height: 2.5cm"></textarea></td>
+        </tr>
+        <tr>
+            <td style="text-align: center">工作内容<a style="color:red;">（限制5行）</a></td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="content" style="height: 2.5cm"></textarea></td>
+        </tr>
+        <tr>
+            <td style="text-align: center" >拟定工资范围</td>
+            <td style="text-align: center" class='form-inline' colspan="2">月薪<input type="text" class="form-control" name="element"/>元</td>
+            <td style="text-align: center" class='form-inline' colspan="4">其他福利
+            <input type="text" class="form-control" name="qita"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center" >工作经验</td>
+            <td style="text-align: center" class='form-inline' colspan="1">月薪
+                <select class="form-control">
+                    <option value="1" name="buxian" style="width: 2cm">不限</option>
+                    <option value="2" name="liangnian">一至两年</option>
+                    <option value="2" name="sannian">三年以上</option>
+                    <option value="2" name="wunian">五年以上</option>
+                    <!--<option value="3" >调休</option>-->
+                </select>
+            </td>
+            <td style="text-align: center;width: 2cm;" class='form-inline' colspan="2">性别要求
+              <select class="form-control">
+                    <option value="buju" name="buju" style="width: 2cm">不拘</option>
+                    <option value="boy" name="boy">男</option>
+                    <option value="girl" name="girl">女</option>
+                    <!--<option value="3" >调休</option>-->
+        </select>
+            </td>
+            <td style="text-align: center;width: 2cm;" class='form-inline' >年龄范围
+            </td>
+            <td class='form-inline'> <input type="text" class="form-control" name="age" style="width: 2cm"/>至  <input type="text" class="form-control" name="ages" style="width: 3cm"/>岁</td>
+        </tr>
+
+        <tr>
+            <td style="text-align: center" >学历及专业要求</td>
+            <td style="text-align: center"colspan="2">
+                <input type="text" class="form-control" name="education"/>
+            </td>
+            <td style="text-align: center" class='form-inline' colspan="1">户口所在地
+                <td colspan="3">
+                <select class="form-control" style="width: 5cm">
+                    <option value="1" name="bujua" style="width: 5cm">不拘</option>
+                    <option value="2" name="shinei">市内</option>
+                    <option value="2" name="shengnei">省内</option>
+                    <!--<option value="3" >调休</option>-->
+                </select></td>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center" >专业资格要求</td>
+            <td style="text-align: center" colspan="2   ">
+                <input type="text" class="form-control" name="zige"/>
+            </td>
+            <td style="text-align: center" class='form-inline' colspan="1"></td>
+            <td style="text-align: center" class='form-inline' colspan="3"></td>
+        </tr>
+
+        <tr>
+            <td style="text-align: center">技能要求<a style="color:red;">（限制5行）</a></td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="jineng" style="height: 2.5cm"></textarea></td>
+        </tr>
+        <tr>
+            <td style="text-align: center" >工作地点</td>
+            <td style="text-align: center">
+                <input type="text" class="form-control" name="place"/>
+            </td>
+            <td style="text-align: center" class='form-inline' colspan="1">工作说明</td>
+            <td colspan="3">
+                <input type="text" class="form-control" name="explain"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td rowspan="3" style="text-align: center;">人事主管/经理</td>
+        <tr><td>部门年度预算人数</td>
+            <td>
+                <input type="text" class="form-control" name="year"/>
+            </td>
+            <td>该部门现有人数</td>
+            <td colspan="3">
+                <input type="text" class="form-control" name="now"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center;width: 2cm;" >说明建议<a style="color:red;">（限制4行）</a></td>
+            <td colspan="5" style="height: 3cm"><textarea class="form-control" name="explain" style="height: 2.5cm"></textarea></td>
+
+        </tr>
+        </tr>
+
+        </tbody>
+    </table>
+</table>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#applyTime'
+        });
+        laydate.render({
+            elem: '#entryTime'
+        });
+    });
+
+    // $("#demo").on("input",function(){
+    //     var realHeight = document.getElementById("demo").scrollHeight;
+    //     document.getElementById("demo").scrollTop=realHeight;
+    //     if($(this).scrollTop>0){
+    //         alert("超过了")
+    //         //TODO:超过行数
+    //     }else{
+    //         //TODO:没有超过行数
+    //     }
+    // });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit() {
+        console.log('重写表单提交前事件...');
+        // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
+        // alert('不允许提交');
+        // return false;   // 返回false可阻止继续表单提交
+    }
+
+</script>
+</body>
+</html>

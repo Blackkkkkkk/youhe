@@ -1,0 +1,133 @@
+<table class="table table-bordered">
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td style="width: 3cm">车型</td>
+            <td>
+            <select class="form-control">
+                <option value="ruifeng" name="ruifeng" style="width: 2cm">瑞风 粤A-LE883</option>
+                <option value="geruisi" name="geruisi">阁瑞斯 粤A-581GV</option>
+                <option value="fengtian" name="fengtian">丰田 粤A-C3748</option>
+                <option value="yangcheng" name="yangcheng">羊城 粤A-73341</option>
+                <option value="jinlong" name="jinlong">金龙 粤A-84558</option>
+                <option value="jipu" name="jipu">吉普 粤A-737Q1</option>
+                <option value="baoma" name="baoma">宝马 粤A-795K0</option>
+                <option value="bieke" name="bieke">别克 粤A-172YW</option>
+                <option value="rui" name="rui">瑞风 粤A-V1A31</option>
+                <option value="jin" name="jin">金龙 粤A-N3129</option>
+                <option value="bie" name="bie">别克 粤A-FS302</option>
+            </select>
+            </td>
+            <td style="width: 5cm">服务类型</td>
+            <td colspan="3" class='form-inline'>
+                <select class="form-control" >
+                    <option value="wucheng" name="wucheng" style="width: 2cm">无偿服务</option>
+                    <option value="youchang" name="youchang">有偿服务</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="color: red">注:车型由调度安排，有偿服务需要财务确认</a>
+            </td>
+        </tr>
+        <tr>
+            <td >部门</td>
+            <td><input type="text" class="form-control" name="department"/></td>
+            <td>申请人</td>
+            <td><input type="text" class="form-control" name="person"/></td>
+            <td>申请日期</td>
+            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="applyTime" name="applyTime"/></td>
+        </tr>
+        <tr>
+            <td  rowspan="3">实际用车时间</td>
+        <tr><td class='form-inline' colspan="2">起：<input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="startTime" name="startTime"/></td>
+            <td>乘坐人数</td>
+            <td colspan="2"><input type="text" class="form-control" name="renshu"/></td>
+        </tr>
+            <tr>
+            <td class='form-inline' colspan="2">止：<input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="endTime" name="endTime"/></td>
+                <td colspan="3">运送物品明细<a style="color: red"> （注：物品明细如超过5项请以附件形式上传明细） </a></td>
+            </tr>
+        </tr>
+        <tr>
+        <td style="width: 3cm">联系人</td>
+        <td><input type="text" class="form-control" name="name"/></td>
+            <td  class='form-inline'>里程
+                <label><input  type="checkbox" class="form-control" value="chu" name="chu" /></label>出/&nbsp;
+                <label><input  type="checkbox" class="form-control" value="hui" name="hui" /></label>回
+            </td>
+            <td colspan="3" rowspan="4"></td>
+        </tr>
+        <tr>
+            <td>电话</td>
+            <td><input type="text" class="form-control" name="del"/></td>
+            <td  class='form-inline'>
+             <input  type="text" class="form-control" value="gonglio" name="gonglio" style="width: 3cm"/>公里&nbsp;
+            </td>
+        </tr>
+
+        <tr>
+            <td>金额</td>
+            <td colspan="2"><input type="text" class="form-control" name="money"/></td>
+        </tr>
+        <tr>
+            <td>金额大写</td>
+            <td colspan="2"><input type="text" class="form-control" name="moneys"/></td>
+        </tr>
+        <tr>
+            <td style="text-align: center" rowspan="3">事由及详细 需求信息</td>
+            <td style="height: 3cm" rowspan="3" colspan="3"><textarea class="form-control" name="xiangxi" style="height: 2.5cm"></textarea></td>
+
+           <tr>
+            <td style="width: 3cm">目的地</td>
+            <td><input type="text" class="form-control" id="mudidi" name="mudidi" /></td>
+        </tr>
+            <tr>
+            <td style="width: 3cm">等候地点</td>
+            <td><input type="text" class="form-control" id="denghou" name="dehoudian" /></td>
+        </tr>
+        </tr>
+        <tr>
+            <td  colspan="8" style="color:red;height: 4cm">
+                <br>注:</br>
+                <br>1、所有用车需要前一天5:30PM前提交，紧急用车的自行协商解决，要告知调度人进行修改。</br>
+                <br>2、用车调度以收到《用车申请单》时间的先后顺序进行安排。</br>
+                <br>3、用车按照优先使用部门的先后进行协调，取消用车要及时告知。</br>
+            </td>
+        </tr>
+
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</table>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#applyTime'
+        });
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+    });
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit() {
+        console.log('重写表单提交前事件...');
+        // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
+        // alert('不允许提交');
+        // return false;   // 返回false可阻止继续表单提交
+    }
+
+</script>
+</body>
+</html>

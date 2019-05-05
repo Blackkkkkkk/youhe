@@ -1,0 +1,207 @@
+<table class="table table-bordered">
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td style="width: 3cm">申请部门</td>
+            <td colspan="2"><input type="text" class="form-control" name="department"/></td>
+            <td >申请人</td>
+            <td colspan="2"><input type="text" class="form-control" name="person"/></td>
+            <td>申请时间</td>
+            <td colspan="2"><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="applyTime" name="applyTime"/></td>
+        </tr>
+        <tr>
+            <td style="text-align: center">申请原因</td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="reason" style="height: 2.5cm"></textarea></td>
+        </tr>
+        <tr>
+            <th colspan="8" style="text-align: center">申请权限及确认权限<th/>
+        </tr>
+        <tr>
+            <td style="text-align: center"></td>
+            <td style="text-align: center;width: 3cm" >权限名称</td>
+            <td style="text-align: center;width: 3cm;">权限操作</td>
+            <td style="text-align: center;width: 3cm;">视图权限</td>
+            <td  class='form-inline' rowspan="9"  style="width: 3cm">
+            </td>
+            <td style="text-align: center;width: 2cm"></td>
+            <td style="text-align: center;width: 3cm" >权限名称</td>
+            <td style="text-align: center;width: 3cm;">权限操作</td>
+            <td style="text-align: center;width: 3cm;">视图权限</td>
+        </tr>
+        <tr>
+            <td style="text-align: center">1</td>
+            <td style="text-align: center">收银</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="shouyin" name="shouyin" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="shouyin1" name="shouyin1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center">2</td>
+            <td style="text-align: center">夜核</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="yehe" name="yehe" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="yehe1" name="yehe1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">3</td>
+            <td style="text-align: center">应收</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="yinshou" name="yinshou" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="yinshou1" name="yinshou1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center">4</td>
+            <td style="text-align: center">营业指标</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="yinyan" name="yinyan" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="yinyan1" name="yinyan1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr> <tr>
+            <td style="text-align: center">5</td>
+            <td style="text-align: center">协议</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="xieyi" name="xieyi" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="xieyi1" name="xieyi1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center">6</td>
+            <td style="text-align: center">管家</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="guanjia" name="guanjia" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="guanjia1" name="guanjia1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr> <tr>
+            <td style="text-align: center">7</td>
+            <td style="text-align: center">经理</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="jinli" name="jinli" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="jinli1" name="jinli1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center">8</td>
+            <td style="text-align: center">销售</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="xiaoshou" name="xiaoshou" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="xiaoshou1" name="xiaoshou1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr> <tr>
+            <td style="text-align: center">9</td>
+            <td style="text-align: center">会员积分</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="huiyuanjifen" name="huiyuanjifen" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="huiyuanjifen1" name="huiyuanjifen1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center">10</td>
+            <td style="text-align: center">问讯</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="wenxun" name="wenxun" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="wenxun1" name="wenxun1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr> <tr>
+            <td style="text-align: center">11</td>
+            <td style="text-align: center">客历</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="keli" name="keli" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="keli1" name="keli1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center">12</td>
+            <td style="text-align: center">接任</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="jieren" name="jieren" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="jieren1" name="jieren1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr> <tr>
+            <td style="text-align: center">13</td>
+            <td style="text-align: center">预定</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="yuding" name="yuding" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="yuding1" name="yuding1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center">14</td>
+            <td style="text-align: center">报表</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="baobiao" name="baobiao" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="baobiao1" name="baobiao1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr> <tr>
+            <td style="text-align: center">15</td>
+            <td style="text-align: center">礼宾</td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="libin" name="libin" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td  class='form-inline' >
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="checkbox" class="form-control" value="libin1" name="libin1" /> </label>&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center"></td>
+            <td style="text-align: center"></td>
+            <td  class='form-inline' ></td>
+            <td  class='form-inline' ></td>
+        </tr>
+
+        <tr>  <td style="text-align: center" colspan="9"><a style="color: red" >说明：操作权限具有查看，添加，修改权限；视图权限只有查看权限，无法进行添加，修改等功能。</a></td></tr>
+
+        <tr>
+            <td>备注</td>
+            <td colspan="9"><input type="text" class="form-control" id="person" name="person" /></td>
+        </tr>
+        </tbody>
+    </table>
+</table>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#applyTime'
+        });
+    });
+
+    // $("#demo").on("input",function(){
+    //     var realHeight = document.getElementById("demo").scrollHeight;
+    //     document.getElementById("demo").scrollTop=realHeight;
+    //     if($(this).scrollTop>0){
+    //         alert("超过了")
+    //         //TODO:超过行数
+    //     }else{
+    //         //TODO:没有超过行数
+    //     }
+    // });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit() {
+        console.log('重写表单提交前事件...');
+        // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
+        // alert('不允许提交');
+        // return false;   // 返回false可阻止继续表单提交
+    }
+
+</script>
+</body>
+</html>
