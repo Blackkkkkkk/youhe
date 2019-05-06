@@ -1,5 +1,6 @@
 package com.youhe.activiti.engine;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
@@ -455,10 +456,10 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         List<HistoricActivityInstance> list = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .activityId(activityId)
-                .finished()
+//                .finished()
                 .orderByHistoricActivityInstanceStartTime()
                 .desc().list();
-        return list == null ? null : list.get(0);   // 取最新那条就行
+        return CollectionUtil.isEmpty(list) ? null : list.get(0);   // 取最新那条就行
     }
 
     @Override
