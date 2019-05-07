@@ -5,15 +5,15 @@
             <td>填表日期</td>
             <td><input  type="text" class="form-control"  required id="createTime" name="createTime"/></td>
             <td style="width: 3cm">填表人</td>
-            <td><input type="text" class="form-control" id="person" name="person" /></td>
+            <td><input type="text" class="form-control" required id="person" name="person" /></td>
             <td>流水号</td>
-            <td><input type="text" class="form-control" id="number" name="number" /></td>
+            <td><input type="text" class="form-control" required id="number" name="number" /></td>
         </tr>
         <tr>
             <td>部门</td>
-            <td><input type="text" class="form-control" id="department" name="department" /></td>
+            <td><input type="text" class="form-control" required id="department" name="department" /></td>
             <td style="width: 3cm">请假人</td>
-            <td><input type="text" class="form-control" id="dummy" name="dummy" /></td>
+            <td><input type="text" class="form-control" required id="dummy" name="dummy" /></td>
             <td>入职日期</td>
             <td><input  type="text" class="form-control"  required id="createTimeEntry" name="createTimeEntry"/></td>
         </tr>
@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <td valign="middle">请假原因</td>
-            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="reasons" style="min-height: 2.5cm"></textarea></td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" required name="reasons" style="min-height: 2.5cm"></textarea></td>
         </tr>
         <tr>
             <td valign="middle" colspan="1">请假开始日期</td>
@@ -43,27 +43,27 @@
         </tr>
         <tr>
             <td valign="middle" colspan="1" >合计请假时间</td>
-            <td colspan="1" class='form-inline'><input  type="text" class="form-control" style="width:200px" id="nDays" name="nDays" />天<a style="color:red;font-size:10px;">注:1小时为0.125天</a></td>
+            <td colspan="1" class='form-inline'><input  type="text" class="form-control" style="width:200px" required id="nDays" name="nDays" />天<a style="color:red;font-size:10px;">注:1小时为0.125天</a></td>
             <td valign="middle" colspan="2">假日中联系电话</td>
-            <td colspan="2"><input type="text" class="form-control" id="contact " name="contact" /></td>
+            <td colspan="2"><input type="text" class="form-control" required id="contact " name="contact" /></td>
         </tr>
         <tr>
             <td valign="middle" colspan="8" >需要跟办工作：<a style="color:red;font-size:12px;">3天以上假期必填，可另附表，跟办人事宜需由部门负责人确认（需加签确认)</a></td>
         </tr>
         <tr>
             <td colspan="8" style="height: 3cm">
-                <textarea class="form-control" name="genban" style="min-height: 2.0cm"></textarea></td>
+                <textarea class="form-control" required name="genban" style="min-height: 2.0cm"></textarea></td>
         </tr>
         <tr>
         <td>跟办人</td>
-        <td><input type="text" class="form-control" id="manager" name="manager" /></td>
+        <td><input type="text" class="form-control" required id="manager" name="manager" /></td>
             <td style="width: 4cm"></td>
             <td colspan="4"></td>
         </tr>
 
         <tr>
             <td>部门负责人审批</td>
-            <td><input type="text" class="form-control" id="departments" name="departments" style="height: 1.5cm"/></td>
+            <td><input type="text" class="form-control"  id="departments" name="departments" style="height: 1.5cm"/></td>
             <td style="width: 4cm">人事部审批</td>
             <td colspan="4"><input type="text" class="form-control" id="personnel" name="personnel" style="height: 1.5cm"/></td>
         </tr>

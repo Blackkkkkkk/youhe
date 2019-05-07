@@ -19,20 +19,20 @@
                 <table class="table table-bordered">
                     <tbody>
                     <tr>
-                        <td >姓名</td>
-                        <td><input type="text" class="form-control" name="name"/></td>
-                        <td >所属部门</td>
-                        <td><input type="text" class="form-control" name="department"/></td>
+                        <td style="width: 2cm">姓名</td>
+                        <td><input type="text" class="form-control" required name="name"/></td>
+                        <td style="width: 2cm   ">所属部门</td>
+                        <td><input type="text" class="form-control" required name="department"/></td>
                         <td>职位</td>
-                        <td><input type="text" class="form-control" name="position"/></td>
+                        <td><input type="text" class="form-control" required name="position"/></td>
                     </tr>
                     <tr>
                         <td>入职日期</td>
-                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="entryTime" name="entryTime"/></td>
+                        <td><input type="text" class="form-control"   required id="entryTime" name="entryTime"/></td>
                         <td>约定转正日期</td>
-                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="workerTime" name="workerTime"/></td>
+                        <td><input type="text" class="form-control"  required id="workerTime" name="workerTime"/></td>
                         <td>评估日期</td>
-                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="assessmentTime" name="assessmentTime"/></td>
+                        <td><input type="text" class="form-control"  required id="assessmentTime" name="assessmentTime"/></td>
                     </tr>
                     <tr>
                         <td colspan="2" rowspan="3" style="text-align: center;">评核要素</td>
@@ -133,14 +133,14 @@
                     </tr>
                     <tr>
                         <td valign="middle" colspan="8"  class='form-inline' style="text-align: center;"> 转正日期：
-                      <input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;试用期薪资为：
-                            <input type="text" class="form-control"  name="salary"/>
+                      <input type="text" class="form-control"  required id="createTime" name="createTime"/> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;试用期薪资为：
+                            <input type="text" class="form-control" required  name="salary"/>
                         </td>
                     </tr>
                     <tr>
                         <td valign="middle" colspan="8"  class='form-inline' style="text-align: center;"> 转正工资调整为：
-                            <input type="text" class="form-control"  name="salary1"/> &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;补贴/ 福利待遇：
-                            <input type="text" class="form-control"  name="subsidy"/>
+                            <input type="text" class="form-control" required  name="salary1"/> &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;补贴/ 福利待遇：
+                            <input type="text" class="form-control" required  name="subsidy"/>
                         </td>
                     </tr>
                     </tbody>

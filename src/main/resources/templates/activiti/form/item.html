@@ -15,9 +15,9 @@
                     <tbody>
                     <tr>
                         <td style="width: 4.5cm">制单人</td>
-                        <td><input type="text" class="form-control" id="propeople" name="propeople" /></td>
+                        <td><input type="text" class="form-control"   required  id="propeople" name="propeople" /></td>
                         <td>填表日期</td>
-                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/></td>
+                        <td><input type="text" class="form-control"   required  id="createTime" name="createTime"/></td>
                     </tr>
                     <tr>
                         <td>项目</td>
@@ -42,38 +42,48 @@
                         <td valign="middle">产品描述<a style="color:red;">（限制4行）</a></td>
                         <td colspan="8" style="height: 3cm"><textarea class="form-control" name="description" style="min-height: 2.5cm"></textarea></td>
                     </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">部门负责人意见</td>
-                        <td colspan="2" style="text-align: center;">接收部门意见</td>
-                    </tr>
+                    <!--<tr>-->
+                        <!--<td colspan="2" style="text-align: center;">部门负责人意见</td>-->
+                        <!--<td colspan="2" style="text-align: center;">接收部门意见</td>-->
+                    <!--</tr>-->
 
-                    <tr>
-                        <td colspan="2"><textarea class="form-control" name="charge" style="min-height: 3.0cm"></textarea></td>
-                        <td colspan="2"><textarea class="form-control" name="receive" style="min-height: 3.0cm"></textarea></td>
-                    </tr>
+                    <!--<tr>-->
+                        <!--<td colspan="2"><textarea class="form-control" name="charge" style="min-height: 3.0cm"></textarea></td>-->
+                        <!--<td colspan="2"><textarea class="form-control" name="receive" style="min-height: 3.0cm"></textarea></td>-->
+                    <!--</tr>-->
 
-                    <tr>
-                        <td colspan="2" style="text-align: center;">财务部资产组意见</td>
-                        <td colspan="2" style="text-align: center;">采购部意见</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><textarea class="form-control" name="departments" style="min-height: 3.0cm"></textarea></td>
-                        <td colspan="2"><textarea class="form-control" name="purchase" style="min-height: 3.0cm"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">后勤服务中心意见</td>
-                        <td colspan="2" style="text-align: center;">发起人</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="height: 3cm"><textarea class="form-control" name="logistical" style="min-height: 3.0cm"></textarea></td>
-                        <td colspan="2" style="height: 3cm"><textarea class="form-control" name="originator" style="min-height: 3.0cm"></textarea></td>
-                    </tr>
+                    <!--<tr>-->
+                        <!--<td colspan="2" style="text-align: center;">财务部资产组意见</td>-->
+                        <!--<td colspan="2" style="text-align: center;">采购部意见</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td colspan="2"><textarea class="form-control" name="departments" style="min-height: 3.0cm"></textarea></td>-->
+                        <!--<td colspan="2"><textarea class="form-control" name="purchase" style="min-height: 3.0cm"></textarea></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td colspan="2" style="text-align: center;">后勤服务中心意见</td>-->
+                        <!--<td colspan="2" style="text-align: center;">发起人</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td colspan="2" style="height: 3cm"><textarea class="form-control" name="logistical" style="min-height: 3.0cm"></textarea></td>-->
+                        <!--<td colspan="2" style="height: 3cm"><textarea class="form-control" name="originator" style="min-height: 3.0cm"></textarea></td>-->
+                    <!--</tr>-->
                     </tbody>
                 </table>
             </table>
         </div>
+        <!--隐藏字段，用于路由条件变量判断-->
+        <div id="hideDiv">
+            <input type="hidden" name="userId" value="">
+            <input type="hidden" name="type" value="2">
+        </div>
+        <!--用于表单必填验证-->
+        <div th:include="activiti/common/form :: busBtn"></div>
     </form>
 </div>
+<!--提交任务模态框-->
+<div th:include="activiti/common/form :: submitTaskModal"></div>
+
 <div th:include="common/Head :: mainJs"></div>
 <script>
     layui.use('laydate', function(){

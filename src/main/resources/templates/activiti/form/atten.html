@@ -3,23 +3,23 @@
         <tbody>
         <tr>
             <td >填表人</td>
-            <td><input type="text" class="form-control" name="person"/></td>
+            <td><input type="text" class="form-control" required name="person"/></td>
             <td>部门</td>
-            <td><input type="text" class="form-control" name="department"/></td>
+            <td><input type="text" class="form-control" required name="department"/></td>
             <td>填表日期</td>
-            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/></td>
+            <td><input type="text" class="form-control"  required id="createTime" name="createTime"/></td>
         </tr>
         <tr>
             <td >补勤员工姓名</td>
-            <td><input type="text" class="form-control" name="atten"/></td>
+            <td><input type="text" class="form-control" required name="atten"/></td>
             <td>证明人</td>
-            <td><input type="text" class="form-control" name="witness"/></td>
+            <td><input type="text" class="form-control" required name="witness"/></td>
             <td>补考时间</td>
-            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="repairCreateTime" name="repairCreateTime"/></td>
+            <td><input type="text" class="form-control"  required id="repairCreateTime" name="repairCreateTime"/></td>
         </tr>
         <tr>
             <td>未按时考勤原因</td>
-            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="reason" style="height: 2.5cm"></textarea></td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" required name="reason" style="height: 2.5cm"></textarea></td>
         </tr>
         <tr>
             <td colspan="3" style="text-align: center;">部门领导/直属上司审核</td>

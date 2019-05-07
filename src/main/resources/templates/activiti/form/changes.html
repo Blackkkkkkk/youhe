@@ -3,10 +3,10 @@
         <tbody>
         <tr>
             <td style="width: 5cm;text-align: center;">申请人</td>
-            <td><input type="text" class="form-control" name="person" style="text-align: center"/></td>
+            <td><input type="text" class="form-control" required name="person" style="text-align: center"/></td>
             <td style="width: 5cm;text-align: center;">申请部门</td>
-            <td><input type="text" class="form-control" name="department"/></td>
-            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/></td>
+            <td><input type="text" class="form-control" required name="department"/></td>
+            <td></td>
         </tr>
         <tr>
             <td style="width: 5cm;text-align: center;">姓名</td>
@@ -16,11 +16,11 @@
             <td style="width: 5cm;text-align: center;">申请日期</td>
         </tr>
         <tr>
-            <td><input type="text" class="form-control" name="name"/></td>
-            <td><input type="text" class="form-control" name="department1"/></td>
-            <td><input type="text" class="form-control" name="post"/></td>
-            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/></td>
-            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="applyTime" name="applyTime"/></td>
+            <td><input type="text" class="form-control" required name="name"/></td>
+            <td><input type="text" class="form-control" required name="department1"/></td>
+            <td><input type="text" class="form-control" required name="post"/></td>
+            <td><input type="text" class="form-control" required id="createTime" name="createTime"/></td>
+            <td><input type="text" class="form-control"  required  id="applyTime" name="applyTime"/></td>
         </tr>
         <tr>
             <td style="text-align: center">申报性质</td>
@@ -66,7 +66,7 @@
         </tr>
         <tr> <td style="width: 5cm;text-align: center;">生效日期</td>
             <td colspan="2"><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="takeTime" name="takeTime" style="width: 5.7cm" /></td>
-            <td style="width: 5cm;text-align: center;"colspan="2" class='form-inline'>员工签名：<input type="text" class="form-control" name="autograph" style="width: 6cm"/></td>
+            <td style="width: 5cm;text-align: center;"colspan="2" class='form-inline'>员工签名：<input type="text" class="form-control"required name="autograph" style="width: 6cm"/></td>
         </tr>
         <tr> <td style="width: 5cm;" colspan="8"><a style="color:red;">注：总监有权授权副总监代为审批同意。</a></td>
         </tr>

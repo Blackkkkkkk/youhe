@@ -3,11 +3,11 @@
                     <tbody>
                     <tr>
                         <td >填表人</td>
-                        <td><input type="text" class="form-control" name="person"/></td>
+                        <td><input type="text" class="form-control"    required name="person"/></td>
                         <td>所属部门</td>
-                        <td><input type="text" class="form-control" name="department"/></td>
+                        <td><input type="text" class="form-control"   required name="department"/></td>
                         <td>填表日期</td>
-                        <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="createTime" name="createTime"/></td>
+                        <td><input type="text" class="form-control"   required id="createTime" name="createTime"/></td>
                     </tr>
                     <tr>
                         <td colspan="1" >现编制人数</td>
@@ -16,10 +16,10 @@
                         <td colspan="2" style="text-align: center;">需□增加/□减少</td>
                     </tr>
                     <tr>
-                        <td colspan="1" style="height: 2cm"><input type="text" class="form-control" name="current " style="height: 1.5cm"/></td>
-                        <td colspan="1" style="height: 2cm"><input type="text" class="form-control" name="incumbency" style="height: 1.5cm"/></td>
-                        <td colspan="2" style="height: 2cm"><input type="text" class="form-control" name="organization" style="height: 1.5cm"/></td>
-                        <td colspan="2" style="height: 2cm"><input type="text" class="form-control" name="increase" style="height: 1.5cm"/></td>
+                        <td colspan="1" style="height: 2cm"><input type="text" class="form-control" required name="current " style="height: 1.5cm"/></td>
+                        <td colspan="1" style="height: 2cm"><input type="text" class="form-control" required  name="incumbency" style="height: 1.5cm"/></td>
+                        <td colspan="2" style="height: 2cm"><input type="text" class="form-control" required name="organization" style="height: 1.5cm"/></td>
+                        <td colspan="2" style="height: 2cm"><input type="text" class="form-control" required name="increase" style="height: 1.5cm"/></td>
                     </tr>
                     <tr>
                         <td colspan="4"  style="text-align: center;">需增岗位明细<a style="color:red;">（限制7行）</a></td>
@@ -43,25 +43,25 @@
                         <td>减少岗位原因说明<a style="color:red;">（限制5行）</a></td>
                         <td colspan="8" style="height: 3cm"><textarea class="form-control" name="reduceReason" style="height: 2.5cm"></textarea></td>
                     </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">事业部副总监</td>
-                        <td colspan="2" style="text-align: center;">事业部总监</td>
-                        <td colspan="2" style="text-align: center;">人事部</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">  <input type="text" class="form-control" name="director" style="height: 2.5cm"/></td>
-                        <td colspan="2">  <input type="text" class="form-control" name="fuDirector" style="height: 2.5cm"/></td>
-                        <td colspan="4">  <input type="text" class="form-control" name="personnel" style="height: 2.5cm"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">管理中心</td>
-                        <td colspan="4" style="text-align: center;">总经理</td>
-                    </tr>
-                    <tr>
+                    <!--<tr>-->
+                        <!--<td colspan="2" style="text-align: center;">事业部副总监</td>-->
+                        <!--<td colspan="2" style="text-align: center;">事业部总监</td>-->
+                        <!--<td colspan="2" style="text-align: center;">人事部</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td colspan="2">  <input type="text" class="form-control" name="director" style="height: 2.5cm"/></td>-->
+                        <!--<td colspan="2">  <input type="text" class="form-control" name="fuDirector" style="height: 2.5cm"/></td>-->
+                        <!--<td colspan="4">  <input type="text" class="form-control" name="personnel" style="height: 2.5cm"/></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td colspan="2" style="text-align: center;">管理中心</td>-->
+                        <!--<td colspan="4" style="text-align: center;">总经理</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
 
-                        <td colspan="2">  <input type="text" class="form-control" name="center" style="height: 2.5cm"/></td>
-                        <td colspan="4">  <input type="text" class="form-control" name="zmanager" style="height: 2.5cm"/></td>
-                    </tr>
+                        <!--<td colspan="2">  <input type="text" class="form-control" name="center" style="height: 2.5cm"/></td>-->
+                        <!--<td colspan="4">  <input type="text" class="form-control" name="zmanager" style="height: 2.5cm"/></td>-->
+                    <!--</tr>-->
                     <tr>
                         <td  colspan="8" style="color:red;height: 6cm">
                             <br>注:</br>

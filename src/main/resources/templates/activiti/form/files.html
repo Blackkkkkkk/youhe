@@ -2,17 +2,17 @@
                 <table class="table table-bordered">
                     <tr>
                         <td style="width: 3cm">申请人</td>
-                        <td><input type="text" class="form-control" name="person"/></td>
+                        <td><input type="text" class="form-control"  required name="person"/></td>
                         <td>职务/岗位</td>
-                        <td><input type="text" class="form-control" name="post"/></td>
+                        <td><input type="text" class="form-control" required name="post"/></td>
                         <td style="width: 2cm">申请部门</td>
-                        <td><input type="text" class="form-control" name="bumen"/></td>
+                        <td><input type="text" class="form-control" required name="bumen"/></td>
                         <td style="width: 2cm">申请日期</td>
                         <td><input  type="text" class="form-control" style="width:220px" required id="startTime" name="startTime"/></td>
                     </tr>
                     <tr>
                         <td>所查员工</td>
-                        <td><input type="text" class="form-control" name="staff"/></td>
+                        <td><input type="text" class="form-control" required name="staff"/></td>
                         <td colspan="6"><a style="color:red;font-size:20px">所查询内容如有时间选择的请选择起始时间及结束时间，否则将会被人事部退回申请表</a></td>
                     </tr>
                     <tr>
@@ -26,65 +26,65 @@
                         <label><input  type="checkbox" class="form-control" value="xinzi" name="xinzi" />员工薪资信息（薪资水平、薪资组成、薪资调整信息等） </label>
                     </td>
                         <td>起始时间</td>
-                        <td><input  type="text" class="form-control"  required id="xinziStartTime" name="xinziStartTime"/></td>
+                        <td><input  type="text" class="form-control"   id="xinziStartTime" name="xinziStartTime"/></td>
                         <td colspan="1">结束时间</td>
-                        <td><input  type="text" class="form-control" required id="xinziEndTime" name="xinziEndTime"/></td>
+                        <td><input  type="text" class="form-control"  id="xinziEndTime" name="xinziEndTime"/></td>
                     </tr>
                         <tr><td  class='form-inline' colspan="3">
                             <label><input  type="checkbox" class="form-control" value="laodong" name="laodong" />员工劳动合同信息（合同期限、合同次数、具体条款等）</label>
                         </td>
                             <td>起始时间</td>
-                            <td><input  type="text" class="form-control"  required id="laodongStartTime" name="laodongStartTime"/></td>
+                            <td><input  type="text" class="form-control"   id="laodongStartTime" name="laodongStartTime"/></td>
                             <td colspan="1">结束时间</td>
-                            <td><input  type="text" class="form-control" required id="laodongEndTime" name="laodongEndTime"/></td>
+                            <td><input  type="text" class="form-control"  id="laodongEndTime" name="laodongEndTime"/></td>
                         </tr>
                         <tr><td  class='form-inline' colspan="3">
                             <label><input  type="checkbox" class="form-control" value="fuli" name="fuli" />员工福利信息</label>
                         </td>
                             <td>起始时间</td>
-                            <td><input  type="text" class="form-control"  required id="fuliStartTime" name="fuliStartTime"/></td>
+                            <td><input  type="text" class="form-control"   id="fuliStartTime" name="fuliStartTime"/></td>
                             <td colspan="1">结束时间</td>
-                            <td><input  type="text" class="form-control" required id="fuliEndTime" name="fuliEndTime"/></td>
+                            <td><input  type="text" class="form-control"  id="fuliEndTime" name="fuliEndTime"/></td>
                         </tr>
                     <tr><td  class='form-inline' colspan="3">
                         <label><input  type="checkbox" class="form-control" value="xinxi" name="xinxi" />员工福利信息</label>
                     </td>
                         <td>起始时间</td>
-                        <td><input  type="text" class="form-control"  required id="xinxiStartTime" name="xinxiStartTime"/></td>
+                        <td><input  type="text" class="form-control"   id="xinxiStartTime" name="xinxiStartTime"/></td>
                         <td colspan="1">结束时间</td>
-                        <td><input  type="text" class="form-control" required id="xinxiEndTime" name="xinxiEndTime"/></td>
+                        <td><input  type="text" class="form-control"  id="xinxiEndTime" name="xinxiEndTime"/></td>
                     </tr>
                     <tr><td  class='form-inline' colspan="3">
                         <label><input  type="checkbox" class="form-control" value="fulis" name="fulis" />员工福利信息</label>
                     </td>
                         <td>起始时间</td>
-                        <td><input  type="text" class="form-control"  required id="fulisStartTime" name="fulisStartTime"/></td>
+                        <td><input  type="text" class="form-control"   id="fulisStartTime" name="fulisStartTime"/></td>
                         <td colspan="1">结束时间</td>
-                        <td><input  type="text" class="form-control" required id="fulisEndTime" name="fulisEndTime"/></td>
+                        <td><input  type="text" class="form-control"  id="fulisEndTime" name="fulisEndTime"/></td>
                     </tr>
                     </tr>
                     <tr>
                         <td>申请事由</td>
-                        <td colspan="8" style="height: 3cm"><textarea class="form-control" name="apply" style="height: 2.5cm"></textarea></td>
+                        <td colspan="8" style="height: 3cm"><textarea class="form-control" required name="apply" style="height: 2.5cm"></textarea></td>
                     </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">部门负责人意见</td>
-                        <td colspan="3" style="text-align: center;">事业部审批意见</td>
-                        <td  colspan="6" style="text-align: center;">人力资源部审批意见</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input  type="text" class="form-control" name="opinion" style="height: 2cm"/></td>
-                        <td colspan="3"><input  type="text" class="form-control" name="affairs" style="height: 2cm"/></td>
-                        <td colspan="6"><input  type="text" class="form-control" name="resources" style="height: 2cm"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" style="text-align: center;">总经理审批意见</td>
-                        <td colspan="3" style="text-align: center;">人力资源部落实情况</td>
-                    </tr>
-                    <tr>
-                        <td colspan="5"  ><input  type="text" class="form-control" name="manager" style="height: 2cm"/></td>
-                        <td colspan="3"><input  type="text" class="form-control" name="situation" style="height: 2cm"/></td>
-                    </tr>
+                    <!--<tr>-->
+                        <!--<td colspan="2" style="text-align: center;">部门负责人意见</td>-->
+                        <!--<td colspan="3" style="text-align: center;">事业部审批意见</td>-->
+                        <!--<td  colspan="6" style="text-align: center;">人力资源部审批意见</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td colspan="2"><input  type="text" class="form-control" name="opinion" style="height: 2cm"/></td>-->
+                        <!--<td colspan="3"><input  type="text" class="form-control" name="affairs" style="height: 2cm"/></td>-->
+                        <!--<td colspan="6"><input  type="text" class="form-control" name="resources" style="height: 2cm"/></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td colspan="5" style="text-align: center;">总经理审批意见</td>-->
+                        <!--<td colspan="3" style="text-align: center;">人力资源部落实情况</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td colspan="5"  ><input  type="text" class="form-control" name="manager" style="height: 2cm"/></td>-->
+                        <!--<td colspan="3"><input  type="text" class="form-control" name="situation" style="height: 2cm"/></td>-->
+                    <!--</tr>-->
 
                     </tbody>
                 </table>

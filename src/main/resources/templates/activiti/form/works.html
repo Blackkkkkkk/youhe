@@ -11,26 +11,26 @@
                     <option value="keji" name="keji" style="width: 2cm">广州安住信息科技有限公司</option>
                     <!--<option value="3" >调休</option>-->
                 </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                流水号：<input type="text" class="form-control" name="number"/>
+                流水号：<input type="text" class="form-control" required name="number"/>
             </td>
         </tr>
         <tr>
             <td >申请部门</td>
-            <td><input type="text" class="form-control" name="department"/></td>
+            <td><input type="text" class="form-control" required name="department"/></td>
             <td>申请人</td>
-            <td><input type="text" class="form-control" name="person"/></td>
+            <td><input type="text" class="form-control" required name="person"/></td>
             <td>填表时间</td>
-            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="tianbiaoTime" name="tianbiaoTime"/></td>
+            <td><input type="text" class="form-control"  required id="tianbiaoTime" name="tianbiaoTime"/></td>
             <td>预计时间</td>
-            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="yujuTime" name="yujuTime"/></td>
+            <td><input type="text" class="form-control"  required id="yujuTime" name="yujuTime"/></td>
         </tr>
         <tr>
             <td >工作地点</td>
-            <td colspan="2"><input type="text" class="form-control" name="didian"/></td>
+            <td colspan="2"><input type="text" class="form-control" required name="didian"/></td>
             <td>下单跟进人</td>
-            <td colspan="2"><input type="text" class="form-control" name="genjin"/></td>
+            <td colspan="2"><input type="text" class="form-control" required name="genjin"/></td>
             <td>跟进人电话</td>
-            <td colspan="2"><input type="text" class="form-control"  name="del"/></td>
+            <td colspan="2"><input type="text" class="form-control"  required name="del"/></td>
         </tr>
         <tr>
             <td style="text-align: center">工程内容</a></td>
@@ -45,9 +45,9 @@
                     <option value="buchong" name="buchong" style="width: 2cm">见工程部审批备注</option>
                 </select></td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <td style="width: 3cm">发单时间</td>
-            <td colspan="2"><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="fadanTime" name="fadanTime"/></td>
+            <td colspan="2"><input type="text" class="form-control" required id="fadanTime" name="fadanTime"/></td>
             <td>完成时间</td>
-            <td colspan="2"><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="finshTime" name="finshTime"/></td>
+            <td colspan="2"><input type="text" class="form-control" required id="finshTime" name="finshTime"/></td>
             </td>
         </tr>
         <tr>
@@ -55,17 +55,22 @@
             <td  style="height: 3cm" colspan="8"><textarea class="form-control" name="gongc" style="height: 2.5cm"></textarea></td>
         </tr>
         <tr>
-            <td colspan="8" style="text-align: center;" >领用明细<a style="color:red;">（限制3行）</a>   <select class="form-control"  class='form-inline'>
+            <td colspan="8" style="text-align: center;" >领用明细<a style="color:red;">（限制3行）</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select class="form-control"  class='form-inline'>
                 <option value="buchong" name="caiwu" style="width: 2cm">无需财务审核</option>
                 <option value="buchong" name="yao" style="width: 2cm">需要财务审核</option>
             </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </td>
         </tr>
         <tr>
+        <td  style="height: 3cm" colspan="8"><textarea class="form-control" name="gongc" style="height: 2.5cm"></textarea></td>
+        </tr>
+        <tr>
             <td >开始时间</td>
-            <td ><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="startTime" name="startTime"/></td>
+            <td ><input type="text" class="form-control"  required id="startTime" name="startTime"/></td>
             <td>结束时间</td>
-            <td ><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="endTime" name="endTime"/></td>
+            <td ><input type="text" class="form-control"  required id="endTime" name="endTime"/></td>
             <td style="width: 3cm"> 实际耗时(小时)</td>
             <td style="width: 3cm">工资(时薪)</td>
             <td style="width: 3cm">基本检查费</td>
@@ -74,13 +79,13 @@
 
         <tr>
             <td >材料费</td>
-            <td ><input type="text" class="form-control"   name="cail"/></td>
+            <td ><input type="text" class="form-control"  required name="cail"/></td>
             <td>附加费</td>
-            <td ><input type="text" class="form-control" name="fujia"/></td>
-            <td><input type="text" class="form-control" name="shiji"/></td>
-            <td><input type="text" class="form-control" name="gongzi"/></td>
-            <td><input type="text" class="form-control" name="jiben"/></td>
-            <td><input type="text" class="form-control" name="gongcheng"/></td>
+            <td ><input type="text" class="form-control" required name="fujia"/></td>
+            <td><input type="text" class="form-control" required name="shiji"/></td>
+            <td><input type="text" class="form-control"  required name="gongzi"/></td>
+            <td><input type="text" class="form-control" required name="jiben"/></td>
+            <td><input type="text" class="form-control" required name="gongcheng"/></td>
         </tr>
         </tbody>
     </table>

@@ -28,26 +28,26 @@
         </tr>
         <tr>
             <td >部门</td>
-            <td><input type="text" class="form-control" name="department"/></td>
+            <td><input type="text" class="form-control" required name="department"/></td>
             <td>申请人</td>
-            <td><input type="text" class="form-control" name="person"/></td>
+            <td><input type="text" class="form-control" required name="person"/></td>
             <td>申请日期</td>
-            <td><input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="applyTime" name="applyTime"/></td>
+            <td><input type="text" class="form-control"  required id="applyTime" name="applyTime"/></td>
         </tr>
         <tr>
             <td  rowspan="3">实际用车时间</td>
-        <tr><td class='form-inline' colspan="2">起：<input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="startTime" name="startTime"/></td>
+        <tr><td class='form-inline' colspan="2">起：<input type="text" class="form-control"  required id="startTime" name="startTime"/></td>
             <td>乘坐人数</td>
-            <td colspan="2"><input type="text" class="form-control" name="renshu"/></td>
+            <td colspan="2"><input type="text" class="form-control" required name="renshu"/></td>
         </tr>
             <tr>
-            <td class='form-inline' colspan="2">止：<input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="endTime" name="endTime"/></td>
+            <td class='form-inline' colspan="2">止：<input type="text" class="form-control"  required id="endTime" name="endTime"/></td>
                 <td colspan="3">运送物品明细<a style="color: red"> （注：物品明细如超过5项请以附件形式上传明细） </a></td>
             </tr>
         </tr>
         <tr>
         <td style="width: 3cm">联系人</td>
-        <td><input type="text" class="form-control" name="name"/></td>
+        <td><input type="text" class="form-control" required name="name"/></td>
             <td  class='form-inline'>里程
                 <label><input  type="checkbox" class="form-control" value="chu" name="chu" /></label>出/&nbsp;
                 <label><input  type="checkbox" class="form-control" value="hui" name="hui" /></label>回
@@ -56,15 +56,15 @@
         </tr>
         <tr>
             <td>电话</td>
-            <td><input type="text" class="form-control" name="del"/></td>
+            <td><input type="text" class="form-control" required name="del"/></td>
             <td  class='form-inline'>
-             <input  type="text" class="form-control" value="gonglio" name="gonglio" style="width: 3cm"/>公里&nbsp;
+             <input  type="text" class="form-control" value="gonglio"  name="gonglio" style="width: 3cm"/>公里&nbsp;
             </td>
         </tr>
 
         <tr>
             <td>金额</td>
-            <td colspan="2"><input type="text" class="form-control" name="money"/></td>
+            <td colspan="2"><input type="text" class="form-control" required name="money"/></td>
         </tr>
         <tr>
             <td>金额大写</td>
@@ -76,11 +76,11 @@
 
            <tr>
             <td style="width: 3cm">目的地</td>
-            <td><input type="text" class="form-control" id="mudidi" name="mudidi" /></td>
+            <td><input type="text" class="form-control" required id="mudidi" name="mudidi" /></td>
         </tr>
             <tr>
             <td style="width: 3cm">等候地点</td>
-            <td><input type="text" class="form-control" id="denghou" name="dehoudian" /></td>
+            <td><input type="text" class="form-control" required id="denghou" name="dehoudian" /></td>
         </tr>
         </tr>
         <tr>

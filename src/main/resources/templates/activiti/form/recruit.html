@@ -5,28 +5,28 @@
             <td colspan="8"><a style="color:red;">&nbsp;&nbsp;致各部门：当您填写本申请之前，请全面考虑能否在本部门现有人员中开发潜在资源，唯在否定之前提下，才提出此申请。</a></td>
         </tr>
         <tr>
-         <td colspan="8" style="text-align: center" class='form-inline'>申请部门：<input type="text" class="form-control" name="department"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-             申请日期： <input type="text" class="form-control"  oninvalid="setCustomValidity('时间不允许为空')" id="applyTime" name="applyTime"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-             流水号：<input type="text" class="form-control" name="number"/>
+         <td colspan="8" style="text-align: center" class='form-inline'>申请部门：<input type="text" class="form-control" required name="department"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             申请日期： <input type="text" class="form-control"  required id="applyTime" name="applyTime"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             流水号：<input type="text" class="form-control" required name="number"/>
          </td>
         </tr>
         <tr>
             <td style="width: 4cm;text-align: center">职位</td>
-            <td><input type="text" class="form-control" name="position" style="width: 7cm"/></td>
+            <td><input type="text" class="form-control" required name="position" style="width: 7cm"/></td>
             <td class='form-inline' style="width: 7cm">
                 <select class="form-control">
                     <option value="buchong" name="buchong" style="width: 2cm">补充</option>
                     <option value="xinzheng" name="xinzheng">新增</option>
                     <!--<option value="3" >调休</option>-->
                 </select>
-                &nbsp;&nbsp;共<input type="text" class="form-control" name="persons" style="width: 2cm"/>人
+                &nbsp;&nbsp;共<input type="text" class="form-control" required name="persons" style="width: 2cm"/>人
             </td>
             <td style="width: 4cm;text-align: center">到位日期</td>
             <td colspan="3"><input  type="text" class="form-control"  required id="entryTime" name="entryTime"/></td>
         </tr>
         <tr>
             <td style="text-align: center">招聘原因<a style="color:red;">（限制5行）</a></td>
-            <td colspan="8" style="height: 3cm"><textarea class="form-control" name="recruitReason" style="height: 2.5cm"></textarea></td>
+            <td colspan="8" style="height: 3cm"><textarea class="form-control" required name="recruitReason" style="height: 2.5cm"></textarea></td>
         </tr>
         <tr>
             <td style="text-align: center">工作范围<a style="color:red;">（限制5行）</a></td>
@@ -38,7 +38,7 @@
         </tr>
         <tr>
             <td style="text-align: center" >拟定工资范围</td>
-            <td style="text-align: center" class='form-inline' colspan="2">月薪<input type="text" class="form-control" name="element"/>元</td>
+            <td style="text-align: center" class='form-inline' colspan="2">月薪<input type="text" class="form-control" required name="element"/>元</td>
             <td style="text-align: center" class='form-inline' colspan="4">其他福利
             <input type="text" class="form-control" name="qita"/>
             </td>
@@ -98,7 +98,7 @@
         <tr>
             <td style="text-align: center" >工作地点</td>
             <td style="text-align: center">
-                <input type="text" class="form-control" name="place"/>
+                <input type="text" class="form-control" required name="place"/>
             </td>
             <td style="text-align: center" class='form-inline' colspan="1">工作说明</td>
             <td colspan="3">
