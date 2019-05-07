@@ -1,0 +1,75 @@
+<!--呈报文件统一用表-->
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">主送单位</td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <select class="form-control" name="unit" data-edit="" oninput="preSubmit(this)" oninvalid="setCustomValidity('请选择主送单位')" required>
+            <option value="">请选择</option>
+            <option value="1" >广州市友和房地产投资有限公司</option>
+            </select></td>
+        <td style="vertical-align:middle;text-align: center; " >流水号</td>
+        <td><input type="text" class="form-control" id="number" name="number"  readonly="readonly"/></td>
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">主送部门</td>
+        <td><input type="text" class="form-control" id="dept" name="dept" oninput="preSubmit(this)" oninvalid="setCustomValidity('主送部门不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">发出部门</td>
+        <td><input type="text" class="form-control" id="outDept" name="outDept" oninput="preSubmit(this)" oninvalid="setCustomValidity('发出部门不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">呈送日期</td>
+        <td><input type="text" class="form-control" oninput="preSubmit(this)"  required id="startTime" name="startTime" /></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">呈送人</td>
+        <td><input type="text" class="form-control"  id="submitPeople" name="submitPeople" oninput="preSubmit(this)" oninvalid="setCustomValidity('呈送人不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">备注</td>
+        <td colspan="3"><input type="text" class="form-control" id="text" name="text" /></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">主题</td>
+        <td colspan="5"><input type="text" class="form-control" id="theme" name="theme" oninput="preSubmit(this)" oninvalid="setCustomValidity('主题不允许为空')" required/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">文件内容</td>
+        <td style="vertical-align:middle;text-align: center; " colspan="5"><textarea class="form-control" name="fileText" rows="8" oninput="preSubmit(this)" oninvalid="setCustomValidity('文件内容不允许为空')" required></textarea></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4());
+        }
+
+        var myID =guid();
+        console.log(myID)
+        $("#number").val(myID)
+
+    })
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+    });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit(i) {
+        if(i.validity.patternMismatch ===true){
+            i.setCustomValidity("请输入数字");
+            i.validationMessage("请输入数字");
+        }
+        i.setCustomValidity("");
+    }
+
+</script>

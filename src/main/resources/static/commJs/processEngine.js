@@ -71,7 +71,7 @@ function preSubmit() {
  * @returns {*}
  */
 function submit(func) {
-    var b = func();
+    var b = func;
     if (b === false) {
         return b;
     }
@@ -141,25 +141,21 @@ console.log(value)
     if(info1==""&&infoId1==""){
         info=info.substring(0, info.lastIndexOf(','));
         infoId=infoId.substring(0, infoId.lastIndexOf(','));
-        showInfo(info,info1,infoId1,infoId);
-
     }
     else if(info==""&&infoId==""){
         info1=info1.substring(0, info1.lastIndexOf(','));
         infoId1=infoId1.substring(0, infoId1.lastIndexOf(','));
-        showInfo(info,info1,infoId1,infoId);
-
-    }else {
+    }
+    else {
         info1 = info1.substring(0, info1.lastIndexOf(','));
         infoId1 = infoId1.substring(0, infoId1.lastIndexOf(','));
-        showInfo(info,info1,infoId1,infoId);
     }
-}
 
-function showInfo(info,info1,infoId1,infoId) {
     $(".glyphicon-user").html(info).append(info1);
     $("input[name='nextUserId']").val(infoId+ infoId1);
 }
+
+
 /**
  * todo 回退到首节点
  */

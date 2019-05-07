@@ -1,0 +1,72 @@
+<!--租约变更事项通知单-->
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; " >流水号</td>
+        <td><input type="text" class="form-control" id="number" name="number" readonly="readonly"/></td>
+        <td colspan="5"></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">发起部门</td>
+        <td><input type="text" class="form-control" id="dept" name="dept" oninput="preSubmit(this)" oninvalid="setCustomValidity('发起部门不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">发起人</td>
+        <td><input type="text" class="form-control" id="people" name="people" oninput="preSubmit(this)" oninvalid="setCustomValidity('发起人不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">发起日期</td>
+        <td><input type="text" class="form-control" oninput="preSubmit(this)"  requiredid id="startTime" name="startTime" /></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">房间号</td>
+        <td style="vertical-align:middle;text-align: center; "colspan="2">
+            <input type="text" class="form-control" id="roomNumber" name="roomNumber" oninput="preSubmit(this)" oninvalid="setCustomValidity('房间号不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <input type="checkbox" class="form-control" id="cus" name="cus" value="客户" style="zoom: 40%"/>客户
+            <input type="checkbox" class="form-control" id="own" name="own" value="业主" style="zoom: 40%"/>业主
+        </td>
+        <td style="vertical-align:middle;text-align: center; " colspan="2"><input type="text" class="form-control" id="cusName" name="cusName" placeholder="业务&客户名称" oninput="preSubmit(this)" oninvalid="setCustomValidity('业务&客户名称')" required/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">变更事项说明</td>
+        <td colspan="5"><textarea class="form-control" name="changeReason" rows="6" oninput="preSubmit(this)" oninvalid="setCustomValidity('变更事项说明')" required></textarea></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4());
+        }
+
+        var myID =guid();
+        console.log(myID)
+        $("#number").val(myID)
+
+    })
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+    });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit(i) {
+        if(i.validity.patternMismatch ===true){
+            i.setCustomValidity("请输入符合格式的数字");
+            i.validationMessage("请输入符合格式的数字");
+        }
+        i.setCustomValidity("");
+    }
+
+</script>

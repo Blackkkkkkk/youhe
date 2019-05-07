@@ -1,0 +1,73 @@
+<!--公章盖章申请-->
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; " >流水号</td>
+        <td><input type="text" class="form-control" id="number" name="number" readonly="readonly"/></td>
+        <td colspan="5"></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">姓名</td>
+        <td><input type="text" class="form-control" id="namePeople" name="namePeople" oninvalid="setCustomValidity('姓名不允许为空')" required oninput="preSubmit(this)"/></td>
+        <td style="vertical-align:middle;text-align: center; ">所属部门</td>
+        <td><input type="text" class="form-control" id="dept" name="dept" oninvalid="setCustomValidity('所属部门不允许为空')" required oninput="preSubmit(this)"/></td>
+        <td style="vertical-align:middle;text-align: center; ">申请日期</td>
+        <td><input type="text" class="form-control"  required oninput="preSubmit(this)" id="startTime" name="startTime" /></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">业务内容标题</td>
+        <td style="vertical-align:middle;text-align: center; " colspan="5">
+            <textarea class="form-control" name="textTitle" rows="6" placeholder="业务内容" oninvalid="setCustomValidity('业务内容标题不允许为空')" required oninput="preSubmit(this)"></textarea></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">盖章单位</td>
+        <td > <select class="form-control" name="unit" oninvalid="setCustomValidity('请选择盖章单位')" required oninput="preSubmit(this)">
+            <option value="">请选择</option>
+            <option value="1" >广州市友和房地产投资有限公司</option>
+        </select></td>
+        <td style="vertical-align:middle;text-align: center; ">份数</td>
+        <td ><input type="text" class="form-control" id="fen" name="fen" pattern="^\d+$" required oninput="preSubmit(this)"/></td>
+        <td >业务经手</td>
+        <td ><input type="text" class="form-control" id="busin" name="busin"  oninvalid="setCustomValidity('业务经手不能为空')" required oninput="preSubmit(this)"/></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4());
+        }
+
+        var myID =guid();
+        console.log(myID)
+        $("#number").val(myID)
+
+    })
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+    });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit(i) {
+        if(i.validity.patternMismatch ===true){
+            i.setCustomValidity("请输入数字");
+            i.validationMessage("请输入数字");
+        }
+        i.setCustomValidity("");
+    }
+</script>

@@ -1,0 +1,77 @@
+<!--友和创新申报表-->
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">主送单位</td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <select class="form-control" name="unit" data-edit="" oninput="preSubmit(this)" oninvalid="setCustomValidity('请选择主送单位')" required>
+                <option value="">请选择</option>
+                <option value="1" >广州市友和房地产投资有限公司</option>
+            </select></td>
+        <td style="vertical-align:middle;text-align: center; " >流水号</td>
+        <td><input type="text" class="form-control" id="number" name="number" readonly="readonly"/></td>
+
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">姓名</td>
+        <td><input type="text" class="form-control" id="namePeople" name="namePeople" oninput="preSubmit(this)" oninvalid="setCustomValidity('姓名不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">入职日期</td>
+        <td><input type="text" class="form-control"   id="startTime" name="startTime" oninput="preSubmit(this)"  required/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">部门</td>
+        <td><input type="text" class="form-control"   id="dept" name="dept" oninput="preSubmit(this)" oninvalid="setCustomValidity('部门不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">职位</td>
+        <td ><input type="text" class="form-control" id="post" name="post" oninput="preSubmit(this)" oninvalid="setCustomValidity('职位不允许为空')" required/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">提交人</td>
+        <td ><input type="text" class="form-control" id="submitPeople" name="submitPeople" oninput="preSubmit(this)" oninvalid="setCustomValidity('提交人不允许为空')" required/></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">创新建议或措施</td>
+        <td style="vertical-align:middle;text-align: center; " colspan="5">
+            <textarea class="form-control" name="innvote" rows="8"  oninput="preSubmit(this)" oninvalid="setCustomValidity('创新建议或措施不允许为空')" required></textarea></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4());
+        }
+
+        var myID =guid();
+        console.log(myID)
+        $("#number").val(myID)
+
+    })
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+
+    });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit(i) {
+        if(i.validity.patternMismatch ===true){
+            i.setCustomValidity("请输入数字");
+            i.validationMessage("请输入数字");
+        }
+        i.setCustomValidity("");
+    }
+
+</script>

@@ -1,90 +1,76 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>门禁申请</title>
-
-</head>
-<body>
-
-    <form name="businessForm" id="businessForm">
-        <div class="table-responsive">
+<!--门禁-->
             <table class="table table-bordered">
                 <tbody>
                 <tr>
-                    <td >流水号</td>
-                    <td colspan="5"><input style="width: 200px" type="text" class="form-control" id="number" name="number" /></td>
+                    <td style="vertical-align:middle;text-align: center; ">流水号</td>
+                    <td colspan="5"><input style="width: 200px" type="text" class="form-control" id="number" name="number" readonly="readonly"/></td>
                 </tr>
                 <tr>
-                    <td>申请部门</td>
-                    <td><input type="text" class="form-control" id="dept" name="dept" /></td>
-                    <td>申请人</td>
-                    <td><input type="text" class="form-control" id="people" name="people" /></td>
-                    <td width="150px">申请时间</td>
-                    <td><input type="text" class="form-control" oninvalid="setCustomValidity('申请时间不允许为空')" id="startTime" name="startTime" /></td>
+                    <td style="vertical-align:middle;text-align: center; ">申请部门</td>
+                    <td><input type="text" class="form-control" id="dept" name="dept" oninput="preSubmit(this)" oninvalid="setCustomValidity('申请部门不允许为空')" required/></td>
+                    <td style="vertical-align:middle;text-align: center; ">申请人</td>
+                    <td><input type="text" class="form-control" id="people" name="people" oninput="preSubmit(this)" oninvalid="setCustomValidity('申请人不允许为空')" required/></td>
+                    <td style="vertical-align:middle;text-align: center; ">申请时间</td>
+                    <td><input type="text" class="form-control" oninput="preSubmit(this)"  required id="startTime" name="startTime" /></td>
                 </tr>
                 <tr>
-                    <td>使用人</td>
-                    <td><input type="text" class="form-control" id="dopeople" name="dopeople" /></td>
+                    <td style="vertical-align:middle;text-align: center; ">使用人</td>
+                    <td><input type="text" class="form-control" id="dopeople" name="dopeople" oninput="preSubmit(this)" oninvalid="setCustomValidity('使用人不允许为空')" required/></td>
 
-                    <td>申请类型</td>
+                    <td style="vertical-align:middle;text-align: center; ">申请类型</td>
                     <td>
-                        <select class="form-control" name="leaveType">
-                            <option>请选择</option>
+                        <select class="form-control" id="leaveType" name="leaveType" oninput="preSubmit(this)" oninvalid="setCustomValidity('请选择申请类型')" required>
+                            <option value="">请选择</option>
                             <option value="1" >员工通道卡</option>
                             <option value="2" >楼层工作卡</option>
                         </select>
                     </td>
-                    <td>
+                    <td colspan="2">
                         <span style="color: red;">注:楼层工作卡及应急卡均需总经理审批</span>
                     </td>
-                    <td></td>
+
                 </tr>
                 <tr>
-                    <td >申请原因</td>
-                    <td colspan="4"><textarea class="form-control" name="reason"></textarea></td>
+                    <td style="vertical-align:middle;text-align: center; ">申请原因</td>
+                    <td colspan="4"><textarea class="form-control" name="reason" rows="5" oninput="preSubmit(this)" oninvalid="setCustomValidity('申请原因不允许为空')" required></textarea></td>
                     <td></td>
                 </tr>
                 <tr >
-                    <td >员工通道卡</td>
+                    <td style="vertical-align:middle;text-align: center; ">员工通道卡</td>
                     <td  colspan="4">
                         <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block1" name="block1" value="1号公共门--友和酒店与友和公寓C栋过道门禁"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block2" name="block2" value="2号公共门-- 公寓C栋长廊门禁"/><br/>
-                        <input  style="margin-top:30px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block3" name="block3" value="3号公共门-- 公寓A,B栋地下室及二楼AB栋连廊门禁"/><br/>
-                        <input  style="margin-top:60px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block4" name="block4" value="4号公共门-- 公寓C栋地下室门禁"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block5" name="block5" value="5号公共门-- 酒店二楼至农垦总局门禁"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block6" name="block6" value="6号公共门-- 酒店二楼健身房通道"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block7" name="block7" value="公司办公室-- 公司二楼办公室门禁"/><br/>
-                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block8" name="block8" value="公司办公室-- 公司二楼办公室后门门禁（即人事部后边的门禁）"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block2" name="block2" value="2号公共门--公寓C栋长廊门禁"/><br/>
+                        <input  style="margin-top:30px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block3" name="block3" value="3号公共门--公寓A,B栋地下室及二楼AB栋连廊门禁"/><br/>
+                        <input  style="margin-top:60px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block4" name="block4" value="4号公共门--公寓C栋地下室门禁"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block5" name="block5" value="5号公共门--酒店二楼至农垦总局门禁"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block6" name="block6" value="6号公共门--酒店二楼健身房通道"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block7" name="block7" value="公司办公室--公司二楼办公室门禁"/><br/>
+                        <input  style="margin-top:10px;zoom:30%;margin-left:-750px" type="checkbox" class="form-control" id="block8" name="block8" value="公司办公室--公司二楼办公室后门门禁（即人事部后边的门禁）"/><br/>
                     </td>
                     <td width="300px"  >
                     <label style="margin-left: -520px">1号公共门--友和酒店与友和公寓C栋过道门禁</label><br/>
-                        <label style="margin-top:7px;margin-left: -520px">2号公共门-- 公寓C栋长廊门禁</label><br/>
-                            <label style="margin-top:11px;margin-left: -520px"> 3号公共门-- 公寓A,B栋地下室及二楼AB栋连廊门禁</label><br/>
-                                <label style="margin-top:7px;margin-left: -520px">4号公共门-- 公寓C栋地下室门禁</label><br/>
-                                    <label style="margin-top:7px;margin-left: -520px"> 5号公共门-- 酒店二楼至农垦总局门禁</label><br/>
-                                        <label style="margin-top:7px;margin-left: -520px">6号公共门-- 酒店二楼健身房通道</label><br/>
-                                            <label style="margin-top:7px;margin-left: -520px">公司办公室-- 公司二楼办公室门禁</label><br/>
-                                                <label style="margin-top:7px;margin-left: -520px">公司办公室-- 公司二楼办公室后门门禁（即人事部后边的门禁）</label><br/>
+                        <label style="margin-top:7px;margin-left: -520px">2号公共门--公寓C栋长廊门禁</label><br/>
+                            <label style="margin-top:11px;margin-left: -520px"> 3号公共门--公寓A,B栋地下室及二楼AB栋连廊门禁</label><br/>
+                                <label style="margin-top:7px;margin-left: -520px">4号公共门--公寓C栋地下室门禁</label><br/>
+                                    <label style="margin-top:7px;margin-left: -520px"> 5号公共门--酒店二楼至农垦总局门禁</label><br/>
+                                        <label style="margin-top:7px;margin-left: -520px">6号公共门--酒店二楼健身房通道</label><br/>
+                                            <label style="margin-top:7px;margin-left: -520px">公司办公室--公司二楼办公室门禁</label><br/>
+                                                <label style="margin-top:7px;margin-left: -520px">公司办公室--公司二楼办公室后门门禁（即人事部后边的门禁）</label><br/>
                         <span style="margin-top:5px;color: red;text-align: center">注：请根据相关规定选择正确的门禁通道，部门负责人需承担核实通道权限的责任。</span></label><br/>
                     </td>
                 </tr>
                 <tr>
-                    <td>楼层工作卡</td>
-                    <td colspan="5"><textarea class="form-control" name="job"></textarea>
+                    <td style="vertical-align:middle;text-align: center; ">楼层工作卡</td>
+                    <td colspan="5" ><textarea class="form-control"  name="job" ></textarea>
                         <span style="color: red;">注：请具体说明需开通的楼层卡。</span></td>
 
                 </tr>
                 <tr>
-                    <td>备注</td>
+                    <td style="vertical-align:middle;text-align: center; ">备注</td>
                     <td colspan="5"><textarea class="form-control" name="remark"></textarea></td>
                 </tr>
                 </tbody>
             </table>
-        </div>
-    </form>
-
-    <div th:include="common/Head :: mainJs"></div>
     <script>
         layui.use('laydate', function(){
             var laydate = layui.laydate;
@@ -101,11 +87,13 @@
          * 重写表单提交前事件
          * @returns {boolean}
          */
-        function preSubmit() {
-            console.log('重写表单提交前事件...');
-            // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
-            // alert('不允许提交');
-            // return false;   // 返回false可阻止继续表单提交
+        function preSubmit(i) {
+
+            if(i.validity.patternMismatch ===true){
+                i.setCustomValidity("请输入数字");
+                i.validationMessage("请输入数字");
+            }
+            i.setCustomValidity("");
         }
 $(function () {
     function S4() {
@@ -119,6 +107,8 @@ $(function () {
     var myID =guid();
     console.log(myID)
     $("#number").val(myID)
+
+
 
 })
 

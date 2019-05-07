@@ -1,0 +1,79 @@
+<!--财务文档查阅申请表-->
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">房间/凭证号</td>
+        <td><input type="text" class="form-control" id="roomNumber" name="roomNumber" oninput="preSubmit(this)" oninvalid="setCustomValidity('房间/凭证号不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">类型</td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <select class="form-control" name="type" oninput="preSubmit(this)" oninvalid="setCustomValidity('请选择类型')" required>
+                <option value="">请选择</option>
+                <option value="1" >仅查阅,不复印</option>
+                <option value="2" >仅复印,不查阅</option>
+            </select></td>
+        <td style="vertical-align:middle;text-align: center; " >流水号</td>
+        <td><input type="text" class="form-control" id="number" name="number"  readonly="readonly"/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">申请原因</td>
+        <td style="vertical-align:middle;text-align: center; " colspan="5">
+            <textarea class="form-control" name="reason" rows="6"  oninput="preSubmit(this)" oninvalid="setCustomValidity('申请原因不允许为空')" required></textarea></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">申请部门</td>
+        <td colspan="2"><input type="text" class="form-control"  id="dept" name="dept"  oninput="preSubmit(this)" oninvalid="setCustomValidity('申请部门不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">申请人</td>
+        <td colspan="2"><input type="text" class="form-control" id="proposer" name="proposer"  oninput="preSubmit(this)" oninvalid="setCustomValidity('申请人不允许为空')" required/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">申请时间</td>
+        <td colspan="2"><input type="text" class="form-control" oninput="preSubmit(this)"  required id="startTime" name="startTime" /></td>
+        <td style="vertical-align:middle;text-align: center; ">返还时间</td>
+        <td colspan="2"><input type="text" class="form-control" id="endTime" name="endTime" oninput="preSubmit(this)"  required/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">备注</td>
+        <td style="vertical-align:middle;text-align: center; " colspan="5"><textarea class="form-control" name="text" rows="8" ></textarea></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4());
+        }
+
+        var myID =guid();
+        console.log(myID)
+        $("#number").val(myID)
+
+    })
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+    });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit(i) {
+        if(i.validity.patternMismatch ===true){
+            i.setCustomValidity("请输入数字");
+            i.validationMessage("请输入数字");
+        }
+        i.setCustomValidity("");
+    }
+
+</script>

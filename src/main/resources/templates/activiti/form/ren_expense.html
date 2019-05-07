@@ -1,0 +1,185 @@
+<!--外租房公寓租费及押金报销单-->
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">报销部门</td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <select class="form-control" name="leaveType" oninvalid="setCustomValidity('请选择报销部门')" required oninput="preSubmit(this)">
+                <option value="">请选择</option>
+                <option value="1" >广州市友和房地产投资有限公司</option>
+            </select></td>
+        <td style="vertical-align:middle;text-align: center; " >流水号</td>
+        <td style="vertical-align:middle;text-align: center; "><input type="text" class="form-control" id="number" name="number" readonly="readonly"/></td>
+        <td style="vertical-align:middle;text-align: center; " >日期</td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <input type="text" class="form-control" id="startTime" name="startTime"  required oninput="preSubmit(this)"/></td>
+
+        <td style="vertical-align:middle;text-align: center; " >附件共</td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <input type="text" class="form-control" id="attach" name="attach" pattern="^\d+$"  required oninput="preSubmit(this)"/>页</td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; " colspan="6">内容明细<span style="color: red">(限6项)</span></td>
+        <td style="vertical-align:middle;text-align: center; " colspan="2">报销单位
+            <input type="text" class="form-control" id="unit" name="unit" oninvalid="setCustomValidity('报销单位不允许为空')" required oninput="preSubmit(this)"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6"><textarea class="form-control" name="text" rows="8" oninvalid="setCustomValidity('内容明细不允许为空')" required oninput="preSubmit(this)"></textarea></td>
+        <td colspan="2" style="vertical-align:middle;text-align: center; ">填报人
+            <input type="text" class="form-control" id="fillPeople" name="fillPeople" oninvalid="setCustomValidity('填报人不允许为空')" required oninput="preSubmit(this)"/>
+            <br/>
+            收款人
+            <input type="text" class="form-control" id="payee" name="payee" oninvalid="setCustomValidity('收款人不允许为空')" required oninput="preSubmit(this)"/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">合计金额</td>
+        <td ><input type="text" class="form-control" id="totalPrice" name="totalPrice" onkeyup="change()" pattern="^\d+(\.\d+)?$" required oninput="preSubmit(this)"/></td>
+        <td style="vertical-align:middle;text-align: center; ">原借款:</td>
+        <td ><input type="text" class="form-control" id="brrMoney" name="brrMoney" pattern="^\d+(\.\d+)?$" required oninput="preSubmit(this)"/></td>
+        <td style="vertical-align:middle;text-align: center; ">应退余款</td>
+        <td ><input type="text" class="form-control" id="spareMoney" name="spareMoney" pattern="^\d+(\.\d+)?$" required oninput="preSubmit(this)"/></td>
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">金额大写</td>
+        <td style="vertical-align:middle;text-align: center; " colspan="7"><input type="text" class="form-control" id="bigMoney" name="bigMoney" readonly="readonly"/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">备注</td>
+        <td colspan="7"><textarea class="form-control" name="remark" rows="8"  ></textarea></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4());
+        }
+
+        var myID =guid();
+        console.log(myID)
+        $("#number").val(myID)
+
+    })
+
+    function change() {
+        var money=$("#totalPrice").val();
+        var str=convertCurrency(money);
+        $("#bigMoney").val(str);
+
+    }
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit(i) {
+        if(i.validity.patternMismatch === true){
+            i.setCustomValidity("请输入数字");
+            i.validationMessage("请输入数字");
+        }
+        i.setCustomValidity("");
+    }
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+    });
+    //把金额数字转换为金额大写
+    function convertCurrency(money) {
+        //汉字的数字
+        var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
+        //基本单位
+        var cnIntRadice = new Array('', '拾', '佰', '仟');
+        //对应整数部分扩展单位
+        var cnIntUnits = new Array('', '万', '亿', '兆');
+        //对应小数部分单位
+        var cnDecUnits = new Array('角', '分', '毫', '厘');
+        //整数金额时后面跟的字符
+        var cnInteger = '整';
+        //整型完以后的单位
+        var cnIntLast = '元';
+        //最大处理的数字
+        var maxNum = 999999999999999.9999;
+        //金额整数部分
+        var integerNum;
+        //金额小数部分
+        var decimalNum;
+        //输出的中文金额字符串
+        var chineseStr = '';
+        //分离金额后用的数组，预定义
+        var parts;
+        var reg="^[0-9]*$";
+        var parrten=new RegExp(reg)
+        if (money === ''||!(parrten.test(money))) { return ''; }
+        money = parseFloat(money);
+        if (money >= maxNum) {
+            //超出最大处理数字
+            return '';
+        }
+        if (money == 0) {
+            chineseStr = cnNums[0] + cnIntLast + cnInteger;
+            return chineseStr;
+        }
+        //转换为字符串
+        money = money.toString();
+        if (money.indexOf('.') == -1) {
+            integerNum = money;
+            decimalNum = '';
+        } else {
+            parts = money.split('.');
+            integerNum = parts[0];
+            decimalNum = parts[1].substr(0, 4);
+        }
+        //获取整型部分转换
+        if (parseInt(integerNum, 10) > 0) {
+            var zeroCount = 0;
+            var IntLen = integerNum.length;
+            for (var i = 0; i < IntLen; i++) {
+                var n = integerNum.substr(i, 1);
+                var p = IntLen - i - 1;
+                var q = p / 4;
+                var m = p % 4;
+                if (n == '0') {
+                    zeroCount++;
+                } else {
+                    if (zeroCount > 0) {
+                        chineseStr += cnNums[0];
+                    }
+                    //归零
+                    zeroCount = 0;
+                    chineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
+                }
+                if (m == 0 && zeroCount < 4) {
+                    chineseStr += cnIntUnits[q];
+                }
+            }
+            chineseStr += cnIntLast;
+        }
+        //小数部分
+        if (decimalNum != '') {
+            var decLen = decimalNum.length;
+            for (var i = 0; i < decLen; i++) {
+                var n = decimalNum.substr(i, 1);
+                if (n != '0') {
+                    chineseStr += cnNums[Number(n)] + cnDecUnits[i];
+                }
+            }
+        }
+        if (chineseStr == '') {
+            chineseStr += cnNums[0] + cnIntLast + cnInteger;
+        } else if (decimalNum == '') {
+            chineseStr += cnInteger;
+        }
+        return chineseStr;
+    }
+</script>

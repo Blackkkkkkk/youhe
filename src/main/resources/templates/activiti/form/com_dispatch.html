@@ -1,0 +1,92 @@
+<!--公司发文申请-->
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; " >流水号</td>
+        <td><input type="text" class="form-control" id="number" name="number" readonly="readonly"/></td>
+        <td colspan="4"></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">拟稿人</td>
+        <td><input type="text" class="form-control" id="draPeople" name="draPeople" oninput="preSubmit(this)" oninvalid="setCustomValidity('拟稿人不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">所属部门</td>
+        <td><input type="text" class="form-control" id="dept" name="dept" oninput="preSubmit(this)" oninvalid="setCustomValidity('所属部门不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">申请日期</td>
+        <td><input type="text" class="form-control" oninput="preSubmit(this)" required id="startTime" name="startTime" /></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">文件名称</td>
+        <td>
+            <input type="text" class="form-control"   id="fileName" name="fileName" oninput="preSubmit(this)" oninvalid="setCustomValidity('文件名称不允许为空')" required/></td>
+        <td style="vertical-align:middle;text-align: center; ">发文字号</td>
+        <td colspan="3">
+            <input type="text" class="form-control" id="submitNumber" name="submitNumber" oninput="preSubmit(this)" oninvalid="setCustomValidity('发文字号不允许为空')" required/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">主送部门</td>
+        <td colspan="5"><input type="text" class="form-control" id="iDept" name="iDept" oninput="preSubmit(this)" oninvalid="setCustomValidity('主送部门不允许为空')" required/></td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">重要程度</td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <select class="form-control" name="import" data-edit="" oninput="preSubmit(this)" oninvalid="setCustomValidity('重要程度不允许为空')" required>
+            <option value="">请选择</option>
+            <option value="1" >低</option>
+            <option value="2" >一般</option>
+            <option value="3" >高</option>
+        </select></td>
+        <td style="vertical-align:middle;text-align: center; ">紧急程度</td>
+        <td style="vertical-align:middle;text-align: center; ">
+            <select class="form-control" name="qucik" data-edit="" oninput="preSubmit(this)" oninvalid="setCustomValidity('紧急程度不允许为空')" required>
+            <option value="">请选择</option>
+            <option value="1" >低</option>
+            <option value="2" >一般</option>
+            <option value="3" >高</option>
+        </select></td>
+        <td style="vertical-align:middle;text-align: center; ">附件数量</td>
+        <td style="vertical-align:middle;text-align: center; "><input  type="text" class="form-control" id="attachNumber" name="attachNumber"  oninput="preSubmit(this)" pattern="^\d+$" required/>份</td>
+    </tr>
+    <tr>
+        <td style="vertical-align:middle;text-align: center; ">内容概要</td>
+        <td colspan="5"><textarea class="form-control" name="textOutline" rows="5" oninput="preSubmit(this)" oninvalid="setCustomValidity('内容概要不允许为空')" required></textarea></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4());
+        }
+
+        var myID =guid();
+        console.log(myID)
+        $("#number").val(myID)
+
+    })
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+
+    });
+
+    /**
+     * 重写表单提交前事件
+     * @returns {boolean}
+     */
+    function preSubmit(i) {
+        if(i.validity.patternMismatch ===true){
+            i.setCustomValidity("请输入符合格式的数字");
+            i.validationMessage("请输入符合格式的数字");
+        }
+        i.setCustomValidity("");
+    }
+
+</script>
