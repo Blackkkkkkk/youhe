@@ -17,6 +17,7 @@ import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.entity.department.Department;
 import com.youhe.entity.user.User;
 import com.youhe.exception.YuheOAException;
+import com.youhe.mapper.activiti.ActivityMapper;
 import com.youhe.mapper.user.UserMapper;
 import com.youhe.utils.activiti.TimeAsc;
 import com.youhe.utils.shiro.ShiroUserUtils;
@@ -38,7 +39,6 @@ import org.activiti.engine.impl.persistence.entity.CommentEntity;
 import org.activiti.engine.impl.persistence.entity.ModelEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;
-import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -89,6 +89,10 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     private UserMapper userMapper;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private ManagementService managementService;
+    @Autowired
+    private ActivityMapper activityMapper;
 
     @Override
     public String createModel() {
@@ -456,7 +460,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         List<HistoricActivityInstance> list = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .activityId(activityId)
-//                .finished()
+                .finished()
                 .orderByHistoricActivityInstanceStartTime()
                 .desc().list();
         return CollectionUtil.isEmpty(list) ? null : list.get(0);   // 取最新那条就行
@@ -465,7 +469,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public String getHisAssignee(String processInstanceId, String activityId) {
         HistoricActivityInstance hisActivityInstance = this.getHisActivityInstance(processInstanceId, activityId);
-        return hisActivityInstance.getAssignee();
+        return hisActivityInstance == null ? "" : hisActivityInstance.getAssignee();
     }
 
     @Override
@@ -492,9 +496,26 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         // 取得上一步活动
         ActivityImpl currActivity = definition.findActivity(task.getTaskDefinitionKey());
         List<PvmTransition> nextTransitionList = currActivity.getIncomingTransitions();
+
         // 暂时不考虑上一步活动为会签的情况，默认认为上一步活动只有一个
-        PvmActivity nextActivity = nextTransitionList.get(0).getSource();
-        return nextActivity.getId();
+        StringBuilder instr = new StringBuilder();
+//        PvmActivity nextActivity = nextTransitionList.get(0).getSource();
+        nextTransitionList.forEach(nextTransition -> {
+            if (instr.length() > 0) {
+                instr.append(",");
+            }
+            instr.append("'");
+            instr.append(nextTransition.getSource().getId());
+            instr.append("'");
+        });
+        String selSql = "select * from " +
+                managementService.getTableName(HistoricActivityInstance.class) +
+                " t where t.PROC_INST_ID_ = '" + flowVariable.getProcessInstanceId() + "'" +
+                " and t.END_TIME_ is not null" +
+                " and t.ACT_ID_ in(" + instr.toString() + ") order by START_TIME_ desc limit 1";
+        // 进一步确认当前节点的上一个提交节点
+        HistoricActivityInstance preActivity = historyService.createNativeHistoricActivityInstanceQuery().sql(selSql).singleResult();
+        return preActivity.getId();
     }
 
     @Override
@@ -542,6 +563,9 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
             // 开始跳转节点
             commandExecutor.execute(new NodeJumpTaskCmd(executionId, destinationActivity, map, currentActivity));
+
+            // 更新历史实例表(因为使用命令跳转节点历史节点没有设置结束时间，所以使用手动更新)
+            activityMapper.updateHistoricActivityInstance(flowVariable.getProcessInstanceId(), currentActivity.getId());
         } catch (Exception e) {
             throw new YuheOAException("节点跳转失败：" + e.getMessage());
         }

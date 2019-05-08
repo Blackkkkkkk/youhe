@@ -12,6 +12,7 @@ import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Attachment;
 import org.activiti.engine.task.Task;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.util.List;
@@ -66,6 +67,7 @@ public interface MyProcessEngine {
      * 提交任务
      * @param taskFlowData 流程任务流转数据
      */
+    @Transactional
     void submitTask(Map<String, Object> taskFlowData);
 
     /**
