@@ -7,7 +7,7 @@
             <td style="width: 3cm">填表人</td>
             <td><input type="text" class="form-control" required id="person" name="person" /></td>
             <td>流水号</td>
-            <td><input type="text" class="form-control" required id="number" name="number" /></td>
+            <td><input type="text" class="form-control" id="number" name="number" readonly="readonly" /></td>
         </tr>
         <tr>
             <td>部门</td>
@@ -110,6 +110,21 @@
             elem: '#endTime'
         });
     });
+
+    $(function () {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + S4());
+        }
+
+        var myID =guid();
+        console.log(myID)
+        $("#number").val(myID)
+
+    })
     /**
      * 重写表单提交前事件
      * @returns {boolean}

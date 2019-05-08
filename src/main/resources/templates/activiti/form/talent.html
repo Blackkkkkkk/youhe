@@ -16,9 +16,9 @@
                         <td colspan="2" style="text-align: center;">需□增加/□减少</td>
                     </tr>
                     <tr>
-                        <td colspan="1" style="height: 2cm"><input type="text" class="form-control" required name="current " style="height: 1.5cm"/></td>
-                        <td colspan="1" style="height: 2cm"><input type="text" class="form-control" required  name="incumbency" style="height: 1.5cm"/></td>
-                        <td colspan="2" style="height: 2cm"><input type="text" class="form-control" required name="organization" style="height: 1.5cm"/></td>
+                        <td colspan="1" style="height: 2cm"><input type="text" class="form-control" required name="current " style="height: 1.5cm" oninput="preSubmit(this)" pattern="^\d+$"/></td>
+                        <td colspan="1" style="height: 2cm"><input type="text" class="form-control" required  name="incumbency" style="height: 1.5cm" oninput="preSubmit(this)" pattern="^\d+$"/></td>
+                        <td colspan="2" style="height: 2cm"><input type="text" class="form-control" required name="organization" style="height: 1.5cm" oninput="preSubmit(this)" pattern="^\d+$"/></td>
                         <td colspan="2" style="height: 2cm"><input type="text" class="form-control" required name="increase" style="height: 1.5cm"/></td>
                     </tr>
                     <tr>
@@ -99,13 +99,13 @@
      * 重写表单提交前事件
      * @returns {boolean}
      */
-    function preSubmit() {
-        console.log('重写表单提交前事件...');
-        // 此处编写任务提交前的业务逻辑（如果需要，不需要就不用重写此方法了）
-        // alert('不允许提交');
-        // return false;   // 返回false可阻止继续表单提交
+    function preSubmit(i) {
+        if(i.validity.patternMismatch ===true){
+            i.setCustomValidity("请输入符合格式的数字");
+            i.validationMessage("请输入符合格式的数字");
+        }
+        i.setCustomValidity("");
     }
-
 </script>
 </body>
 </html>
