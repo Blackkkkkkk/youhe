@@ -1,5 +1,6 @@
 package com.youhe.activiti.ext;
 
+import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.interceptor.Command;
 import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
@@ -26,7 +27,7 @@ public class NodeJumpTaskCmd implements Command<Void> {
 
     @Override
     public Void execute(CommandContext commandContext) {
-        ExecutionEntityManager executionEntityManager = commandContext.getExecutionEntityManager();
+        ExecutionEntityManager executionEntityManager = Context.getCommandContext().getExecutionEntityManager();
         // 获取当前流程的executionId，因为在并发的情况下executionId是唯一的。
         ExecutionEntity executionEntity = executionEntityManager
                 .findExecutionById(executionId);
@@ -34,7 +35,7 @@ public class NodeJumpTaskCmd implements Command<Void> {
         executionEntity.setEventSource(this.currentActivity);
         executionEntity.setActivity(this.currentActivity);
         // 根据executionId 获取Task
-        Iterator<TaskEntity> localIterator = commandContext
+        Iterator<TaskEntity> localIterator = Context.getCommandContext()
                 .getTaskEntityManager()
                 .findTasksByExecutionId(this.executionId).iterator();
 
@@ -43,7 +44,7 @@ public class NodeJumpTaskCmd implements Command<Void> {
             // 触发任务监听
             taskEntity.fireEvent("complete");
             // 删除任务的原因
-            commandContext.getTaskEntityManager()
+            Context.getCommandContext().getTaskEntityManager()
                     .deleteTask(taskEntity, "completed", false);
         }
         executionEntity.executeActivity(this.desActivity);

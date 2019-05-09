@@ -12,6 +12,7 @@ import com.youhe.activiti.ext.FelSupport;
 import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.FlowVariable;
+import com.youhe.entity.activiti.Node;
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.entity.department.Department;
@@ -417,9 +418,11 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
         // 设置下一步路由出口用户任务节点集
         List<UserTask> nextNodes = this.getNextNode(flowVariable.getProcessDefinitionId(), flowVariable.getCurrentNodeKey(), variables);
+        List<Node> nodes = new ArrayList<>();
+        nextNodes.forEach(userTask -> nodes.add(new Node(userTask.getId(), userTask.getName())));
 
         flowVariable.setNextNodeNum(nextNodes.size());
-        flowVariable.setNextNodes(nextNodes);
+        flowVariable.setNextNodes(nodes);
         LOGGER.info("variables = {}", variables);
         return variables;
     }

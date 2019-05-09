@@ -3,7 +3,6 @@ package com.youhe.entity.activiti;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 
 import java.io.Serializable;
@@ -35,7 +34,7 @@ public class FlowVariable implements Serializable {
     private String targetTaskDefKey; // 目标任务定义ID
     private boolean firstSubmit;    // 是否第一次已提交，用于判断流程首环节是否回退过
     private int nextNodeNum;   // 当前节点所有可能的出口路由节点个数
-    private List<UserTask> nextNodes;   // 当前节点所有可能的出口路由节点列表
+    private List<Node> nextNodes;   // 当前节点所有可能的出口路由节点列表
     private List<ActivityImpl> canBackNodes; // 当前节点所有可驳回的节点列表
     private String comment; // 流转意见
 
