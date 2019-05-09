@@ -515,7 +515,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                 " and t.ACT_ID_ in(" + instr.toString() + ") order by START_TIME_ desc limit 1";
         // 进一步确认当前节点的上一个提交节点
         HistoricActivityInstance preActivity = historyService.createNativeHistoricActivityInstanceQuery().sql(selSql).singleResult();
-        return preActivity.getId();
+        return preActivity.getActivityId();
     }
 
     @Override

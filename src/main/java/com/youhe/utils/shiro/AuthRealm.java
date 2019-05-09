@@ -37,6 +37,19 @@ public class AuthRealm extends AuthorizingRealm {
 
         User user = userBiz.findOnlyUserList(search).get(0);
 
+
+        User gr = new User();
+
+        if (isNotEmpty(userBiz.findByUserName(user.getUserAccount()))) {
+            gr = userBiz.findByUserName(user.getUserAccount());
+        }
+
+
+        if(!isEmpty(gr)){
+            user.setRoles(gr.getRoles());
+        }
+
+
         // User user =userService.findByUserName(username);
         return new SimpleAuthenticationInfo(user, user.getUserPassword(), this.getClass().getName());//放入shiro.调用CredentialsMatcher检验密码
     }
@@ -47,9 +60,10 @@ public class AuthRealm extends AuthorizingRealm {
         User user = (User) principal.fromRealm(this.getClass().getName()).iterator().next();//获
 
 
+        /*
         if (isNotEmpty(userBiz.findByUserName(user.getUserAccount()))) {
             user = userBiz.findByUserName(user.getUserAccount());
-        }
+        }*/
         // 取session中的用户
         List<String> permissions = new ArrayList<>();
         Set<Role> roles = user.getRoles();
