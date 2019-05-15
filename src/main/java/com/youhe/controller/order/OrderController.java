@@ -87,6 +87,7 @@ public class OrderController extends BaseController {
         }
 //        PayUtil.cashierPay("", 0L, new ArrayList<OrderDetails>());
         // 获取购物车商品
+
         List<Shop> shops = redisBiz.hscan(CartPrefix.getCartList, userAccount);
 //        List<Shop> shopList = shopBiz.findShopList(shops);
         ArrayList<OrderDetails> orderDetails = new ArrayList<>();
@@ -101,9 +102,10 @@ public class OrderController extends BaseController {
             orderDetail.setName(shop.getName()).setNum(cartNum).setPirce(price);
             orderDetails.add(orderDetail);
 //            payAmount += price * cartNum*100;
-            payAmount=allPrices*100;
+
             orderBiz.updates(bigOrderCode,deliveryAddr);
         }
+        payAmount=allPrices*100;
 //        String outTradeNo = "GO-" + DateUtil.format(new Date(), "yyyyMMddhhmm") + RandomUtil.randomString(3);
         String url = PayUtil.cashierPay(bigOrderCode, payAmount, orderDetails);
         return R.ok().put("url", url);
