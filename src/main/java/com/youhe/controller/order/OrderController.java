@@ -7,6 +7,8 @@ import com.youhe.biz.order.OrderBiz;
 import com.youhe.biz.redis.RedisBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.controller.comm.BaseController;
+import com.youhe.entity.order.Order;
+import com.youhe.entity.order.OrderDetail;
 import com.youhe.entity.order.OrderDetails;
 import com.youhe.entity.permission.Permission;
 import com.youhe.entity.shop.PayResult;
@@ -17,9 +19,7 @@ import com.youhe.service.shop.OrderService;
 import com.youhe.serviceImpl.Controller.orderController.OrderControllerImpl;
 import com.youhe.utils.R;
 import com.youhe.utils.pay.PayUtil;
-import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
-import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +75,42 @@ public class OrderController extends BaseController {
         String url = PayUtil.cashierPay(outTradeNo, totalAmount, orderDetails);
         return R.ok().put("url", url);
     }
+
+    /**
+     * 下单接口（不包含分账）
+     */
+    @GetMapping(value = "payment")
+    public R payment( String bigOrderCode,String deliveryAddr,Integer allPrices) {
+        String userAccount = ShiroUserUtils.getShiroUser().getUserAccount();
+        if (StrUtil.isBlank(userAccount)) {
+            return R.error("请登录后再下单支付");
+        }
+//        PayUtil.cashierPay("", 0L, new ArrayList<OrderDetails>());
+        // 获取购物车商品
+        List<Shop> shops = redisBiz.hscan(CartPrefix.getCartList, userAccount);
+//        List<Shop> shopList = shopBiz.findShopList(shops);
+        ArrayList<OrderDetails> orderDetails = new ArrayList<>();
+        long payAmount = 0L;    // 订单总金额
+        for (Shop shop : shops) {
+            OrderDetails orderDetail = new OrderDetails();
+            Order order=new Order();
+            Integer price = shop.getPirce();
+            Integer id=shop.getId();
+            int cartNum = shop.getCartNum();
+//            order.setDeliveryAddr(deliveryAddr);
+            orderDetail.setName(shop.getName()).setNum(cartNum).setPirce(price);
+            orderDetails.add(orderDetail);
+//            payAmount += price * cartNum*100;
+            payAmount=allPrices*100;
+            orderBiz.updates(bigOrderCode,deliveryAddr);
+        }
+//        String outTradeNo = "GO-" + DateUtil.format(new Date(), "yyyyMMddhhmm") + RandomUtil.randomString(3);
+        String url = PayUtil.cashierPay(bigOrderCode, payAmount, orderDetails);
+        return R.ok().put("url", url);
+    }
+
+
+
 
     /**
      * 支付成功的同步接口
@@ -140,13 +176,22 @@ public class OrderController extends BaseController {
     //    立即购买
     @RequestMapping(value = "/shoppingPurchase")
     @ResponseBody
-    public ModelAndView shoppingPurchase(Shop_index_carousel shop_index_carousel,Shop shop) {
-        ModelAndView model = new ModelAndView();
-        model.addObject("shopList", orderService.shoppingPurchase(shop));
-        model.setViewName("user/shop/shoppingOrder/shopping-order");
-        return  model;
+    public ModelAndView shoppingPurchase(Model model,Shop_index_carousel shop_index_carousel,Shop shop) {
+        ModelAndView models = new ModelAndView();
+        Map<String,Object> resultMap = orderService.shoppingPurchase(shop);
+        models.addObject("shopList", resultMap);
+        models.setViewName("user/shop/shoppingOrder/shopping-order");
+        return  models;
     }
 
+//        @RequestMapping(value = "/shoppingPurchase")
+//        @ResponseBody
+//        public  Map<String,Object> shoppingPurchase(Model model, Shop_index_carousel shop_index_carousel,Shop shop) {
+//        ModelAndView models = new ModelAndView();
+//        Map<String,Object> resultMap = orderService.shoppingPurchase(shop);
+//        models.addObject("shopList", resultMap);
+//        return resultMap;
+//    }
 
 
 //    @RequestMapping(value = "/shoppingOrder")

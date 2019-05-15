@@ -44,7 +44,7 @@ public interface OrderService extends IService<Order> {
 
     Map<String,Object> shoppingOrder();
 
-    List<Shop> shoppingPurchase(Shop shop);
+    Map<String,Object> shoppingPurchase(Shop shop);
 
 
 

@@ -5,8 +5,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.youhe.entity.order.Order;
 import com.youhe.entity.order.OrderDetails;
+import com.youhe.entity.shop.Commodity;
 import com.youhe.mapper.order.OrderMapper;
 import com.youhe.mapper.order.OrdertMapper;
+import com.youhe.mapper.shop.CommodityMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,15 @@ import java.util.List;
 
 @Service
 public class OrderBiz {
+
+    @Autowired
+    private OrderMapper orderMapper;
+
     private Logger log = LoggerFactory.getLogger(OrderBiz.class);
+    //修改角色表
+    public void updates(String bigOrderCode,String deliveryAddr) {
+        orderMapper.updates(bigOrderCode,deliveryAddr);
+    }
 
     /*@Autowired
     private OrderMapper ordertMapper;

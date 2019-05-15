@@ -87,7 +87,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <div class="form-group">
                         <h3 style="margin-bottom:0.1cm">填写收货地址</h3>
                         <div class="" style="margin-bottom:0.5cm"  >
-                            <input type="text" class="form-control"  placeholder="收货地址"/>
+                            <input  required  type="text" class="form-control"  placeholder="收货地址" name="delivery_addr"/>
                         </div>
                     </div>
                     <h2 style="margin-bottom:0.2cm">确认订单信息</h2>
@@ -105,10 +105,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <th class="shopping-cart-price">单价</th>
                                         <th class="shopping-cart-total" colspan="2">总价</th>
                                     </tr>
-
-                                    <tr th:each="com_list:${shopList}">
-                                    </tr>
-                                    <tr th:each="com_list:${shopList}">
+                                    <!--th:each=${shopList['orderDetail']}-->
+                                    <!--对象名.user[0].name这样子-->
+                                    <!--<tr th:each="shopList.orderDetail[0]">-->
+                                    <tr th:each="com_list:${shopList['orderDetail']}">
                                         <td class="shopping-cart-image">
                                             <!--<a href="#"><img-->
                                                     <!--:src="item.pageaddr+item.saveFileName"-->
@@ -121,7 +121,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <!--<h3><a href="#">Cool green dress with red bell</a></h3>-->
                                             <!--<p><strong>Item 1</strong> - Color: Green; Size: S</p>-->
                                             <!--<em>More info is here</em>-->
-                                            <strong><span></span><span th:text="${com_list.remark}"></span></strong>
+                                            <strong><span></span><span th:text="${com_list.commodityName}"></span></strong>
                                         </td>
 
                                         <td class="shopping-cart-quantity">
@@ -129,14 +129,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-up bootstrap-touchspin-up" type="button"
                                                         @click="addCardNum($event,0)"><i
-                                                        class="fa fa-angle-up"></i></button></span>
-                                                <input v-if="0 == 0" id="product-quantity" type="text"
+                                                         class="fa fa-angle-up" ></i></button></span>
+                                                <input v-if="0 == 0" id="product-quantity"   th:value="${com_list.num}" type="text"
                                                        readonly
                                                        class="form-control input-sm" ref="input1">
-                                                <input v-if="0 != 0" :id="'product-quantity'+(0+1)" type="text"
-                                                       :value="item.cartNum"
-                                                       readonly
-                                                       class="form-control input-sm">
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-down bootstrap-touchspin-down"
                                                         type="button" @click="delCardNum($event,0)"><i
@@ -144,10 +140,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </div>
                                         </td>
                                         <td class="shopping-cart-price">
-                                            <strong><span th:text="${com_list.pirce}">¥</span></strong>
+                                            <strong><span th:text="${com_list.onePrice}">¥</span></strong>
                                         </td>
                                         <td class="shopping-cart-total">
-                                            <strong><span th:text="${com_list.AllPrices}">¥</span></strong>
+                                            <strong><span th:text="${com_list.price}">¥</span></strong>
                                         </td>
                                         <td class="del-goods-col">
                                             <a class="del-goods" href="#"><i class="fa fa-times"></i></a>
@@ -156,11 +152,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </table>
                             </div>
                             <div class="shopping-total">
-                                <ul th:each="com_list:${shopList}">
+                                <!--<tr th:each="com_list:${shopList['orderDetail']}">-->
+                                <ul >
                                     <li>
                                         <em>小计</em>
-                                        <strong><span th:text="${com_list.pirce}">¥</span></strong>
-                                        <!--<strong class="price"><span>¥</span>{{carData.prices}}</strong>-->
+                                        <strong><span th:text="${shopList.allPrices}" id="xiaoji" th:name="xiaoji">¥</span></strong>
+                                        <!--<strong class="price"><span>¥</span>{{shopList.allPrices}}</strong>-->
                                     </li>
                                     <li>
                                         <em>运费</em>
@@ -168,14 +165,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </li>
                                     <li class="shopping-total-price">
                                         <em>总计</em>
-                                        <strong><span th:text="${com_list.pirce}">¥</span></strong>
+                                        <strong><span th:text="${shopList.allPrices}">¥</span></strong>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-
-                        <button class="btn btn-primary" type="submit" @click="pay">提交订单 <i class="fa fa-check"></i>
-                        </button>
+                        <!--th:id="${shopList.bigOrderCode+','+shopList.allPrices}"-->
+                        <a class="btn btn-primary" type="submit" onclick="pay(id)" ref="myelement"  th:id="${shopList.bigOrderCode+','+shopList.allPrices}">提交订单 <i class="fa fa-check"></i>
+                        </a>
                     </div>
                 </div>
                 <!-- END CONTENT -->
@@ -183,7 +180,6 @@ License: You must have a valid license purchased only from themeforest(the above
 
         </div>
     </div>
-
     <!-- BEGIN STEPS -->
     <div class="steps3 steps3red">
         <div class="container">
@@ -440,396 +436,55 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="../bootstrap/user/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="../bootstrap/user/plugins/back-to-top.js"></script>
 <script type="text/javascript" src="../bootstrap/user/plugins/jQuery-slimScroll/jquery.slimscroll.min.js"></script>
+<script type="text/javascript" src='../bootstrap/user/plugins/zoom/jquery.zoom.min.js'></script><!-- product zoom -->
 <!-- END CORE PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+<script src="../bootstrap/user/plugins/layerslider/jQuery/jquery-easing-1.3.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/layerslider/jQuery/jquery-transit-modified.js" type="text/javascript"></script>
 <script type="text/javascript" src="../bootstrap/user/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
 <!-- pop up -->
 <script type="text/javascript" src="../bootstrap/user/plugins/bxslider/jquery.bxslider.min.js"></script>
 <!-- slider for products -->
 <script type="text/javascript" src='../bootstrap/user/plugins/zoom/jquery.zoom.min.js'></script><!-- product zoom -->
 <script src="../bootstrap/user/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/layerslider/js/layerslider.kreaturamedia.jquery.js"
+        type="text/javascript"></script>
+
 <!-- Quantity -->
 
 
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
 <!--<script type="text/javascript" src="../bootstrap/user/scripts/app.js"></script> -->
-<script src="../js/shoppingOrder/js/shoppingOrder.js"></script>
-<script th:inline="javascript">
+<!--<script src="../js/shoppingOrder/js/shoppingOrder.js"></script>-->
+<!--<script src="../bootstrap/js/project/user/shop/shoppingCart/js/shoppingOrder.js"></script>-->
+<script type="text/javascript">
     var layer;
-    jQuery(document).ready(function () {
-
-        layui.use("layer", function () {
-            layer = layui.layer;  //layer初始化
-
-        })
-
-
-        var App = function () {
-
-            // IE mode
-            var isRTL = false;
-            var isIE8 = false;
-            var isIE9 = false;
-            var isIE10 = false;
-
-            var responsive = true;
-
-            var responsiveHandlers = [];
-
-            var handleInit = function () {
-
-                if ($('body').css('direction') === 'rtl') {
-                    isRTL = true;
-                }
-
-                isIE8 = !!navigator.userAgent.match(/MSIE 8.0/);
-                isIE9 = !!navigator.userAgent.match(/MSIE 9.0/);
-                isIE10 = !!navigator.userAgent.match(/MSIE 10.0/);
-
-                if (isIE10) {
-                    jQuery('html').addClass('ie10'); // detect IE10 version
-                }
+        function pay (obj){
+            // var subStr=new RegExp('=');//创建正则表达式对象
+            // obj.replace(/=/g,":");
+            var bigOrderCode = obj.split(',')[0];
+            var allPrices = obj.split(',')[1];
+            console.info(obj);
+            debugger;
+         // pay = function (obj) {
+            var deliveryAddr=$("input[name='delivery_addr']").val();
+            if(deliveryAddr.length<=0){
+                 alert('收货地址不能为空!');
+                $('.no').show();
+                return false;
             }
-
-            // runs callback functions set by App.addResponsiveHandler().
-            var runResponsiveHandlers = function () {
-                // reinitialize other subscribed elements
-                for (var i in responsiveHandlers) {
-                    var each = responsiveHandlers[i];
-                    each.call();
-                }
-            }
-
-            // handle the layout reinitialization on window resize
-            var handleResponsiveOnResize = function () {
-                var resize;
-                if (isIE8) {
-                    var currheight;
-                    $(window).resize(function () {
-                        if (currheight == document.documentElement.clientHeight) {
-                            return; //quite event since only body resized not window.
-                        }
-                        if (resize) {
-                            clearTimeout(resize);
-                        }
-                        resize = setTimeout(function () {
-                            runResponsiveHandlers();
-                        }, 50); // wait 50ms until window resize finishes.
-                        currheight = document.documentElement.clientHeight; // store last body client height
-                    });
+            $.get("/order/payment?bigOrderCode="+bigOrderCode+"&deliveryAddr="+deliveryAddr+"&allPrices="+allPrices, function (r) {
+                if (r.Status == 0) {
+                    window.location.href = (r.url)
                 } else {
-                    $(window).resize(function () {
-                        if (resize) {
-                            clearTimeout(resize);
-                        }
-                        resize = setTimeout(function () {
-                            runResponsiveHandlers();
-                        }, 50); // wait 50ms until window resize finishes.
+                    layer.msg(r.msg, {
+                        icon: 2,
+                        time: 500
                     });
                 }
-            }
-
-            var handleIEFixes = function () {
-                //fix html5 placeholder attribute for ie7 & ie8
-                if (isIE8 || isIE9) { // ie8 & ie9
-                    // this is html5 placeholder fix for inputs, inputs with placeholder-no-fix class will be skipped(e.g: we need this for password fields)
-                    jQuery('input[placeholder]:not(.placeholder-no-fix), textarea[placeholder]:not(.placeholder-no-fix)').each(function () {
-
-                        var input = jQuery(this);
-
-                        if (input.val() == '' && input.attr("placeholder") != '') {
-                            input.addClass("placeholder").val(input.attr('placeholder'));
-                        }
-
-                        input.focus(function () {
-                            if (input.val() == input.attr('placeholder')) {
-                                input.val('');
-                            }
-                        });
-
-                        input.blur(function () {
-                            if (input.val() == '' || input.val() == input.attr('placeholder')) {
-                                input.val(input.attr('placeholder'));
-                            }
-                        });
-                    });
-                }
-            }
-
-            // Handles scrollable contents using jQuery SlimScroll plugin.
-            var handleScrollers = function () {
-                $('.scroller').each(function () {
-                    var height;
-                    if ($(this).attr("data-height")) {
-                        height = $(this).attr("data-height");
-                    } else {
-                        height = $(this).css('height');
-                    }
-                    $(this).slimScroll({
-                        allowPageScroll: true, // allow page scroll when the element scroll is ended
-                        size: '7px',
-                        color: ($(this).attr("data-handle-color") ? $(this).attr("data-handle-color") : '#bbb'),
-                        railColor: ($(this).attr("data-rail-color") ? $(this).attr("data-rail-color") : '#eaeaea'),
-                        position: isRTL ? 'left' : 'right',
-                        height: height,
-                        alwaysVisible: ($(this).attr("data-always-visible") == "1" ? true : false),
-                        railVisible: ($(this).attr("data-rail-visible") == "1" ? true : false),
-                        disableFadeOut: true
-                    });
-                });
-            }
-
-            var handleSearch = function () {
-                $('.search-btn').click(function () {
-                    if ($('.search-btn').hasClass('show-search-icon')) {
-                        if ($(window).width() > 767) {
-                            $('.search-box').fadeOut(300);
-                        } else {
-                            $('.search-box').fadeOut(0);
-                        }
-                        $('.search-btn').removeClass('show-search-icon');
-                    } else {
-                        if ($(window).width() > 767) {
-                            $('.search-box').fadeIn(300);
-                        } else {
-                            $('.search-box').fadeIn(0);
-                        }
-                        $('.search-btn').addClass('show-search-icon');
-                    }
-                });
-            }
-
-            var handleMenu = function () {
-                $(".header .navbar-toggle").click(function () {
-                    if ($(".header .navbar-collapse").hasClass("open")) {
-                        $(".header .navbar-collapse").slideDown(300)
-                            .removeClass("open");
-                    } else {
-                        $(".header .navbar-collapse").slideDown(300)
-                            .addClass("open");
-                    }
-                });
-            }
-
-            var handleSidebarMenu = function () {
-                $(".sidebar .dropdown a").click(function () {
-                    if ($(this).hasClass("collapsed") == false) {
-                        $(this).addClass("collapsed");
-                        $(this).siblings(".dropdown-menu").slideDown(300);
-                    } else {
-                        $(this).removeClass("collapsed");
-                        $(this).siblings(".dropdown-menu").slideUp(300);
-                    }
-                });
-            }
-
-            function handleDifInits() {
-                $(".header .navbar-toggle span:nth-child(2)").addClass("short-icon-bar");
-                $(".header .navbar-toggle span:nth-child(4)").addClass("short-icon-bar");
-            }
-
-            function handleUniform() {
-                if (!jQuery().uniform) {
-                    return;
-                }
-                var test = $("input[type=checkbox]:not(.toggle), input[type=radio]:not(.toggle, .star)");
-                if (test.size() > 0) {
-                    test.each(function () {
-                        if ($(this).parents(".checker").size() == 0) {
-                            $(this).show();
-                            $(this).uniform();
-                        }
-                    });
-                }
-            }
-
-            var handleFancybox = function () {
-                jQuery(".fancybox-fast-view").fancybox();
-
-                if (!jQuery.fancybox) {
-                    return;
-                }
-
-                if (jQuery(".fancybox-button").size() > 0) {
-                    jQuery(".fancybox-button").fancybox({
-                        groupAttr: 'data-rel',
-                        prevEffect: 'none',
-                        nextEffect: 'none',
-                        closeBtn: true,
-                        helpers: {
-                            title: {
-                                type: 'inside'
-                            }
-                        }
-                    });
-
-                    $('.fancybox-video').fancybox({
-                        type: 'iframe'
-                    });
-                }
-            }
-
-            // Handles Bootstrap Accordions.
-            var handleAccordions = function () {
-
-                jQuery('body').on('shown.bs.collapse', '.accordion.scrollable', function (e) {
-                    App.scrollTo($(e.target), -100);
-                });
-
-            }
-
-            // Handles Bootstrap Tabs.
-            var handleTabs = function () {
-                // fix content height on tab click
-                $('body').on('shown.bs.tab', '.nav.nav-tabs', function () {
-                    handleSidebarAndContentHeight();
-                });
-
-                //activate tab if tab id provided in the URL
-                if (location.hash) {
-                    var tabid = location.hash.substr(1);
-                    $('a[href="#' + tabid + '"]').click();
-                }
-            }
-
-            return {
-                init: function () {
-                    // init core variables
-                    handleInit();
-                    handleResponsiveOnResize();
-                    handleIEFixes();
-                    handleSearch();
-                    handleFancybox();
-                    handleDifInits();
-                    handleSidebarMenu();
-                    handleAccordions();
-                    handleMenu();
-                    handleScrollers();
-
-                    this.addResponsiveHandler(function () {
-                        App.initBxSlider(true);
-                    });
-                },
-
-                initUniform: function (els) {
-                    if (els) {
-                        jQuery(els).each(function () {
-                            if ($(this).parents(".checker").size() == 0) {
-                                $(this).show();
-                                $(this).uniform();
-                            }
-                        });
-                    } else {
-                        handleUniform();
-                    }
-                },
-                initBxSlider: function (reload) {
-                    $('.bxslider').each(function () {
-                        var width = $(window).width();
-
-                        var slides;
-                        var slideMargin = parseInt($(this).attr("data-slide-margin"));
-                        var slideContainerWidth = $(this).closest('.bxslider-wrapper').width();
-                        var slideWidth;
-
-                        if (width <= 480) {
-                            slides = $(this).attr("data-slides-phone");
-                        } else if (width > 480 && width <= 992) {
-                            slides = $(this).attr("data-slides-tablet");
-                        } else {
-                            slides = $(this).attr("data-slides-desktop");
-                        }
-
-                        slides = parseInt(slides);
-
-                        slideWidth = slideContainerWidth / slides;
-
-
-                        if (reload === true) {
-                            if (!$(this).data("bxslider")) {
-                                return;
-                            }
-                            $(this).data("bxslider").reloadSlider({
-                                minSlides: slides,
-                                maxSlides: slides,
-                                slideWidth: slideWidth,
-                                slideMargin: slideMargin,
-                                moveSlides: 5,
-                                responsive: true
-                            });
-                        } else {
-                            //alert(2);
-                            var slider = $(this).bxSlider({
-                                minSlides: slides,
-                                maxSlides: slides,
-                                slideWidth: slideWidth,
-                                slideMargin: slideMargin,
-                                moveSlides: 5,
-                                responsive: true
-                            });
-                            $(this).data("bxslider", slider);
-                        }
-                    });
-                },
-
-                initImageZoom: function () {
-                    $('.product-main-image').zoom({url: $('.product-main-image img').attr('data-BigImgSrc')});
-                },
-
-                initSliderRange: function () {
-                    $("#slider-range").slider({
-                        range: true,
-                        min: 0,
-                        max: 500,
-                        values: [50, 250],
-                        slide: function (event, ui) {
-                            $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-                        }
-                    });
-                    $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-                        " - $" + $("#slider-range").slider("values", 1));
-                },
-
-                // wrapper function to scroll(focus) to an element
-                scrollTo: function (el, offeset) {
-                    var pos = (el && el.size() > 0) ? el.offset().top : 0;
-                    if (el) {
-                        if ($('body').hasClass('page-header-fixed')) {
-                            pos = pos - $('.header').height();
-                        }
-                        pos = pos + (offeset ? offeset : -1 * el.height());
-                    }
-
-                    jQuery('html,body').animate({
-                        scrollTop: pos
-                    }, 'slow');
-                },
-
-                //public function to add callback a function which will be called on window resize
-                addResponsiveHandler: function (func) {
-                    responsiveHandlers.push(func);
-                },
-
-                scrollTop: function () {
-                    App.scrollTo();
-                },
-
-                gridOption1: function () {
-                    $(function () {
-                        $('.grid-v1').mixitup();
-                    });
-                }
-
-            };
-        }();
-
-
-        App.init();
-        App.initBxSlider();
-        App.initImageZoom();
-    });
-
+            });
+        }
 </script>
 <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>

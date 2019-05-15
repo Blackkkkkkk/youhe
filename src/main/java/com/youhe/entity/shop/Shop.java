@@ -90,6 +90,7 @@ public class Shop extends SysBaseEntity {
     private String size;
 
     private int AllPrices;
+    private String bigOrderCode;
 
 
 }

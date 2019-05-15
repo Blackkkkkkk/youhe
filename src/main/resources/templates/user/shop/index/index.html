@@ -793,9 +793,9 @@
                                           @click="addCardNum($event,0)" th:id="${shopList.id}"><i
                                           class="fa fa-angle-up"></i></button></span>
                                 <input id="product-quantity" type="text"
-                                       :value="addcar.cartNum"
+                                       :value="1"
                                        readonly
-                                       class="form-control input-sm" ref="input1">
+                                       class="form-control input-sm" ref="input1" name="text">
                                 <span class="input-group-btn"><button
                                         class="btn quantity-down bootstrap-touchspin-down"
                                         type="button" @click="delCardNum($event,0)" th:id="${shopList.id}"><i
@@ -905,14 +905,29 @@
     // }
    //立即购买
     function shoppingPurchase(id) {
-        // cartNum=vm.addcar.cartNum = 0;
+        var cartNum=$("input[name='text']").val();
         id=id;
         remark=vm.addcar.remark;
-        debugger
         if (id && id != 'null') {
-            window.location.href="/order/shoppingPurchase?id=" + id +"&remark="+remark;
+            window.location.href="/order/shoppingPurchase?id=" + id +"&remark="+remark+"&cartNum="+cartNum;
         }
     }
+
+    function preSubmit() {
+        // console.log('重写表单提交前事件...');
+        // var startTimes  = $(" input[ name='startTimes' ] ").val();
+        // var endTime  = $(" input[ name='endTime' ] ").val();
+        // var bd = daysBetween(startTimes, endTime);
+        // console.log('bd=', bd);
+        // $("#nDays").val(bd);
+        // var name=$("input[name='text']").val();
+        //
+        // $(" #product-quantity").val()
+        // $(" input[ name='test' ] ").val()
+        // $(" input[ type='text' ] ").val()
+        // $(" input[ type='text' ]").attr("value")
+    }
+
 
     var layer;
     /*

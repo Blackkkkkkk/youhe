@@ -15,6 +15,8 @@ import java.util.List;
  * @since 2019-04-16
  */
 public interface OrderMapper extends BaseMapper<Order> {
+    //修改角色表
+    void updates(String bigOrderCode,String deliveryAddr);
 
     List<Order> findOrder(Order order);
 

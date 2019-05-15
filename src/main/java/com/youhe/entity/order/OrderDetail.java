@@ -74,4 +74,6 @@ public class OrderDetail extends SysBaseEntity implements Serializable {
 
     private String pageaddr; // 页面显示路径
 
+   private String onePrice;//商品单价
+
 }
