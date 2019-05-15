@@ -35,6 +35,16 @@
     </select>
 
 
+    <update id="updates" parameterType="com.youhe.entity.order.Order"  >
+        UPDATE shop_order
+        SET
+            <if test="deliveryAddr != null and deliveryAddr!=''">
+                delivery_addr=#{deliveryAddr}
+            </if>
+        WHERE b_order_num=#{bigOrderCode}
+    </update>
+
+
     <!--<update id="updateOrder" parameterType="com.youhe.entity.order.Order">
         UPDATE order_order
         SET
