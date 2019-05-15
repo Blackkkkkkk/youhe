@@ -729,20 +729,18 @@
     <!--permissiondList: (...)-->
     <!--son: (...)-->
     <!--BEGIN fast view of a product-->
-    <li th:each="shopList,info : ${shopList}">
+    <li th:each="com_list:${shopList}">
+    <!--<li th:each="shopList,info : ${shopList}">-->
         <div id="product-pop-up" style="display: none; width: 700px;">
             <div class="product-page product-pop-up">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-3">
                         <div class="product-main-image">
-                            <!--  <img :src="img_src"  alt="Cool green dress with red bell"
-                                   class="img-responsive">
-                                   -->
-
                             <!--<img src="../bootstrap/user/temp/products/model7.jpg" alt="Cool green dress with red bell"-->
                             <!--class="img-responsive">-->
-                            <img th:src="${shopList.detail_picture}" alt="Cool green dress with red bell">
-                            <img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
+                            <!--<img class="pi-price" v-img="view.detail_picture">&lt;!&ndash;&ndash;&gt;-->
+                            <img th:src="${com_list.detail_picture}" alt="Cool green dress with red bell">
+                            <img th:src="${com_list.pageaddr}+'/'+${com_list.saveFileName}"
                                  alt="Cool green dress with red bell"
                                  class="img-responsive">
                         </div>
@@ -766,16 +764,17 @@
                             <!--<strong><span>$</span>47.00</strong>-->
                             <!--<em>$<span>62.00</span></em>-->
                             <!--</div>-->
-                            <div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>
+                            <div class="pi-price" v-text="view.pirce"></div>
+                            <!--<div class="pi-price" th:text="'¥'+${com_list.pirce}"></div>-->
                             <div class="availability">
                                 库存:
-                                <a th:if="${shopList.available}==null" th:text="无货"></a>
-                                <a th:if="${shopList.available}!=null" th:text="${shopList.available}>0?'有库存':'无货'"></a>
+                                <a th:if="${com_list.available}==null" th:text="无货"></a>
+                                <a th:if="${com_list.available}!=null" th:text="${com_list.available}>0?'有库存':'无货'"></a>
                             </div>
                         </div>
                         <div class="description">
                             <!--describe-->
-                            <p><a th:text="${shopList.describe}"></a></p>
+                            <p><a th:text="${com_list.describe}"></a></p>
 
                         </div>
                         <div class="product-page-options">
@@ -790,7 +789,7 @@
                             <div class="product-quantity">
                                   <span class="input-group-btn"><button
                                           class="btn quantity-up bootstrap-touchspin-up" type="button"
-                                          @click="addCardNum($event,0)" th:id="${shopList.id}"><i
+                                          @click="addCardNum($event,0)" th:id="${com_list.id}"><i
                                           class="fa fa-angle-up"></i></button></span>
                                 <input id="product-quantity" type="text"
                                        :value="1"
@@ -798,7 +797,7 @@
                                        class="form-control input-sm" ref="input1" name="text">
                                 <span class="input-group-btn"><button
                                         class="btn quantity-down bootstrap-touchspin-down"
-                                        type="button" @click="delCardNum($event,0)" th:id="${shopList.id}"><i
+                                        type="button" @click="delCardNum($event,0)" th:id="${com_list.id}"><i
                                         class="fa fa-angle-down"></i></button></span>
                             </div>
 
@@ -807,11 +806,13 @@
                                <!--th:onclick="'javascript:shoppingPurchase('+${shopList.id}+')'"-->
                             <!--&gt;View</a>-->
 
-                            <a  class="btn btn-primary"  th:onclick="'javascript:shoppingPurchase('+${shopList.id}+')'">立即购买</a>
+
+                            <a  class="btn btn-primary"  @click="purchase"   v-model="view.id">立即购买</a>
+                            <!--<a  class="btn btn-primary"  th:onclick="'javascript:shoppingPurchase('+${com_list.id}+')'">立即购买</a>-->
 
 
                             <a @click="addCar($event,2)" class="btn btn-primary"
-                               th:id="${shopList.id}">添加到购物车</a>
+                               th:id="${com_list.id}">添加到购物车</a>
                         </div>
                     </div>
                     <div class="sticker sticker-sale"></div>
@@ -905,7 +906,8 @@
     // }
    //立即购买
     function shoppingPurchase(id) {
-        var cartNum=$("input[name='text']").val();
+        debugger
+            var cartNum=$("input[name='text']").val();
         id=id;
         remark=vm.addcar.remark;
         if (id && id != 'null') {

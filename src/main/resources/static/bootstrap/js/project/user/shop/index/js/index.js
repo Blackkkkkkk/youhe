@@ -179,7 +179,9 @@ var vm = new Vue({
         }
         ,   // 购物车数量增加
         addCardNum: function (event, index) {
+            debugger
             _this.addcar.cartNum++;
+
 
 
         }
@@ -188,6 +190,18 @@ var vm = new Vue({
             if (_this.addcar.cartNum > 0) {
                 _this.addcar.cartNum--;
             }
+        }
+        ,
+        //立即购买
+        purchase: function () {
+           id=vm.view.id;
+            var cartNum=$("input[name='text']").val();
+            // id=vm.id;
+            debugger
+            if (id && id != 'null') {
+                window.location.href="/order/shoppingPurchase?id=" + id + "&cartNum=" +cartNum;
+            }
+            // url = "/touristShop/addCart?id=" + el.id + "&remark=" + _this.addcar.remark + "&cartNum=" + _this.addcar.cartNum;
         }
         ,
         addCar: function (event, type) {
