@@ -168,6 +168,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         String remark=shop.getRemark();
         int cartNum=shop.getCartNum();
         int pirce=0;
+        String name="";
         String pageaddr="";
         List<Shop> shopListNew=new ArrayList<Shop>();
         if (shiroUser.getUserAccount() != null || shiroUser.getUserAccount() != "") {
@@ -187,6 +188,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 for (Shop shops : shopListNew) {
 //                    cartPrices=shop.getPirce()*cartNum;
                     //小订单号自动生成的订单号
+                    //名字
+                    name=shops.getName();
                     String smallOrderCode = getSmallOrderCode();
                     allPrices += shops.getPirce() * cartNum;
                     order.setStatus(30);
@@ -218,6 +221,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 //                resultMap.put("cartNum",cartNum);
                 //单价
                 resultMap.put("pirce",pirce);
+                resultMap.put("name",name);
+                resultMap.put("cartNum",cartNum);
                 resultMap.put("cartPrices",cartPrices);
 //                resultMap.put("allPrice",allPrice);
                 resultMap.put("bigOrderCode",bigOrderCode);

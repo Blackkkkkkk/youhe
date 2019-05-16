@@ -10,8 +10,11 @@ import java.util.List;
 public interface ShopMapper {
 
 
-    //查找角色表
+
     List<Shop> findShopList(Shop shop);
+
+    //查找详情
+    List<Shop> findShopListView(Shop shop);
 
     //查找分类
     List<Shop> findCommodity(Shop shop);

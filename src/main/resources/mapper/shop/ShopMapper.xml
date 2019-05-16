@@ -121,6 +121,65 @@
         DESC
     </select>
 
+
+    <select id="findShopListView" parameterType="com.youhe.entity.shop.Shop" resultMap="shopList">
+        SELECT sc.*,sp.SAVE_FILE_NAME,sp.PAGEADDR,ct.TID,ct.COLOR,ct.SIZE FROM shop_commodity sc
+        LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
+        LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id
+        AND
+        sp.ID =
+        (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
+        where sp.TYPE=1
+        <if test="id!=null">
+            AND sc.ID = #{id}
+        </if>
+
+        <if test="id!=null">
+            AND sc.ID = #{id}
+        </if>
+
+        <if test="isIndex !=null">
+            AND sp.SAVE_FILE_NAME is not NULL
+            AND sp.PAGEADDR is not NULL
+        </if>
+
+        <if test="status!=null">
+            AND sc.STATUS = #{status}
+        </if>
+        <if test="type!=null">
+            AND sp.TYPE = #{type}
+        </if>
+        ORDER BY
+        1 = 1
+        <if test="orderNum_Sort != null and orderNum_Sort ==1">
+            ,sc.ORDER_NUM
+        </if>
+        <if test="isNewProductOrderNum_Sort != null and isNewProductOrderNum_Sort == 1">
+            ,sc.IS_NEW_PRODUCT_ORDER_NUM
+        </if>
+        <if test=" top_Sort !=null and top_Sort ==1 ">
+            , sc.TOP
+        </if>
+        <if test=" register_Sort !=null and  register_Sort ==1 ">
+            , sc.REGISTER
+        </if>
+        <if test=" hotSale_Sort !=null and hotSale_Sort == 1">
+            , sc.HOT_SALE
+        </if>
+        <if test=" name_Sort !=null and name_Sort == 1">
+            , sc.NAME
+        </if>
+        <if test=" pirce_Sort !=null and pirce_Sort ==1 ">
+            , sc.PRICE
+        </if>
+        <if test=" num_Sort !=null and num_Sort == 1">
+            , sc.NUM
+        </if>
+        DESC
+    </select>
+
+
+
     <!--
      商品表和商品分类变关联，商品表和照片表关联，右表为照片表，
    -->

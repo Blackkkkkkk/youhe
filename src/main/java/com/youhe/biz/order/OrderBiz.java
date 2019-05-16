@@ -24,10 +24,11 @@ public class OrderBiz {
     private OrderMapper orderMapper;
 
     private Logger log = LoggerFactory.getLogger(OrderBiz.class);
-    //修改角色表
+    //修改
     public void updates(String bigOrderCode,String deliveryAddr) {
         orderMapper.updates(bigOrderCode,deliveryAddr);
     }
+
 
     /*@Autowired
     private OrderMapper ordertMapper;

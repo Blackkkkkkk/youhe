@@ -76,6 +76,9 @@ public class OrderController extends BaseController {
         return R.ok().put("url", url);
     }
 
+
+
+
     /**
      * 下单接口（不包含分账）
      */
@@ -107,10 +110,37 @@ public class OrderController extends BaseController {
         }
         payAmount=allPrices*100;
 //        String outTradeNo = "GO-" + DateUtil.format(new Date(), "yyyyMMddhhmm") + RandomUtil.randomString(3);
-        String url = PayUtil.cashierPay(bigOrderCode, payAmount, orderDetails);
+         String url = PayUtil.cashierPay(bigOrderCode, payAmount, orderDetails);
         return R.ok().put("url", url);
     }
 
+
+    /**
+     * 下单接口（不包含分账）
+     */
+    @GetMapping(value = "paymentPurchase")
+    public R paymentPurchase( String bigOrderCode,String deliveryAddr,Integer allPrices,String name,Integer cartNum,Integer pirce) {
+        String userAccount = ShiroUserUtils.getShiroUser().getUserAccount();
+        if (StrUtil.isBlank(userAccount)) {
+            return R.error("请登录后再下单支付");
+        }
+//        PayUtil.cashierPay("", 0L, new ArrayList<OrderDetails>());
+        // 获取购物车商品
+        List<Shop> shops = redisBiz.hscan(CartPrefix.getCartList, userAccount);
+//        List<Shop> shopList = shopBiz.findShopList(shops);
+        ArrayList<OrderDetails> orderDetails = new ArrayList<>();
+        long payAmount = 0L;    // 订单总金额
+            OrderDetails orderDetail = new OrderDetails();
+            orderDetail.setName(name);
+            orderDetail.setNum(cartNum);
+            orderDetail.setPirce(pirce);
+            orderDetails.add(orderDetail);
+//            payAmount += price * cartNum*100;
+            orderBiz.updates(bigOrderCode,deliveryAddr);
+        payAmount=allPrices*100;
+        String url = PayUtil.cashierPay(bigOrderCode, payAmount, orderDetails);
+        return R.ok().put("url", url);
+    }
 
 
 
@@ -182,7 +212,7 @@ public class OrderController extends BaseController {
         ModelAndView models = new ModelAndView();
         Map<String,Object> resultMap = orderService.shoppingPurchase(shop);
         models.addObject("shopList", resultMap);
-        models.setViewName("user/shop/shoppingOrder/shopping-order");
+        models.setViewName("user/shop/shoppingOrder/shopping-purchase");
         return  models;
     }
 

@@ -102,7 +102,7 @@ public class IndexController {
                 setTop_Sort(1).
                 setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
 
-        List<Shop> shopList = shopBiz.findShopList(shop);
+        List<Shop> shopList = shopBiz.findShopListView(shop);
 
         if (!CollectionUtils.isEmpty(shopList)) {
             return R.ok(1, "").put("shopList", shopList.get(0));
