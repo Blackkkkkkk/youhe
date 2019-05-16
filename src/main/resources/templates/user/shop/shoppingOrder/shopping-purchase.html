@@ -125,6 +125,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </td>
 
                                         <td class="shopping-cart-quantity">
+
                                             <div class="product-quantity">
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-up bootstrap-touchspin-up" type="button"
@@ -132,7 +133,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                                          class="fa fa-angle-up" ></i></button></span>
                                                 <input v-if="0 == 0" id="product-quantity"   th:value="${com_list.num}" type="text"
                                                        readonly
-                                                       class="form-control input-sm" ref="input1">
+                                                       class="form-control input-sm" ref="input1" name="text">
+                                                <input id="product-quantity"   th:value="${shopList.allPrices}" type="hidden" name="prices">
+
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-down bootstrap-touchspin-down"
                                                         type="button" @click="delCardNum($event,0)"><i
@@ -455,9 +458,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
-<!--<script type="text/javascript" src="../bootstrap/user/scripts/app.js"></script> -->
-<!--<script src="../js/shoppingOrder/js/shoppingOrder.js"></script>-->
-<!--<script src="../bootstrap/js/project/user/shop/shoppingCart/js/shoppingOrder.js"></script>-->
+<script src="../js/shoppingOrder/js/shoppingPurchase.js"></script>
 <script type="text/javascript">
     var layer;
         function pay (obj){
