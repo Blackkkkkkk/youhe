@@ -22,7 +22,7 @@
 
     <!-- 查询角色-->
     <select id="findRoleList" parameterType="com.youhe.entity.role.Role" resultMap="roleList">
-        SELECT *,(SELECT RNAME FROM sys_role WHERE s.PARENT_ID = RID) PARENT_NAME FROM sys_role S
+        SELECT *,(SELECT RNAME FROM sys_role WHERE s.PARENT_ID = RID) PARENT_NAME FROM sys_role s
         <where>
             <trim prefixOverrides="AND">
                 <if test="rid">

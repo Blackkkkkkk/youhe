@@ -39,6 +39,7 @@ CREATE TABLE `shop_commodity`  (
   `COMMODITY_ID` bigint(50) NULL DEFAULT NULL COMMENT '商品分类',
   `DESCRIBE` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   `AVAILABLE` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否可用,1：可用，0不可用',
+
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -95,7 +96,7 @@ CREATE TABLE `shop_order`  (
   `b_order_num` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '大订单号',
   `total_price` int(11) NOT NULL DEFAULT 0 COMMENT '订单总金额：单位分',
   `status` tinyint(2) NOT NULL DEFAULT 0 COMMENT '订单状态：0-已取消；30-待支付；60-已支付待发货；90-已发货',
-  `delivery_addr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货地址',
+  `delivery_addr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货地址',
   `end_time` datetime(0) NULL DEFAULT NULL COMMENT '完成时间',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
