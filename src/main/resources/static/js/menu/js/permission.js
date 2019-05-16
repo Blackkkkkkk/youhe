@@ -86,7 +86,7 @@ var vm = new Vue({
                     if (r.Status===0) {
 
                         layer.msg('操作成功', {icon: 1, time: 1000}, function () {
-                            vm.reload();
+                            location.reload();
                         });
                     } else {
 
@@ -108,7 +108,9 @@ var vm = new Vue({
                 vm.title = "修改";
                 vm.dept = r.dept;
                 vm.getDept();
+
             });
+
         },
         del: function () {
             var pid = getDeptId();
@@ -130,9 +132,9 @@ var vm = new Vue({
 
                         if (r.Status===0 ) {
                             layer.msg('操作成功', {icon: 1, time: 1000}, function () {
-
+                            location.reload();
                             });
-                            vm.reload();
+
                         } else {
                             layer.msg(r.msg, {icon: 2, time: 1000});
                         }

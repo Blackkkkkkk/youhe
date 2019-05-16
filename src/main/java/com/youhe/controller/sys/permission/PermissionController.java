@@ -1,14 +1,10 @@
 package com.youhe.controller.sys.permission;
 
 import com.youhe.biz.permisson.PermissonBiz;
-import com.youhe.biz.role.RoleBiz;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.controller.loginController.LoginController;
-import com.youhe.controller.sys.department.DepartmentController;
-import com.youhe.entity.department.Department;
 import com.youhe.entity.permission.Permission;
 import com.youhe.entity.permission.Permission_Role;
-import com.youhe.entity.role.Role;
 import com.youhe.entity.user.User;
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.ShiroUser;
@@ -22,7 +18,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
+
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +34,8 @@ import java.util.Map;
 @RequestMapping(value = "/permission")
 public class PermissionController {
 
-
+    @Resource
+    private ThymeleafViewResolver thymeleafViewResolver;
     @Autowired
     private PermissonBiz permissonBiz;
     @Autowired
@@ -153,6 +153,10 @@ public class PermissionController {
     @ResponseBody
     public R update(@RequestBody Permission dept) {
         permissonBiz.update(dept);
+        Map<String, Object> vars = new HashMap<>();
+        List<Permission> mentList = permissonBiz.selectMentLists();
+        vars.put("mentlist",mentList);
+        thymeleafViewResolver.setStaticVariables(vars);
         return R.ok();
     }
 
@@ -181,6 +185,10 @@ public class PermissionController {
     @ResponseBody
     public R del(Permission dept) {
         permissonBiz.del(dept);
+        Map<String, Object> vars = new HashMap<>();
+        List<Permission> mentList = permissonBiz.selectMentLists();
+        vars.put("mentlist",mentList);
+        thymeleafViewResolver.setStaticVariables(vars);
         return R.ok();
     }
 

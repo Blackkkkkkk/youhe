@@ -106,7 +106,7 @@
         var chineseStr = '';
         //分离金额后用的数组，预定义
         var parts;
-        var reg="^[0-9]*$";
+        var reg="^[0-9]+(.[0-9]{1,4})?$";
         var parrten=new RegExp(reg)
         if (money === ''||!(parrten.test(money))) { return ''; }
         money = parseFloat(money);
