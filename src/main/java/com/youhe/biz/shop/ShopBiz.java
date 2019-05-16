@@ -25,10 +25,10 @@ public class ShopBiz {
         return shopMapper.findShopList(shop);
     }
 
-    //查找商品详情表
-    public List<Shop> findShopListView(Shop shop) {
-        return shopMapper.findShopListView(shop);
-    }
+//    //查找商品详情表
+//    public List<Shop> findShopListView(Shop shop) {
+//        return shopMapper.findShopListView(shop);
+//    }
 
 
     //查找分类表

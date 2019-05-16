@@ -14,7 +14,7 @@ public interface ShopMapper {
     List<Shop> findShopList(Shop shop);
 
     //查找详情
-    List<Shop> findShopListView(Shop shop);
+    Shop findShopListView(Shop shop);
 
     //查找分类
     List<Shop> findCommodity(Shop shop);

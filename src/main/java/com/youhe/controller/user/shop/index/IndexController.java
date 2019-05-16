@@ -7,11 +7,14 @@ import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
 import com.youhe.entity.order.Order;
+import com.youhe.entity.order.OrderDetail;
 import com.youhe.entity.pay.Refund;
 import com.youhe.entity.shop.Picture;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.shop.Shop_index_carousel;
 import com.youhe.initBean.redis.CartPrefix;
+import com.youhe.mapper.shop.ShopMapper;
+import com.youhe.service.shop.OrderDetailService;
 import com.youhe.service.shop.OrderService;
 import com.youhe.serviceImpl.Controller.orderController.OrderControllerImpl;
 import com.youhe.utils.R;
@@ -63,6 +66,12 @@ public class IndexController {
 
     @Autowired
     private OrderService orderBiz;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+   private OrderDetailService orderDetailService;
+    @Autowired
+    private ShopMapper shopMapper;
 
     @RequestMapping(value = "/index")
     public String index(Model model, Shop_index_carousel shop_index_carousel) {
@@ -101,15 +110,16 @@ public class IndexController {
                 setRegister_Sort(1).
                 setTop_Sort(1).
                 setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
+        Shop shopList= shopMapper.findShopListView(shop);
 
-        List<Shop> shopList = shopBiz.findShopListView(shop);
-
-        if (!CollectionUtils.isEmpty(shopList)) {
-            return R.ok(1, "").put("shopList", shopList.get(0));
+//        List<Shop> shop = shopBiz.findShopListView(shop);
+        if (shopList != null ) {
+            return R.ok(1, "").put("shopList", shopList);
         } else {
             return R.ok(0, "");
         }
     }
+
 
 
     @RequestMapping(value = "/shoppingCart")

@@ -729,7 +729,7 @@
     <!--permissiondList: (...)-->
     <!--son: (...)-->
     <!--BEGIN fast view of a product-->
-    <!--<li th:each="com_list:${shopList}">-->
+    <!--<td th:text="${shopList}">-->
     <li th:each="shopList,info : ${shopList}">
         <div id="product-pop-up" style="display: none; width: 700px;">
             <div class="product-page product-pop-up">
@@ -739,20 +739,20 @@
                             <!--<img src="../bootstrap/user/temp/products/model7.jpg" alt="Cool green dress with red bell"-->
                             <!--class="img-responsive">-->
                             <!--<img class="pi-price" v-img="view.detail_picture">&lt;!&ndash;&ndash;&gt;-->
-                            <imp src="view.saveFileName"></imp>
+                            <!--<imp src="view.saveFileName"></imp>-->
                             <!--<img th:src="${shopList.detail_picture}" alt="Cool green dress with red bell">-->
-                            <img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"
-                                 alt="Cool green dress with red bell"
-                                 class="img-responsive">
+                            <!--<img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"-->
+                                 <!--alt="Cool green dress with red bell"-->
+                                 <!--class="img-responsive">-->
+
+                            <!--<img :src= "imgServer.down+scope.row.coverImage" style="width: 100px;height: 100px; "/>-->
+                            <img :src="view.pageaddr + view.saveFileName">
+                         <!--<img-->
+                                    <!--th:src="@{${shopList.pageaddr}+${shopList.saveFileName}}"-->
+                                    <!--alt="Berry Lace Dress">-->
                         </div>
                         <div class="product-other-images">
                             <a href="#" class="" v-for="item in minpic"><img alt="Berry Lace Dress" :src="item"></a>
-                            <!--<a href="#" class="active"><img alt="Berry Lace Dress"-->
-                            <!--src="../bootstrap/user/temp/products/model3.jpg"></a>-->
-                            <!--<a href="#"><img alt="Berry Lace Dress"-->
-                            <!--src="../bootstrap/user/temp/products/model4.jpg"></a>-->
-                            <!--<a href="#"><img alt="Berry Lace Dress"-->
-                            <!--src="../bootstrap/user/temp/products/model5.jpg"></a>-->
 
                         </div>
                     </div>
@@ -868,7 +868,6 @@
 <script type="text/javascript">
     function showView(id) {
         //初始化
-        debugger
         vm.addcar.cartNum = 0;
         vm.addcar.remark = "";
         $.ajax({
@@ -888,7 +887,7 @@
         layer.open({
             title: false,
             type: 1,
-            area: ['747px', 'auto'],
+            area: ['747px', '355px'],
             content: $('#product-pop-up'),//这可以写弹出框的html内容
         });
     }

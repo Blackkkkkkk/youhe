@@ -122,7 +122,7 @@
     </select>
 
 
-    <select id="findShopListView" parameterType="com.youhe.entity.shop.Shop" resultMap="shopList">
+    <select id="findShopListView" parameterType="com.youhe.entity.shop.Shop" resultType="com.youhe.entity.shop.Shop">
         SELECT sc.*,sp.SAVE_FILE_NAME,sp.PAGEADDR,ct.TID,ct.COLOR,ct.SIZE FROM shop_commodity sc
         LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
         LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id
