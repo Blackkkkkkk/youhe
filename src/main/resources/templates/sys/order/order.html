@@ -332,7 +332,8 @@
     //发货/order/manage/updateStaus?bOrderNum=' + borderNum
     function outGoods(status,borderNum) {
         if (status==='60') {
-            $.ajax({
+            layer.confirm("是否确认发货？", { btn: ["确定","取消"]  }, function(){
+                $.ajax({
                 type: "get",
                 url: '/order/manage/updateStaus?bOrderNum='+borderNum,
                 dataType: "json",
@@ -346,6 +347,7 @@
                     }
                 }
             })
+            });
             /*layer.open({
                 type: 1,
                 shadeClose: true,
@@ -359,14 +361,7 @@
                 }
             });*/
         }else{
-            layer.open({
-                type: 1,
-                shadeClose: true,
-                shade: 0.1,
-                scrollbar: true,
-                area: ['20%', '40%'],
-                content:"<p style='text-align: center'>未支付不能发货<p>"
-            });
+            layer.msg('未支付不能发货', {icon:2 , time: 1000})
         }
     }
     $(function () {
