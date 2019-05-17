@@ -231,6 +231,11 @@
             ztree.expandAll(false);
         });
     });
+    $(function () {
+        var $thisA = $('a[href="/commodity/index"]');
+        $thisA.parent().attr("class", "active");
+        $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
+    });
 </script>
 </body>
 </html>

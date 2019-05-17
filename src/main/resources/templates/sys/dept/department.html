@@ -212,6 +212,12 @@
         $('#btnCollapse').click(function () {
             ztree.expandAll(false);
         });
+
+        $(function () {
+            var $thisA = $('a[href="/department/index"]');
+            $thisA.parent().attr("class", "active");
+            $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
+        });
     });
 </script>
 </body>

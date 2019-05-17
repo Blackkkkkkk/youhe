@@ -226,9 +226,10 @@
     }
 
     $(function () {
-
-    })
-
+        var $thisA = $('a[href="/activiti/dealwithdo"]');
+        $thisA.parent().attr("class", "active");
+        $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
+    });
 
 </script>
 

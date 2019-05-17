@@ -95,6 +95,8 @@ public class OrderController extends BaseController {
 //        List<Shop> shopList = shopBiz.findShopList(shops);
         ArrayList<OrderDetails> orderDetails = new ArrayList<>();
         long payAmount = 0L;    // 订单总金额
+        String orderNo="";
+        orderNo=bigOrderCode;
         for (Shop shop : shops) {
             OrderDetails orderDetail = new OrderDetails();
             Order order=new Order();
@@ -110,7 +112,7 @@ public class OrderController extends BaseController {
         }
         payAmount=allPrices*100;
 //        String outTradeNo = "GO-" + DateUtil.format(new Date(), "yyyyMMddhhmm") + RandomUtil.randomString(3);
-         String url = PayUtil.cashierPay(bigOrderCode, payAmount, orderDetails);
+         String url = PayUtil.cashierPay(orderNo, payAmount, orderDetails);
         return R.ok().put("url", url);
     }
 
@@ -129,6 +131,8 @@ public class OrderController extends BaseController {
         List<Shop> shops = redisBiz.hscan(CartPrefix.getCartList, userAccount);
 //        List<Shop> shopList = shopBiz.findShopList(shops);
         ArrayList<OrderDetails> orderDetails = new ArrayList<>();
+        String orderNo="";
+        orderNo=bigOrderCode;
         long payAmount = 0L;    // 订单总金额
             OrderDetails orderDetail = new OrderDetails();
             orderDetail.setName(name);
@@ -138,7 +142,7 @@ public class OrderController extends BaseController {
 //            payAmount += price * cartNum*100;
             orderBiz.updates(bigOrderCode,deliveryAddr);
         payAmount=allPrices*100;
-        String url = PayUtil.cashierPay(bigOrderCode, payAmount, orderDetails);
+        String url = PayUtil.cashierPay(orderNo, payAmount, orderDetails);
         return R.ok().put("url", url);
     }
 

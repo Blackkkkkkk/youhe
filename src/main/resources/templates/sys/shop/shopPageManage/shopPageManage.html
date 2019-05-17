@@ -572,6 +572,11 @@
             content: '/shop/pictureCarousel?shopId=' + shopId
         })
     }
+    $(function () {
+        var $thisA = $('a[href="/shop/shopPageMange"]');
+        $thisA.parent().attr("class", "active");
+        $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
+    });
 </script>
 </body>
 </html>

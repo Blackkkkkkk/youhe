@@ -203,17 +203,18 @@
                 ]
         })
     });
+    // $(function () {
+    //
+    //     $("#flow").attr("class", "active");
+    //     $("#approvalProcess_ul").attr("class", "nav nav-second-level collapse in");
+    //
+    //     $("#backlog").attr("class", "active");
+    // });
     $(function () {
-
-        $("#flow").attr("class", "active");
-        $("#approvalProcess_ul").attr("class", "nav nav-second-level collapse in");
-
-        $("#backlog").attr("class", "active");
+    var $thisA = $('a[href="/activiti/dealwith"]');
+    $thisA.parent().attr("class", "active");
+    $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
     });
-
-
-
-
 
 </script>
 
