@@ -240,6 +240,7 @@
                 },
                 {
                     "render": function (data,type,row) {
+
                         return '<button style="margin-bottom: 0" class="btn btn-primary btn-xs btn-outline"  onclick =orderDetail(' + "'" + row.borderNum + "'" + ')>&nbsp;订单详情</button>'
                             +'&nbsp;'+'<button style="margin-bottom: 0" class="btn btn-primary btn-xs btn-outline"  onclick =outGoods(' + "'" + row.status+ "'"+ ',' + "'" + row.borderNum + "'" + ')>&nbsp;发货</button>'
                     },
@@ -365,7 +366,9 @@
         }
     }
     $(function () {
-
+        var $thisA = $('a[href="/order/manage/list"]');
+        $thisA.parent().attr("class", "active");
+        $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
     })
 
 

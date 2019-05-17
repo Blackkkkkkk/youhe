@@ -21,5 +21,10 @@ public interface OrderDetailService extends IService<OrderDetail> {
      */
     PageInfo<OrderDetail> findOrderDetails(OrderDetail orderDetail);
 
+    /**
+     * 修改订单状态
+     * @param bOrderNum
+     * @return
+     */
     int updateOrderStaus(String bOrderNum);
 }
