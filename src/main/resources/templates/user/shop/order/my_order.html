@@ -151,13 +151,11 @@
                                         <table class="table table-striped table-bordered table-hover dataTables-example">
                                             <thead>
                                             <tr>
-                                                <th></th>
-                                                <th>订单ID</th>
-                                                <th>订单编码</th>
-                                                <th>订单状态</th>
-                                                <th>发货状态</th>
-                                                <th>订单总价</th>
-                                                <th>订单完成时间</th>
+                                                <th style="text-align: center">订单ID</th>
+                                                <th style="text-align: center">订单编码</th>
+                                                <th style="text-align: center">订单状态</th>
+                                                <th style="text-align: center">订单总价</th>
+                                                <th style="text-align: center">订单完成时间</th>
                                             </tr>
                                             </thead>
                                             <tfoot>
@@ -458,8 +456,7 @@
                 {
                     url: "/order/manage/listData",
                     dataSrc: function (r) {
-                        console.log(r);
-                        return r.page.list;
+                        return r.orderList;
                     }
                     ,
                     dataType: 'json',
@@ -467,39 +464,39 @@
                 }
             ,
             columns: [
-                {data: null, orderable: false},
                 {data: "id"},
-                {data: "bigOrderCode"},
+                {data: "borderNum"},
                 {data: "status"},
-                {data: "transportStatus"},
                 {data: "totalPrice"},
-                {data: "orderEndTime"}
+                {data: "endTime"}
 
             ],
             aoColumnDefs: [
-                {
+                /*{
                     "render": function (data, type) {
                         return "<div align='center'><input type='radio' name='radio' value='" + data.id + "' ></div>";
                     },
                     "aTargets": 0 //第一列
-                },
+                },*/
                 {
                     "render": function (data, type) {
-                        // 0 未支付   1 支付成功  2 支付超时
+                        // 订单状态：0-已取消；30-待支付；60-已支付待发货；90-已发货
                         switch (Number(data)) {
                             case 0:
-                                return '未支付';
-                            case 1:
-                                return '支付成功';
-                            case 2:
-                                return '支付超时';
+                                return '已取消';
+                            case 30:
+                                return '待支付';
+                            case 60:
+                                return '已支付待发货';
+                            case 90:
+                                return '已发货';
                             default:
                                 return data;
                         }
                     },
-                    "aTargets": 3 //第一列
+                    "aTargets": 2
                 },
-                {
+               /* {
                     "render": function (data, type) {
                         // 0 未发货   1 已发货   2 已收货
                         switch (Number(data)) {
@@ -514,16 +511,16 @@
                         }
                     },
                     "aTargets": 4 //第一列
-                },
+                },*/
                 {
                     "render": function (data, type) {
-                        if (data) {
+                        if (data!=null) {
                             return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
                         } else {
                             return '';
                         }
                     },
-                    "aTargets": 6 //第7列
+                    "aTargets": 4
                 },
             ],
             columnDefs:
@@ -554,7 +551,20 @@
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
-
+    $('.dataTables-example').on('click','tr', function() {
+            var borderNum = $($(this).find('td')[1]).text();
+            if (borderNum) {
+                layer.open({
+                    type: 2,
+                    title: '订单详情',
+                    shadeClose: true,
+                    shade: 0.1,
+                    scrollbar: true,
+                    area: ['70%', '90%'],
+                    content: '/order/manage/detail?bOrderNum=' + borderNum
+                });
+            }
+        });
     function detail(shopId) {
         top.layer.open({
             type: 2,
@@ -567,22 +577,7 @@
         })
     }
 
-    $('.dataTables-example').on('click', 'tr', function () {
-        var bigOrderCode = $($(this).find('td')[2]).text();
-        console.log('bigOrderCode = ', bigOrderCode);
-        if (bigOrderCode) {
-            layer.open({
-                type: 2,
-                title: '订单详情',
-                shadeClose: true,
-                shade: 0.1,
-                scrollbar: true,
-                area: ['70%', '90%'],
-                content: '/order/detail?bigOrderCode=' + bigOrderCode
-            });
-        }
 
-    });
 
     $(function () {
         yuheUtils.checkLogin();
