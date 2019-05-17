@@ -140,6 +140,7 @@ var vm = new Vue({
                 vm.getDetail(id);
 
                 vm.showList = false;
+                vm.getDept();
             }
         },
         del: function (id) {
