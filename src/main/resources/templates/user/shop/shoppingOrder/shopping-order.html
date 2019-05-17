@@ -473,13 +473,13 @@ License: You must have a valid license purchased only from themeforest(the above
                 return false;
             }
             $.get("/order/payment?bigOrderCode="+bigOrderCode+"&deliveryAddr="+deliveryAddr+"&allPrices="+allPrices, function (r) {
+                console.info(r);
                 if (r.Status == 0) {
+
                     window.location.href = (r.url)
                 } else {
-                    layer.msg(r.msg, {
-                        icon: 2,
-                        time: 500
-                    });
+                    console.info(r);
+                   alert("提交订单失败："+ r.msg);
                 }
             });
         }

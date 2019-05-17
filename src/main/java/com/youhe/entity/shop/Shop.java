@@ -91,6 +91,7 @@ public class Shop extends SysBaseEntity {
 
     private int AllPrices;
     private String bigOrderCode;
+    private Integer price;//商品价格
 
 
 }

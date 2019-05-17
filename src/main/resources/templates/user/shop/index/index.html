@@ -759,14 +759,16 @@
                     <div class="col-md-6 col-sm-6 col-xs-9">
 
                         <h3><a v-text="view.name"></a></h3>
+                        <!--<div class="pi-price" v-text="view.price"></div>-->
                         <!--<h1>Cool green dress with red bell</h1>-->
                         <div class="price-availability-block clearfix">
                             <!--<div class="price">-->
                             <!--<strong><span>$</span>47.00</strong>-->
                             <!--<em>$<span>62.00</span></em>-->
                             <!--</div>-->
-                            <div class="pi-price" v-text="view.pirce"></div>
-                            <!--<div class="pi-price" th:text="'¥'+${com_list.pirce}"></div>-->
+                           <a class="pi-price">¥</a>
+                            <div class="pi-price"  v-text="view.price"></div>
+                            <!--<div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>-->
                             <div class="availability">
                                 库存:
                                 <a th:if="${shopList.available}==null" th:text="无货"></a>
@@ -790,7 +792,7 @@
                             <div class="product-quantity">
                                   <span class="input-group-btn"><button
                                           class="btn quantity-up bootstrap-touchspin-up" type="button"
-                                          @click="addCardNum($event,0)" th:id="${shopList.id}"><i
+                                          @click="addCardNum($event,0)"><i
                                           class="fa fa-angle-up"></i></button></span>
                                 <input id="product-quantity" type="text"
                                        :value="1"
@@ -798,7 +800,7 @@
                                        class="form-control input-sm" ref="input1" name="text">
                                 <span class="input-group-btn"><button
                                         class="btn quantity-down bootstrap-touchspin-down"
-                                        type="button" @click="delCardNum($event,0)" th:id="${shopList.id}"><i
+                                        type="button" @click="delCardNum($event,0)"><i
                                         class="fa fa-angle-down"></i></button></span>
                             </div>
 
@@ -813,7 +815,7 @@
 
 
                             <a @click="addCar($event,2)" class="btn btn-primary"
-                               th:id="${shopList.id}">添加到购物车</a>
+                              >添加到购物车</a>
                         </div>
                     </div>
                     <div class="sticker sticker-sale"></div>
