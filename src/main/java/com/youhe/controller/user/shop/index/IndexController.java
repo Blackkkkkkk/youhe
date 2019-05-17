@@ -113,11 +113,11 @@ public class IndexController {
         Shop shopList= shopMapper.findShopListView(shop);
 
 //        List<Shop> shop = shopBiz.findShopListView(shop);
-        if (shopList != null ) {
-            return R.ok(1, "").put("shopList", shopList);
-        } else {
-            return R.ok(0, "");
-        }
+       shopList.setStockNum(shopList.getNum());
+//        System.out.println(shopList.getNum());
+
+        return R.ok().put("shopList", shopList);
+
     }
 
 

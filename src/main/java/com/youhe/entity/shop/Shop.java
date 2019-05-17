@@ -15,6 +15,7 @@ import java.util.Date;
 public class Shop extends SysBaseEntity {
 
 
+    private static final long serialVersionUID = -7160520443360732807L;
     private Integer id;
     private String name;              //商品名称
     private Integer pirce;                //价格
@@ -92,6 +93,7 @@ public class Shop extends SysBaseEntity {
     private int AllPrices;
     private String bigOrderCode;
     private Integer price;//商品价格
+    private int stockNum;
 
 
 }

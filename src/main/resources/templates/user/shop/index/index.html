@@ -730,7 +730,7 @@
     <!--son: (...)-->
     <!--BEGIN fast view of a product-->
     <!--<td th:text="${shopList}">-->
-    <li th:each="shopList,info : ${shopList}">
+    <li>
         <div id="product-pop-up" style="display: none; width: 700px;">
             <div class="product-page product-pop-up">
                 <div class="row">
@@ -771,15 +771,18 @@
                             <!--<div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>-->
                             <div class="availability">
                                 库存:
-                                <a th:if="${shopList.available}==null" th:text="无货"></a>
-                                <a th:if="${shopList.available}!=null" th:text="${shopList.available}>0?'有库存':'无货'"></a>
+                                <!--<a th:if="${shopList.available}==null" th:text="无货"></a>-->
+                                <!--<a th:if="${shopList.available}!=null" th:text="${shopList.available}>0?'有库存':'无货'"></a>-->
+                                <a  v-if="view.stockNum==0">无货</a>
+                                <!--<a  v-if="view.stockNum==0">无货</a>-->
+                                <a  v-if="view.stockNum!=0" >有货</a>
                             </div>
                         </div>
-                        <div class="description">
-                            <!--describe-->
-                            <p><a th:text="${shopList.describe}"></a></p>
+                        <!--<div class="description">-->
+                            <!--&lt;!&ndash;describe&ndash;&gt;-->
+                            <!--<p><a th:text="${shopList.describe}"></a></p>-->
 
-                        </div>
+                        <!--</div>-->
                         <div class="product-page-options">
                             <div class="col-sm-3 control-label" style="line-height: 34px;text-align: right;">备注</div>
                             <div class="col-sm-9">
@@ -875,10 +878,11 @@
         $.ajax({
             data: {"id": id},
             type: "POST",
-            dataType: 'json',
+            // dataType: 'json',
             url: "/touristShop/viewList",
             success: function (data) {
-                if (data.Status == 1) {
+                console.log('d= ', data);
+                if (data.Status == 0) {
                     vm.view = data.shopList;
 
                 }
