@@ -67,19 +67,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
 
     @Override
-    public PageInfo<Order> findOrderByPage(Order order) {
-        PageHelper.startPage(order.getPageNum(), order.getPageSize());
+    public List<Order> findOrderBy(Order order) {
+        /*PageHelper.startPage(order.getPageNum(), order.getPageSize());*/
         List<Order> orders = this.findOrder(order);
-        return new PageInfo<>(orders);
+        return orders;
     }
 
-    @Override
-    public PageInfo<OrderDetail> findOrderDetailByPage(OrderDetail orderDetail) {
-        PageHelper.startPage(orderDetail.getPageNum(), orderDetail.getPageSize());
-        List<OrderDetail> orderDetails = orderDetailService.list(new QueryWrapper<OrderDetail>().lambda()
-                .eq(OrderDetail::getBOrderNum, orderDetail.getBOrderNum()));
-        return new PageInfo<>(orderDetails);
-    }
+
 
     //结算
     @Override

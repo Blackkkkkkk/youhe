@@ -31,14 +31,9 @@ public interface OrderService extends IService<Order> {
      * @param order 订单参数
      * @return pageInfo
      */
-    PageInfo<Order> findOrderByPage(Order order);
+   List<Order> findOrderBy(Order order);
 
-    /**
-     * 分页：查找订单列表
-     * @param orderDetail 订单详情参数
-     * @return pageInfo
-     */
-    PageInfo<OrderDetail> findOrderDetailByPage(OrderDetail orderDetail);
+
 
 //    void shoppingOrder();
 

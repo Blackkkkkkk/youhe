@@ -15,10 +15,10 @@
     <link rel="stylesheet" href="../bootstrap/js/dept/css/bootstrap-table.min.css">
     -->
 
-    <link href="../bootstrap/js/project/sys/shop/css/fileinput.min.css" rel="stylesheet">
+    <link href="/bootstrap/js/project/sys/shop/css/fileinput.min.css" rel="stylesheet">
 
 
-    <link rel="stylesheet" type="text/css" href="../bootstrap/dataTable/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/dataTable/datatables.min.css"/>
 
 
     <style type="text/css">
@@ -33,6 +33,7 @@
     </style>
 </div>
 <body>
+<input type="hidden"  id="bigOrder" th:value="${bOrderNum}"/>
 <div id="wrapper">
     <!--<nav th:include="common/Left_Ment :: left"></nav>-->
     <div class="row">
@@ -93,17 +94,17 @@
 </div>
 <div th:include="common/Head :: js"></div>
 
-<script src="../bootstrap/js/dept/js/vue.min.js"></script>
+<script src="/bootstrap/js/dept/js/vue.min.js"></script>
 
 
-<script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
+<script src="/bootstrap/js/dept/js/bootstrapValidator.js"></script>
 
-<script src="../bootstrap/js/project/sys/shop/js/fileinput.min.js"></script>
-<script src="../bootstrap/js/project/sys/shop/js/zh.js"></script>
-<script src="../bootstrap/js/project/sys/shop/js/shopData.js"></script>
+<script src="/bootstrap/js/project/sys/shop/js/fileinput.min.js"></script>
+<script src="/bootstrap/js/project/sys/shop/js/zh.js"></script>
+<script src="/bootstrap/js/project/sys/shop/js/shopData.js"></script>
 
 
-<script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
+<script type="text/javascript" src="/bootstrap/dataTable/datatables.min.js"></script>
 
 
 <!-- Page-Level Scripts -->
@@ -174,23 +175,24 @@
             ],
             ajax:
                 {
-                    url: "/order/manage/detailListData",
+                    url: "/order/manage/detailListData?bOrderNum="+$("#bigOrder").val(),
                     dataSrc: function (r) {
+                        console.log(r);
                         return r.page.list;
                     },
                     data: function (d) {
-                        d.bigOrderCode = getUrlParam("bigOrderCode")
+                        d.borderNum = getUrlParam("borderNum")
                     },
                     dataType: 'json',
-                    type: "post",
+                    type: "get",
                 }
             ,
             columns: [
                 {data: null, orderable: false},
-                {data: "bigOrderCode"},
-                {data: "orderCode"},
-                {data: "name"},
-                {data: "pirce"},
+                {data: "borderNum"},
+                {data: "sorderNum"},
+                {data: "commodityName"},
+                {data: "price"},
                 {data: "num"},
                 {data: "remark"}
 

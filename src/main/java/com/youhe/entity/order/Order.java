@@ -63,11 +63,11 @@ public class Order extends SysBaseEntity implements Serializable {
     /**
      * 完成时间
      */
-    private LocalDateTime endTime;
+    private String endTime;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private  String createTime;
 
 }
