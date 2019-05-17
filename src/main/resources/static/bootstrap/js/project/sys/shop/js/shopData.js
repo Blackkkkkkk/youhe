@@ -243,7 +243,7 @@ var vm = new Vue({
                 type: 1,
                 offset: '50px',
                 skin: 'layui-layer-molv',
-                title: "选择角色",
+                title: "选择分类",
                 maxmin: true,
                 area: ['380px', '380px'],
                 shade: 0,

@@ -243,9 +243,9 @@ var Dept = {
 Dept.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
-        {title: '角色ID', field: 'cid', visible: false, align: 'center', valign: 'middle', width: '80px'},
-        {title: '角色名称', field: 'cname', align: 'center', valign: 'middle', sortable: true, width: '180px'},
-        {title: '上级角色', field: 'parentName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '商品ID', field: 'cid', visible: false, align: 'center', valign: 'middle', width: '80px'},
+        {title: '商品名称', field: 'cname', align: 'center', valign: 'middle', sortable: true, width: '180px'},
+        {title: '上级商品', field: 'parentName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
         {title: '排序号', field: 'orderNum', align: 'center', valign: 'middle', sortable: true, width: '100px'}]
     return columns;
 };
