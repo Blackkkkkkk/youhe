@@ -1,9 +1,11 @@
 package com.youhe.utils.pay.sdk.utils;
 
-import com.youhe.controller.user.shop.index.IndexController;
+import com.youhe.YouheApplication;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,8 +17,11 @@ public abstract class Config {
 
     private static boolean initialized = false;
 
-    public static void initialize(File file) {
-        System.out.println(file.getAbsoluteFile());
+    /**
+     * edit by Kalvin:为解决 jar包启动项目的情况下，无法读取文件资料，把参数File更改为FileInputStream
+     * @param is 把参数File更改为FileInputStream
+     */
+    public static void initialize(InputStream is) {
         if (initialized) {
             return;
         }
@@ -25,7 +30,7 @@ public abstract class Config {
                 return;
             }
             try {
-                props.load(new FileInputStream(file));
+                props.load(is);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -36,8 +41,9 @@ public abstract class Config {
     public static String getProperty(String key) {
         if (!initialized) {
             try {
-                initialize(new File(ClassLoader.getSystemResource("config.properties").toURI()));
-            } catch (URISyntaxException e) {
+                File file = new File(ClassLoader.getSystemResource("config.properties").toURI());
+                initialize(new FileInputStream(file));
+            } catch (URISyntaxException | FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
@@ -222,6 +228,15 @@ public abstract class Config {
     }
 
     /**
+     * 公钥文件
+     * edit by Kalvin:为解决 jar包启动项目的情况下，无法读取文件资料，把返回File更改为InputStream
+     */
+    public static InputStream getPublicKeyInputStream() throws Exception {
+        String key = getProperty("public_key");
+        return YouheApplication.class.getResourceAsStream("../../static/payproperties/" + key);
+    }
+
+    /**
      * @return 私钥文件
      * @throws Exception
      */
@@ -231,9 +246,17 @@ public abstract class Config {
         if (keyFile.exists()) {
             return keyFile;
         } else {
-
             return new File(Config.class.getClassLoader().getResource("").getPath() + "static/payproperties/" + key);
         }
+    }
+
+    /**
+     * 私钥文件
+     * edit by Kalvin:为解决 jar包启动项目的情况下，无法读取文件资料，把返回File更改为InputStream
+     */
+    public static InputStream getPrivateKeyInputStream() throws Exception {
+        String key = getProperty("private_key");
+        return YouheApplication.class.getResourceAsStream("../../static/payproperties/" + key);
     }
 
     /**

@@ -1,11 +1,6 @@
 package com.youhe.utils.pay.sdk.utils;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -66,6 +61,25 @@ public class RsaUtils {
         signature.update(content.getBytes(CHARSET));
         return signature.verify(Base64.decodeBase64(signStr.getBytes(CHARSET)));
     }
+
+	/**
+	 * create by Kalvin 返回报文验签
+	 * @param publicKeyIs   公钥字符串输入流
+	 * @param content     验签原文报文
+	 * @param signStr     返回签名字符串
+	 * @return            验签结果
+	 * @throws Exception
+	 */
+	public static boolean vertify(InputStream publicKeyIs, String content, String signStr)throws Exception{
+		Signature signature = Signature.getInstance(algorithm);
+		CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
+		byte[] bytes = new byte[publicKeyIs.available()];
+		publicKeyIs.read(bytes);
+		Certificate certificate = certificateFactory.generateCertificate(new ByteArrayInputStream(bytes));
+		signature.initVerify(certificate.getPublicKey());
+		signature.update(content.getBytes(CHARSET));
+		return signature.verify(Base64.decodeBase64(signStr.getBytes(CHARSET)));
+	}
 	
 
     /**
@@ -224,7 +238,7 @@ public class RsaUtils {
          Certificate certificate = certificateFactory.generateCertificate(new ByteArrayInputStream(Base64.decodeBase64(keyStr.getBytes(CHARSET))));
          return certificate.getPublicKey();
     }
-    
+
     public static String getPublicKey(String publicKeyPath){
     	if(publicKeyPath==null){
     		throw new RuntimeException("请设置公钥证书路径！");

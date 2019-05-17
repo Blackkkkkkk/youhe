@@ -1,12 +1,12 @@
 package com.youhe.utils.pay.sdk.utils;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.util.Enumeration;
-
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * Created by dhcao on 2018/1/16.
@@ -21,9 +21,10 @@ public class KeyUtil {
         try {
             ks = KeyStore.getInstance("PKCS12");
             // 获得密钥库文件流
-            InputStream is = new FileInputStream(com.youhe.utils.pay.sdk.utils.Config.getPrivateKeyFile());
+//            InputStream is = new FileInputStream(com.youhe.utils.pay.sdk.utils.Config.getPrivateKeyFile());
+            InputStream is = Config.getPrivateKeyInputStream();
             // 加载密钥库
-            ks.load(is, com.youhe.utils.pay.sdk.utils.Config.getPrivateKeyPassword().toCharArray());
+            ks.load(is, Config.getPrivateKeyPassword().toCharArray());
 
             // 关闭密钥库文件流
             is.close();
@@ -44,7 +45,8 @@ public class KeyUtil {
         try {
             ks = KeyStore.getInstance("PKCS12");
             // 获得密钥库文件流
-            InputStream is = new FileInputStream(com.youhe.utils.pay.sdk.utils.Config.getPrivateKeyFile());
+//            InputStream is = new FileInputStream(com.youhe.utils.pay.sdk.utils.Config.getPrivateKeyFile());
+            InputStream is = Config.getPrivateKeyInputStream();
             // 加载密钥库
             ks.load(is, com.youhe.utils.pay.sdk.utils.Config.getPrivateKeyPassword().toCharArray());
 

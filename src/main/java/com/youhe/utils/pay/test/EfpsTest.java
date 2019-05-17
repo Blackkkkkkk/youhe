@@ -96,7 +96,7 @@ public class EfpsTest {
     public void initialize() throws URISyntaxException {
 
 
-        Config.initialize(new File(EfpsTest.class.getClassLoader().getResource("config_uat.properties").getPath()));
+//        Config.initialize(new File(EfpsTest.class.getClassLoader().getResource("config_uat.properties").getPath()));
         // Config.initialize(new File("D:/work/demo/target/test-classes/config_uat.properties"));
         //  Config.initialize(new File("D:\work\demo\target\test-classes\config_test.properties"));
 
@@ -917,7 +917,7 @@ public class EfpsTest {
         String notifyUrl = NOTIFY_URL + "/WithdrawalForSubMerchant";
         String remark = "";
 
-        String publicKeyPath = Config.getPublicKeyFile().getAbsolutePath();
+        String publicKeyPath = "";//Config.getPublicKeyFile().getAbsolutePath();
 
         String bankUserName = RsaUtils.encryptByPublicKey("张三", RsaUtils.getPublicKey(publicKeyPath));
         String bankUserCert = RsaUtils.encryptByPublicKey("3623xxxx234324", RsaUtils.getPublicKey(publicKeyPath));
@@ -1000,7 +1000,7 @@ public class EfpsTest {
         String outTradeNo = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()); //交易编号,商户侧唯一
         String customerCode = Config.getCustomerCode(); //商户编号
 
-        String publicKeyPath = Config.getPublicKeyFile().getAbsolutePath();
+        String publicKeyPath = "";//Config.getPublicKeyFile().getAbsolutePath();
 
         String certNameEnc = RsaUtils.encryptByPublicKey("柯工要", RsaUtils.getPublicKey(publicKeyPath));
         String certIdEnc = RsaUtils.encryptByPublicKey("445302198805273030", RsaUtils.getPublicKey(publicKeyPath));
@@ -1044,7 +1044,7 @@ public class EfpsTest {
         String notifyUrl = NOTIFY_URL + "/WithdrawalForSubMerchant";
         String remark = "";
 
-        String publicKeyPath = Config.getPublicKeyFile().getAbsolutePath();
+        String publicKeyPath = "";//Config.getPublicKeyFile().getAbsolutePath();
 
 //		String userName = RsaUtils.encryptByPublicKey("银联一", RsaUtils.getPublicKey(publicKeyPath));
 //		String certificatesNo = RsaUtils.encryptByPublicKey("310115198903261113", RsaUtils.getPublicKey(publicKeyPath));

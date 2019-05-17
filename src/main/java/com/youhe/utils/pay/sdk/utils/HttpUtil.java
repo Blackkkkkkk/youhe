@@ -1,6 +1,7 @@
 package com.youhe.utils.pay.sdk.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
@@ -77,7 +78,7 @@ public class HttpUtil {
                 debug("响应证书号：%s", signNo);
                 debug("响应签名：%s", signResult);
 
-                if (signResult != null && signResult != "" && verify(jsonString, signResult, com.youhe.utils.pay.sdk.utils.Config.getPublicKeyFile().getAbsolutePath())) {
+                if (signResult != null && signResult != "" && verify(jsonString, signResult, com.youhe.utils.pay.sdk.utils.Config.getPublicKeyInputStream())) {
                     responseResult = JSONObject.parseObject(jsonString, clazz);
                 } else {
                     responseResult.setReturnCode("-1");
@@ -124,6 +125,28 @@ public class HttpUtil {
         if (content != null && !content.equals("") && sign != null && !sign.equals("")) {
 
             boolean result = com.youhe.utils.pay.sdk.utils.RsaUtils.vertify(com.youhe.utils.pay.sdk.utils.RsaUtils.getPublicKey(publicKey), content, sign);
+            debug("验签结果:" + result);
+            if (result) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * create by kalvin 验签
+     *
+     * @param content 原字符串
+     * @param sign    已签名字符串
+     * @return
+     * @throws Exception
+     */
+    public static boolean verify(String content, String sign, InputStream publicKeyIs) throws Exception {
+
+        boolean flag = false;
+        if (content != null && !content.equals("") && sign != null && !sign.equals("")) {
+
+            boolean result = com.youhe.utils.pay.sdk.utils.RsaUtils.vertify(publicKeyIs, content, sign);
             debug("验签结果:" + result);
             if (result) {
                 flag = true;

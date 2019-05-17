@@ -1,10 +1,7 @@
 package com.youhe.utils.pay;
 
-import cn.hutool.core.util.ClassUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.youhe.biz.order.OrderBiz;
-import com.youhe.controller.user.shop.index.IndexController;
-import com.youhe.entity.order.Order;
+import com.youhe.YouheApplication;
 import com.youhe.entity.order.OrderDetails;
 import com.youhe.entity.pay.Refund;
 import com.youhe.exception.YuheOAException;
@@ -20,7 +17,7 @@ import com.youhe.utils.pay.sdk.utils.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +30,8 @@ public class PayUtil {
     private final static Logger LOGGER = LoggerFactory.getLogger(PayUtil.class);
 
     static {
-        Config.initialize(new File(ClassUtil.getClassPath() + "static/payproperties/config_uat.properties"));
+        InputStream is = YouheApplication.class.getResourceAsStream("../../static/payproperties/config_uat.properties");
+        Config.initialize(is);
     }
 
     /**

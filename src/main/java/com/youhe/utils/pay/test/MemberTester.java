@@ -26,7 +26,7 @@ import com.youhe.utils.pay.sdk.utils.Config;
 public class MemberTester {
     @Before
     public void initialize() throws URISyntaxException {
-		com.youhe.utils.pay.sdk.utils.Config.initialize(new File(ClassLoader.getSystemResource("config_uat.properties").toURI()));
+//		com.youhe.utils.pay.sdk.utils.Config.initialize(new File(ClassLoader.getSystemResource("config_uat.properties").toURI()));
         System.setProperty("sdk.mode", "debug");
     }
 
