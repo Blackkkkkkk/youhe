@@ -340,27 +340,16 @@
                 dataType: "json",
                 success: function (r) {
                     if(r.Status===0){
-                        alert("发货成功")
+                        layer.msg('发货成功', {icon:1 , time: 1000})
                         var table = $('.dataTables-example').DataTable();
                         table.ajax.reload();
                     }else{
-                        alert("发货失败")
+                        layer.msg('发货失败', {icon:2 , time: 1000})
                     }
                 }
             })
             });
-            /*layer.open({
-                type: 1,
-                shadeClose: true,
-                shade: 0.1,
-                scrollbar: true,
-                area: ['20%', '40%'],
-                content:"是否发货",
-                btn: ['确定', '取消'],
-                yes:function(){
 
-                }
-            });*/
         }else{
             layer.msg('未支付不能发货', {icon:2 , time: 1000})
         }
