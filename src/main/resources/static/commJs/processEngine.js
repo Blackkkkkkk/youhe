@@ -151,7 +151,7 @@ console.log(value)
         infoId1 = infoId1.substring(0, infoId1.lastIndexOf(','));
     }
 
-    $(".glyphicon-user").html(info).append(info1);
+    $("#userShow").text(info).append(info1);
     $("input[name='nextUserId']").val(infoId+ infoId1);
 }
 

@@ -4,7 +4,7 @@
 
     <!--流程表单头-->
     <div th:fragment="formHeadView">
-        <div class="container" style="padding-left:0!important;padding-right:0!important;background: #999688">
+        <div class="container" style="padding-left:0!important;padding-right:0!important;background: #5f83b9">
             <div style="float: left; padding: 8px; color: white;">
                 <span th:text="${taskData.flowVariable['processName']}"></span>
                 <span th:text="${'-当前环节：' + taskData.flowVariable['currentNodeName']}"></span>
@@ -54,8 +54,9 @@
                             <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
                                 <label class="col-sm-2 control-label">审批人</label>
                                 <div class="form-group">
-                                    <span class="glyphicon glyphicon-user" style="margin-top: 6px;"  onclick="selUser()">
+                                    <span class="glyphicon glyphicon-user" style="margin-top: 9px;"  onclick="selUser()">
                                     </span>
+                                    <span id="userShow"></span>
                                     <input type="hidden" name="nextUserId"  value=""/>
                                 </div>
                             </div>
