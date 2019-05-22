@@ -124,12 +124,17 @@ console.log(value)
          id=value[i];
         for(var j=0;j<id.length;j++){
                 if(id[j].checked) {
+                    console.log(id[j])
                     if(id[j].isParent){
+
                         id1=id[j].children
                    for(var h=0;h<id1.length;h++){
-                       info += id1[h].userDepartmentName+ ","
-                       infoId += id1[h].uid + ","
+                       if(id1[h].checked) {
+                           info += id1[h].userDepartmentName + ","
+                           infoId += id1[h].uid + ","
+                       }
                       }
+
                     }else if(id[j].parentId==0){
                             info1+=id[j].userDepartmentName+","
                             infoId1+=id[j].deptId+","
