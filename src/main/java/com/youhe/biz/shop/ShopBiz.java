@@ -73,4 +73,10 @@ public class ShopBiz {
         return shopMapper.update(shop);
     }
 
+
+    //查找商品详情页信息
+    public List<Shop> findshopDetail(Shop shop) {
+        return shopMapper.findshopDetail(shop);
+    }
+
 }

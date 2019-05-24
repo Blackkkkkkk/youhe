@@ -69,7 +69,7 @@ public class IndexController {
     @Autowired
     private OrderService orderService;
     @Autowired
-   private OrderDetailService orderDetailService;
+    private OrderDetailService orderDetailService;
     @Autowired
     private ShopMapper shopMapper;
 
@@ -110,16 +110,15 @@ public class IndexController {
                 setRegister_Sort(1).
                 setTop_Sort(1).
                 setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
-        Shop shopList= shopMapper.findShopListView(shop);
+        Shop shopList = shopMapper.findShopListView(shop);
 
 //        List<Shop> shop = shopBiz.findShopListView(shop);
-       shopList.setStockNum(shopList.getNum());
+        shopList.setStockNum(shopList.getNum());
 //        System.out.println(shopList.getNum());
 
         return R.ok().put("shopList", shopList);
 
     }
-
 
 
     @RequestMapping(value = "/shoppingCart")

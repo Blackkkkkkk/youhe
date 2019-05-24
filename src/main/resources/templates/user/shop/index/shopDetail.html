@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+
+<!-- Head BEGIN -->
+<head>
+    <meta charset="utf-8">
+    <title>Metronic Shop UI</title>
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta content="Metronic Shop UI description" name="description">
+    <meta content="Metronic Shop UI keywords" name="keywords">
+    <meta content="keenthemes" name="author">
+
+    <meta property="og:site_name" content="-CUSTOMER VALUE-">
+    <meta property="og:title" content="-CUSTOMER VALUE-">
+    <meta property="og:description" content="-CUSTOMER VALUE-">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
+    <meta property="og:url" content="-CUSTOMER VALUE-">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/favicon.ico" rel="SHORTCUT ICON" type="image/ico">
+
+    <!-- Fonts START -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&subset=all" rel="stylesheet"
+          type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow&subset=all" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900&subset=all"
+          rel="stylesheet" type="text/css"><!--- fonts for slider on the index page -->
+    <!-- Fonts END -->
+
+    <!-- Global styles START -->
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/bootstrap-3.3.4.css">
+    <!-- Global styles END -->
+
+    <!-- Page level plugin styles START -->
+    <link href="../bootstrap/user/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
+    <link href="../bootstrap/user/plugins/bxslider/jquery.bxslider.css" rel="stylesheet">
+    <link rel="stylesheet" href="../bootstrap/user/plugins/layerslider/css/layerslider.css" type="text/css">
+    <!-- Page level plugin styles END -->
+
+    <!-- Theme styles START -->
+    <link href="../bootstrap/user/css/style-metronic.css" rel="stylesheet" type="text/css">
+    <link href="../bootstrap/user/css/style.css" rel="stylesheet" type="text/css">
+    <link href="../bootstrap/user/css/style-responsive.css" rel="stylesheet" type="text/css">
+    <link href="../bootstrap/user/css/custom.css" rel="stylesheet" type="text/css">
+    <!-- Theme styles END -->
+    <link href="../layui/css/layui.css" rel="stylesheet">
+    <style>
+        .layui-layer-content {
+            padding: 10px;
+        }
+
+        #product-pop-up a:focus, #product-pop-up a:hover, #product-pop-up a:active {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .viewPicture {
+            width: 400px !important;
+            height: 400px !important;
+        }
+
+        .viewFont {
+            color: #7b8a99;
+            font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
+        }
+
+        .colourSize {
+            text-align: center;
+        }
+
+        .product-item {
+            padding: 0;
+            background: none;
+            position: relative;
+        }
+
+        .nav-content .product-item {
+            width: 75px;
+        }
+
+        .product-quantity1 {
+            width: 70px;
+            float: left;
+            margin-right: 20px;
+            position: relative;
+        }
+
+        .product-quantity1 input.form-control {
+            border: none;
+            background: #edeff1 !important;
+            font: 300 23px 'Open Sans', sans-serif;
+            color: #647484;
+            height: 38px;
+            width: 50px;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .product-quantity1 .btn i {
+            position: relative;
+            top: -2px;
+            left: 1px;
+        }
+
+        .glyphicon-star:before {
+            content: "\e006";
+            color: #ff5400;
+        }
+
+        .layui-tab-card > .layui-tab-title .layui-this {
+            background-color: #d60e0e;
+        }
+
+        .layui-tab-title .layui-this {
+            color: #f3f0f0;
+        }
+
+        .shopDetailFont {
+            font: 14px/150% tahoma, arial, Microsoft YaHei, Hiragino Sans GB, "\u5b8b\u4f53", sans-serif;
+            color: #666;
+        }
+
+        .p-parameter li {
+            width: 30%;
+            padding-left: 42px;
+            float: left;
+            margin-bottom: 5px;
+            font: 14px/150% tahoma, arial, Microsoft YaHei, Hiragino Sans GB, "\u5b8b\u4f53", sans-serif;
+            color: #666;
+        }
+
+        .serve-agree-bd {
+            padding: 20px 20px 20px 62px;
+        }
+
+        .serve-agree-bd dt .goods {
+            background: url('http://localhost/templates/upload/icon/iconZP.png') no-repeat;
+
+        }
+
+        .item-detail-copyright strong {
+            display: inline-block;
+            padding: 8px 0 3px;
+        }
+
+        .serve-agree-bd dt i {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            padding-right: 10px;
+            vertical-align: bottom;
+        }
+
+        .serve-agree-bd dt {
+            display: block;
+            height: 32px;
+            line-height: 32px;
+            margin-left: 10%;
+            font-size: 16px;
+            color: #e4393c;
+            font-family: "microsoft yahei";
+        }
+
+        .item-detail-copyright strong {
+            display: inline-block;
+            padding: 8px 0 3px 20px;
+        }
+
+        .serve-agree-bd dd {
+            display: block;
+            padding: 10px 0px 30px 15.5%;
+            line-height: 18px;
+        }
+
+        #state strong {
+            color: #e4393c;
+        }
+
+        body {
+            font: 12px/150% tahoma, arial, Microsoft YaHei, Hiragino Sans GB, "\u5b8b\u4f53", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            color: #666;
+            background: #fff;
+        }
+    </style>
+</head>
+<!-- Head END -->
+
+<!-- Body BEGIN -->
+<body>
+<!-- BEGIN TOP BAR -->
+<div id="wrapper">
+
+    <!-- BEGIN TOP BAR -->
+    <div th:include="common/userShopHead :: head"></div>
+    <!-- END TOP BAR -->
+
+    <!-- BEGIN HEADER -->
+    <div th:include="common/userShopHead :: head-navigation"></div>
+    <!-- END HEADER -->
+
+
+    <div class="main">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="/touristShop/index">首页</a></li>
+                <li><a href="">商品</a></li>
+                <li class="active" v-text="shop.name">Men category</li>
+            </ul>
+            <div class="layui-carousel" id="test10" style="float: left;">
+                <div carousel-item="">
+                    <div v-if="item.type == 1" v-for="item in shop.pictureList">
+                        <img :src="item.pageaddr+item.saveFileName" class="viewPicture">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-9" style="padding-left: 2%;float: left;">
+                <h3>
+                    <a style="font: 700 30px Arial,'microsoft yahei';" v-for="shop.sukChangeName !=null "
+                       v-text="shop.sukChangeName"></a>
+                    <a style="font: 700 30px Arial,'microsoft yahei';" v-text="shop.name"></a>
+                </h3>
+                <div class="price-availability-block clearfix" style="padding-top: 20px;">
+                    <div class="availability" style="float: left">
+                        价格:
+                        <a style="color: #E02222;">¥</a>
+                        <a style="font-size: 26px;color: #E02222;" v-text="shop.pirce"></a>
+                    </div>
+                    <div class="availability" style="margin-right: 50%;margin-top: 3px;">
+                        库存:
+                        <a v-if="shop.num==0" style="font: 700 20px Arial, 'microsoft yahei';">无货</a>
+                        <a v-if="shop.num!=0" v-text="shop.num" style="font-size: 16px;"></a>
+                    </div>
+                    <div class="availability" style="margin-right: -53%;margin-top: 8px;"><i
+                            class="glyphicon glyphicon-star" style="padding-top: 2px;"></i>
+                        <p
+                                style="float: right;color: #212020;">收藏商品</p></div>
+                </div>
+                <div class="price-availability-block clearfix" style="padding-top: 20px;">
+                    <div class="availability" style="float: left">
+                        产品规格:
+                        <div class="nav-content" id="product">
+                            <div class="product-item" v-for="item in shop.sukList">
+                                <div class="pi-img-wrapper" :id=" item.sid">
+                                    <a href="#" @click="changePrice(item.sukPrice,item.sukName,item.sid)"><img
+                                            :src="item.pageaddr+item.saveFileName"
+                                            class="img-responsive" alt="Berry Lace Dress"
+                                            style="margin: 5px 1px 5px 1px;"
+                                            @click="changePrice(item.sukPrice,item.sukName,item.sid)"></a>
+                                </div>
+                                <h3 class="colourSize"><a href="#" v-text="item.sukName"></a></h3>
+                            </div>
+                            <!--
+                             <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <a href="#"><img
+                                            src="http://localhost/templates/upload/台灯_小轮播.jpg"
+                                            class="img-responsive" alt="Berry Lace Dress"></a>
+                                </div>
+                                <h3 class="colourSize"><a href="#">白色</a></h3>
+                            </div>
+                            </div>
+                            -->
+                        </div>
+                        <div class="product-page-cart">
+                            <div class="product-quantity">
+                                  <span class="input-group-btn"><button
+                                          class="btn quantity-up bootstrap-touchspin-up" type="button"
+                                          @click="addCardNum($event,0)"><i
+                                          class="fa fa-angle-up"></i></button></span>
+                                <input id="product-quantity" type="text"
+                                       v-model="productQuantity"
+                                       readonly
+                                       class="form-control input-sm" ref="input1" name="text">
+                                <span class="input-group-btn"><button
+                                        class="btn quantity-down bootstrap-touchspin-down"
+                                        type="button" @click="delCardNum($event,0)"><i
+                                        class="fa fa-angle-down"></i></button></span>
+                            </div>
+                            <a class="btn btn-primary" @click="purchase" v-model="view.id">立即购买</a>
+                            <a @click="addCar($event,2)" class="btn btn-primary"
+                            >添加到购物车</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab layui-tab-card"
+                 style="float: left;clear: left;width: 100%;box-shadow: 0 2px 5px 0 rgba(245, 126, 126, 0.1);">
+                <ul class="layui-tab-title" style="border-bottom: 1px solid #e4393c;">
+                    <li class="layui-this">商品介绍</li>
+                    <li>规格与包装</li>
+                    <li>售后保障</li>
+                </ul>
+                <div class="layui-tab-content" style="height: 100%;">
+                    <!--商品介绍Start -->
+                    <div class="layui-tab-item layui-show" style="padding: 0 100px 10px;">
+                        <!-- 商品概述Start-->
+                        <div style="padding-bottom: 40px;padding-top: 40px;">
+                            <!--
+                            <ul class="p-parameter" style="padding-bottom: 40px;padding-top: 20px;">
+                                <li class="shopDetailFont">品牌： 南极人（NanJiren）</li>
+                            </ul>
+                            -->
+                            <ul class="p-parameter">
+                                <li v-for="item in shop.shopExplainList" v-text="item"></li>
+                            </ul>
+                        </div>
+                        <!-- 商品概述End-->
+                        <div style="clear: left;border-bottom: 1px solid #eee;">
+
+                        </div>
+                        <!--商品图片开始 -->
+                        <div v-if="item.type == 3" v-for="item in shop.pictureList"
+                             style=" text-align: center;padding: 30px 0;width: 100%;">
+                            <img alt="" class="" :src="item.pageaddr+item.saveFileName">
+                        </div>
+                        <!-- 商品图片结束-->
+                    </div>
+                    <!--商品介绍End -->
+                    <!--规格与包装Start-->
+                    <div class="layui-tab-item">
+                        <div style="padding: 0 100px 10px;">
+                            <ul class="p-parameter" style="padding-bottom: 40px;padding-top: 20px;">
+                                <li class="shopDetailFont">品牌： 南极人（NanJiren）</li>
+                            </ul>
+                            <ul class="p-parameter">
+                                <li v-for="item in shop.shopExplainList" v-text="item"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 规格与包装End-->
+                    <!--售后保障Strat-->
+                    <div class="layui-tab-item">
+                        <div class="item-detail item-detail-copyright">
+                            <div class="serve-agree-bd">
+                                <dl>
+                                    <dt>
+                                        <i class="goods"></i>
+                                        <strong>厂家服务</strong>
+                                    </dt>
+                                    <dd>
+                                        本产品全国联保，享受三包服务，质保期为：七天质保<br>
+                                    </dd>
+                                    <dt>
+                                        <i class="goods"></i>
+                                        <strong>友和承诺</strong>
+                                    </dt>
+                                    <dd>
+                                        友和公寓销售并发货的商品，由平台卖家提供发票和相应的售后服务。请您放心购买！<br>
+                                        注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！
+                                    </dd>
+                                    <dt>
+                                        <i class="goods"></i><strong>
+                                        正品行货 </strong>
+                                    </dt>
+                                    <dd>友和商城向您保证所售商品均为正品行货。</dd>
+                                </dl>
+                                <div id="state">
+                                    <strong style="padding: 8px 0 3px;">权利声明：</strong>
+                                    <br>
+                                    友和公寓上的所有商品信息、客户评价、商品咨询、等内容，是友和重要的经营资源，未经许可，禁止非法转载使用。
+                                    <p><b>注：</b>本站商品信息均来自于合作方，其真实性、准确性和合法性由信息拥有者（合作方）负责。本站不提供任何保证，并不承担任何法律责任。</p>
+                                    <br>
+                                    <strong style="padding: 8px 0 3px;">价格说明：</strong>
+                                    <br>
+                                    <p><b>价格：</b>价格商品的销售价，是您最终决定是否购买商品的依据。</p>
+                                    <p><b>折扣：</b>如无特殊说明，折扣指销售商在原价、或划线价（如品牌专柜标价、商品吊牌价、厂商指导价、厂商建议零售价）等某一价格基础上计算出的优惠比例或优惠金额；如有疑问，您可在购买前联系销售商进行咨询。
+                                    </p>
+                                    <p><b>异常问题：</b>商品促销信息以商品详情页“促销”栏中的信息为准；商品的具体售价以订单结算页价格为准；如您发现活动商品售价或促销信息有异常，建议购买前先联系销售商咨询。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--售后保障End-->
+                </div>
+                <div style="clear: left;border-bottom: 1px solid #eee;"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- BEGIN BRANDS -->
+    <div class="brands">
+        <div class="container">
+            <div class="row">
+                <div class="bxslider-wrapper">
+                    <ul class="bxslider" data-slides-phone="1" data-slides-tablet="3" data-slides-desktop="6"
+                        data-slide-margin="15">
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/canon.jpg" alt="canon"
+                                                             title="canon"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/esprit.jpg" alt="esprit"
+                                                             title="esprit"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/gap.jpg" alt="gap"
+                                                             title="gap"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/next.jpg" alt="next"
+                                                             title="next"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/puma.jpg" alt="puma"
+                                                             title="puma"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/zara.jpg" alt="zara"
+                                                             title="zara"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/canon.jpg" alt="canon"
+                                                             title="canon"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/esprit.jpg" alt="esprit"
+                                                             title="esprit"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/gap.jpg" alt="gap"
+                                                             title="gap"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/next.jpg" alt="next"
+                                                             title="next"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/puma.jpg" alt="puma"
+                                                             title="puma"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/zara.jpg" alt="zara"
+                                                             title="zara"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END BRANDS -->
+
+    <!-- BEGIN STEPS -->
+    <div class="steps3 steps3red">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-truck"></i>
+                    <div>
+                        <h2>Free shipping</h2>
+                        <em>Express delivery withing 3 days</em>
+                    </div>
+                    <span>&nbsp;</span>
+                </div>
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-gift"></i>
+                    <div>
+                        <h2>Daily Gifts</h2>
+                        <em>3 Gifts daily for lucky customers</em>
+                    </div>
+                    <span>&nbsp;</span>
+                </div>
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-phone"></i>
+                    <div>
+                        <h2>477 505 8877</h2>
+                        <em>24/7 customer care available</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END STEPS -->
+
+    <!-- BEGIN PRE-FOOTER -->
+    <div class="pre-footer">
+        <div class="container">
+            <div class="row">
+                <!-- BEGIN BOTTOM ABOUT BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>About us</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam sit nonummy nibh euismod
+                        tincidunt
+                        ut laoreet dolore magna aliquarm erat sit volutpat. Nostrud exerci tation ullamcorper suscipit
+                        lobortis nisl aliquip commodo consequat. </p>
+                    <p>Duis autem vel eum iriure dolor vulputate velit esse molestie at dolore.</p>
+                </div>
+                <!-- END BOTTOM ABOUT BLOCK -->
+                <!-- BEGIN BOTTOM INFO BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>Information</h2>
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Delivery Information</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Customer Service</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Order Tracking</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Shipping & Returns</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="contacts.html">Contact Us</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Careers</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Payment Methods</a></li>
+                    </ul>
+                </div>
+                <!-- END INFO BLOCK -->
+                <!-- BEGIN TWITTER BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>Latest Tweets</h2>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
+                            <span>3 min ago</span>
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
+                            <span>3 min ago</span>
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
+                            <span>3 min ago</span>
+                        </dd>
+                    </dl>
+                </div>
+                <!-- END TWITTER BLOCK -->
+                <!-- BEGIN BOTTOM CONTACTS -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>Our Contacts</h2>
+                    <address class="margin-bottom-40">
+                        35, Lorem Lis Street, Park Ave<br>
+                        California, US<br>
+                        Phone: 300 323 3456<br>
+                        Fax: 300 323 1456<br>
+                        Email: <a href="mailto:info@metronic.com">info@metronic.com</a><br>
+                        Skype: <a href="skype:metronic">metronic</a>
+                    </address>
+                </div>
+                <!-- END BOTTOM CONTACTS -->
+            </div>
+            <hr>
+            <div class="row">
+                <!-- BEGIN SOCIAL ICONS -->
+                <div class="col-md-6 col-sm-6">
+                    <ul class="social-icons">
+                        <li><a class="rss" data-original-title="rss" href="#"></a></li>
+                        <li><a class="facebook" data-original-title="facebook" href="#"></a></li>
+                        <li><a class="twitter" data-original-title="twitter" href="#"></a></li>
+                        <li><a class="googleplus" data-original-title="googleplus" href="#"></a></li>
+                        <li><a class="linkedin" data-original-title="linkedin" href="#"></a></li>
+                        <li><a class="youtube" data-original-title="youtube" href="#"></a></li>
+                        <li><a class="vimeo" data-original-title="vimeo" href="#"></a></li>
+                        <li><a class="skype" data-original-title="skype" href="#"></a></li>
+                    </ul>
+                </div>
+                <!-- END SOCIAL ICONS -->
+                <!-- BEGIN NEWLETTER -->
+                <div class="col-md-6 col-sm-6">
+                    <div class="pre-footer-subscribe-box pull-right">
+                        <h2>Newsletter</h2>
+                        <form action="#">
+                            <div class="input-group">
+                                <input type="text" placeholder="youremail@mail.com" class="form-control">
+                                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                  </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END NEWLETTER -->
+            </div>
+        </div>
+    </div>
+    <!-- END PRE-FOOTER -->
+
+    <!-- BEGIN FOOTER -->
+    <div class="footer padding-top-15">
+        <div class="container">
+            <div class="row">
+                <!-- BEGIN COPYRIGHT -->
+                <div class="col-md-6 col-sm-6 padding-top-10">
+                    2014 © Metronic Shop UI. ALL Rights Reserved.
+                </div>
+                <!-- END COPYRIGHT -->
+                <!-- BEGIN PAYMENTS -->
+                <div class="col-md-6 col-sm-6">
+                    <ul class="list-unstyled list-inline pull-right margin-bottom-15">
+                        <li><img src="../bootstrap/user/img/payments/western-union.jpg" alt="We accept Western Union"
+                                 title="We accept Western Union"></li>
+                        <li><img src="../bootstrap/user/img/payments/american-express.jpg"
+                                 alt="We accept American Express"
+                                 title="We accept American Express"></li>
+                        <li><img src="../bootstrap/user/img/payments/MasterCard.jpg" alt="We accept MasterCard"
+                                 title="We accept MasterCard"></li>
+                        <li><img src="../bootstrap/user/img/payments/PayPal.jpg" alt="We accept PayPal"
+                                 title="We accept PayPal"></li>
+                        <li><img src="../bootstrap/user/img/payments/visa.jpg" alt="We accept Visa"
+                                 title="We accept Visa">
+                        </li>
+                    </ul>
+                </div>
+                <!-- END PAYMENTS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END fast view of a product -->
+<script src="../layui/layui.js"></script>
+<!-- Load javascripts at bottom, this will reduce page load time -->
+<!-- BEGIN CORE PLUGINS (REQUIRED FOR ALL PAGES) -->
+<!--[if lt IE 9]>
+<script src="../bootstrap/user/plugins/respond.min.js"></script>
+<![endif]-->
+<script src="../bootstrap/user/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="../bootstrap/user/plugins/back-to-top.js"></script>
+<script type="text/javascript" src="../bootstrap/user/plugins/jQuery-slimScroll/jquery.slimscroll.min.js"></script>
+<!-- END CORE PLUGINS -->
+
+<!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+<script type="text/javascript" src="../bootstrap/user/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
+<!-- pop up -->
+<script type="text/javascript" src="../bootstrap/user/plugins/bxslider/jquery.bxslider.min.js"></script>
+<!-- slider for products -->
+<script type="text/javascript" src='../bootstrap/user/plugins/zoom/jquery.zoom.min.js'></script><!-- product zoom -->
+<script src="../bootstrap/user/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+<!-- Quantity -->
+
+<!-- BEGIN LayerSlider -->
+<script src="../bootstrap/user/plugins/layerslider/jQuery/jquery-easing-1.3.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/layerslider/jQuery/jquery-transit-modified.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/layerslider/js/layerslider.transitions.js" type="text/javascript"></script>
+<script src="../bootstrap/user/plugins/layerslider/js/layerslider.kreaturamedia.jquery.js"
+        type="text/javascript"></script>
+<!-- END LayerSlider -->
+
+<script type="text/javascript" src="../bootstrap/user/scripts/app.js"></script>
+<script type="text/javascript" src="../bootstrap/user/scripts/index.js"></script>
+<script src="../bootstrap/js/dept/js/vue.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    var vmSon = {
+        methods: {},
+        created() {
+            _this = this;
+            var list = [[${list}]];
+            if (list != null) {
+                console.log(list)
+                _this.shop.id = list[0].id
+                _this.shop.pirce = list[0].pirce
+                _this.shop.num = list[0].num
+                _this.shop.name = list[0].name
+                _this.shop.pictureList = list[0].pictureList
+                if (list[0].shopExplain != null) {
+                    var shopList = list[0].shopExplain.split(";")
+                    shopList.pop()
+                    _this.shop.shopExplainList = [];
+                    for (var i = 0; i < shopList.length; i++) {
+                        _this.shop.shopExplainList.push(shopList[i])
+                    }
+                }
+
+                if (list[0].sukParameter != null) {
+
+                    var pictureList = list[0].pictureList
+                    var sukAddressList = []
+                    //取出为suk的图片地址
+                    for (var i = 0; i < pictureList.length; i++) {
+                        if (pictureList[i].type == 4) {
+                            sukAddressList.push(pictureList[i])
+                        }
+                    }
+
+                    var sukParameterlist = list[0].sukParameter.split(";")
+                    sukParameterlist.pop()
+
+
+                    for (var i = 0; i < sukAddressList.length; i++) {
+                        if (i < sukParameterlist.length) {
+                            //console.log(sukParameterlist[i])
+                            sukAddressList[i]["sukName"] = sukParameterlist[i].substring(0, sukParameterlist[i].indexOf(","))
+                            sukAddressList[i]["sukPrice"] = sukParameterlist[i].substring(sukParameterlist[i].indexOf(",") + 1, sukParameterlist[i].length)
+                        } else {
+                            sukAddressList[i]["sukName"] = "暂无相关信息";
+                            sukAddressList[i]["sukPrice"] = "0";
+
+                        }
+                        _this.shop.sukList.push(sukAddressList[i])
+                    }
+
+
+                    /*
+                    _this.shop.shopExplainList = [];
+                    for (var i = 0; i < list.length; i++) {
+                        _this.shop.shopExplainList.push(list[i])
+                    }*/
+                }
+                //  sukList
+            }
+        }
+    }
+</script>
+
+<script src="../bootstrap/js/project/user/shop/index/js/shopDetail.js"></script>
+<script src="../commJs/yuhe.js"></script>
+
+<script type="text/javascript">
+
+
+    layui.use(['carousel', 'form'], function () {
+        var carousel = layui.carousel
+            , form = layui.form;
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            , width: '400px'
+            , height: '400px'
+            , interval: 5000
+        });
+    });
+
+    layui.use('element', function () {
+        var $ = layui.jquery
+            , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+        //触发事件
+        var active = {
+            tabChange: function () {
+                //切换到指定Tab项
+                element.tabChange('demo', '22'); //切换到：用户管理
+            }
+        };
+    });
+
+    function showView(id) {
+        //初始化
+        vm.addcar.cartNum = 0;
+        vm.addcar.remark = "";
+        $.ajax({
+            data: {"id": id},
+            type: "POST",
+            // dataType: 'json',
+            url: "/touristShop/viewList",
+            success: function (data) {
+                console.log('d= ', data);
+                if (data.Status == 0) {
+                    vm.view = data.shopList;
+
+                }
+            },
+            error: function (data) {
+            }
+        });
+        layer.open({
+            title: false,
+            type: 1,
+            area: ['50%', '70%'],
+            content: $('#product-pop-up'),//这可以写弹出框的html内容
+        });
+    }
+
+
+    // function shoppingPurchase(id) {
+    //     //初始化
+    //     cartNum=vm.addcar.cartNum = 0;
+    //     remark=vm.addcar.remark = "";
+    //     $.ajax({
+    //         data: {"id": id},
+    //         type: "POST",
+    //         dataType: 'json',
+    //         url: "/order/shoppingPurchase",
+    //     });
+    // }
+    //立即购买
+    function shoppingPurchase(id) {
+        debugger
+        var cartNum = $("input[name='text']").val();
+        id = id;
+        remark = vm.addcar.remark;
+        if (id && id != 'null') {
+            window.location.href = "/order/shoppingPurchase?id=" + id + "&remark=" + remark + "&cartNum=" + cartNum;
+        }
+    }
+
+    function preSubmit() {
+        // console.log('重写表单提交前事件...');
+        // var startTimes  = $(" input[ name='startTimes' ] ").val();
+        // var endTime  = $(" input[ name='endTime' ] ").val();
+        // var bd = daysBetween(startTimes, endTime);
+        // console.log('bd=', bd);
+        // $("#nDays").val(bd);
+        // var name=$("input[name='text']").val();
+        //
+        // $(" #product-quantity").val()
+        // $(" input[ name='test' ] ").val()
+        // $(" input[ type='text' ] ").val()
+        // $(" input[ type='text' ]").attr("value")
+    }
+
+
+    var layer;
+
+    $(document).ready(function () {
+        App.init();
+        App.initBxSlider();
+        Index.initLayerSlider();
+        App.initImageZoom();
+        App.initTouchspin();
+
+        layui.use("layer", function () {
+            layer = layui.layer;  //layer初始化
+
+        })
+    });
+
+    function change(lang) {
+        $.ajax(
+            {
+                type: 'post',
+                url: '/changeLang',
+                dataType: 'json',
+                data: {
+                    lang: lang
+                }, success: function (data) {
+                    location.reload();
+                }, erro: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("erro");
+                }
+            }
+        )
+
+    }
+
+
+</script>
+<!-- END PAGE LEVEL JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

@@ -9,6 +9,8 @@ import java.util.Date;
  */
 public class Picture extends SysBaseEntity {
 
+
+    private Integer sid; // 商品详情页的关联id
     private int id;
     private Date registerDate; //注册时间
 
@@ -22,12 +24,80 @@ public class Picture extends SysBaseEntity {
     private String previewId;//照片的独立id
 
     private Integer shopId; // type 1:商品的ID   2:轮播图id
+    private Integer orderNum;//排序
+
 
     private String pictureSize; //照片大小
+    private String vernier; // 对应第几张照片
 
+    /*
+      移动照片的时候更改两个照片的排序
+     */
+
+    private Integer newIndex; // 移动新照片的下标
+    private Integer newIndexId; // 移动新照片的数据库Id
+    private Integer oldIndex; // 移动新照片的下标
+    private Integer oldIndexId; // 被移动新照片的数据库Id
+
+
+    public Integer getSid() {
+        return sid;
+    }
+
+    public void setSid(Integer sid) {
+        this.sid = sid;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public Integer getNewIndex() {
+        return newIndex;
+    }
+
+    public void setNewIndex(Integer newIndex) {
+        this.newIndex = newIndex;
+    }
+
+    public Integer getNewIndexId() {
+        return newIndexId;
+    }
+
+    public void setNewIndexId(Integer newIndexId) {
+        this.newIndexId = newIndexId;
+    }
+
+    public Integer getOldIndex() {
+        return oldIndex;
+    }
+
+    public void setOldIndex(Integer oldIndex) {
+        this.oldIndex = oldIndex;
+    }
+
+    public Integer getOldIndexId() {
+        return oldIndexId;
+    }
+
+    public void setOldIndexId(Integer oldIndexId) {
+        this.oldIndexId = oldIndexId;
+    }
 
     public String getPageaddr() {
         return pageaddr;
+    }
+
+    public String getVernier() {
+        return vernier;
+    }
+
+    public void setVernier(String vernier) {
+        this.vernier = vernier;
     }
 
     public void setPageaddr(String pageaddr) {

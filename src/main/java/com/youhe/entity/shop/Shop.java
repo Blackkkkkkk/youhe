@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by xiaoqiang on 2018/12/27.
@@ -26,7 +27,15 @@ public class Shop extends SysBaseEntity {
     private Integer status;    //1 上架 0下架
     private Date register; //注册时间
     private Integer hotSale;// 是否热卖   // 1热卖   0非热卖
-    private String  remark;//备注
+    private String remark;//备注
+    private String shopExplain;//商品文字介绍
+    private List shopExplainList;//文字格式化预览
+    private String specification;//规格与包装
+    private List specificationList;//规格与包装预览
+    private String sukParameter;//suk参数
+    private List sukParameterList;//suk参数预览
+
+    private List<Picture> pictureList;
 
     //排序
     private Integer orderNum;
@@ -41,7 +50,7 @@ public class Shop extends SysBaseEntity {
 
 
     private String previewId;
-    private Integer type;  //1.详情图，2缩略图
+    private Integer type;  //1.详情图，2缩略图  3商品介绍图片
 
     private String pictureSize; //照片大小
 
@@ -77,7 +86,7 @@ public class Shop extends SysBaseEntity {
     private String cname;
 
     /*
-    *判断是哪一个页面
+     *判断是哪一个页面
      */
 
     //0 用户页面，1  管理(PC端)

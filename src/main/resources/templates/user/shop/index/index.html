@@ -60,6 +60,11 @@
             cursor: pointer;
         }
 
+        .viewPicture {
+            width: 400px !important;
+            height: 400px !important;
+        }
+
         .product-quantity1 {
             width: 70px;
             float: left;
@@ -215,7 +220,7 @@
                                             <a th:shopid="${shopList.id}"
                                                class="btn btn-default fancybox-fast-view11"
                                                th:onclick="'javascript:showView('+${shopList.id}+')'"
-                                            >View</a>
+                                            >详情</a>
                                         </div>
                                     </div>
                                     <h3><a href="item.html" th:text="${shopList.name}"></a></h3>
@@ -375,7 +380,8 @@
                             <li>
                                 <div class="product-item">
                                     <div class="pi-img-wrapper">
-                                        <img src="/templates/upload/ShopManage/20190331//20190331120726_进口洋酒.jpg" class="img-responsive"
+                                        <img src="/templates/upload/ShopManage/20190331//20190331120726_进口洋酒.jpg"
+                                             class="img-responsive"
                                              alt="Berry Lace Dress">
                                         <div>
                                             <a href="/templates/upload/ShopManage/20190331//20190331120726_进口洋酒.jpg"
@@ -392,7 +398,8 @@
                             <li>
                                 <div class="product-item">
                                     <div class="pi-img-wrapper">
-                                        <img src="/templates/upload/ShopManage/20190331//20190331120754_葡萄酒.jpg" class="img-responsive"
+                                        <img src="/templates/upload/ShopManage/20190331//20190331120754_葡萄酒.jpg"
+                                             class="img-responsive"
                                              alt="Berry Lace Dress">
                                         <div>
                                             <a href="/templates/upload/ShopManage/20190331//20190331120754_葡萄酒.jpg"
@@ -731,58 +738,36 @@
     <!--BEGIN fast view of a product-->
     <!--<td th:text="${shopList}">-->
     <li>
-        <div id="product-pop-up" style="display: none; width: 700px;">
-            <div class="product-page product-pop-up">
+        <div id="product-pop-up" style="display: none;">
+            <div class="product-page product-pop-up" style="padding-left: 5%;">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-3">
-                        <div class="product-main-image">
-                            <!--<img src="../bootstrap/user/temp/products/model7.jpg" alt="Cool green dress with red bell"-->
-                            <!--class="img-responsive">-->
-                            <!--<img class="pi-price" v-img="view.detail_picture">&lt;!&ndash;&ndash;&gt;-->
-                            <!--<imp src="view.saveFileName"></imp>-->
-                            <!--<img th:src="${shopList.detail_picture}" alt="Cool green dress with red bell">-->
-                            <!--<img th:src="${shopList.pageaddr}+'/'+${shopList.saveFileName}"-->
-                                 <!--alt="Cool green dress with red bell"-->
-                                 <!--class="img-responsive">-->
-
-                            <!--<img :src= "imgServer.down+scope.row.coverImage" style="width: 100px;height: 100px; "/>-->
-                            <img :src="view.pageaddr + view.saveFileName">
-                         <!--<img-->
-                                    <!--th:src="@{${shopList.pageaddr}+${shopList.saveFileName}}"-->
-                                    <!--alt="Berry Lace Dress">-->
+                        <div class="layui-carousel" id="test10">
+                            <div carousel-item="">
+                                <div><img :src="view.pageaddr + view.saveFileName" class="viewPicture"></div>
+                                <div><img :src="view.pageaddr + view.saveFileName" class="viewPicture"></div>
+                                <div><img :src="view.pageaddr + view.saveFileName" class="viewPicture"></div>
+                                <div><img :src="view.pageaddr + view.saveFileName" class="viewPicture"></div>
+                                <div><img :src="view.pageaddr + view.saveFileName" class="viewPicture"></div>
+                                <div><img :src="view.pageaddr + view.saveFileName" class="viewPicture"></div>
+                            </div>
                         </div>
                         <div class="product-other-images">
                             <a href="#" class="" v-for="item in minpic"><img alt="Berry Lace Dress" :src="item"></a>
-
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-9">
-
+                    <div class="col-md-6 col-sm-6 col-xs-9" style="padding-left: 2%;margin-top: 2%;padding-right: 10%;">
                         <h3><a v-text="view.name"></a></h3>
-                        <!--<div class="pi-price" v-text="view.price"></div>-->
-                        <!--<h1>Cool green dress with red bell</h1>-->
                         <div class="price-availability-block clearfix">
-                            <!--<div class="price">-->
-                            <!--<strong><span>$</span>47.00</strong>-->
-                            <!--<em>$<span>62.00</span></em>-->
-                            <!--</div>-->
-                           <a class="pi-price">¥</a>
-                            <div class="pi-price"  v-text="view.price"></div>
-                            <!--<div class="pi-price" th:text="'¥'+${shopList.pirce}"></div>-->
+                            <a class="pi-price">¥</a>
+                            <div class="pi-price" v-text="view.price"></div>
                             <div class="availability">
                                 库存:
-                                <!--<a th:if="${shopList.available}==null" th:text="无货"></a>-->
-                                <!--<a th:if="${shopList.available}!=null" th:text="${shopList.available}>0?'有库存':'无货'"></a>-->
-                                <a  v-if="view.stockNum==0">无货</a>
-                                <!--<a  v-if="view.stockNum==0">无货</a>-->
-                                <a  v-if="view.stockNum!=0" >有货</a>
+                                <a v-if="view.stockNum==0">无货</a>
+                                <a v-if="view.stockNum!=0">有货</a>
                             </div>
                         </div>
-                        <!--<div class="description">-->
-                            <!--&lt;!&ndash;describe&ndash;&gt;-->
-                            <!--<p><a th:text="${shopList.describe}"></a></p>-->
 
-                        <!--</div>-->
                         <div class="product-page-options">
                             <div class="col-sm-3 control-label" style="line-height: 34px;text-align: right;">备注</div>
                             <div class="col-sm-9">
@@ -791,14 +776,14 @@
                                 ></textarea>
                             </div>
                         </div>
-                        <div class="product-page-cart">
+                        <div class="product-page-cart" style="padding-top: 16%;">
                             <div class="product-quantity">
                                   <span class="input-group-btn"><button
                                           class="btn quantity-up bootstrap-touchspin-up" type="button"
                                           @click="addCardNum($event,0)"><i
                                           class="fa fa-angle-up"></i></button></span>
                                 <input id="product-quantity" type="text"
-                                       :value="1"
+                                       v-model="productQuantity"
                                        readonly
                                        class="form-control input-sm" ref="input1" name="text">
                                 <span class="input-group-btn"><button
@@ -806,22 +791,12 @@
                                         type="button" @click="delCardNum($event,0)"><i
                                         class="fa fa-angle-down"></i></button></span>
                             </div>
-
-                            <!--<a href="#product-pop-up"-->
-                               <!--class="btn btn-default fancybox-fast-view11"-->
-                               <!--th:onclick="'javascript:shoppingPurchase('+${shopList.id}+')'"-->
-                            <!--&gt;View</a>-->
-
-
-                            <a  class="btn btn-primary"  @click="purchase"   v-model="view.id">立即购买</a>
-                            <!--<a  class="btn btn-primary"  th:onclick="'javascript:shoppingPurchase('+${com_list.id}+')'">立即购买</a>-->
-
+                            <a class="btn btn-primary" @click="purchase" v-model="view.id">立即购买</a>
 
                             <a @click="addCar($event,2)" class="btn btn-primary"
-                              >添加到购物车</a>
+                            >添加到购物车</a>
                         </div>
                     </div>
-                    <div class="sticker sticker-sale"></div>
                 </div>
             </div>
         </div>
@@ -871,10 +846,43 @@
 <script src="../commJs/yuhe.js"></script>
 
 <script type="text/javascript">
+
+
+    layui.use(['carousel', 'form'], function () {
+        var carousel = layui.carousel
+            , form = layui.form;
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            , width: '400px'
+            , height: '400px'
+            , interval: 5000
+        });
+    });
+
+
+    layui.use('element', function () {
+        var $ = layui.jquery
+            , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+        //触发事件
+        var active = {
+            tabChange: function () {
+                //切换到指定Tab项
+                element.tabChange('demo', '22'); //切换到：用户管理
+            }
+        };
+
+
+    });
+
+
     function showView(id) {
         //初始化
+
         vm.addcar.cartNum = 0;
         vm.addcar.remark = "";
+
         $.ajax({
             data: {"id": id},
             type: "POST",
@@ -890,14 +898,20 @@
             error: function (data) {
             }
         });
+
+
+        window.open('/shopDetail/detail?id=' + id)
+
+
+        /*
+
         layer.open({
             title: false,
             type: 1,
-            area: ['747px', '355px'],
+            area: ['50%', '70%'],
             content: $('#product-pop-up'),//这可以写弹出框的html内容
-        });
+        });*/
     }
-
 
 
     // function shoppingPurchase(id) {
@@ -911,14 +925,14 @@
     //         url: "/order/shoppingPurchase",
     //     });
     // }
-   //立即购买
+    //立即购买
     function shoppingPurchase(id) {
         debugger
-            var cartNum=$("input[name='text']").val();
-        id=id;
-        remark=vm.addcar.remark;
+        var cartNum = $("input[name='text']").val();
+        id = id;
+        remark = vm.addcar.remark;
         if (id && id != 'null') {
-            window.location.href="/order/shoppingPurchase?id=" + id +"&remark="+remark+"&cartNum="+cartNum;
+            window.location.href = "/order/shoppingPurchase?id=" + id + "&remark=" + remark + "&cartNum=" + cartNum;
         }
     }
 

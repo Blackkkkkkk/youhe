@@ -10,7 +10,6 @@ import java.util.List;
 public interface ShopMapper {
 
 
-
     List<Shop> findShopList(Shop shop);
 
     //查找详情
@@ -27,4 +26,8 @@ public interface ShopMapper {
     Long del(Shop shop);
 
     Long update(Shop shop);
+
+    //查找商品详情页信息
+    List<Shop> findshopDetail(Shop shop);
+
 }
