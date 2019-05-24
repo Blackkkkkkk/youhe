@@ -1,19 +1,24 @@
 package com.youhe.controller.sys.user;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youhe.biz.department.DepartmentBiz;
 import com.youhe.biz.role.RoleBiz;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.controller.loginController.LoginController;
 import com.youhe.entity.department.User_Department;
+import com.youhe.entity.permission.Permission;
 import com.youhe.entity.role.Role;
 import com.youhe.entity.role.User_Role;
 import com.youhe.entity.user.User;
 
+import com.youhe.mapper.user.UserMapper;
 import com.youhe.serviceImpl.Controller.userController.UserControllerImpl;
 
 import com.youhe.utils.R;
+import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +28,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +41,8 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
+    @Resource
+    private ThymeleafViewResolver thymeleafViewResolver;
 
     @Autowired
     private DepartmentBiz departmentBiz;
@@ -43,6 +52,8 @@ public class UserController {
 
     @Autowired
     private RoleBiz roleBizl;
+    @Autowired
+    private UserMapper userMapper;
 
 
     @Autowired
@@ -56,6 +67,63 @@ public class UserController {
         return "sys/user/userManage";
     }
 
+    @RequestMapping(value = "/updateUser")
+    public String updateUser() {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        String userAccount=shiroUser.getUserAccount();
+        Map<String, Object> vars = new HashMap<>();
+        User userNmae=userMapper.findUser(userAccount);
+        vars.put("user",userNmae);
+//        thymeleafViewResolver.setStaticVariables(vars);
+        return "sys/user/updateUser";
+    }
+//修改个人资料
+    @RequiresPermissions(value = "flow:")
+    @RequestMapping(value = "/updates")
+    @ResponseBody
+    public R updates(String userName,String email,String phone,Integer uid) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        String userAccount=shiroUser.getUserAccount();
+        Map<String, Object> vars = new HashMap<>();
+        userBiz.updates(userName,email,phone,uid);
+        return R.ok();
+    }
+
+    //跳转到修改密码
+    @RequestMapping(value = "/changePassword")
+    public String changePassword( String oldpassword,String password,String passwordAgin,Integer uid) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        String userAccount=shiroUser.getUserAccount();
+        Map<String, Object> vars = new HashMap<>();
+        User userNmae=userMapper.findUser(userAccount);
+        vars.put("user",userNmae);
+        return "sys/user/changePassword";
+    }
+
+    //修改密码
+    @RequestMapping(value = "/updatePassword")
+    @ResponseBody
+    public R updatePassword(String oldpassword,String password,String passwordAgin,Integer uid) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        String userAccount=shiroUser.getUserAccount();
+        User user=new User();
+        //数据库实际的密码
+        User userTemp=userMapper.findUser(userAccount);
+        String oldpass=userTemp.getUserPassword();
+        System.out.println("数据库实际的密码"+oldpass);
+        user.setUserAccount(userAccount);
+        user.setUserPassword(password);
+        user.setUid(Long.valueOf(uid));
+        if (ShiroUserUtils.checkPasswordByMeixiang(userTemp,oldpassword)){
+            userBiz.update(user);
+            System.out.println("修改成功");
+        }else {
+            System.out.println("与原密码不一致");
+        }
+//        Map<String, Object> vars = new HashMap<>();
+//        userBiz.updates(userName,email,phone,uid);
+        return R.ok();
+    }
 
     /**
      * 上级部门Id(管理员则为0)

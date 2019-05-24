@@ -5,6 +5,7 @@ import com.youhe.entity.department.Department;
 import com.youhe.entity.department.User_Department;
 import com.youhe.entity.user.User;
 
+import com.youhe.utils.shiro.ShiroUser;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -42,4 +43,13 @@ public interface UserMapper extends BaseMapper<User> {
    /* List<User_Department> findNameTwo (String dept_id);*/
     //查询出用户
     List<User> findNameTwo(String dept_id);
+
+    //查找详情
+    User findUser(@Param(value="userAccount") String userAccount);
+
+    //修改角色表
+    void updates(String userName,String email,String phone,Integer uid);
+
+
+
 }

@@ -284,7 +284,6 @@ var vm = new Vue({
         }
         ,
         showView: function (id) {//这个只是给基本方法   还没用上ajax请求
-
             _this = this;
             $.ajax({
                 type: "POST",
@@ -292,10 +291,11 @@ var vm = new Vue({
                 data: {"id": id},
 
                 success: function (r) {
+                    console.info(r)
                     if (r.Status == 1) {
 
                         _this.view = r.shopList;
-                        _this.stocktotal = _this.view.num;
+                        // _this.stocktotal = _this.view.num;
                         _this.minpic = _this.view.thumbnail.split(',');
                         console.log(_this.view);
                     }
