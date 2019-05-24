@@ -23,6 +23,8 @@ INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (19, '商品管理', 'menu', '/shop/index', 'shop:commodityManage', 18, NULL, '1', '1', NULL);
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (20, '商品首页', 'menu', '/shop/shopPageMange', 'sys:shopPageMange', 18, NULL, '2', '1', NULL);
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (21, '商品分类', 'menu', '/commodity/index', 'sys:commodity', 18, NULL, '3', '1', NULL);
+INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('22', '文档中心', 'menu', '/docment/index', 'sys:docment', '0', NULL, '3', '1', NULL);
+INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('23', '知识管理', 'menu', '/docment/knowledge', 'sys:docment', '22', NULL, '3', '1', NULL);
 
 
 
