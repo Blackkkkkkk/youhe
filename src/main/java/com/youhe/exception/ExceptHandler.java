@@ -1,6 +1,7 @@
 package com.youhe.exception;
 
 import com.youhe.utils.R;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,5 +28,11 @@ public class ExceptHandler {
     public R handleException(Exception e) {
         LOGGER.error("yuheOA异常：", e);
         return R.error(e.getMessage());
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public R handleUnauthorizedException(UnauthorizedException e) {
+        LOGGER.error("yuheOA异常：", e);
+        return R.error(403, "权限不足，请联系管理员");
     }
 }

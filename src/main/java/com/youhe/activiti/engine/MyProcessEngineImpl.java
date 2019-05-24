@@ -1,5 +1,6 @@
 package com.youhe.activiti.engine;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSON;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.youhe.activiti.ext.FelSupport;
 import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
+import com.youhe.entity.activiti.Copyto;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.Node;
 import com.youhe.entity.activitiData.MyCommentEntity;
@@ -20,6 +22,7 @@ import com.youhe.entity.user.User;
 import com.youhe.exception.YuheOAException;
 import com.youhe.mapper.activiti.ActivityMapper;
 import com.youhe.mapper.user.UserMapper;
+import com.youhe.service.activiti.CopytoService;
 import com.youhe.utils.activiti.TimeAsc;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
@@ -50,6 +53,7 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Attachment;
 import org.activiti.engine.task.Comment;
+import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -62,6 +66,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 我的流程引擎实现类
@@ -81,8 +86,6 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Autowired
     private TaskService taskService;
     @Autowired
-    private FormService formService;
-    @Autowired
     private HistoryService historyService;
     @Autowired
     private IdentityService identityService;
@@ -94,6 +97,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     private ManagementService managementService;
     @Autowired
     private ActivityMapper activityMapper;
+    @Autowired
+    private CopytoService copytoService;
 
     @Override
     public String createModel() {
@@ -174,20 +179,39 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public List<Model> getDeployedProcesses() {
-        return repositoryService.createModelQuery().deployed().orderByLastUpdateTime().desc().list();
+    public List<Map<String, Object>> getDeployedProcesses() {
+        List<Model> list = repositoryService.createModelQuery().deployed().orderByLastUpdateTime().desc().list();
+        List<Map<String, Object>> maps = list.stream().map(BeanUtil::beanToMap).collect(Collectors.toList());
+        maps.forEach(map -> {
+            ProcessDefinition processDefinition = repositoryService
+                    .createProcessDefinitionQuery().deploymentId((String) map.get("deploymentId")).singleResult();
+            map.put("processDefId", processDefinition.getId());
+        });
+        return maps;
     }
 
     @Override
     public ProcessInstance start(String processDefinitionId) {
-        return start(processDefinitionId, null);
+        return this.start(processDefinitionId, null, null);
     }
 
     @Override
     public ProcessInstance start(String processDefinitionId, String businessId) {
+        return this.start(processDefinitionId, businessId, null);
+    }
+
+    @Override
+    public ProcessInstance start(String processDefinitionId, Long userId) {
+        return this.start(processDefinitionId, null, userId);
+    }
+
+    @Override
+    public ProcessInstance start(String processDefinitionId, String businessId, Long userId) {
         try {
-            // 获取当前登录用户
-            Long userId = ShiroUserUtils.getUserId();
+            if (userId == null) {
+                // 获取当前登录用户
+                userId = ShiroUserUtils.getUserId();
+            }
             Map<String, Object> variables = new HashMap<>();
             FlowVariable flowVariable = new FlowVariable();
             flowVariable.setNextUserId(String.valueOf(userId));
@@ -263,11 +287,39 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             taskService.addComment(task.getId(), processInstanceId, comment); // 添加审批意见
             Authentication.setAuthenticatedUserId(userId);
 
+            // owner不为空说明可能存在委托任务
+            if (StrUtil.isNotBlank(task.getOwner())) {
+                DelegationState delegationState = task.getDelegationState();
+                // 把被委托人代理处理后的任务交回给委托人
+                if (DelegationState.PENDING == delegationState) {
+                    taskService.resolveTask(task.getId());
+                }
+            }
+
             taskService.complete(task.getId(), taskFlowData);
         } else if (nodeNum > 1) {  // 跳转分支任务
             this.gotoAnyTask(flowVariable.getTargetTaskDefKey(), taskFlowData, null, comment, Constant.NODE_JUMP_TYPE_GO);
         } else {
             throw new YuheOAException("提交任务异常");
+        }
+
+        // 若有抄送人，则插入抄送记录
+        final String ccUserId = flowVariable.getCcUserId();
+        if (StrUtil.isNotBlank(ccUserId)) {
+            // 获取提交成功后的目标任务节点实例。注意不是当前任务节点
+            List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstanceId).active().list();
+            List<Copyto> copytos = new ArrayList<>();
+            tasks.forEach(task -> {
+                Copyto copyto;
+                for (String cc : ccUserId.split(",")) {
+                    copyto = new Copyto();
+                    copyto.setCc(cc).setAssignee(nextUserId)
+                            .setProcInstId(processInstanceId).setTaskId(task.getId())
+                            .setProcName(flowVariable.getProcessName());
+                    copytos.add(copyto);
+                }
+            });
+            copytoService.saveBatch(copytos);
         }
 
     }

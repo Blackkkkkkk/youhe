@@ -46,7 +46,7 @@ public interface MyProcessEngine {
      * 获取所有已发布的流程
      * @return List<Model>
      */
-    List<Model> getDeployedProcesses();
+    List<Map<String, Object>> getDeployedProcesses();
 
     /**
      * 启动流程
@@ -56,12 +56,29 @@ public interface MyProcessEngine {
     ProcessInstance start(String processDefinitionId);
 
     /**
-     * 启动流程带业务ID
+     * 启动流程（带业务ID）
      * @param processDefinitionId 流程定义ID
      * @param businessId 业务ID
      * @return 流程实例
      */
     ProcessInstance start(String processDefinitionId, String businessId);
+
+    /**
+     * 启动流程 一般用于代理申请
+     * @param processDefinitionId 流程定义ID
+     * @param userId 流程申请者，不一定是当前用户ID
+     * @return
+     */
+    ProcessInstance start(String processDefinitionId, Long userId);
+
+    /**
+     * 启动流程（带业务ID） 一般用于代理申请
+     * @param processDefinitionId 流程定义ID
+     * @param businessId 业务ID
+     * @param userId 流程申请者，不一定是当前用户ID
+     * @return
+     */
+    ProcessInstance start(String processDefinitionId, String businessId, Long userId);
 
     /**
      * 提交任务
