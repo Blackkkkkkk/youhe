@@ -37,6 +37,15 @@
         .table > thead:first-child > tr:first-child > th {
             text-align: center;
         }
+
+        .p-parameter li {
+            width: 30%;
+            padding-left: 42px;
+            float: left;
+            margin-bottom: 5px;
+            font: 14px/150% tahoma, arial, Microsoft YaHei, Hiragino Sans GB, "\u5b8b\u4f53", sans-serif;
+            color: #666;
+        }
     </style>
 </div>
 <body>
@@ -46,7 +55,7 @@
         <div th:include="common/Head :: head"></div>
         <div v-show="!showList" class="panel panel-default">
             <div class="panel-heading">{{title}}</div>
-            <form class="form-horizontal" id="myForm">
+            <form class="form-horizontal" id="myForm" style="padding-bottom: 50px;">
                 <input type="hidden" v-model="shop.id" name="id">
                 <div class="form-group">
                     <div class="col-sm-2 control-label">商品名字</div>
@@ -75,7 +84,7 @@
                 <div class="form-group">
                     <div class="col-sm-2 control-label">商品分类</div>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  style="cursor:pointer;"
+                        <input type="text" class="form-control" style="cursor:pointer;"
                                @click="deptTree" readonly="readonly" placeholder=""/>
                         <input type="hidden" class="form-control" style="cursor:pointer;" v-model="dept.parentId"
                                readonly="readonly" placeholder=""/>
@@ -139,10 +148,83 @@
                 <div class="form-group">
                     <div class="col-sm-2 control-label">新品排序号</div>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" name="isNewProductOrderNum" v-model="shop.isNewProductOrderNum"/>
+                        <input type="number" class="form-control" name="isNewProductOrderNum"
+                               v-model="shop.isNewProductOrderNum"/>
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">suk上传</div>
+                    <div class="col-sm-10">
+                        <div class="form-group" id="suk">
+                            <input type="file" name="sukreportFile" id="sukreportFile" multiple class="file-loading"/>
+                            <input type="hidden" class="form-control" name="suk_picture" id="suk_picture"
+                                   v-model="shop.detail_picture"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">suk参数设置(格式：suk名字,价格;)</div>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control"
+                                  v-model="shop.sukParameter" name="sukParameter"
+                                  placeholder="请用以下格式分开，如： AA:AA;BB:BB; "></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">效果预览</div>
+                    <div class="col-sm-10" style="border: 1px solid #e5e6e7;">
+                        <ul class="p-parameter">
+                            <li v-for="item in shop.sukParameterList" v-text="item"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">商品介绍文字说明</div>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control"
+                                  v-model="shop.shopExplain" name="shopExplain"
+                                  placeholder="请用以下格式分开，如： AA:AA;BB:BB; "></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">效果预览</div>
+                    <div class="col-sm-10" style="border: 1px solid #e5e6e7;">
+                        <ul class="p-parameter">
+                            <li v-for="item in shop.shopExplainList" v-text="item"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">商品介绍详情图</div>
+                    <div class="col-sm-10">
+                        <div class="form-group" id="introduceDetail">
+                            <input type="file" name="introduceReportFile" id="introduceReportFile" multiple
+                                   class="file-loading"/>
+                            <input type="hidden" class="form-control" name="detail_picture"
+                                   id="introduce_detail_picture"
+                                   v-model="shop.detail_picture"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">规格与包装</div>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control"
+                                  v-model="shop.specification" name="specification"
+                                  placeholder="请用以下格式分开，如： AA:AA;BB:BB; "></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">效果预览</div>
+                    <div class="col-sm-10" style="border: 1px solid #e5e6e7;">
+                        <ul class="p-parameter">
+                            <li v-for="specificationListItem in shop.specificationList"
+                                v-text="specificationListItem"></li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-sm-2 control-label"></div>
                     <input type="button" name="submit" class="btn btn-primary" @click="save" value="确定"/>
@@ -256,6 +338,53 @@
 
 <script src="../bootstrap/js/project/sys/shop/js/fileinput.min.js"></script>
 <script src="../bootstrap/js/project/sys/shop/js/zh.js"></script>
+<script src="../bootstrap/js/tool/Sortable.js"></script>
+<script src="../bootstrap/js/tool/Sortable.min.js"></script>
+
+<script>
+    var vueSon = {
+        methods: {},
+        created() {
+            //商品介绍文字说明
+            this.$watch('shop.shopExplain', (val, oldVal) => {
+                _this = this;
+                if (val.indexOf(";") != -1) {
+                    var list = val.split(";")
+                    list.pop()
+                    vm.shop.shopExplainList = [];
+                    for (var i = 0; i < list.length; i++) {
+                        vm.shop.shopExplainList.push(list[i])
+                    }
+                }
+            })
+            //规格与包装
+            this.$watch('shop.specification', (val, oldVal) => {
+                _this = this;
+                if (val.indexOf(";") != -1) {
+                    var list = val.split(";")
+                    list.pop()
+                    vm.shop.specificationList = [];
+                    for (var i = 0; i < list.length; i++) {
+                        vm.shop.specificationList.push(list[i])
+                    }
+                }
+            })
+            //suk
+            this.$watch('shop.sukParameter', (val, oldVal) => {
+                _this = this;
+                if (val.indexOf(";") != -1) {
+                    var list = val.split(";")
+                    list.pop()
+                    vm.shop.sukParameterList = [];
+                    for (var i = 0; i < list.length; i++) {
+                        vm.shop.sukParameterList.push(list[i])
+                    }
+                }
+            })
+        }
+    }
+
+</script>
 <script src="../bootstrap/js/project/sys/shop/js/shopData.js"></script>
 
 
@@ -266,6 +395,7 @@
 
 <!-- Page-Level Scripts -->
 <script>
+
     var data;
 
     var lastValue = "", nodeList = [], key = $("#keyword");
@@ -277,6 +407,7 @@
     });
     $(document).ready(function () {
 
+        //   console.log(sortable)
 
         $("#shopMange").attr("class", "active");
         $("#shopMange_ul").attr("class", "nav nav-second-level collapse in");
@@ -607,6 +738,7 @@
             treeNode = parentNode;
         }
     }
+
     function search($this) {
         $('#search').slideToggle(200);
         $('#btnShow').toggle();

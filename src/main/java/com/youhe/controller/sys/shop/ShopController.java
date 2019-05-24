@@ -123,7 +123,7 @@ public class ShopController {
         Map<String, Object> result = new HashMap<String, Object>();
 
         result = shopController.uploadReport(request, response, shop);
-        System.out.println(result+"************************");
+        System.out.println(result + "************************");
         return R.ok().put("result", result);
     }
 
@@ -131,19 +131,32 @@ public class ShopController {
     @RequestMapping(value = "/delReport", method = RequestMethod.POST)
     @ResponseBody
     public R delReport(Picture picture) {
+
         Map<String, Object> result = new HashMap<String, Object>();
 
-        pictureBiz.del(picture);
+        if (!picture.getVernier().equals("0")) {
 
-        File file = new File(picture.getReportaddr());
-        // 判断目录或文件是否存在
-        if (file.exists()) {  // 不存在返回 false
-            file.delete();
+            try {
+
+                pictureBiz.del(picture);
+
+                File file = new File(picture.getReportaddr());
+                // 判断目录或文件是否存在
+                if (file.exists()) {  // 不存在返回 false
+                    file.delete();
+                }
+
+                // result = shopController.uploadReport(request, response, shop);
+
+                return R.ok("删除成功！");
+            } catch (Exception e) {
+                return R.error("删除失败！");
+            }
+        } else {
+            return R.error("必须保留一张图片用于！");
         }
 
-        // result = shopController.uploadReport(request, response, shop);
 
-        return R.ok().put("result", result);
     }
 
     @RequestMapping("/save")
@@ -175,14 +188,12 @@ public class ShopController {
     @ResponseBody
     public R del(Shop shop) {
 
-
         try {
             shopController.del(shop);
             return R.ok("删除成功！").put("state", true);
         } catch (Exception e) {
             return R.error("删除失败！").put("state", false);
         }
-
     }
 
 
@@ -198,6 +209,29 @@ public class ShopController {
 
 
         return "sys/shop/pictureCarousel";
+
+    }
+
+    //修改照片的排序
+    @RequestMapping("/updateOrderNum")
+    @ResponseBody
+    public R updateOrderNum(Picture picture) {
+        Picture uPicture = new Picture();
+        try {
+            uPicture.setId(picture.getNewIndexId());
+            uPicture.setOrderNum(picture.getNewIndex());
+            pictureBiz.update(uPicture);
+
+            uPicture.setId(picture.getOldIndexId());
+            uPicture.setOrderNum(picture.getOldIndex());
+            pictureBiz.update(uPicture);
+
+            return R.ok();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return R.error();
+        }
+
 
     }
 

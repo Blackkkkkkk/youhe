@@ -48,7 +48,7 @@ var App = function () {
                 }
                 resize = setTimeout(function () {
                     runResponsiveHandlers();
-                }, 50); // wait 50ms until window resize finishes.                
+                }, 50); // wait 50ms until window resize finishes.
                 currheight = document.documentElement.clientHeight; // store last body client height
             });
         } else {
@@ -260,12 +260,13 @@ var App = function () {
 
         initTouchspin: function () {
 
+            /*
             $(".product-quantity .form-control").TouchSpin({
                 buttondown_class: "btn quantity-down",
                 buttonup_class: "btn quantity-up"
             });
             $(".quantity-down").html("<i class='fa fa-angle-down' ></i>");
-            $(".quantity-up").html("<i class='fa fa-angle-up'></i>");
+            $(".quantity-up").html("<i class='fa fa-angle-up'></i>");*/
         },
 
         initBxSlider: function (reload) {
@@ -351,6 +352,8 @@ var App = function () {
         },
 
         //public function to add callback a function which will be called on window resize
+
+
         addResponsiveHandler: function (func) {
             responsiveHandlers.push(func);
         },

@@ -14,55 +14,55 @@
         <result property="shopId" column="SHOP_ID"></result>
         <result property="pictureSize" column="PICTURE_SIZE"></result>
         <result property="pageaddr" column="PAGEADDR"></result>
+        <result property="orderNum" column="orderNum"></result>
     </resultMap>
 
     <select id="findPictureList" parameterType="com.youhe.entity.shop.Picture" resultMap="pictureList">
         SELECT * FROM shop_picture
-        <where>
-            <trim prefixOverrides="AND">
-                <if test="id!=null and id !=''">
-                    AND ID = #{id}
-                </if>
-                <if test="previewId != null and previewId != ''">
-                    AND PREVIEW_ID = #{previewId,jdbcType=VARCHAR}
-                </if>
-                <if test="shopId != null and shopId != ''">
-                    AND SHOP_ID = #{shopId,jdbcType=VARCHAR}
-                </if>
-                <if test="type != null and type != ''">
-                    AND TYPE = #{type,jdbcType=INTEGER}
-                </if>
-            </trim>
-        </where>
+        where 1 = 1
+
+        <if test="id!=null and id !=''">
+            AND ID = #{id}
+        </if>
+        <if test="previewId != null and previewId != ''">
+            AND PREVIEW_ID = #{previewId,jdbcType=VARCHAR}
+        </if>
+        <if test="shopId != null and shopId != ''">
+            AND SHOP_ID = #{shopId,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null and type != ''">
+            AND TYPE = #{type,jdbcType=INTEGER}
+        </if>
+
+        ORDER BY
+        orderNum
     </select>
 
 
     <insert id="save" parameterType="com.youhe.entity.shop.Picture" keyProperty="id"
             useGeneratedKeys="true">
-    insert into shop_picture(
-    TYPE,
-    FILE_NAME,
-    FILE_TYPE,
-    SAVE_FILE_NAME,
-    REPORTADDR,
-    REGISTER_DATE,
-    PREVIEW_ID,
-    SHOP_ID,
-    PICTURE_SIZE,
-    PAGEADDR
-    )
-    values(
-    #{type,jdbcType=INTEGER},
-    #{fileName,jdbcType=VARCHAR},
-    #{fileType,jdbcType=VARCHAR},
-    #{saveFileName,jdbcType=VARCHAR},
-    #{reportaddr,jdbcType=VARCHAR},
-    NOW(),
-    #{previewId,jdbcType=VARCHAR},
-    #{shopId,jdbcType=VARCHAR},
-    #{pictureSize,jdbcType=VARCHAR},
-    #{pageaddr,jdbcType=VARCHAR}
-    )
+        insert into shop_picture(TYPE,
+                                 FILE_NAME,
+                                 FILE_TYPE,
+                                 SAVE_FILE_NAME,
+                                 REPORTADDR,
+                                 REGISTER_DATE,
+                                 PREVIEW_ID,
+                                 SHOP_ID,
+                                 PICTURE_SIZE,
+                                 PAGEADDR,
+                                 orderNum)
+        values (#{type,jdbcType=INTEGER},
+                #{fileName,jdbcType=VARCHAR},
+                #{fileType,jdbcType=VARCHAR},
+                #{saveFileName,jdbcType=VARCHAR},
+                #{reportaddr,jdbcType=VARCHAR},
+                NOW(),
+                #{previewId,jdbcType=VARCHAR},
+                #{shopId,jdbcType=VARCHAR},
+                #{pictureSize,jdbcType=VARCHAR},
+                #{pageaddr,jdbcType=VARCHAR},
+                #{orderNum,jdbcType=INTEGER})
     </insert>
 
     <delete id="del" parameterType="com.youhe.entity.shop.Picture">
@@ -99,8 +99,8 @@
             <if test="reportaddr != null and reportaddr != ''">
                 REPORTADDR = #{reportaddr,jdbcType=VARCHAR},
             </if>
-            <if test="register != null ">
-                REGISTER = #{register,jdbcType=DATE},
+            <if test="registerDate != null ">
+                registerDate = #{registerDate,jdbcType=DATE},
             </if>
             <if test="shopId != null and shopId != ''">
                 SHOP_ID = #{shopId,jdbcType=VARCHAR},
@@ -110,6 +110,9 @@
             </if>
             <if test="pageaddr != null and pageaddr != ''">
                 PAGEADDR = #{pageaddr,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null">
+                orderNum = #{orderNum,jdbcType=VARCHAR},
             </if>
         </set>
         <where>

@@ -61,6 +61,11 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
 //        userMapper.del(user);
     }
 
+    //修改
+    public void updates(String userName,String email,String phone,Integer uid) {
+        userMapper.updates(userName,email,phone,uid);
+    }
+
 
 
 

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -43,7 +44,7 @@ public class ShopControllerImpl {
         Map<String, Object> result = new HashMap<String, Object>();
 
         //调用通用接口上传文件
-        return ((ShopControllerImpl) AopContext.currentProxy()).uploadFile(request,shop);
+        return ((ShopControllerImpl) AopContext.currentProxy()).uploadFile(request, shop);
 
     }
 
@@ -51,8 +52,8 @@ public class ShopControllerImpl {
     /**
      * 上传文件通用接口
      *
-     * @param request     请求体
-     * @param shop        （特殊）上传报告所述报告组参数
+     * @param request 请求体
+     * @param shop    （特殊）上传报告所述报告组参数
      */
     @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> uploadFile(HttpServletRequest request, Shop shop) {
@@ -128,6 +129,17 @@ public class ShopControllerImpl {
                     picture.setPictureSize(shop.getPictureSize());
                     picture.setPageaddr(pageaddr);
 
+                    //新上传图片的时候判断数据库是否有图片
+                    Picture picNum = new Picture();
+                    picNum.setShopId(picture.getShopId());
+                    List<Picture> listNum = pictureBiz.findPictureList(picNum);
+                    if (!CollectionUtils.isEmpty(listNum)) {
+                        System.out.println(listNum.size());
+                        picture.setOrderNum(listNum.size());
+                    } else {
+                        picture.setOrderNum(shop.getOrderNum());
+                    }
+                    //
                     pictureBiz.save(picture);
 
                     System.out.println(picture.getId());

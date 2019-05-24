@@ -22,6 +22,9 @@
         <result property="tid" column="TID"></result>
         <result property="color" column="COLOR"></result>
         <result property="size" column="SIZE"></result>
+        <result property="shopExplain" column="shopExplain"></result>
+        <result property="specification" column="specification"></result>
+        <result property="sukParameter" column="sukParameter"></result>
     </resultMap>
 
     <resultMap type="com.youhe.entity.shop.Shop" id="commodityList">
@@ -37,6 +40,45 @@
         <result property="pageaddr" column="PAGEADDR"></result>
         <result property="hotSale" column="HOT_SALE"></result>
         <result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>
+        <result property="shopExplain" column="shopExplain"></result>
+        <result property="specification" column="specification"></result>
+        <result property="sukParameter" column="sukParameter"></result>
+    </resultMap>
+
+    <!-- 商品详情页-->
+    <resultMap id="shopDetail" type="com.youhe.entity.shop.Shop">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="pirce" column="PRICE"/>
+        <result property="num" column="NUM"></result>
+        <result property="top" column="TOP"/>
+        <result property="status" column="STATUS"/>
+        <result property="register" column="REGISTER"/>
+        <result property="orderNum" column="ORDER_NUM"/>
+        <result property="hotSale" column="HOT_SALE"></result>
+        <result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>
+        <result property="commodityId" column="COMMODITY_ID"></result>
+        <result property="describe" column="DESCRIBE"></result>
+        <result property="available" column="AVAILABLE"></result>
+        <result property="tid" column="TID"></result>
+        <result property="color" column="COLOR"></result>
+        <result property="size" column="SIZE"></result>
+        <result property="shopExplain" column="shopExplain"></result>
+        <result property="specification" column="specification"></result>
+        <result property="sukParameter" column="sukParameter"></result>
+        <collection property="pictureList" ofType="com.youhe.entity.shop.Picture">
+            <id property="sid" column="sid"></id>
+            <result property="type" column="TYPE"/>
+            <result property="fileName" column="FILE_NAME"/>
+            <result property="fileType" column="FILE_TYPE"></result>
+            <result property="saveFileName" column="SAVE_FILE_NAME"></result>
+            <result property="reportaddr" column="REPORTADDR"/>
+            <result property="registerDate" column="REGISTER_DATE"/>
+            <result property="previewId" column="PREVIEW_ID"></result>
+            <result property="shopId" column="SHOP_ID"></result>
+            <result property="pictureSize" column="PICTURE_SIZE"></result>
+            <result property="pageaddr" column="PAGEADDR"></result>
+        </collection>
     </resultMap>
 
     <!--<resultMap type="com.youhe.entity.shop.Shop" id="commodityTypeList">-->
@@ -67,9 +109,6 @@
         SELECT sc.*,sp.SAVE_FILE_NAME,sp.PAGEADDR,ct.TID,ct.COLOR,ct.SIZE FROM shop_commodity sc
         LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
         LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id
-        AND
-        sp.ID =
-        (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
         where
         1=1
 
@@ -92,6 +131,7 @@
         <if test="type!=null">
             AND sp.TYPE = #{type}
         </if>
+        GROUP BY sc.ID
         ORDER BY
         1 = 1
         <if test="orderNum_Sort != null and orderNum_Sort ==1">
@@ -179,7 +219,6 @@
     </select>
 
 
-
     <!--
      商品表和商品分类变关联，商品表和照片表关联，右表为照片表，
    -->
@@ -225,7 +264,10 @@
                                    ORDER_NUM,
                                    HOT_SALE,
                                    COMMODITY_ID,
-                                   IS_NEW_PRODUCT_ORDER_NUM)
+                                   IS_NEW_PRODUCT_ORDER_NUM,
+                                   shopExplain,
+                                   specification,
+                                   sukParameter)
         values (#{name,jdbcType=VARCHAR},
                 #{pirce,jdbcType=INTEGER},
                 #{num,jdbcType=INTEGER},
@@ -235,7 +277,10 @@
                 #{orderNum,jdbcType=VARCHAR},
                 #{hotSale,jdbcType=INTEGER},
                 #{cid},
-                #{isNewProductOrderNum,jdbcType=INTEGER})
+                #{isNewProductOrderNum,jdbcType=INTEGER},
+                #{shopExplain,jdbcType=VARCHAR},
+                #{specification,jdbcType=VARCHAR},
+                #{sukParameter,jdbcType=VARCHAR})
     </insert>
 
 
@@ -274,6 +319,15 @@
                 <if test="isNewProductOrderNum !=null">
                     IS_NEW_PRODUCT_ORDER_NUM = #{isNewProductOrderNum,jdbcType=INTEGER},
                 </if>
+                <if test="shopExplain != null and shopExplain != ''">
+                    shopExplain = #{shopExplain,jdbcType=VARCHAR},
+                </if>
+                <if test="specification != null and specification != ''">
+                    specification = #{specification,jdbcType=VARCHAR},
+                </if>
+                <if test="sukParameter != null and sukParameter != ''">
+                    sukParameter = #{sukParameter,jdbcType=VARCHAR},
+                </if>
             </trim>
         </set>
         <where>
@@ -285,5 +339,15 @@
         </where>
     </update>
 
-
+    <!-- 商品详情页-->
+    <select id="findshopDetail" parameterType="com.youhe.entity.shop.Shop" resultMap="shopDetail">
+        SELECT * ,sp.ID sid FROM shop_commodity sc
+        LEFT JOIN shop_picture sp on sc.ID = sp.SHOP_ID
+        where
+        1 =1
+        <if test="id != null and id != ''">
+            AND sc.ID = #{id,jdbcType=INTEGER}
+        </if>
+        ORDER BY orderNum
+    </select>
 </mapper>

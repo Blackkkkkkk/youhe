@@ -45,6 +45,18 @@ public class User implements Serializable {
     private String userDepartmentName;//用户和部门公用字段
 
     @TableField(exist = false)
+    //ztree属性
+    private String oldpassword;//用户和部门公用字段
+
+    public String getOldpassword() {
+        return oldpassword;
+    }
+
+    public void setOldpassword(String oldpassword) {
+        this.oldpassword = oldpassword;
+    }
+
+    @TableField(exist = false)
     private Set<Role> roles = new HashSet<>();
 
     public String getUserDepartmentName() {
