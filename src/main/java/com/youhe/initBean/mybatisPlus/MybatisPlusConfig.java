@@ -1,6 +1,7 @@
 package com.youhe.initBean.mybatisPlus;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -45,11 +46,11 @@ public class MybatisPlusConfig {
      * 配置分页插件
      * @return page
      */
-    /*@Bean
+    @Bean
     public PaginationInterceptor paginationInterceptor(){
         PaginationInterceptor page = new PaginationInterceptor();
         page.setDialectType("mysql");
         return page;
-    }*/
+    }
 
 }

@@ -89,9 +89,11 @@ $('#businessForm').submit(function () {
 /**
  * 审批用户选择
  */
-function selUser() {
-    $(".glyphicon-user").html("");
-    $("input[name='nextUserId']").val("");
+function selUser(that) {
+    // $(".glyphicon-user").html("");
+    // $("input[name='nextUserId']").val("");
+    $(that).html('');
+    $(that).next().next().val('');
     layer.open({
         type: 2,
         title: '选择用户',
@@ -104,13 +106,13 @@ function selUser() {
         area:['380px', '380px'],
         content:'/activiti/deal/task',
         yes:function(layero,index){
-           findUser(layero,index);
+           findUser(that,index);
             layer.close(layero)
         }
     });
 }
 
-function findUser(layero,index) {
+function findUser(that,index) {
     var info="";
     var infoId="";
     var info1="";
@@ -156,8 +158,10 @@ console.log(value)
         infoId1 = infoId1.substring(0, infoId1.lastIndexOf(','));
     }
 
-    $("#userShow").text(info).append(info1);
-    $("input[name='nextUserId']").val(infoId+ infoId1);
+    $(that).next().text(info).append(info1);
+    $(that).next().next().val(infoId+ infoId1);
+    // $(".glyphicon-user").next().text(info).append(info1);
+    // $("input[name='nextUserId']").val(infoId+ infoId1);
 }
 
 

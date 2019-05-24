@@ -26,6 +26,11 @@ INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`
 INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('22', '文档中心', 'menu', '/docment/index', 'sys:docment', '0', NULL, '3', '1', NULL);
 INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('23', '知识管理', 'menu', '/docment/knowledge', 'sys:docment', '22', NULL, '3', '1', NULL);
 
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (22, '审批委托设置', 'menu', '/activiti/delegate/index', 'flow:delegate:index', 2, NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (23, '代理申请', 'menu', NULL, 'flow:agency', 2, NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (24, '代理申请设置', 'menu', NULL, 'flow:agency:set', 2, NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (26, '编辑', 'button', NULL, 'flow:delegate:edit', 22, NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (27, '删除', 'button', NULL, 'flow:delegate:del', 22, NULL, '0', '1', '');
 
 
 -- 系统角色

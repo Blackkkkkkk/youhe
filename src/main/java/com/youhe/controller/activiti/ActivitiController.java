@@ -5,19 +5,22 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.activiti.ext.ProcessDiagramGenerator;
-import com.youhe.activiti.rest.editor.ModelSaveRestResource;
+import com.youhe.biz.user.UserBiz;
 import com.youhe.common.Constant;
 import com.youhe.controller.comm.BaseController;
+import com.youhe.entity.activiti.Delegate;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.entity.department.Department;
 import com.youhe.exception.YuheOAException;
+import com.youhe.service.activiti.DelegateService;
 import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
 import com.youhe.utils.shiro.ShiroUserUtils;
@@ -36,6 +39,7 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,7 +67,9 @@ public class ActivitiController extends BaseController {
     @Autowired
     private HistoryService historyService;
     @Autowired
-    private ModelSaveRestResource modelSaveRestResource;
+    private DelegateService delegateService;
+    @Autowired
+    private UserBiz userBiz;
 
 
     @GetMapping(value = "ProcessManagement")
@@ -486,6 +492,50 @@ public class ActivitiController extends BaseController {
         } catch (IOException e) {
             return R.error("导入流程模型失败：" + e.getMessage());
         }
+        return R.ok();
+    }
+
+    @RequiresPermissions(value = "flow:delegate:index")
+    @GetMapping(value = "delegate/index")
+    public ModelAndView delegate() {
+        return new ModelAndView("activiti/approve/app_delegate");
+    }
+
+    /**
+     * 委托任务列表数据接口
+     * @param processName
+     * @param current 当前页码
+     * @param size 每页条目
+     * @return
+     */
+    @GetMapping(value = "delegate/listData")
+    public R delegateListData(String processName, int current, int size) {
+        IPage<Delegate> delegateIPage = delegateService.listDelegatePage(processName, current, size);
+        return R.ok().put("data", delegateIPage.getRecords()).put("total", delegateIPage.getTotal());
+    }
+
+    /**
+     * 保存/更新委托
+     * @param delegate
+     * @return
+     */
+    @RequiresPermissions(value = "flow:delegate:edit")
+    @PostMapping(value = "delegate/save")
+    public R delegateSave(Delegate delegate) {
+        delegate.setAssignee(String.valueOf(ShiroUserUtils.getUserId()));
+        delegateService.saveOrUpdate(delegate);
+        return R.ok();
+    }
+
+    /**
+     * 删除委托
+     * @param delegateId
+     * @return
+     */
+    @RequiresPermissions(value = "flow:delegate:del")
+    @PostMapping(value = "remove/delegate/{delegateId}")
+    public R removeDelegate(@PathVariable Long delegateId) {
+        delegateService.removeById(delegateId);
         return R.ok();
     }
 

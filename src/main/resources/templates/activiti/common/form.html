@@ -50,17 +50,27 @@
                         <!--form-->
                         <form id="taskForm" class="form-horizontal" role="form">
 
-                            <!--todo 选择审批人-->
+                            <!--选择审批人-->
                             <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
                                 <label class="col-sm-2 control-label">审批人</label>
                                 <div class="form-group">
-                                    <span class="glyphicon glyphicon-user" style="margin-top: 9px;"  onclick="selUser()">
+                                    <span class="glyphicon glyphicon-user" style="margin-top: 9px;"  onclick="selUser(this)">
                                     </span>
                                     <span id="userShow"></span>
                                     <input type="hidden" name="nextUserId"  value=""/>
                                 </div>
                             </div>
-                            <!--todo 下一节点-->
+                            <!--选择抄送人-->
+                            <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
+                                <label class="col-sm-2 control-label">抄送人</label>
+                                <div class="form-group">
+                                    <span class="glyphicon glyphicon-user" style="margin-top: 9px;" onclick="selUser(this)">
+                                    </span>
+                                    <span></span>
+                                    <input type="hidden" name="ccUserId"  value=""/>
+                                </div>
+                            </div>
+                            <!--下一节点-->
                             <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
                                 <label class="col-sm-2 control-label">下一环节</label>
                                 <div class="form-group">
