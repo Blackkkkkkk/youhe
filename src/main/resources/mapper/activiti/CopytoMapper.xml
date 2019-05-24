@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.activiti.CopytoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.youhe.entity.activiti.Copyto">
+        <id column="ID" property="id" />
+        <result column="CC" property="cc" />
+        <result column="ASSIGNEE" property="assignee" />
+        <result column="PROC_INST_ID" property="procInstId" />
+        <result column="TASK_ID" property="taskId" />
+        <result column="PROC_NAME" property="procName" />
+        <result column="READ_TIME" property="readTime" />
+        <result column="DURATION" property="duration" />
+        <result column="CREATE_TIME" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, CC, ASSIGNEE, PROC_INST_ID, TASK_ID, PROC_NAME, READ_TIME, DURATION, CREATE_TIME
+    </sql>
+
+</mapper>

@@ -1,5 +1,6 @@
 package com.youhe.activiti.ext;
 
+import cn.hutool.core.util.StrUtil;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.interceptor.Command;
 import org.activiti.engine.impl.interceptor.CommandContext;
@@ -7,6 +8,7 @@ import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntityManager;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.task.DelegationState;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -27,7 +29,7 @@ public class NodeJumpTaskCmd implements Command<Void> {
 
     @Override
     public Void execute(CommandContext commandContext) {
-        ExecutionEntityManager executionEntityManager = Context.getCommandContext().getExecutionEntityManager();
+        ExecutionEntityManager executionEntityManager = commandContext.getExecutionEntityManager();
         // 获取当前流程的executionId，因为在并发的情况下executionId是唯一的。
         ExecutionEntity executionEntity = executionEntityManager
                 .findExecutionById(executionId);
@@ -35,17 +37,26 @@ public class NodeJumpTaskCmd implements Command<Void> {
         executionEntity.setEventSource(this.currentActivity);
         executionEntity.setActivity(this.currentActivity);
         // 根据executionId 获取Task
-        Iterator<TaskEntity> localIterator = Context.getCommandContext()
+        Iterator<TaskEntity> localIterator = commandContext
                 .getTaskEntityManager()
                 .findTasksByExecutionId(this.executionId).iterator();
 
         while (localIterator.hasNext()) {
             TaskEntity taskEntity = localIterator.next();
+
+            // owner不为空说明可能存在委托任务
+            if (StrUtil.isNotBlank(taskEntity.getOwner())) {
+                DelegationState delegationState = taskEntity.getDelegationState();
+                // 把被委托人代理处理后的任务交回给委托人
+                if (DelegationState.PENDING == delegationState) {
+                    taskEntity.resolve();
+                }
+            }
+
             // 触发任务监听
             taskEntity.fireEvent("complete");
             // 删除任务的原因
-            Context.getCommandContext().getTaskEntityManager()
-                    .deleteTask(taskEntity, "completed", false);
+            commandContext.getTaskEntityManager().deleteTask(taskEntity, "completed", false);
         }
         executionEntity.executeActivity(this.desActivity);
         return null;

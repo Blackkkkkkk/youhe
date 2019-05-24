@@ -17,8 +17,8 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 public class Generator {
 
     private static String packageName = "com.youhe"; // 生成的包名
-    private static String[] tableNames = {"shop_order_detail"};   // 表名
-    private static String tablePrefix = "shop_";    // 配置了会自动去掉表名的前缀
+    private static String[] tableNames = {"act_hi_delegate"};   // 表名
+    private static String tablePrefix = "act_";    // 配置了会自动去掉表名的前缀
     private static boolean serviceNameStartWithI = false;  //user -> UserService, 设置成true: user -> IUserService
     private static String author = "Kalvin";    // 作者
     private static String outputDir = "D://genCode";   // 代码生成的路径目录
@@ -43,7 +43,7 @@ public class Generator {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig
                 .setCapitalMode(true)
-                .setEntityLombokModel(false)
+                .setEntityLombokModel(true)
 //                .setDbColumnUnderline(true)
                 .setTablePrefix(tablePrefix)
                 .setNaming(NamingStrategy.underline_to_camel)
@@ -69,11 +69,11 @@ public class Generator {
                 .setPackageInfo(
                         new PackageConfig()
                                 .setParent(packageName)
-                                .setEntity("entity.order")
-                                .setMapper("mapper.order")
+                                .setEntity("entity.activiti")
+                                .setMapper("mapper.activiti")
                                 .setController("controller")
-                                .setService("service.shop")
-                                .setServiceImpl("service.shop")
+                                .setService("service.activiti")
+                                .setServiceImpl("service.activiti")
                                 .setXml("xml")
                 ).execute();
     }
