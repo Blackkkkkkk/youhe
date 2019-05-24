@@ -7,6 +7,7 @@
 
 <aside th:fragment="left">
 
+
     <nav class="navbar-default navbar-static-side" role="navigation">
 
         <div class="sidebar-collapse">
@@ -15,17 +16,32 @@
                     <div class="dropdown profile-element"> <span >
                             <img alt="image" class="img-circle" src="../bootstrap/img/profile_small.jpg"/>
                              </span>
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong
-                                    class="font-bold">David Williams</strong>
-                             </span> <span class="text-muted text-xs block">Art Director <b
+                        <!--<a data-toggle="dropdown" class="dropdown-toggle" href="#">-->
+                            <!--<span class="clear"> <span class="block m-t-xs"> <strong-->
+                                    <!--class="font-bold">David Williams</strong>-->
+                             <!--</span> <span class="text-muted text-xs block">Art Director <b-->
+                                    <!--class="caret"></b></span> </span> </a>-->
+
+                        <a data-toggle="dropdown" class="dropdown-toggle">
+                            <span class="clear"> <span class="block m-t-xs"  th:text="${user.userName}" > <strong
+                                    class="font-bold"></strong>
+                             </span> <span class="text-muted text-xs block">个人设置<b
                                     class="caret"></b></span> </span> </a>
+
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="profile.html">Profile</a></li>
-                            <li><a href="contacts.html">Contacts</a></li>
-                            <li><a href="mailbox.html">Mailbox</a></li>
-                            <li class="divider"></li>
-                            <li><a href="login.html">Logout</a></li>
+                            <li><a href="/user/updateUser">个人信息</a></li>
+                            <!--<li><a href="#" onclick="changePassword(id)" th:id="${user.uid}">修改密码</a></li>-->
+                            <li><a href="/user/changePassword">修改密码</a></li>
+                            <li><a href="contacts.html">桌面设置</a></li>
+                            <li><a href="contacts.html">天气预报设置</a></li>
+                            <li><a href="contacts.html">快捷方式</a></li>
+                            <li><a href="contacts.html">个人网址收藏</a></li>
+                            <li><a href="contacts.html">快速意见设置</a></li>
+
+
+                            <!--<li><a href="mailbox.html">Mailbox</a></li>-->
+                            <!--<li class="divider"></li>-->
+                            <!--<li><a href="login.html">Logout</a></li>-->
                         </ul>
                     </div>
                     <div class="logo-element">
@@ -36,7 +52,7 @@
                     <a href="#" ><i th:class="${ment.icon}"></i>
                         <span class="nav-label"   th:text="${ment.pname}" ></span>
                         <span class="fa arrow"></span></a>
-                    <ul  class="nav nav-second-level collapse" id="approvalProcess_ul">
+                    <ul  class="nav nav-second-level collapse" id="approvalProce ss_ul">
                         <li   id="process" th:each="childrenMent:${mentlist}" shiro:hasPermission="${childrenMent.percode}" th:if="${childrenMent.parentid}==${ment.pid} and ${childrenMent.type}=='menu'">
                             <a th:href="${childrenMent.url}" ><i th:class="${childrenMent.icon}"></i><span class="nav-label" th:text="${childrenMent.pname}"></span></a></li>
                     </ul>
@@ -47,6 +63,49 @@
     </nav>
 
 </aside>
+<div th:include="common/Head :: js"></div>
+
+<script src="../bootstrap/js/dept/js/vue.min.js"></script>
+
+
+<script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
+
+<script src="../js/manage/js/fileinput.min.js"></script>
+<script src="../js/manage/js/zh.js"></script>
+<script src="../js/manage/js/processData.js"></script>
+
+
+<script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
+
+<script type="text/javascript">
+
+    var layer;
+    function updataPsd(id){}
+    // updatePsd(id){
+    //     alert(id);
+    // }
+    // var changePassword = function(){
+    //     alert("123");
+    // // changePassword=function (obj) {
+    //     debugger
+        // idx = layer.open({
+        //     type: 1,
+        //     title: '选择需要导入的流程模型JSON',
+        //     resize: true,
+        //     fixed: true,
+        //     shadeClose: true,
+        //     shade: 0.1,
+        //     scrollbar: false,
+        //     area: ['400px', '250px'],
+        //     content: $('#uploadLayout'),
+        //     /*btn: ['上传并导入'],
+        //     end: function (index) {
+        //         console.log('index', index);
+        //     }*/
+        // });
+    // }
+
+</script>
 
 </body>
 </html>

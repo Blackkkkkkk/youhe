@@ -71,4 +71,29 @@ public class ShiroUserUtils {
         user.setUserPassword(newPassword);
     }
 
+//    /**
+//     *
+//     *根据盐，账号，原始密码生成加密后的密码
+//     */
+//    public static String encryptionPasswordBySalt(String userAccount,String salt,String password) {
+//        String credentialsSalt = userAccount + salt;
+//        return new SimpleHash(Constant.HASH_ALGORITHM, password,
+//                ByteSource.Util.bytes(credentialsSalt), Constant.HASH_INTERATIONS).toHex();
+//
+//    }
+
+    /**
+     *
+     * user 根据账号从数据查询出来的用户
+     * password 用于判断的密码
+     */
+    public static boolean checkPasswordByMeixiang(User userTemp,String oldpassword) {
+        String credentialsSalt = userTemp.getUserAccount() + userTemp.getSalt();
+        String oldPassword = new SimpleHash(Constant.HASH_ALGORITHM, oldpassword,
+                ByteSource.Util.bytes(credentialsSalt), Constant.HASH_INTERATIONS).toHex();
+        if(oldPassword.equals(userTemp.getUserPassword())){
+            return true;
+        }
+        return false;
+    }
 }

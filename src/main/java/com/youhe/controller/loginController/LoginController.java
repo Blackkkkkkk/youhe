@@ -6,6 +6,7 @@ import com.youhe.biz.permisson.PermissonBiz;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.entity.permission.Permission;
 import com.youhe.entity.user.User;
+import com.youhe.mapper.user.UserMapper;
 import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
@@ -56,6 +57,8 @@ public class LoginController {
     private PermissonBiz permissonBiz;
     @Autowired
     private UserBiz userBiz;
+    @Autowired
+    private UserMapper userMapper;
 
     @RequestMapping(value = "/")
     public String login() {
@@ -104,9 +107,11 @@ public class LoginController {
     @RequestMapping(value = "/index")
     public String index() {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
-
+        String userAccount=shiroUser.getUserAccount();
         Map<String, Object> vars = new HashMap<>();
         List<Permission> mentList = permissonBiz.selectMentLists();
+        User user=userMapper.findUser(userAccount);
+        vars.put("user",user);
         vars.put("mentlist",mentList);
         thymeleafViewResolver.setStaticVariables(vars);
         log.debug(shiroUser.getUserName() + ">>>>>>>>>>>>登录成功");

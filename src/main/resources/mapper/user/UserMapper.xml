@@ -210,5 +210,30 @@
 
 
 
+    <select id="findUser" parameterType="com.youhe.entity.user.User" resultType="com.youhe.entity.user.User">
+        SELECT * from sys_user
+        where 1=1
+        <if test="userAccount!=null">
+            AND USER_ACCOUNT = #{userAccount}
+        </if>
+    </select>
+
+    <update id="updates" parameterType="com.youhe.entity.user.User">
+        UPDATE  sys_user
+        SET
+        <if test="userName != null and userName!=''">
+            USER_NAME=#{userName},
+        </if>
+        <if test="email != null and email!=''">
+            EMAIL=#{email},
+        </if>
+        <if test="phone != null and phone!=''">
+            PHONE=#{phone}
+        </if>
+
+        WHERE uid=#{uid}
+    </update>
+
+
 
 </mapper>
