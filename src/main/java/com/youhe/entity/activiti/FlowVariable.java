@@ -20,9 +20,10 @@ public class FlowVariable implements Serializable {
 
     private String processName; // 流程名称
     private String processDefinitionId; // 流程定义ID
-    private String userId;  // 用户ID
+    private String userId;  // 当前用户ID
     private String nextUserId;  // 下一审批人
     private String ccUserId;  // 抄送人
+    private boolean agency; // 是否是代理申请
     private String processInstanceId;   // 流程实例ID
     private String taskId;  // 任务ID
     private String executionId;  // 任务执行ID；在并发情况下是唯一的

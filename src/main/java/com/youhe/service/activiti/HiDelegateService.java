@@ -14,6 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface HiDelegateService extends IService<HiDelegate> {
 
 
-    void saveHiDelegate(String assignee, String attorney, String taskId);
+    void saveHiDelegate(String assignee, String attorney, String taskId, Integer type);
 
 }

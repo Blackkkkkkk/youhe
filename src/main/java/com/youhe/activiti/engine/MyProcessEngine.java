@@ -103,6 +103,12 @@ public interface MyProcessEngine {
     List<ProdefTask> getHisTaskList(String userId);
 
     /**
+     * 获取总数
+     * @param userId
+     * @return
+     */
+    int total(String userId);
+    /**
      * 获取我申请的任务
      * @param userId
      * @return

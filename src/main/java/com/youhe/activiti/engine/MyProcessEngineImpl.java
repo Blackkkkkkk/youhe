@@ -211,12 +211,16 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public ProcessInstance start(String processDefinitionId, String businessId, Long userId) {
         try {
+            Map<String, Object> variables = new HashMap<>();
+            FlowVariable flowVariable = new FlowVariable();
             if (userId == null) {
                 // 获取当前登录用户
                 userId = ShiroUserUtils.getUserId();
+            } else {
+                flowVariable.setAgency(true);
             }
-            Map<String, Object> variables = new HashMap<>();
-            FlowVariable flowVariable = new FlowVariable();
+
+            flowVariable.setFirstNode(true);
             flowVariable.setNextUserId(String.valueOf(userId));
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
             // 设置当前任务的办理人
@@ -240,7 +244,6 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             flowVariable.setCurrentNodeKey(task.getTaskDefinitionKey());
             flowVariable.setTaskId(task.getId());
             flowVariable.setExecutionId(task.getExecutionId());
-            flowVariable.setFirstNode(true);
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
             taskService.setVariables(task.getId(), variables);
 
@@ -424,13 +427,22 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
+    public int total(String userId){
+        int listSize= historyService.createHistoricTaskInstanceQuery()
+                .taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime()
+                .desc().list().size();
+        return listSize;
+    }
+    @Override
     public List<ProdefTask> getHisApplyList(String userId,int size,int current ) {
         List<ProdefTask> ptHisList=new ArrayList<>();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
-        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime().desc().listPage(current,size);
-
+         int currents=current-1;
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
+                .taskAssignee(userId)
+                .finished().orderByHistoricTaskInstanceEndTime().desc()
+                .listPage(currents*size,size);
         list.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();

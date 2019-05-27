@@ -52,7 +52,7 @@
 
                             <!--选择审批人-->
                             <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
-                                <label class="col-sm-2 control-label">审批人</label>
+                                <label class="col-sm-2 control-label" style="width: 100px">下一审批人</label>
                                 <div class="form-group">
                                     <span class="glyphicon glyphicon-user" style="margin-top: 9px;"  onclick="selUser(this)">
                                     </span>
@@ -62,7 +62,7 @@
                             </div>
                             <!--选择抄送人-->
                             <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
-                                <label class="col-sm-2 control-label">抄送人</label>
+                                <label class="col-sm-2 control-label" style="width: 100px">抄送人</label>
                                 <div class="form-group">
                                     <span class="glyphicon glyphicon-user" style="margin-top: 9px;" onclick="selUser(this)">
                                     </span>
@@ -72,21 +72,18 @@
                             </div>
                             <!--下一节点-->
                             <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
-                                <label class="col-sm-2 control-label">下一环节</label>
+                                <label class="col-sm-2 control-label" style="width: 100px">下一环节</label>
                                 <div class="form-group">
                                     <label class="radio-inline" th:each="nextNode, info: ${taskData.flowVariable['nextNodes']}">
                                         <input type="radio" name="targetTaskDefKey" th:id="${'nextNode' + info.index}" th:value="${nextNode.id}" th:checked="${info.size==1}">
                                         <span th:text="${nextNode.name}">选项1</span>
                                     </label>
-                                    <!--<label class="radio-inline">
-                                        <input type="radio" name="nextNode" id="nextNode2"  value="option2"> 选项 2
-                                    </label>-->
                                 </div>
 
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">审批意见</label>
-                                <div class="col-sm-10">
+                                <label class="col-sm-2 control-label" style="width: 100px">审批意见</label>
+                                <div class="col-sm-9">
                                     <textarea class="form-control" name="comment"  rows="5" placeholder="填写审批意见"></textarea>
                                 </div>
                             </div>

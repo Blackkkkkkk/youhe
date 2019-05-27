@@ -238,6 +238,15 @@ var yuheUtils = {
                 ],
             // order: []
         });
+    },
+    /**
+     * 选中左侧菜单
+     * @param url 菜单url
+     */
+    leftMenuSelected : function (url) {
+        var $thisA = $('a[href="' + url + '"]');
+        $thisA.parent().attr("class", "active");
+        $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
     }
 };
 
