@@ -424,13 +424,22 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
+    public int total(String userId){
+        int listSize= historyService.createHistoricTaskInstanceQuery()
+                .taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime()
+                .desc().list().size();
+        return listSize;
+    }
+    @Override
     public List<ProdefTask> getHisApplyList(String userId,int size,int current ) {
         List<ProdefTask> ptHisList=new ArrayList<>();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
-        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime().desc().listPage(1,size*current);
-
+         int currents=current-1;
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
+                .taskAssignee(userId)
+                .finished().orderByHistoricTaskInstanceEndTime().desc()
+                .listPage(currents*size,size);
         list.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();

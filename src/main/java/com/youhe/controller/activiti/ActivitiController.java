@@ -274,7 +274,8 @@ public class ActivitiController extends BaseController {
     public R hisMyApply(int size,int current) {
         String userId = String.valueOf(ShiroUserUtils.getUserId());
         List<ProdefTask> hisAppyList = myProcessEngine.getHisApplyList(userId,size,current);
-        return R.ok().put("data", hisAppyList).put("total", hisAppyList.size());
+        int total = myProcessEngine.total(userId);
+        return R.ok().put("data", hisAppyList).put("total",total);
     }
 
     @GetMapping(value = "submitTask")
