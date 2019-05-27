@@ -31,6 +31,8 @@ INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (24, '代理申请设置', 'menu', NULL, 'flow:agency:set', 2, NULL, '0', '1', '');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (26, '编辑', 'button', NULL, 'flow:delegate:edit', 22, NULL, '0', '1', '');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (27, '删除', 'button', NULL, 'flow:delegate:del', 22, NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('29', '我的申请', 'menu', '/activiti/apply', 'user:apply', '2', NULL, '0', '1', '');
+
 
 
 -- 系统角色
