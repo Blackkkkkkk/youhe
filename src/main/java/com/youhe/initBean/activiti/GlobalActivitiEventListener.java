@@ -59,16 +59,34 @@ public class GlobalActivitiEventListener implements ActivitiEventListener {
                 // 设置审批人
                 task.setAssignee(nextUser);
 
-                // todo 如果开启委托功能，把当前任务转交到委托代理人
-                Delegate delegate = delegateService.getDelegateAssigneeAndProcessDefId(nextUser, flowVariable.getProcessDefinitionId());
-                if (delegate != null) {
-                    Date startTime = delegate.getStartTime();
-                    Date endTime = delegate.getEndTime();
-                    long l = DateUtil.betweenMs(startTime, endTime);
-                    if (l >= 0) {   // 转交委托人办理
-                        task.delegate(delegate.getAttorney());
-                        hiDelegateService.saveHiDelegate(nextUser, delegate.getAttorney(), flowVariable.getTaskId());
-                        LOGGER.info("任务实例{}委托给{}代理处理", flowVariable.getTaskId(), delegate.getAttorney());
+                // 设置了代理申请
+                if (flowVariable.isAgency()) {
+                    Delegate agency = delegateService
+                            .getDelegateAssigneeAndProcessDefId(nextUser, task.getProcessDefinitionId(), Constant.DELEGATE_TYPE_0);
+                    if (agency != null) {
+                        Date startTime = agency.getStartTime();
+                        Date endTime = agency.getEndTime();
+                        long l = DateUtil.betweenMs(startTime, endTime);
+                        if (l >= 0) {   // 由代理人发起申请
+                            task.delegate(agency.getAttorney());
+                            hiDelegateService.saveHiDelegate(nextUser, agency.getAttorney(), task.getId(), Constant.DELEGATE_TYPE_0);
+                        }
+                    }
+                }
+
+                // 如果开启委托功能，把当前任务转交到委托代理人
+                if (!flowVariable.isFirstNode()) {
+                    Delegate delegate = delegateService
+                            .getDelegateAssigneeAndProcessDefId(nextUser, task.getProcessDefinitionId(), Constant.DELEGATE_TYPE_1);
+                    if (delegate != null) {
+                        Date startTime = delegate.getStartTime();
+                        Date endTime = delegate.getEndTime();
+                        long l = DateUtil.betweenMs(startTime, endTime);
+                        if (l >= 0) {   // 转交委托人办理
+                            task.delegate(delegate.getAttorney());
+                            hiDelegateService.saveHiDelegate(nextUser, delegate.getAttorney(), task.getId(), Constant.DELEGATE_TYPE_1);
+                            LOGGER.info("任务实例{}委托给{}代理处理", task.getId(), delegate.getAttorney());
+                        }
                     }
                 }
 

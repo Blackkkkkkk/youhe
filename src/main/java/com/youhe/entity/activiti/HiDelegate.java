@@ -44,6 +44,11 @@ public class HiDelegate implements Serializable {
     private String attorney;
 
     /**
+     * 类型，0：申请代理，1：委托代理
+     */
+    private Integer type;
+
+    /**
      * 任务实例ID
      */
     private String taskId;
@@ -53,14 +58,13 @@ public class HiDelegate implements Serializable {
      */
     private Date delegateTime;
 
-    public HiDelegate() {
+    public HiDelegate() { }
 
-    }
-
-    public HiDelegate(String assignee, String attorney, String taskId) {
+    public HiDelegate(String assignee, String attorney, String taskId, Integer type) {
         this.assignee = assignee;
         this.attorney = attorney;
         this.taskId = taskId;
+        this.type = type;
     }
 
 

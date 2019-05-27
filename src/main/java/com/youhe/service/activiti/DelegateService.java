@@ -14,17 +14,26 @@ import com.youhe.entity.activiti.Delegate;
  */
 public interface DelegateService extends IService<Delegate> {
 
+    IPage<Delegate> listDelegatePage(String processName, Integer type, int current, int size);
 
-    IPage<Delegate> listDelegatePage(String processName, int current, int size);
+    Delegate getDelegateAssigneeAndProcessDefId(String assignee, String processDefId, Integer type);
 
-    Delegate getDelegateAssigneeAndProcessDefId(String assignee, String processDefId);
+    Delegate getDelegateAttorneyAndProcessDefId(String attorney, String processDefId, Integer type);
 
     /**
-     * 是否委托任务
-     * @param assignee 办理人
-     * @param processDefId 流程定义ID
+     * 根据ID和类型删除
+     * @param id 主键ID
+     * @param type 类型：0：代理申请；1：委托审批
+     */
+    void removeDelegateByIdAndType(Long id, Integer type);
+
+    /**
+     * 获取代理申请数据（分页）
+     * @param processName
+     * @param current
+     * @param size
      * @return
      */
-    boolean isDelegate(String assignee, String processDefId);
+    IPage<Delegate> listAgencyAppPage(String processName, int current, int size);
 
 }

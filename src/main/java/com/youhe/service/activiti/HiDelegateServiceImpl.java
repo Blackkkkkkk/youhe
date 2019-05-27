@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class HiDelegateServiceImpl extends ServiceImpl<HiDelegateMapper, HiDelegate> implements HiDelegateService {
 
     @Override
-    public void saveHiDelegate(String assignee, String attorney, String taskId) {
-        super.save(new HiDelegate(assignee, attorney, taskId));
+    public void saveHiDelegate(String assignee, String attorney, String taskId, Integer type) {
+        super.save(new HiDelegate(assignee, attorney, taskId, type));
     }
 }

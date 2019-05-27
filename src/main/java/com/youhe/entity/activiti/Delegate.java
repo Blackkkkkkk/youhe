@@ -44,6 +44,11 @@ public class Delegate implements Serializable {
     private String attorney;
 
     /**
+     * 类型，0：申请代理，1：委托代理
+     */
+    private Integer type;
+
+    /**
      * 流程定义ID
      */
     private String processDefinitionId;

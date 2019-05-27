@@ -1,8 +1,10 @@
 
+DROP TABLE IF EXISTS `act_ru_delegate`;
 CREATE TABLE `act_ru_delegate` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `ASSIGNEE` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '办理人',
   `ATTORNEY` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '代理人',
+  `TYPE` tinyint(2) DEFAULT NULL COMMENT '类型，0：申请代理，1：委托代理',
   `PROCESS_DEFINITION_ID` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流程定义ID',
   `PROCESS_NAME` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '流程名称',
   `START_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
@@ -10,17 +12,18 @@ CREATE TABLE `act_ru_delegate` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='委托表';
 
-
+DROP TABLE IF EXISTS `act_hi_delegate`;
 CREATE TABLE `act_hi_delegate` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `ASSIGNEE` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '办理人',
   `ATTORNEY` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '代理人',
+  `TYPE` tinyint(2) DEFAULT NULL COMMENT '类型，0：申请代理，1：委托代理',
   `TASK_ID` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '任务实例ID',
   `DELEGATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '委托时间',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='委托历史表';
 
-
+DROP TABLE IF EXISTS `act_ext_copyto`;
 CREATE TABLE `act_ext_copyto` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `CC` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '抄送人',

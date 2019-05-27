@@ -211,12 +211,16 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public ProcessInstance start(String processDefinitionId, String businessId, Long userId) {
         try {
+            Map<String, Object> variables = new HashMap<>();
+            FlowVariable flowVariable = new FlowVariable();
             if (userId == null) {
                 // 获取当前登录用户
                 userId = ShiroUserUtils.getUserId();
+            } else {
+                flowVariable.setAgency(true);
             }
-            Map<String, Object> variables = new HashMap<>();
-            FlowVariable flowVariable = new FlowVariable();
+
+            flowVariable.setFirstNode(true);
             flowVariable.setNextUserId(String.valueOf(userId));
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
             // 设置当前任务的办理人
@@ -240,7 +244,6 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             flowVariable.setCurrentNodeKey(task.getTaskDefinitionKey());
             flowVariable.setTaskId(task.getId());
             flowVariable.setExecutionId(task.getExecutionId());
-            flowVariable.setFirstNode(true);
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
             taskService.setVariables(task.getId(), variables);
 

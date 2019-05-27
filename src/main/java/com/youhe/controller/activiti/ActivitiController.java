@@ -158,6 +158,21 @@ public class ActivitiController extends BaseController {
     }
 
     /**
+     * 启动代理申请流程
+     *
+     * @param processDefinitionId 流程定义ID
+     * @return 任务表单
+     */
+    @GetMapping(value = "start/agencyProcess")
+    public ModelAndView startAgencyProcess(String processDefinitionId) {
+        String userId = String.valueOf(ShiroUserUtils.getUserId());
+        Delegate delegate = delegateService.getDelegateAttorneyAndProcessDefId(userId, processDefinitionId, Constant.DELEGATE_TYPE_0);
+        ProcessInstance processInstance = myProcessEngine.start(processDefinitionId, Long.valueOf(delegate.getAssignee()));
+        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
+        return new ModelAndView("redirect:/activiti/form/task/" + task.getId());
+    }
+
+    /**
      * 提交任务
      */
     @PostMapping(value = "submit/task")
@@ -174,7 +189,7 @@ public class ActivitiController extends BaseController {
      * @param taskId 任务ID
      * @return
      */
-    @GetMapping(value = "/form/task/{taskId}")
+    @GetMapping(value = "form/task/{taskId}")
     public ModelAndView taskForm(@PathVariable("taskId") String taskId) {
         ModelAndView mv = new ModelAndView();
         Map<String, Object> map = myProcessEngine.getTaskFormData(taskId);
@@ -518,6 +533,28 @@ public class ActivitiController extends BaseController {
         return R.ok();
     }
 
+    @RequiresPermissions(value = "flow:agency:index")
+    @GetMapping(value = "agency/index")
+    public ModelAndView agency() {
+        return new ModelAndView("activiti/approve/app_agency_set");
+    }
+
+    @RequiresPermissions(value = "flow:agencyApp:index")
+    @GetMapping(value = "agencyApp/index")
+    public ModelAndView agencyApp() {
+        return new ModelAndView("activiti/approve/app_agency");
+    }
+
+    /**
+     * 当前用户代理申请列表
+     * @return
+     */
+    @GetMapping(value = "agencyApp/listData")
+    public R agencyAppListData(String processName, int current, int size) {
+        IPage<Delegate> page = delegateService.listAgencyAppPage(processName, current, size);
+        return R.ok().put("data", page.getRecords()).put("total", page.getTotal());
+    }
+
     @RequiresPermissions(value = "flow:delegate:index")
     @GetMapping(value = "delegate/index")
     public ModelAndView delegate() {
@@ -525,20 +562,21 @@ public class ActivitiController extends BaseController {
     }
 
     /**
-     * 委托任务列表数据接口
+     * 委托任务或代理申请列表数据接口
      * @param processName
+     * @param type 类型：0：代理申请；1：委托审批
      * @param current 当前页码
      * @param size 每页条目
      * @return
      */
     @GetMapping(value = "delegate/listData")
-    public R delegateListData(String processName, int current, int size) {
-        IPage<Delegate> delegateIPage = delegateService.listDelegatePage(processName, current, size);
+    public R delegateListData(String processName, Integer type, int current, int size) {
+        IPage<Delegate> delegateIPage = delegateService.listDelegatePage(processName, type , current, size);
         return R.ok().put("data", delegateIPage.getRecords()).put("total", delegateIPage.getTotal());
     }
 
     /**
-     * 保存/更新委托
+     * 保存/更新委托或代理申请
      * @param delegate
      * @return
      */
@@ -551,14 +589,15 @@ public class ActivitiController extends BaseController {
     }
 
     /**
-     * 删除委托
+     * 删除委托或代理申请
+     * @param type 类型：0：代理申请；1：委托审批
      * @param delegateId
      * @return
      */
     @RequiresPermissions(value = "flow:delegate:del")
-    @PostMapping(value = "remove/delegate/{delegateId}")
-    public R removeDelegate(@PathVariable Long delegateId) {
-        delegateService.removeById(delegateId);
+    @PostMapping(value = "remove/{type}/delegate/{delegateId}")
+    public R removeDelegate(@PathVariable Integer type, @PathVariable Long delegateId) {
+        delegateService.removeDelegateByIdAndType(delegateId, type);
         return R.ok();
     }
 
