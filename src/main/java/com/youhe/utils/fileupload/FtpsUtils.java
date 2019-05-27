@@ -1,4 +1,5 @@
-package com.youhe.utils.fastdfs;/**
+package com.youhe.utils.fileupload;
+/**
  * @ClassName Ftps
  * @Description TODO
  * @Author xdn
@@ -7,15 +8,14 @@ package com.youhe.utils.fastdfs;/**
  */
 
 import com.jcraft.jsch.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.EOFException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
+
 import java.util.*;
 
 /**
