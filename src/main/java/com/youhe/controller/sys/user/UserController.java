@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youhe.biz.department.DepartmentBiz;
 import com.youhe.biz.role.RoleBiz;
 import com.youhe.biz.user.UserBiz;
+import com.youhe.common.Constant;
 import com.youhe.controller.loginController.LoginController;
 import com.youhe.entity.department.User_Department;
 import com.youhe.entity.permission.Permission;
@@ -19,6 +20,8 @@ import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +81,6 @@ public class UserController {
         return "sys/user/updateUser";
     }
 //修改个人资料
-    @RequiresPermissions(value = "flow:")
     @RequestMapping(value = "/updates")
     @ResponseBody
     public R updates(String userName,String email,String phone,Integer uid) {
@@ -114,15 +116,28 @@ public class UserController {
         user.setUserAccount(userAccount);
         user.setUserPassword(password);
         user.setUid(Long.valueOf(uid));
-        if (ShiroUserUtils.checkPasswordByMeixiang(userTemp,oldpassword)){
+
+        String credentialsSalt = userTemp.getUserAccount() + userTemp.getSalt();
+        String oldPassword = new SimpleHash(Constant.HASH_ALGORITHM, oldpassword,
+                ByteSource.Util.bytes(credentialsSalt), Constant.HASH_INTERATIONS).toHex();
+        if(oldPassword.equals(userTemp.getUserPassword())){
+            System.out.println("成功");
+            ShiroUserUtils.encryptPassword(user);
             userBiz.update(user);
-            System.out.println("修改成功");
-        }else {
-            System.out.println("与原密码不一致");
+            return R.ok();
+
         }
+        return R.error();
+
+//        if (ShiroUserUtils.checkPasswordByMeixiang(userTemp,oldpassword)){
+//            userBiz.update(user);
+//            System.out.println("修改成功");
+//        }else {
+//            return R.error("与原密码不一致");
+//        }
 //        Map<String, Object> vars = new HashMap<>();
 //        userBiz.updates(userName,email,phone,uid);
-        return R.ok();
+//        return R.ok();
     }
 
     /**
