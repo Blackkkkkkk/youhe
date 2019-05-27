@@ -105,7 +105,7 @@ public class UserController {
     //修改密码
     @RequestMapping(value = "/updatePassword")
     @ResponseBody
-    public R updatePassword(String oldpassword,String password,String passwordAgin,Integer uid) {
+    public R updatePassword(String oldpassword,String password,Integer uid) {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
         String userAccount=shiroUser.getUserAccount();
         User user=new User();
@@ -116,7 +116,7 @@ public class UserController {
         user.setUserAccount(userAccount);
         user.setUserPassword(password);
         user.setUid(Long.valueOf(uid));
-
+       //输入的新密码跟数据库的实际密码进行判断   如果一致修改成功  如果不一致修改失败
         String credentialsSalt = userTemp.getUserAccount() + userTemp.getSalt();
         String oldPassword = new SimpleHash(Constant.HASH_ALGORITHM, oldpassword,
                 ByteSource.Util.bytes(credentialsSalt), Constant.HASH_INTERATIONS).toHex();
@@ -127,7 +127,7 @@ public class UserController {
             return R.ok();
 
         }
-        return R.error();
+        return R.error("原密码输入错误");
 
 //        if (ShiroUserUtils.checkPasswordByMeixiang(userTemp,oldpassword)){
 //            userBiz.update(user);
