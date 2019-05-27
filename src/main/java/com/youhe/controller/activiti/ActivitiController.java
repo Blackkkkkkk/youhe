@@ -104,6 +104,15 @@ public class ActivitiController extends BaseController {
         return new ModelAndView("activiti/manage/MyDo");
     }
 
+    /**
+     * 我的申请
+     * @return
+     */
+    @GetMapping(value = "/apply")
+    public ModelAndView indxMyApply() {
+        return new ModelAndView("activiti/manage/MyApply");
+    }
+
     @GetMapping(value = "create")
     public void create(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -253,6 +262,19 @@ public class ActivitiController extends BaseController {
         List<ProdefTask> hisTaskList = myProcessEngine.getHisTaskList(userId);
 
         return R.ok().put("hisTaskList", hisTaskList);
+    }
+
+   /* IPage<Delegate> delegateIPage = delegateService.listDelegatePage(processName, current, size);
+        return R.ok().put("data", delegateIPage.getRecords()).put("total", delegateIPage.getTotal());*/
+    /**
+     * 我的申请
+     * @return
+     */
+    @GetMapping(value = "apply/list")
+    public R hisMyApply(int size,int current) {
+        String userId = String.valueOf(ShiroUserUtils.getUserId());
+        List<ProdefTask> hisAppyList = myProcessEngine.getHisApplyList(userId,size,current);
+        return R.ok().put("data", hisAppyList).put("total", hisAppyList.size());
     }
 
     @GetMapping(value = "submitTask")

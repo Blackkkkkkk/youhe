@@ -6,6 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -13,6 +15,7 @@ import com.youhe.activiti.ext.FelSupport;
 import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.Copyto;
+import com.youhe.entity.activiti.Delegate;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.Node;
 import com.youhe.entity.activitiData.MyCommentEntity;
@@ -404,6 +407,41 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             pt.setTaskId(lists.getId());
 
         //根据流程实例id查询发起人
+            String startUserId = this.getStartUserId(lists.getProcessInstanceId());
+            pt.setStartUserId(startUserId);
+            User user= userMapper.findName(pt.getStartUserId());
+            pt.setStartUserName(user.getUserName());
+            //根据流程定义id查询出流程名称(标题)
+            String processDefinitionId = lists.getProcessDefinitionId();
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionId(processDefinitionId)
+                    .singleResult();
+            pt.setName_(processDefinition.getName());
+
+            ptHisList.add(pt);
+        });
+        return ptHisList;
+    }
+
+    @Override
+    public List<ProdefTask> getHisApplyList(String userId,int size,int current ) {
+        List<ProdefTask> ptHisList=new ArrayList<>();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime().desc().listPage(current,size);
+
+        list.forEach(lists->{
+            //通过浅克隆创建对象
+            ProdefTask pt = ProdefTask.getOnePerson();
+
+
+            pt.setName(lists.getName());
+            pt.setCreateTime(date.format(lists.getCreateTime()));
+            pt.setEndTime(date.format(lists.getEndTime()));
+            pt.setTaskId(lists.getId());
+
+            //根据流程实例id查询发起人
             String startUserId = this.getStartUserId(lists.getProcessInstanceId());
             pt.setStartUserId(startUserId);
             User user= userMapper.findName(pt.getStartUserId());

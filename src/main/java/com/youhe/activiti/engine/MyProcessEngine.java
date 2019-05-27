@@ -1,5 +1,6 @@
 package com.youhe.activiti.engine;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.entity.department.Department;
@@ -100,6 +101,13 @@ public interface MyProcessEngine {
      * @return List<HistoricTaskInstance>
      */
     List<ProdefTask> getHisTaskList(String userId);
+
+    /**
+     * 获取我申请的任务
+     * @param userId
+     * @return
+     */
+    List<ProdefTask> getHisApplyList(String userId,int size,int current);
 
     /**
      * 获取流程表单
