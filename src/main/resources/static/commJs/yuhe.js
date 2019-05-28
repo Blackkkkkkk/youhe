@@ -179,7 +179,7 @@ var yuheUtils = {
         return control;
     },
     /**
-     * 表格实例化
+     * 表格实例化 这个只是前端分页，没有整合服务端分页，若要服务端分页请参数 app_delegate.html里面
      * @param dom
      * @param params
      */
@@ -187,42 +187,15 @@ var yuheUtils = {
         $(dom).DataTable({
             pageLength: 10,
             responsive: true,
-            //  dom: '<"html5buttons"B>f',
             dom: '<"html5buttons"B>f<"top">rt<"bottom"lp>i<"clear">',
             pagingType: "full_numbers",
             destroy: true,
             colReorder: true,
-            /*language: {
-                "sLengthMenu": "每页显示 _MENU_条",
-                "paginate": {
-                    "last": "最后一页",
-                    "first": "第一页",
-                    "next": "下一页",
-                    "previous": "上一页",
-                    "show": "显示"
-                },
-                zeroRecords: "没有内容",//table tbody内容为空时，tbody的内容。
-                //下面三者构成了总体的左下角的内容。
-                info: "总共_PAGES_ 页，显示第_START_ 到第 _END_ ，筛选之后得到 _TOTAL_ 条，初始_MAX_ 条 ",//左下角的信息显示，大写的词为关键字。
-                infoEmpty: "0条记录",//筛选为空时左下角的显示。
-                infoFiltered: "",//筛选之后的左下角筛选提示，
-                buttons: {
-                    "colvis": "列可见性",
-                    "print": "打印",
-                    "copy": "复制数据"
-                },
-                editor: {
-                    "Update": "更新"
-                }
-
-            },*/
             language: CONSTANT.DATA_TABLES.DEFAULT_OPTION.language,
             autoWidth: false,   //禁用自动调整列宽
             stripeClasses: ["odd", "even"],//为奇偶行加上样式，兼容不支持CSS伪类的场合
             order: [],          //取消默认排序查询,否则复选框一列会出现小箭头
             processing: false,  //隐藏加载提示,自行处理
-            serverSide: true,   //启用服务器端分页
-            // searching: false,    //禁用原生搜索
             ajax: {
                 url: params.ajax.url,
                 dataSrc: params.ajax.dataSrc,
@@ -234,9 +207,7 @@ var yuheUtils = {
             columnDefs:
                 [
                     {orderable: false, targets: 0}
-                    // {width: "15%", orderable: false, targets: 5}
-                ],
-            // order: []
+                ]
         });
     },
     /**
@@ -247,6 +218,19 @@ var yuheUtils = {
         var $thisA = $('a[href="' + url + '"]');
         $thisA.parent().attr("class", "active");
         $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
+    },
+    bindPersonalSetting: function () {
+        $('#setting').on('click', function () {
+            var isExpanded = $(this).attr('aria-expanded');
+            var $drodownEl = $(this).parent('.profile-element');
+            if (isExpanded === 'true') {
+                $drodownEl.removeClass('open');
+                $(this).attr('aria-expanded', false);
+            } else {
+                $drodownEl.addClass('open');
+                $(this).attr('aria-expanded', true);
+            }
+        });
     }
 };
 
@@ -332,7 +316,6 @@ $(function () {
     bindAdd2Cart();
     bindLogin();
     bindLoginOut();
-
 });
 
 

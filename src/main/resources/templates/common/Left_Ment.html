@@ -14,7 +14,7 @@
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element"> <span >
-                            <img alt="image" class="img-circle" src="../bootstrap/img/profile_small.jpg"/>
+                            <img alt="image" class="img-circle" th:src="@{/bootstrap/img/profile_small.jpg}"/>
                              </span>
                         <!--<a data-toggle="dropdown" class="dropdown-toggle" href="#">-->
                             <!--<span class="clear"> <span class="block m-t-xs"> <strong-->
@@ -22,7 +22,7 @@
                              <!--</span> <span class="text-muted text-xs block">Art Director <b-->
                                     <!--class="caret"></b></span> </span> </a>-->
 
-                        <a data-toggle="dropdown" class="dropdown-toggle">
+                        <a data-toggle="dropdown" id="setting" class="dropdown-toggle">
                             <span class="clear"> <span class="block m-t-xs"  th:text="${user.userName}" > <strong
                                     class="font-bold"></strong>
                              </span> <span class="text-muted text-xs block">个人设置<b

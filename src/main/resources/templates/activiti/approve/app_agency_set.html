@@ -129,7 +129,8 @@
         var $ = layui.jquery, element = layui.element, form = layui.form, laydate = layui.laydate;
 
         // 选中左侧菜单
-        yuheUtils.leftMenuSelected('/activiti/agency/index');
+        yuheUtils.leftMenuSelected('/activiti/agency/index');\
+        yuheUtils.bindPersonalSetting();
         
         var $wrapper = $('#div-table-container');
         var $table = $('#myTable');
