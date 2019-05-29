@@ -2,10 +2,13 @@ package com.youhe.controller.fileuploads;
 
 import cn.hutool.core.lang.UUID;
 import com.jcraft.jsch.*;
+import com.youhe.service.fileupload.FileKnowledgeService;
 import com.youhe.utils.R;
 import com.youhe.utils.fileupload.FtpsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,9 +35,12 @@ import java.util.Map;
 public class FileController {
     private static Logger logger = LoggerFactory.getLogger(FileController.class);
 
+    @Autowired
+    private FileKnowledgeService fileKnowledgeService;
+
     @GetMapping(value = "/knowledge")
     public ModelAndView DocmentKnowLedge() {
-        return new ModelAndView("/sys/docment/file");
+        return new ModelAndView("sys/docment/files");
     }
 
     /**
@@ -86,28 +92,13 @@ public class FileController {
      */
     @PostMapping("/uploadLocal")
     public  R uploadLocalFile(@RequestParam(name = "file")MultipartFile[] multipartFile, HttpServletRequest request){
+        fileKnowledgeService.uploadFile(multipartFile,request);
+        return  R.ok();
+    }
 
-        if (multipartFile == null || multipartFile.length < 1) {
-           return  R.error();
-        }
-        String path = request.getSession().getServletContext().getRealPath("/uploads/");
-        File files = new File(path);
-        if (!files.exists() || !files.isDirectory()){
-            files.mkdirs();
-        }
-       String uuid=UUID.randomUUID().toString().replace("-","");
-        for (MultipartFile file : multipartFile) {
-            try {
-                String fileName = file.getOriginalFilename();
-                String suffix = fileName.substring(fileName.lastIndexOf('.'));
-                String ossFileName = uuid+suffix;
-                File serverFile = new File(path,ossFileName);
-                file.transferTo(serverFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return  R.error();
-            }
-        }
+    @PostMapping("/uploaList")
+    public  R uploadLocalList(){
+
         return  R.ok();
     }
 }

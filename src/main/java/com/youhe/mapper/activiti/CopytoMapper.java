@@ -1,7 +1,12 @@
 package com.youhe.mapper.activiti;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.youhe.dto.activiti.CopyToDto;
 import com.youhe.entity.activiti.Copyto;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +17,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2019-05-22
  */
 public interface CopytoMapper extends BaseMapper<Copyto> {
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    List<CopyToDto> queryRead(String userId,IPage page);
 
 }

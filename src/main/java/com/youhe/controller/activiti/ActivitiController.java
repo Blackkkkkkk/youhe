@@ -8,11 +8,14 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageInfo;
 import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.activiti.ext.ProcessDiagramGenerator;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.common.Constant;
 import com.youhe.controller.comm.BaseController;
+import com.youhe.dto.activiti.CopyToDto;
+import com.youhe.entity.activiti.Copyto;
 import com.youhe.entity.activiti.Delegate;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
@@ -20,11 +23,13 @@ import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
 import com.youhe.entity.department.Department;
 import com.youhe.exception.YuheOAException;
+import com.youhe.service.activiti.CopytoService;
 import com.youhe.service.activiti.DelegateService;
 import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import com.youhe.utils.spring.HttpServletContextKit;
+import com.youhe.vo.activiti.CopyToVo;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
@@ -70,7 +75,8 @@ public class ActivitiController extends BaseController {
     private DelegateService delegateService;
     @Autowired
     private UserBiz userBiz;
-
+    @Autowired
+    CopytoService copytoService;
 
     @GetMapping(value = "ProcessManagement")
     public ModelAndView ProcessManagement() {
@@ -111,6 +117,15 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "/apply")
     public ModelAndView indxMyApply() {
         return new ModelAndView("activiti/manage/MyApply");
+    }
+
+    /**
+     * 待我阅读
+     * @return
+     */
+    @GetMapping(value = "/read")
+    public ModelAndView indxMyRead() {
+        return new ModelAndView("activiti/manage/MyRead");
     }
 
     @GetMapping(value = "create")
@@ -279,8 +294,6 @@ public class ActivitiController extends BaseController {
         return R.ok().put("hisTaskList", hisTaskList);
     }
 
-   /* IPage<Delegate> delegateIPage = delegateService.listDelegatePage(processName, current, size);
-        return R.ok().put("data", delegateIPage.getRecords()).put("total", delegateIPage.getTotal());*/
     /**
      * 我的申请
      * @return
@@ -291,6 +304,30 @@ public class ActivitiController extends BaseController {
         List<ProdefTask> hisAppyList = myProcessEngine.getHisApplyList(userId,size,current);
         int total = myProcessEngine.total(userId);
         return R.ok().put("data", hisAppyList).put("total",total);
+    }
+
+    /**
+     * 待我阅读
+     * @param size
+     * @param current
+     * @return
+     */
+    @GetMapping(value = "read/list")
+    public R MyRead(int size,int current) {
+        String userId = String.valueOf(ShiroUserUtils.getUserId());
+        IPage<CopyToDto> readList = copytoService.getReadList(userId, size, current);
+        return R.ok().put("data", readList.getRecords()).put("total",readList.getTotal());
+    }
+
+    /**
+     * 修改阅读状态
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/read/change")
+    public R changeRead(long id) {
+        copytoService.makeRead(id);
+        return R.ok();
     }
 
     @GetMapping(value = "submitTask")
@@ -580,7 +617,7 @@ public class ActivitiController extends BaseController {
      * @param delegate
      * @return
      */
-    @RequiresPermissions(value = "flow:delegate:edit")
+    @RequiresPermissions(value = "flow:delegate:del")
     @PostMapping(value = "delegate/save")
     public R delegateSave(Delegate delegate) {
         delegate.setAssignee(String.valueOf(ShiroUserUtils.getUserId()));

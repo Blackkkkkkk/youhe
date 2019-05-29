@@ -73,5 +73,4 @@ public class Copyto implements Serializable {
      */
     private Date createTime;
 
-
 }
