@@ -19,8 +19,9 @@ public class Generator {
     private static String packageName = "com.youhe"; // 生成的包名
     private static String[] tableNames = {"act_hi_delegate"};   // 表名
     private static String tablePrefix = "act_";    // 配置了会自动去掉表名的前缀
+    private static String modelName = "activiti";   // 包模块
     private static boolean serviceNameStartWithI = false;  //user -> UserService, 设置成true: user -> IUserService
-    private static String author = "Kalvin";    // 作者
+    private static String author = "xxx";    // 作者
     private static String outputDir = "D://genCode";   // 代码生成的路径目录
     private static String dbUrl = "jdbc:mysql://localhost:3306/activiti?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=false&serverTimezone=GMT%2B8";
     private static String dbUsername = "root";
@@ -62,6 +63,9 @@ public class Generator {
             config.setServiceName("%sService");
             config.setMapperName("%sMapper");
         }
+        if (!"".equals(modelName)) {
+            modelName += ".";
+        }
         new AutoGenerator().setGlobalConfig(config)
                 .setTemplate(tc)
                 .setDataSource(dataSourceConfig)
@@ -69,11 +73,11 @@ public class Generator {
                 .setPackageInfo(
                         new PackageConfig()
                                 .setParent(packageName)
-                                .setEntity("entity.activiti")
-                                .setMapper("mapper.activiti")
-                                .setController("controller")
-                                .setService("service.activiti")
-                                .setServiceImpl("service.activiti")
+                                .setEntity("entity" + modelName)
+                                .setMapper("mapper"+ modelName)
+                                .setController("controller" + modelName)
+                                .setService("service" + modelName)
+                                .setServiceImpl("service" + modelName)
                                 .setXml("xml")
                 ).execute();
     }
