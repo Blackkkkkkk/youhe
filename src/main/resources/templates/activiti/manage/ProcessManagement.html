@@ -128,6 +128,18 @@
 <script src="../js/manage/js/processData.js"></script>
 
 
+<script src="../ztree/jquery.ztree.all.min.js"></script>
+<script src="../ztree/jquery.ztree.exhide.js"></script>
+<script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
+
+<script src="../bootstrap/js/dept/js/jquery.treegrid.min.js"></script>
+<script src="../bootstrap/js/dept/js/jquery.treegrid.bootstrap3.js"></script>
+<script src="../bootstrap/js/dept/js/jquery.treegrid.extension.js"></script>
+<script src="../bootstrap/js/dept/js/tree.table.js"></script>
+
+<script src="../bootstrap/js/user/js/Roleztree.js"></script>
+
+
 <script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
 
 
@@ -201,6 +213,7 @@
     var data;
 
     $(document).ready(function () {
+        yuheUtils.bindPersonalSetting();
         var trs ;
 
         $("#flow").attr("class", "active");
@@ -288,11 +301,15 @@
         return fmt;
     }
 
+    // $(function () {
+    //
+    // })
+
     $(function () {
-
-    })
-
-
+        var $thisA = $('a[href="/activiti/ProcessManagement"]');
+        $thisA.parent().attr("class", "active");
+        $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
+    });
 </script>
 
 </body>

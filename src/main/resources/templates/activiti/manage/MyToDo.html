@@ -112,6 +112,7 @@
 
     var data;
     $(document).ready(function () {
+        yuheUtils.bindPersonalSetting();
 
         // 初始化表格dataTable。一般只传ajax（数据）、columns（列）、aoColumnDefs（列格式化操作，若无不需要）
         yuheUtils.initDataTable('.dataTables-example', {
