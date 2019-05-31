@@ -62,6 +62,17 @@ License: You must have a valid license purchased only from themeforest(the above
     <link href="../bootstrap/user/css/custom.css" rel="stylesheet" type="text/css">
     <!-- Theme styles END -->
     <link href="../layui/css/layui.css" rel="stylesheet">
+    <style>
+        .shopping-cart-data td, .checkout-page td {
+            vertical-align: top;
+            padding: 10px 20px 20px 0;
+            border-bottom: solid 1px #ecebeb;
+        }
+
+        .layui-form-select dl dd.layui-this {
+            background-color: #e84d1c;
+        }
+    </style>
 </head>
 <!-- Head END -->
 
@@ -82,103 +93,114 @@ License: You must have a valid license purchased only from themeforest(the above
             <!-- BEGIN SIDEBAR & CONTENT -->
             <div class="row margin-bottom-40">
                 <!-- BEGIN CONTENT -->
-
-                <div class="col-md-12 col-sm-12">
-                    <div class="form-group">
-                        <h3 style="margin-bottom:0.1cm">填写收货地址</h3>
-                        <div class="" style="margin-bottom:0.5cm"  >
-                            <input  required  type="text" class="form-control"  placeholder="收货地址" name="delivery_addr"/>
+                <div class="layui-form">
+                    <form class="form-horizontal" id="myForm" style="padding: 10px 10% 10px 0;" action="">
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">我的已存地址</div>
+                            <div class="col-sm-10">
+                                <select class="form-control" lay-filter="addre">
+                                    <option v-for="(item,index) in addressList" :value="item.id">{{item.deliveryAddr}}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <h2 style="margin-bottom:0.2cm">确认订单信息</h2>
-
-
-                    <div class="shopping-cart-page">
-                        <div class="shopping-cart-data clearfix">
-                            <div class="table-wrapper-responsive">
-
-                                <table summary="Shopping cart111">
-                                    <tr>
-                                        <th class="shopping-cart-image">图片</th>
-                                        <th class="shopping-cart-description" style=" text-align:center; ">商品属性</th>
-                                        <th class="shopping-cart-quantity">数量</th>
-                                        <th class="shopping-cart-price">单价</th>
-                                        <th class="shopping-cart-total" colspan="2">总价</th>
-                                    </tr>
-                                    <!--th:each=${shopList['orderDetail']}-->
-                                    <!--对象名.user[0].name这样子-->
-                                    <!--<tr th:each="shopList.orderDetail[0]">-->
-                                    <tr th:each="com_list:${shopList['orderDetail']}">
-                                        <td class="shopping-cart-image">
-                                            <!--<a href="#"><img-->
-                                                    <!--:src="item.pageaddr+item.saveFileName"-->
-                                                    <!--alt="Berry Lace Dress"></a>-->
-                                            <a href="#"><img
-                                                    th:src="@{${com_list.pageaddr}+${com_list.saveFileName}}"
-                                                    alt="Berry Lace Dress"></a>
-                                        </td>
-                                        <td class="shopping-cart-description" style=" text-align:center; ">
-                                            <!--<h3><a href="#">Cool green dress with red bell</a></h3>-->
-                                            <!--<p><strong>Item 1</strong> - Color: Green; Size: S</p>-->
-                                            <!--<em>More info is here</em>-->
-                                            <strong><span></span><span th:text="${com_list.commodityName}"></span></strong>
-                                        </td>
-
-                                        <td class="shopping-cart-quantity">
-
-                                            <div class="product-quantity">
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">收件人</div>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="username" v-model="addressee"
+                                       placeholder="收件人" lay-verify="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">手机</div>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="phone" placeholder="手机" v-model="phone"
+                                       lay-verify="required|phone"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">收货地址</div>
+                            <div class="col-sm-10">
+                          <textarea type="text" class="form-control"
+                                    name="shopExplain"
+                                    v-model="deliveryAddr" placeholder="收货地址" lay-verify="required"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-md-12 col-sm-12">
+                        <div class="shopping-cart-page">
+                            <div class="shopping-cart-data clearfix">
+                                <div class="table-wrapper-responsive">
+                                    <table summary="Shopping cart111">
+                                        <tr>
+                                            <th class="shopping-cart-image">图片</th>
+                                            <th class="shopping-cart-description" style=" text-align:center; ">商品名字</th>
+                                            <th class="shopping-cart-quantity">数量</th>
+                                            <th class="shopping-cart-price">单价</th>
+                                            <th class="shopping-cart-total" colspan="2">总价</th>
+                                        </tr>
+                                        <tr v-for="item in shopList">
+                                            <td class="shopping-cart-image">
+                                                <a href="#"><img
+                                                        :src="item.pageaddr+item.saveFileName"
+                                                        alt="Berry Lace Dress"></a>
+                                            </td>
+                                            <td class="shopping-cart-description"
+                                                style=" text-align:center;padding: 30px 0 0 0; ">
+                                                <span v-text="item.sukChangeName"></span>
+                                            </td>
+                                            <td class="shopping-cart-quantity" style="padding: 20px 0 0 0;">
+                                                <div class="product-quantity">
                                                 <span class="input-group-btn"><button
                                                         class="btn quantity-up bootstrap-touchspin-up" type="button"
-                                                        @click="addCardNum($event,0)"><i
-                                                         class="fa fa-angle-up" ></i></button></span>
-                                                <input v-if="0 == 0" id="product-quantity"   th:value="${com_list.num}" type="text"
-                                                       readonly
-                                                       class="form-control input-sm" ref="input1" name="text">
-                                                <input id="product-quantity"   th:value="${shopList.allPrices}" type="hidden" name="prices">
-
-                                                <span class="input-group-btn"><button
-                                                        class="btn quantity-down bootstrap-touchspin-down"
-                                                        type="button" @click="delCardNum($event,0)"><i
-                                                        class="fa fa-angle-down"></i></button></span>
-                                            </div>
-                                        </td>
-                                        <td class="shopping-cart-price">
-                                            <strong><span th:text="${com_list.onePrice}">¥</span></strong>
-                                        </td>
-                                        <td class="shopping-cart-total">
-                                            <strong><span th:text="${com_list.price}">¥</span></strong>
-                                        </td>
-                                        <td class="del-goods-col">
-                                            <a class="del-goods" href="#"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                </table>
+                                                        @click="addCardNum(item.shopId,item.id)"><i
+                                                        class="fa fa-angle-up"></i></button></span>
+                                                    <input :id='"product-quantity"+item.shopId' :value="item.cartNum"
+                                                           type="text"
+                                                           readonly
+                                                           class="form-control input-sm" ref="input1" name="text">
+                                                    <span class="input-group-btn"><button
+                                                            class="btn quantity-down bootstrap-touchspin-down"
+                                                            type="button" @click="delCardNum(item.shopId,item.id)"><i
+                                                            class="fa fa-angle-down"></i></button></span>
+                                                </div>
+                                            </td>
+                                            <td class="shopping-cart-price" style="padding: 25px 0 0 0;">
+                                                <strong><span v-text="item.pirce">¥</span></strong>
+                                            </td>
+                                            <td class="shopping-cart-total" style="padding: 25px 0 0 0;">
+                                                <strong><span v-text="item.amount">¥</span></strong>
+                                            </td>
+                                            <td class="del-goods-col">
+                                                <a class="del-goods" href="#" @click="delCart($event)"
+                                                   :name="item.id"><i class="fa fa-times"></i></a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="shopping-total">
+                                    <ul>
+                                        <li>
+                                            <em>小计</em>
+                                            <strong><span id="xiaoji" v-text='"¥"+subtotal'></span></strong>
+                                        </li>
+                                        <li>
+                                            <em>运费</em>
+                                            <strong class="price"><span v-text='"¥"+freight'></span></strong>
+                                        </li>
+                                        <li class="shopping-total-price">
+                                            <em>总计</em>
+                                            <strong><span v-text='"¥"+total'></span></strong>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="shopping-total">
-                                <!--<tr th:each="com_list:${shopList['orderDetail']}">-->
-                                <ul >
-                                    <li>
-                                        <em>小计</em>
-                                        <strong><span th:text="${shopList.allPrices}" id="xiaoji" th:name="xiaoji">¥</span></strong>
-                                        <!--<strong class="price"><span>¥</span>{{shopList.allPrices}}</strong>-->
-                                    </li>
-                                    <li>
-                                        <em>运费</em>
-                                        <strong class="price"><span>¥</span>0</strong>
-                                    </li>
-                                    <li class="shopping-total-price">
-                                        <em>总计</em>
-                                        <strong><span th:text="${shopList.allPrices}">¥</span></strong>
-                                    </li>
-                                </ul>
-                            </div>
+                            <input type="button" class="btn btn-primary" @click="pay" value="提交订单" ref="myelement"
+                                   lay-submit/>
                         </div>
-                        <!--th:id="${shopList.bigOrderCode+','+shopList.allPrices}"-->
-                        <a class="btn btn-primary" type="submit" onclick="pay(id)" ref="myelement"  th:id="${shopList.bigOrderCode+','+shopList.allPrices+','+shopList.name+','+shopList.cartNum+','+shopList.pirce}">提交订单 <i class="fa fa-check"></i>
-                        </a>
                     </div>
                 </div>
-                <!-- END CONTENT -->
+
             </div>
 
         </div>
@@ -461,33 +483,35 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="../js/shoppingOrder/js/shoppingPurchase.js"></script>
 <script type="text/javascript">
     var layer;
-        function pay (obj){
-            var bigOrderCode = obj.split(',')[0];
-            var allPrices = obj.split(',')[1];
-            var name = obj.split(',')[2];
-            var cartNum = obj.split(',')[3];
-            var pirce = obj.split(',')[4];
+    layui.use("layer", function () {
+        layer = layui.layer;  //layer初始化
 
-            console.info(obj);
-            debugger;
-         // pay = function (obj) {
-            var deliveryAddr=$("input[name='delivery_addr']").val();
-            if(deliveryAddr.length<=0){
-                 alert('收货地址不能为空!');
-                $('.no').show();
-                return false;
-            }
-            $.get("/order/paymentPurchase?bigOrderCode="+bigOrderCode+"&deliveryAddr="+deliveryAddr+"&allPrices="+allPrices+"&name="+name+"&cartNum="+cartNum+"&pirce="+pirce, function (r) {
-                if (r.Status == 0) {
-                    window.location.href = (r.url)
-                } else {
-                    layer.msg(r.msg, {
-                        icon: 2,
-                        time: 500
-                    });
+    })
+    layui.use('element', function () {
+        var element = layui.element;
+
+        //…
+    });
+
+    layui.use('form', function () {
+        var form = layui.form;
+        form.on('select(addre)', function (data) {
+            // console.log(data.value); //得到被选中的值
+            console.log(vm.addressList)
+            for (var i = 0; i < vm.addressList.length; i++) {
+                if (vm.addressList[i].id == data.value) {
+                    vm.deliveryAddr = vm.addressList[i].deliveryAddr
+                    vm.phone = vm.addressList[i].phone
+                    vm.addressee = vm.addressList[i].addressee
                 }
-            });
-        }
+            }
+
+
+        });
+        //各种基于事件的操作，下面会有进一步介绍
+    });
+
+
 </script>
 <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>

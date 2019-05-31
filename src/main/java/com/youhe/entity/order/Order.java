@@ -41,6 +41,21 @@ public class Order extends SysBaseEntity implements Serializable {
     private Integer userId;
 
     /**
+     * 商品id  逗号隔开
+     */
+    private String shopId;
+
+    /**
+     * 商品价格 逗号隔开
+     */
+    private String pirce;
+
+    /**
+     * 商品数量  逗号隔开
+     */
+    private String num;
+
+    /**
      * 大订单号
      */
     private String bOrderNum;
@@ -51,7 +66,7 @@ public class Order extends SysBaseEntity implements Serializable {
     private Integer totalPrice;
 
     /**
-     * 订单状态：0-已取消；30-待支付；60-已支付待发货；90-已发货
+     * // 订单状态   0 未支付   1 已支付  2 运输中  3完成
      */
     private Integer status;
 
@@ -68,6 +83,20 @@ public class Order extends SysBaseEntity implements Serializable {
     /**
      * 创建时间
      */
-    private  String createTime;
+    private String createTime;
 
+
+    //查询参数
+    private String userName;
+
+
+    //收件人
+    private String addressee;
+
+    //收件人手机
+    private String phone;
+
+
+    //判断是查看还是编辑
+    private String actionType;
 }

@@ -276,7 +276,7 @@
                                           @click="addCardNum($event,0)"><i
                                           class="fa fa-angle-up"></i></button></span>
                                 <input id="product-quantity" type="text"
-                                       v-model="productQuantity"
+                                       v-model="shop.cartNum"
                                        readonly
                                        class="form-control input-sm" ref="input1" name="text">
                                 <span class="input-group-btn"><button
@@ -284,7 +284,7 @@
                                         type="button" @click="delCardNum($event,0)"><i
                                         class="fa fa-angle-down"></i></button></span>
                             </div>
-                            <a class="btn btn-primary" @click="purchase" v-model="view.id">立即购买</a>
+                            <a class="btn btn-primary" @click="purchase" v-model="shop.id">立即购买</a>
                             <a @click="addCar($event,2)" class="btn btn-primary"
                             >添加到购物车</a>
                         </div>
@@ -723,46 +723,6 @@
             }
         };
     });
-
-    function showView(id) {
-        //初始化
-        vm.addcar.cartNum = 0;
-        vm.addcar.remark = "";
-        $.ajax({
-            data: {"id": id},
-            type: "POST",
-            // dataType: 'json',
-            url: "/touristShop/viewList",
-            success: function (data) {
-                console.log('d= ', data);
-                if (data.Status == 0) {
-                    vm.view = data.shopList;
-
-                }
-            },
-            error: function (data) {
-            }
-        });
-        layer.open({
-            title: false,
-            type: 1,
-            area: ['50%', '70%'],
-            content: $('#product-pop-up'),//这可以写弹出框的html内容
-        });
-    }
-
-
-    // function shoppingPurchase(id) {
-    //     //初始化
-    //     cartNum=vm.addcar.cartNum = 0;
-    //     remark=vm.addcar.remark = "";
-    //     $.ajax({
-    //         data: {"id": id},
-    //         type: "POST",
-    //         dataType: 'json',
-    //         url: "/order/shoppingPurchase",
-    //     });
-    // }
     //立即购买
     function shoppingPurchase(id) {
         debugger

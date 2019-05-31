@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .nav > li > a {
+            font-weight: 600 !important;
+        }
+    </style>
 </head>
 <body>
 <aside th:fragment="head">
@@ -40,8 +45,8 @@
                 <!-- BEGIN TOP BAR MENU -->
                 <div class="col-md-6 col-sm-6 additional-nav">
                     <ul class="list-unstyled list-inline pull-right">
-                        <li><a href="#" th:text="#{login.account}"></a></li>
-                        <li><a id="myOrder_1" href="javascript:void(0);">我的订单</a></li>
+                        <li><a href="/touristShop/shoppingUser" th:text="#{login.account}"></a></li>
+                        <li><a id="myOrder_1" href="/order/myOrder">我的订单</a></li>
                         <li><a href="#" th:text="#{login.my}"></a></li>
                         <li><a id="loginOut_1" href="javascript:void(0);" th:text="#{login.checkOut}"></a></li>
                         <li><a id="login_1" href="javascript:void(0);" th:text="#{login.login}"></a></li>
@@ -68,13 +73,14 @@
                     <span class="icon-bar"></span>
                 </button>
                 <!-- END RESPONSIVE MENU TOGGLER -->
-                <a href="/touristShop/index.html" class="navbar-brand"><img src="../bootstrap/user/img/youhe.png" height="40px" width="160px"
-                                                               alt="Metronic Shop UI"></a><!-- LOGO -->
+                <a href="/touristShop/index" class="navbar-brand"><img src="../bootstrap/user/img/youhe.png"
+                                                                       height="40px" width="160px"
+                                                                       alt="Metronic Shop UI"></a><!-- LOGO -->
             </div>
             <!-- BEGIN CART -->
             <div class="cart-block">
                 <div class="cart-info">
-                    <a href="javascript:void(0);" class="cart-info-count">{{carData.items}} items</a>
+                    <a href="javascript:void(0);" class="cart-info-count">{{carData.items}} 项</a>
                     <a href="javascript:void(0);" class="cart-info-value">¥{{carData.prices}}</a>
                 </div>
                 <i class="fa fa-shopping-cart"></i>
@@ -87,14 +93,16 @@
                                                          alt="Rolex Classic Watch"
                                                          width="37" height="34"></a>
                                 <span class="cart-content-count">x {{item.cartNum}}</span>
-                                <strong><a href="item.html">{{item.name}}</a></strong>
+                                <strong>
+                                    <a href="item.html">{{item.name}}</a>
+                                </strong>
                                 <em>¥{{item.pirce}}</em>
-                                <a href="javascript:void(0);" @click="delCart($event)" :name="item.id"
+                                <a href="javascript:void(0);" @click="delCart($event,item)" :name="item.id"
                                    class="del-goods"><i class="fa fa-times"></i></a>
                             </li>
                         </ul>
                         <div class="text-right">
-                            <a href="/touristShop/shoppingCart" class="btn btn-default">购物车详情</a>
+                            <a href="/order/shoppingPurchase" class="btn btn-default">购物车详情</a>
                             <a href="/order/shoppingOrder" class="btn btn-primary">结算</a>
                         </div>
                     </div>
@@ -107,14 +115,13 @@
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"
-                           data-target="product-list.html" href="product-list.html">
+                           data-target="product-list.html" href="product-list.html" style="  font-weight: 600;">
                             商品
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="mega-menu">
                             <li>
                                 <div class="nav-content">
-
                                     <tree-head :lists="lists">
                                     </tree-head>
                                 </div>
@@ -122,16 +129,16 @@
                         </ul>
                     </li>
                     <!--<li class="dropdown">-->
-                        <!--<a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"-->
-                           <!--data-target="product-list.html" href="product-list.html">-->
-                            <!--商品-->
-                            <!--<i class="fa fa-angle-down"></i> </a>-->
-                        <!--<tree-head-two :lists="lists">-->
-                        <!--</tree-head-two>-->
+                    <!--<a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"-->
+                    <!--data-target="product-list.html" href="product-list.html">-->
+                    <!--商品-->
+                    <!--<i class="fa fa-angle-down"></i> </a>-->
+                    <!--<tree-head-two :lists="lists">-->
+                    <!--</tree-head-two>-->
                     <!--</li>-->
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"
-                           data-target="product-list.html" href="product-list.html">
+                           data-target="product-list.html" href="product-list.html" style="font-weight: 600;">
                             新品推荐
                             <i class="fa fa-angle-down"></i>
                         </a>

@@ -33,6 +33,10 @@ public class User implements Serializable {
 
     private int orderNum; // 排序
 
+    private Integer type; // 1 OA  2 商城
+    @TableField(exist = false)
+    private String newPassword;// 商城修改密码
+
 
     //查询属性
     @TableField(exist = false)
@@ -186,5 +190,21 @@ public class User implements Serializable {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

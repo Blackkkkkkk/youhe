@@ -144,7 +144,7 @@ var vm = new Vue({
             })
         }
         ,
-        delCart: function (event) {
+        delCart: function (event,item) {
 
             var x = event.clientX;
             var y = event.clientY;
@@ -152,14 +152,18 @@ var vm = new Vue({
             var el = event.currentTarget;
             var _this = this;
 
-            $.get("/touristShop/delCart?id=" + el.name, function (r) {
-                if (r == 1) {
-                    top.layer.msg('物品删除成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
-                    _this.initcart();
-                } else {
-                    top.layer.msg('物品删除失败，请重新删除', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
+            for (var i = 0; i < _this.shopList.length; i++) {
+                if (item.shopId != null && _this.shopList[i].shopId == item.shopId) {
+                    $.get("/touristShop/delCart?id=" + item.id + "&shopId=" + _this.shopList[i].shopId, function (r) {
+                        if (r == 1) {
+                            top.layer.msg('物品删除成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
+                            _this.initcart();
+                        } else {
+                            top.layer.msg('物品删除失败，请重新删除', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
+                        }
+                    })
                 }
-            })
+            }
         }
     }
 })

@@ -1,7 +1,11 @@
 package com.youhe.controller.user.shop.index;
 
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.youhe.biz.redis.RedisBiz;
 import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
@@ -36,6 +40,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,8 +76,7 @@ public class IndexController {
     private OrderService orderService;
     @Autowired
     private OrderDetailService orderDetailService;
-    @Autowired
-    private ShopMapper shopMapper;
+
 
     @RequestMapping(value = "/index")
     public String index(Model model, Shop_index_carousel shop_index_carousel) {
@@ -110,7 +115,7 @@ public class IndexController {
                 setRegister_Sort(1).
                 setTop_Sort(1).
                 setHotSale_Sort(1).setIsNewProductOrderNum_Sort(1);
-        Shop shopList = shopMapper.findShopListView(shop);
+        Shop shopList = shopBiz.findShopListView(shop);
 
 //        List<Shop> shop = shopBiz.findShopListView(shop);
         shopList.setStockNum(shopList.getNum());
@@ -206,30 +211,100 @@ public class IndexController {
 
         int Status = 4;
 
-        if (shiroUser.getUserAccount() == null || shiroUser.getUserAccount() == "") {
-            Status = 3;
-        } else {
-            // 判断缓存是否有该物品
-            Boolean exists = redisBiz.hhasKey(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
-            if (exists) {
-                // 数量自增1
-                Long num = redisBiz.hincrement(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
-                Status = 2;
+        Map<String, Map> shopMap = new HashMap<String, Map>();
+        String jsonString = "";
+        Map<String, Object> shopDetailMap = new HashMap<String, Object>();
+
+        String params = "";// map转json 字符串
+        ObjectMapper json = new ObjectMapper();
+        try {
+            if (shiroUser.getUserAccount() == null || shiroUser.getUserAccount() == "") {
+                Status = 3;
             } else {
-                redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", 1);
-                Status = 1;
+                // 判断缓存是否有该物品
+                Boolean exists = redisBiz.hhasKey(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+                if (exists) {
+                    //拿到redis 存取的商品主id,转成map对象 ，在看看二级sukid 存在不存在，存在增加数量，不存在便新增个suk商品
+                    jsonString = redisBiz.hget(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+                    Map<String, Map> gson = (Map<String, Map>) JSON.parse(jsonString);
+                    if (shop.getShopStyleId() != null) {
+                        shop.setShopId(Integer.parseInt(shop.getShopStyleId() + ""));
+                    }
+                    List<Shop> listShopid = shopBiz.findCarList(shop);
+
+                    if (jsonString != null) {
+                        shopMap = gson.get(shop.getShopStyleId() == null ? listShopid.get(0).getShopId() + "" : shop.getShopStyleId() + "");
+                        if (shopMap != null && !shopMap.isEmpty()) {
+                            if (!CollectionUtils.isEmpty(listShopid)) {
+                                shopDetailMap = gson.get(listShopid.get(0).getSpId() + "");
+                                System.out.println(listShopid.get(0).getSpId() + "");
+                                int num = Integer.parseInt(shopDetailMap.get("num") + "") + 1;
+                                shopDetailMap.put("num", num);
+                                shopDetailMap.put("amount", Integer.parseInt(shopDetailMap.get("pirce") + "") * Integer.parseInt(shopDetailMap.get("num") + ""));
+                                gson.put(shop.getShopStyleId() == null ? listShopid.get(0).getShopId() + "" : shop.getShopStyleId() + "", shopDetailMap);
+                                params = json.writeValueAsString(gson);
+                                redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", params); // 商品id
+                                Status = 2;
+                            }
+                        } else {
+
+                            if (!CollectionUtils.isEmpty(listShopid)) {
+                                //  shop = listShopid.get(0);
+                            }
+                            shopDetailMap = new HashMap<String, Object>();
+                            shopDetailMap.put("num", shop.getCartNum());
+                            shopDetailMap.put("pirce", shop.getPirce());
+                            shopDetailMap.put("sukName", shop.getSukChangeName());
+                            shopDetailMap.put("amount", Integer.parseInt(shop.getPirce() + "") * Integer.parseInt(shopDetailMap.get("num") + ""));
+                            gson.put(shop.getShopStyleId() + "", shopDetailMap);
+
+                            params = json.writeValueAsString(gson);
+                            System.out.println(params);
+                            redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", params); // 商品id
+                            Status = 1;
+                        }
+                    }
+                } else {
+                    shopDetailMap = new HashMap<String, Object>();
+                    Shop findshopPicture = new Shop();
+                    findshopPicture.setId(shop.getId());
+                    List<Shop> list = shopBiz.findCarList(findshopPicture);
+                    if (!CollectionUtils.isEmpty(list)) {
+                        findshopPicture = list.get(0);
+                        shopDetailMap.put("num", 1);
+                        shopDetailMap.put("pirce", findshopPicture.getPirce());
+                        shopDetailMap.put("sukName", findshopPicture.getName());
+                        System.out.println(shopDetailMap.get("num") != null);
+                        System.out.println(findshopPicture.getPirce() != null);
+                        if (shopDetailMap.get("num") != null && findshopPicture.getPirce() != null) {
+                            shopDetailMap.put("amount", Integer.parseInt(findshopPicture.getPirce() + "") * Integer.parseInt(shopDetailMap.get("num") + ""));
+                        }
+
+                        if (shop.getShopStyleId() != null) {
+                            shopMap.put(shop.getShopStyleId(), shopDetailMap);
+                        } else {
+                            shopMap.put(findshopPicture.getShopId() + "", shopDetailMap);
+
+                        }
+                    }
+                    params = json.writeValueAsString(shopMap);
+                    redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", params); // 商品id
+                    Status = 1;
+                }
+                redisBiz.expire(CartPrefix.getCartList, shiroUser.getUserAccount());
             }
+            List<Shop> shopList = searchList(shiroUser.getUserAccount());
 
-            redisBiz.expire(CartPrefix.getCartList, shiroUser.getUserAccount());
+            map.put("shopList", shopList);
+            map.put("Status", Status);
+
+        } catch (Exception e) {
+            log.error(e.toString());
         }
-
-        List<Shop> shopList = searchList(shiroUser.getUserAccount());
-
-        map.put("shopList", shopList);
-        map.put("Status", Status);
 
         return map;
     }
+
 
     // 查询购物车的信息
     /*
@@ -237,6 +312,43 @@ public class IndexController {
      */
     public List<Shop> searchList(String key) {
         return redisBiz.hscan(CartPrefix.getCartList, key);
+    }
+
+    //购物车数量增加
+    @RequestMapping(value = "/addCartNum")
+    @ResponseBody
+    public R addCartNum(Shop shop) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+
+
+        //拿到redis 存取的商品主id,转成map对象 ，在看看二级sukid 存在不存在，存在增加数量，不存在便新增个suk商品
+        String jsonString = redisBiz.hget(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+
+        Map<String, Map> gson = (Map<String, Map>) JSON.parse(jsonString);
+        List<Shop> listShopid = shopBiz.findCarList(shop);
+        Map<String, Map> shopMap = new HashMap<String, Map>();
+        Map<String, Object> shopDetailMap = new HashMap<String, Object>();
+        String params = "";// map转json 字符串
+        ObjectMapper json = new ObjectMapper();
+
+        try {
+            shopDetailMap = gson.get(shop.getShopStyleId() == null ? listShopid.get(0).getShopId() + "" : shop.getShopStyleId() + "");
+            if (shopDetailMap != null && !shopDetailMap.isEmpty()) {
+                int num = Integer.parseInt(shopDetailMap.get("num") + "") + shop.getCarNumUD();
+                shopDetailMap.put("num", num);
+                shopDetailMap.put("amount", Integer.parseInt(shopDetailMap.get("pirce") + "") * Integer.parseInt(shopDetailMap.get("num") + ""));
+                gson.put(shop.getShopStyleId() == null ? listShopid.get(0).getShopId() + "" : shop.getShopStyleId() + "", shopDetailMap);
+                params = json.writeValueAsString(gson);
+                redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", params); // 商品id
+            }
+
+            return R.ok().put("shopList", redisBiz.hscan(CartPrefix.getCartList, shiroUser.getUserAccount()));
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return R.error("添加失败，请联系管理员");
+        }
+
+
     }
 
 
@@ -252,7 +364,30 @@ public class IndexController {
     @ResponseBody
     public int delCart(Shop shop) {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
-        Long status = redisBiz.hdel(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+        Long status = 0l;
+        String params = "";// map转json 字符串
+        ObjectMapper json = new ObjectMapper();
+        try {
+            if (shop.getShopId() == null) {  //如果没有二级类目就只删除全部一级类目的商品
+                status = redisBiz.hdel(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+            } else {
+                String jsonString = redisBiz.hget(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+                Map<String, Map> gson = (Map<String, Map>) JSON.parse(jsonString);
+                gson.remove(shop.getShopId() + "");
+                params = json.writeValueAsString(gson);
+
+                System.out.println(params.length());
+                if (params.length() > 2) {
+                    redisBiz.hput(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "", params); // 商品id
+                } else {
+                    status = redisBiz.hdel(CartPrefix.getCartList, shiroUser.getUserAccount(), shop.getId() + "");
+                }
+                status = 1l;
+            }
+        } catch (Exception e) {
+
+        }
+
         if (status == 1l) {
             return 1;
         } else {
@@ -328,6 +463,13 @@ public class IndexController {
     @GetMapping(value = "orderList")
     public ModelAndView orderList() {
         return new ModelAndView("user/shop/order/my_order");
+    }
+
+
+    @GetMapping(value = "shoppingUser")
+    public String shoppingUser() {
+
+        return "user/shop/login/shoppingUser";
     }
 
 }

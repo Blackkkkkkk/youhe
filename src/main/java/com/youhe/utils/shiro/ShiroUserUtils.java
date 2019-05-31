@@ -82,4 +82,18 @@ public class ShiroUserUtils {
 //                ByteSource.Util.bytes(credentialsSalt), Constant.HASH_INTERATIONS).toHex();
 //
 //    }
+
+    /**
+     * user 根据账号从数据查询出来的用户
+     * password 用于判断的密码
+     */
+    public static Boolean checkPasswordByMeixiang(User userTemp, String oldpassword) {
+        String credentialsSalt = userTemp.getUserAccount() + userTemp.getSalt();
+        String oldPassword = new SimpleHash(Constant.HASH_ALGORITHM, oldpassword,
+                ByteSource.Util.bytes(credentialsSalt), Constant.HASH_INTERATIONS).toHex();
+        if (oldPassword.equals(userTemp.getUserPassword())) {
+            return true;
+        }
+        return false;
+    }
 }

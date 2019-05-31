@@ -100,7 +100,16 @@ var vm = new Vue({
         view: {},
         stocknum: 0,
         stocktotal: 0,
-        minpic: []
+        minpic: [],
+        subtotal: 0,
+        freight: 0,
+        total: 0,
+        deliveryAddr: "",
+        addressee: "",
+        phone: "",
+        addressList: []
+
+
     },
     created: function () {
 
@@ -115,6 +124,11 @@ var vm = new Vue({
             _this.menList = r;
         })
 
+        $.get("/touristShop/addressList", function (r) {
+
+            r.list.splice(0, 0, {"deliveryAddr": "请选择"})
+            _this.addressList = r.list;
+        })
 
         let data = _this.menList;
         // 属性配置信息
@@ -131,9 +145,54 @@ var vm = new Vue({
     }
     ,
     methods: {
-
         pay: function () {
+            _this = this;
+
+            var shopId = "";  //商品id
+            var pirce = "";   // 商品价格
+            var num = "";    //商品数量
+
+            for (var i = 0; i < _this.shopList.length; i++) {
+                shopId += _this.shopList[i].shopId + ",";
+                pirce += _this.shopList[i].pirce + ",";
+                num += _this.shopList[i].cartNum + ",";
+            }
+            var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+
+            if (_this.deliveryAddr == null || _this.deliveryAddr == "") {
+
+            } else if (_this.addressee == null || _this.addressee == "") {
+
+            } else if (_this.phone == null || _this.phone == "" || !myreg.test(_this.phone)) {
+            } else {
+                console.log("23123")
+                $.ajax({
+                    type: "POST",
+                    url: "/order/shoppingPay",
+                    data: {
+                        "shopId": shopId,
+                        "pirce": pirce,
+                        "num": num,
+                        "totalPrice": _this.total,
+                        "deliveryAddr": _this.deliveryAddr,
+                        "addressee": _this.addressee,
+                        "phone": _this.phone
+                    },
+                    dataType: "json",
+                    success: function (r) {
+                        if (r.Status === 0) {
+                            layer.msg(r.msg, {icon: 1, time: 1000}, function () {
+                                window.location.href = '/order/myOrder';
+                            });
+
+                        } else {
+                            layer.msg(r.msg, {icon: 2, time: 1000});
+                        }
+                    }
+                });
+            }
         },
+
         //把数据类型转成树格式
         toTreeData: function (data, attributes) {
             let resData = data;
@@ -178,28 +237,70 @@ var vm = new Vue({
             return tree;
         }
         ,   // 购物车数量增加
-        addCardNum: function (event, index) {
-            debugger
-            _this.addcar.cartNum++;
+        addCardNum: function (shopId, id) {
+            _this = this;
+            var num = 0;
 
+            for (var i = 0; i < _this.shopList.length; i++) {
+                if (_this.shopList[i].shopId == shopId) {
+                    _this.shopList[i].cartNum += 1;
+                    _this.shopList[i].amount = parseInt(_this.shopList[i].cartNum) * parseInt(_this.shopList[i].pirce)
+                    console.log("/touristShop/addCartNum?id=" + id + "&shopId=" + shopId)
+                    $.get("/touristShop/addCartNum?id=" + id + "&shopStyleId=" + shopId + "&carNumUD=1", function (r) {
+                        _this.initcart(r.shopList);
+                        if (r.Status == 1) {
+                            top.layer.msg('数量添加成功！', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
+                        } else {
+                        }
+                        top.layer.msg('添加失败，请联系管理员！', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
+                    })
+
+                }
+                num += _this.shopList[i].amount;
+            }
+            _this.subtotal = num;
+            _this.total = num + _this.freight;
+            _this.carData.prices = _this.total
 
 
         }
         ,// 购物车数量减少
-        delCardNum: function (event, index) {
-            if (_this.addcar.cartNum > 0) {
-                _this.addcar.cartNum--;
+        delCardNum: function (shopId, id) {
+            _this = this;
+            var num = 0;
+            for (var i = 0; i < _this.shopList.length; i++) {
+                if (_this.shopList[i].shopId == shopId) {
+                    console.log(shopId)
+                    if (_this.shopList[i].cartNum > 0) {
+                        _this.shopList[i].cartNum -= 1;
+                        _this.shopList[i].amount = parseInt(_this.shopList[i].cartNum) * parseInt(_this.shopList[i].pirce)
+                        $.get("/touristShop/addCartNum?id=" + id + "&shopStyleId=" + shopId + "&carNumUD=-1", function (r) {
+                            _this.initcart(r.shopList);
+                            if (r.Status == 1) {
+                                top.layer.msg('数量添加成功！', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
+                            } else {
+                                top.layer.msg('添加失败，请联系管理员！', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
+                            }
+
+                        })
+
+                    }
+                }
+                num += _this.shopList[i].amount;
             }
+            _this.subtotal = num;
+            _this.total = num + _this.freight;
+            _this.carData.prices = _this.total
         }
         ,
         //立即购买
         purchase: function () {
-           id=vm.view.id;
-            var cartNum=$("input[name='text']").val();
+            id = vm.view.id;
+            var cartNum = $("input[name='text']").val();
             // id=vm.id;
             debugger
             if (id && id != 'null') {
-                window.location.href="/order/shoppingPurchase?id=" + id + "&cartNum=" +cartNum;
+                window.location.href = "/order/shoppingPurchase?id=" + id + "&cartNum=" + cartNum;
             }
             // url = "/touristShop/addCart?id=" + el.id + "&remark=" + _this.addcar.remark + "&cartNum=" + _this.addcar.cartNum;
         }
@@ -237,17 +338,37 @@ var vm = new Vue({
         }
         ,
 
-        initcart: function () {
-            id=vm.view.id;
-            var cartNum=$("input[name='text']").val();
-            var prices=$("input[name='prices']").val();
+        initcart: function (r) {
             var _this = this;
+            if (r == null || r == undefined || r == '') {
+                $.ajax({
+                    type: "POST",
+                    url: "/touristShop/initCart",
+                    dataType: "json",
+                    async: false,//取消异步
+                    success: function (data) {
+                        r = data;
+                    }
+                });
+            }
+            var num = 0;
+            var prices = 0;
             _this.shopList = [];
-            _this.carData.items = cartNum;
+            for (var index in r) {
+                num++;
+                //  num +=  r.shopList[index].pirce
+                prices += r[index].pirce * r[index].cartNum;
+                _this.shopList.push(r[index])
+            }
+            _this.subtotal = prices;
+            _this.total = prices + _this.freight;
+
+
+            console.log(_this.shopList)
+            _this.carData.items = num;
             _this.carData.prices = prices;
-            debugger
         },
-        delCart: function (event) {
+        delCart: function (event,item) {
 
             var x = event.clientX;
             var y = event.clientY;
@@ -255,14 +376,18 @@ var vm = new Vue({
             var el = event.currentTarget;
             var _this = this;
 
-            $.get("/touristShop/delCart?id=" + el.name, function (r) {
-                if (r == 1) {
-                    top.layer.msg('物品删除成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
-                    _this.initcart();
-                } else {
-                    top.layer.msg('物品删除失败，请重新删除', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
+            for (var i = 0; i < _this.shopList.length; i++) {
+                if (item.shopId != null && _this.shopList[i].shopId == item.shopId) {
+                    $.get("/touristShop/delCart?id=" + item.id + "&shopId=" + _this.shopList[i].shopId, function (r) {
+                        if (r == 1) {
+                            top.layer.msg('物品删除成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
+                            _this.initcart();
+                        } else {
+                            top.layer.msg('物品删除失败，请重新删除', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
+                        }
+                    })
                 }
-            })
+            }
         }
         ,
         showView: function (id) {//这个只是给基本方法   还没用上ajax请求
@@ -272,7 +397,6 @@ var vm = new Vue({
                 type: "POST",
                 url: "/touristShop/viewList",
                 data: {"id": id},
-
                 success: function (r) {
                     if (r.Status == 1) {
 

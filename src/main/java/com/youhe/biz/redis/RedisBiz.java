@@ -1,6 +1,7 @@
 package com.youhe.biz.redis;
 
 
+import com.alibaba.fastjson.JSON;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.entity.shop.Shop;
 import com.youhe.initBean.redis.KeyPrefix;
@@ -16,10 +17,7 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -120,23 +118,36 @@ public class RedisBiz implements RedisService {
 
     public List<Shop> hscan(KeyPrefix prefix, String key) {
         List<Shop> shopList = new ArrayList<Shop>();
-
+        Shop shop = new Shop();
         //遍历出该ID 所有的购物车商品
         Cursor<Map.Entry<Object, Object>> curosr = redisTemplate.opsForHash().scan(prefix.getPrefix() + key, ScanOptions.NONE);
-        Shop shop = new Shop();
+
+
         while (curosr.hasNext()) {
             Map.Entry<Object, Object> entry = curosr.next();
-            Pattern pattern = Pattern.compile("[0-9]*");
-            if (pattern.matcher(entry.getKey() + "").matches()) {  //判断是值，还是存储的备注信息
-                shop.setId(Integer.parseInt(entry.getKey() + ""));
-                if (!CollectionUtils.isEmpty(shopBiz.findShopList(shop))) {  // 去查数据库该ID1的商品信息
-                    shop = shopBiz.findShopList(shop).get(0);
-                    shop.setCartNum(Integer.parseInt(entry.getValue() + ""));
-                    shopList.add(shop);
-                    shop = new Shop();
+            Map<String, Map> gson = (Map<String, Map>) JSON.parse(entry.getValue() + "");
+            if (gson != null && !gson.isEmpty()) {
+                for (String key1 : gson.keySet()) {
+                    Map<String, Object> mapValue = new HashMap<String, Object>();
+                    System.out.println(key1);
+                    mapValue = gson.get(key1);
+
+                    shop.setId(Integer.parseInt(entry.getKey() + ""));
+                    shop.setShopId(Integer.parseInt(key1));
+                    shopBiz.findCarList(shop);
+                    if (!CollectionUtils.isEmpty(shopBiz.findCarList(shop))) {  // 去查数据库该ID1的商品信息
+                        shop = shopBiz.findCarList(shop).get(0);
+                        shop.setCartNum(mapValue.get("num") == null ? 0 : Integer.parseInt(mapValue.get("num") + ""));
+                        shop.setPirce(mapValue.get("pirce") == null ? 0 : Integer.parseInt(mapValue.get("pirce") + ""));
+                        shop.setAmount(mapValue.get("amount") == null ? 0 : Integer.parseInt(mapValue.get("amount") + ""));
+                        shop.setSukChangeName(mapValue.get("sukName") + "");
+                        shop.setName(shop.getName() + "(" + shop.getSukChangeName() + ")");
+                        shop.setShopId(Integer.parseInt(key1));
+                        shopList.add(shop);
+                        shop = new Shop();
+                    }
                 }
             }
-
         }
         return shopList;
     }
@@ -184,5 +195,10 @@ public class RedisBiz implements RedisService {
         System.out.println(redisTemplate.expire(prefix.getPrefix() + key, prefix.expireSeconds(), TimeUnit.SECONDS));
     }
 
-
+    /*
+      删除某个has键
+     */
+    public void hdelKey(KeyPrefix prefix, String key) {
+        redisTemplate.delete(prefix.getPrefix() + key);
+    }
 }
