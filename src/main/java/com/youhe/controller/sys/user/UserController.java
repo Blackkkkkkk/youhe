@@ -1,25 +1,24 @@
 package com.youhe.controller.sys.user;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youhe.biz.department.DepartmentBiz;
 import com.youhe.biz.role.RoleBiz;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.common.Constant;
 import com.youhe.controller.loginController.LoginController;
+import com.youhe.entity.collection.Collections;
 import com.youhe.entity.department.User_Department;
-import com.youhe.entity.permission.Permission;
 import com.youhe.entity.role.Role;
 import com.youhe.entity.role.User_Role;
 import com.youhe.entity.user.User;
 
+import com.youhe.mapper.collection.CollectionsMapper;
 import com.youhe.mapper.user.UserMapper;
+import com.youhe.service.sys.CollectionsService;
 import com.youhe.serviceImpl.Controller.userController.UserControllerImpl;
 
 import com.youhe.utils.R;
-import com.youhe.utils.shiro.InitUsernamePasswordToken;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.annotation.Resource;
@@ -57,6 +57,8 @@ public class UserController {
     private RoleBiz roleBizl;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private CollectionsMapper collectionsMapper;
 
 
     @Autowired
@@ -80,6 +82,29 @@ public class UserController {
 //        thymeleafViewResolver.setStaticVariables(vars);
         return "sys/user/updateUser";
     }
+
+    //收藏标签
+    @RequestMapping(value = "/findCollections")
+    @ResponseBody
+    public ModelAndView findCollections() {
+        ModelAndView models = new ModelAndView();
+//        Map<String, Object> vars = new HashMap<>();
+        List<Collections> collectionList = collectionsMapper.findCollections();
+//        vars.put("collectionList",collectionList);
+        models.addObject("collectionList", collectionList);
+//        return "sys/user/collections";
+        models.setViewName("sys/user/collections");
+        return models;
+    }
+
+//天气预报
+    @RequestMapping(value = "/forecast")
+    public String forecast() {
+
+        return "sys/user/forecast";
+    }
+
+
 //修改个人资料
     @RequestMapping(value = "/updates")
     @ResponseBody
