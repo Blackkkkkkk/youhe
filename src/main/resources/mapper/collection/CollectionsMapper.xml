@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.collection.CollectionsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap  type="com.youhe.entity.collection.Collections" id="collectionList">
+        <id column="cid" property="cid" />
+        <result column="cname" property="cname" />
+        <result column="url" property="url" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        cid, cname, url
+    </sql>
+
+    <!--<insert id="saveCollection"  parameterType="com.youhe.entity.collection.Collections" -->
+            <!--useGeneratedKeys="true">-->
+           <!--insert into sys_collections (url) value (#{url})-->
+    <!--</insert>-->
+
+    <select id="findCollections" parameterType="com.youhe.entity.collection.Collections" resultMap="collectionList">
+        SELECT * from sys_collection;
+    </select>
+
+    <select id="finds" parameterType="String"  resultType="Integer">
+        select count(1) from sys_collection
+         where url =#{url};
+    </select>
+
+
+    <delete id="del" parameterType="String">
+       DELETE from sys_collection where
+	   url =#{url};
+    </delete>
+
+</mapper>

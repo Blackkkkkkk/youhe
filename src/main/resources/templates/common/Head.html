@@ -23,6 +23,11 @@
 
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
 
+    <style>
+        .styleclass{
+            color: dodgerblue;
+        }
+    </style>
 </head>
 
 <!--核心js 去掉了多余的js-->
@@ -101,7 +106,7 @@
 </aside>
 
 
-<body>
+<body onload='init()'>
 
 <aside th:fragment="head">
     <div class="row border-bottom">
@@ -120,6 +125,8 @@
                 <!--<li>-->
                     <!--<span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>-->
                 <!--</li>-->
+
+                <!--<iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=52&icon=1&num=3" width="140" height="20" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>-->
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info"  href="/index">
                         <i class="glyphicon glyphicon-blackboard"></i>
@@ -178,10 +185,21 @@
                         </li>
                     </ul>
                 </li>
+
                 <li class="dropdown">
                     <!--<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">-->
                         <!--<i class="fa fa-bell"></i> <span class="label label-primary">8</span>-->
                     <!--</a>-->
+                    <!--<div class="availability" style="margin-right: -53%;margin-top: 8px;"><i-->
+                            <!--class="glyphicon glyphicon-star" style="padding-top: 2px;"></i>-->
+                        <!--<p-->
+                                <!--style="float: right;color: #212020;"></p></div>-->
+                    <!--<li><a href="#" onclick="addFavorite()" >修改密码</a></li>-->
+                    <!--<div class="availability" style="margin-right: -53%;"><i-->
+                            <!--class="glyphicon glyphicon-star" style="padding-top: 2px;"></i>-->
+                        <!--<p-->
+                                <!--style="float: right;color: #212020;">收藏商品</p></div>-->
+                    <li  class="glyphicon glyphicon-star" style="padding-top: 2px;text-align: center;"  href="javascript:void(0)" onclick="addFavorite()" id="div1"></li>
                     <ul class="dropdown-menu dropdown-alerts">
                         <li>
                             <a href="mailbox.html">
@@ -227,6 +245,7 @@
                         <i class="fa fa-sign-out"></i> 退出登录
                     </a>
                 </li>
+
                 <li>
                     <a class="right-sidebar-toggle">
                         <i class="fa fa-tasks"></i>
@@ -234,8 +253,128 @@
                 </li>
             </ul>
         </nav>
+
+        <div class="form-group" style="display: none;" id="collectionName">
+            <div class="col-sm-10">
+                <input type="hidden" class="form-control"th:value="${user.userName}"
+                       placeholder="姓名" style="width: 8cm" name="userName"/>
+            </div>
+            <div class="col-sm-10">
+                <input type="hidden" class="form-control"th:value="${user.userName}"
+                       placeholder="姓名" style="width: 8cm" name="userName"/>
+            </div>
+            <div class="col-sm-2 control-label" type="hidden">名称</div>
+            <div >名称</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control"
+                       placeholder="姓名" style="width: 8cm" name="cname"/>
+            </div>
+
+        </div>
     </div>
+
+
+    <script type="text/javascript">
+        var layer;
+        var idx;
+        var flag=0;
+        window.onload=function(){
+            var url = window.location;
+            href=url.href;
+
+            $.get("/collections/finds?url=" + href, function (r) {
+                console.info(r);
+                if (r.Status == 0) {
+                    // document.getElementById("div1").style.background="red";
+
+                    var obj = document.getElementById('div1');
+                    obj.className += ' styleclass'; // 注意前面加空格，防止两个属性挨在一起
+
+                    // var a = document.getElementById('div1');
+                    // a.setAttribute("className", "glyphicon glyphicon-star-empty");
+                    // document.getElementById("glyphicon glyphicon-star-empty").className = "blue";
+                } else {
+                    // a.setAttribute("className", "glyphicon glyphicon-star-empty");
+                    // document.getElementById("glyphicon glyphicon-star-empty").className = "gray";
+                    // document.getElementById("div1").style.background="gray";
+                }
+            });
+
+            // 初始化内容
+        }
+
+        function addFavorite() {
+            var flag=0;
+            // var cname=$("input[name='cname']").val();
+            debugger
+            // if (cname!=null) {
+                var url = window.location;
+                href=url.href;
+            // idx = layer.open({
+            //     type: 1,
+            //     title: '收藏名称',
+            //     resize: true,
+            //     fixed: true,
+            //     shadeClose: true,
+            //     shade: 0.1,
+            //     scrollbar: false,
+            //     area: ['800px', '200px'],
+            //     content: $('#collectionName'),
+            //     btn: ['确定', '取消'],
+            //     btn1: function (index) {
+                    $.get("/collections/saveCollection?url=" + href, function (r) {
+                        console.info(r);
+                        if (r.Status == 0) {
+                            alert("收藏成功")
+                        } else {
+                            alert("取消收藏")
+                        }
+                        location.replace(location.href);
+                    });
+
+            // });
+
+            // if (num==1) {
+            //     document.getElementById("div1").style.background="blue";
+            //     num=0;
+            // }else {
+            //     document.getElementById("div1").style.background="red";
+            //     num=1;
+            // }
+            // if(flag==0){
+            //     alert("第一次")
+            //     document.getElementById("div1").style.background="green";
+
+
+
+            //     flag=1;
+            // }
+
+
+        }
+
+
+
+
+
+    </script>
+
+
 </aside>
+<div th:include="common/Head :: js"></div>
+
+<script src="../bootstrap/js/dept/js/vue.min.js"></script>
+
+
+<script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
+
+<script src="../js/manage/js/fileinput.min.js"></script>
+<script src="../js/manage/js/zh.js"></script>
+<script src="../js/manage/js/processData.js"></script>
+
+<script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
+
+
 
 </body>
 </html>
