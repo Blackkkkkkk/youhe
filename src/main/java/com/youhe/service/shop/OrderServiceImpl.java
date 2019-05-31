@@ -41,12 +41,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private OrderDetailService orderDetailService;
 
 
-
     @Autowired
     private RedisBiz redisBiz;
     @Autowired
     private ShopBiz shopBiz;
-
 
 
     @Override
@@ -74,49 +72,48 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
 
-
     //结算
     @Override
-    public  Map<String,Object> shoppingOrder(){
+    public Map<String, Object> shoppingOrder() {
         //获取用户信息
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
 //        List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
         List<Shop> shopList = new ArrayList<>(0);
 
         if (shiroUser.getUserAccount() != null || shiroUser.getUserAccount() != "") {
             //通过用户账号获取购物车详情
-            shopList = redisBiz.hscan(CartPrefix.getCartList,shiroUser.getUserAccount());
+            shopList = redisBiz.hscan(CartPrefix.getCartList, shiroUser.getUserAccount());
             //大订单号自动生成的订单号
-            String bigOrderCode=getBigOrderCode();
+            String bigOrderCode = getBigOrderCode();
             Order order = new Order();
 
             //总金额
-            int allPrices=0;
-            String pageaddr="";
-            String saveFileName="";
-            int cartNum=0;
-            int cartPrices=0;
-            int pirce=0;
-            String smallOrderCode="";
+            int allPrices = 0;
+            String pageaddr = "";
+            String saveFileName = "";
+            int cartNum = 0;
+            int cartPrices = 0;
+            int pirce = 0;
+            String smallOrderCode = "";
             List<OrderDetail> list = new ArrayList<>();
-            if(CollectionUtils.isNotEmpty(shopList)){
+            if (CollectionUtils.isNotEmpty(shopList)) {
                 for (Shop shop : shopList) {
                     OrderDetail orderDetail = new OrderDetail();
                     //小订单号
-                    smallOrderCode=getSmallOrderCode();
-                    int num=shop.getCartNum();
+                    smallOrderCode = getSmallOrderCode();
+                    int num = shop.getCartNum();
 
-                    pirce=shop.getPirce();
-                    allPrices+=shop.getPirce()*num;
-                    saveFileName=shop.getSaveFileName();
+                    pirce = shop.getPirce();
+                    allPrices += shop.getPirce() * num;
+                    saveFileName = shop.getSaveFileName();
 //                    cartNum=shop.getCartNum();
-                    cartPrices=shop.getPirce()*num;
-                    pageaddr=shop.getPageaddr();
+                    cartPrices = shop.getPirce() * num;
+                    pageaddr = shop.getPageaddr();
 
                     orderDetail.setCommodityId(Long.valueOf(shop.getCommodityId()));
                     orderDetail.setNum(shop.getCartNum());
-                    orderDetail.setPrice(shop.getPirce()*num);
+                    orderDetail.setPrice(shop.getPirce() * num);
                     orderDetail.setCommodityName(shop.getName());
                     orderDetail.setRemark(shop.getRemark());
                     orderDetail.setBOrderNum(bigOrderCode);
@@ -125,7 +122,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                     orderDetail.setPageaddr(shop.getPageaddr());
                     orderDetail.setSaveFileName(shop.getSaveFileName());
                     orderDetail.setOnePrice(String.valueOf(shop.getPirce()));
-                    shop.setCartPrices(shop.getPirce()*num);
+                    shop.setCartPrices(shop.getPirce() * num);
                     shop.setAllPrices(allPrices);
 
 
@@ -138,14 +135,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 order.setTotalPrice(allPrices);
                 super.save(order);
 
-                resultMap.put("order",order);
+                resultMap.put("order", order);
 //                resultMap.put("cartNum",cartNum);
-                resultMap.put("pirce",pirce);
-                resultMap.put("cartPrices",cartPrices);
+                resultMap.put("pirce", pirce);
+                resultMap.put("cartPrices", cartPrices);
 //                resultMap.put("allPrice",allPrice);
-                resultMap.put("bigOrderCode",bigOrderCode);
-                resultMap.put("orderDetail",list);
-                resultMap.put("allPrices",allPrices);
+                resultMap.put("bigOrderCode", bigOrderCode);
+                resultMap.put("orderDetail", list);
+                resultMap.put("allPrices", allPrices);
             }
         }
         return resultMap;
@@ -153,37 +150,37 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     //立即购买
     @Override
-    public  Map<String,Object> shoppingPurchase(Shop shop){
+    public Map<String, Object> shoppingPurchase(Shop shop) {
         //获取用户信息
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
 //        List<Shop> shopList = new ArrayList<>(0);
         List<Shop> shopList = shopBiz.findShopList(shop);
-        String remark=shop.getRemark();
-        int cartNum=shop.getCartNum();
-        int pirce=0;
-        String name="";
-        String pageaddr="";
-        List<Shop> shopListNew=new ArrayList<Shop>();
+        String remark = shop.getRemark();
+        int cartNum = shop.getCartNum();
+        int pirce = 0;
+        String name = "";
+        String pageaddr = "";
+        List<Shop> shopListNew = new ArrayList<Shop>();
         if (shiroUser.getUserAccount() != null || shiroUser.getUserAccount() != "") {
             //通过用户账号获取购物车详情
 //            shopList = redisBiz.hscan(CartPrefix.getCartList,shiroUser.getUserAccount());
             //大订单号自动生成的订单号
-            String bigOrderCode=getBigOrderCode();
+            String bigOrderCode = getBigOrderCode();
             Order order = new Order();
             OrderDetail orderDetail = new OrderDetail();
             //总金额
-            int allPrices=0;
-            int cartPrices=0;
+            int allPrices = 0;
+            int cartPrices = 0;
             List<OrderDetail> list = new ArrayList<>();
-            if(CollectionUtils.isNotEmpty(shopList)){
-                Shop shop1=shopList.get(0);
+            if (CollectionUtils.isNotEmpty(shopList)) {
+                Shop shop1 = shopList.get(0);
                 shopListNew.add(shop1);
                 for (Shop shops : shopListNew) {
 //                    cartPrices=shop.getPirce()*cartNum;
                     //小订单号自动生成的订单号
                     //名字
-                    name=shops.getName();
+                    name = shops.getName();
                     String smallOrderCode = getSmallOrderCode();
                     allPrices += shops.getPirce() * cartNum;
                     order.setStatus(30);
@@ -193,7 +190,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                     orderDetail.setCommodityId(Long.valueOf(shops.getCommodityId()));
                     orderDetail.setNum(cartNum);
 //                    orderDetail.setPrice(shops.getPirce());
-                    orderDetail.setPrice(shops.getPirce()*cartNum);
+                    orderDetail.setPrice(shops.getPirce() * cartNum);
                     orderDetail.setCommodityName(shops.getName());
                     orderDetail.setRemark(remark);
                     orderDetail.setBOrderNum(bigOrderCode);
@@ -211,38 +208,35 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 }
 
 
-                resultMap.put("order",order);
+                resultMap.put("order", order);
 //                resultMap.put("cartNum",cartNum);
                 //单价
-                resultMap.put("pirce",pirce);
-                resultMap.put("name",name);
-                resultMap.put("cartNum",cartNum);
-                resultMap.put("cartPrices",cartPrices);
+                resultMap.put("pirce", pirce);
+                resultMap.put("name", name);
+                resultMap.put("cartNum", cartNum);
+                resultMap.put("cartPrices", cartPrices);
 //                resultMap.put("allPrice",allPrice);
-                resultMap.put("bigOrderCode",bigOrderCode);
-                resultMap.put("orderDetail",list);
+                resultMap.put("bigOrderCode", bigOrderCode);
+                resultMap.put("orderDetail", list);
                 //总价
-                resultMap.put("allPrices",allPrices);
+                resultMap.put("allPrices", allPrices);
             }
         }
         return resultMap;
     }
 
 
-
     //随机生成的大订单号
-    public String getBigOrderCode(){
-        return  "SBO"+ DateUtil.format(new Date(),"yyyyMMdd") +
-                (RandomUtil.randomInt(1000,9999));
+    public String getBigOrderCode() {
+        return "SBO" + DateUtil.format(new Date(), "yyyyMMdd") +
+                (RandomUtil.randomInt(1000, 9999));
     }
 
     //随机生成的小订单号
-    public String getSmallOrderCode(){
-        return  "SSO"+ DateUtil.format(new Date(),"yyyyMMdd") +
-                (RandomUtil.randomInt(10000,99999));
+    public String getSmallOrderCode() {
+        return "SSO" + DateUtil.format(new Date(), "yyyyMMdd") +
+                (RandomUtil.randomInt(10000, 99999));
     }
-
-
 
 
 }

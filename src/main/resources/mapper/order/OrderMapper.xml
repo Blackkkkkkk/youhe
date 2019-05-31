@@ -4,27 +4,92 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.youhe.entity.order.Order">
-        <id column="id" property="id" />
-        <id column="user_id" property="userId" />
-        <result column="b_order_num" property="bOrderNum" />
-        <result column="total_price" property="totalPrice" />
-        <result column="status" property="status" />
-        <result column="delivery_addr" property="deliveryAddr" />
-        <result column="end_time" property="endTime" />
-        <result column="create_time" property="createTime" />
+        <id column="id" property="id"/>
+        <id column="user_id" property="userId"/>
+        <result column="b_order_num" property="bOrderNum"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="status" property="status"/>
+        <result column="delivery_addr" property="deliveryAddr"/>
+        <result column="end_time" property="endTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="shopId" property="shopId"></result>
+        <result column="pirce" property="pirce"></result>
+        <result column="num" property="num"></result>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,b_order_num, total_price, status, end_time, create_time
+        id,
+        b_order_num,
+        total_price,
+        status,
+        end_time,
+        create_time,
+        shopId,
+        pirce,
+        num
     </sql>
 
     <sql id="order_Column_List">
-        id as 'id' ,user_id as 'userId', b_order_num as 'bOrderNum', status as 'status', end_time as 'endTime', total_price as 'totalPrice'
+        id
+        as
+        'id' ,
+        user_id
+        as
+        'userId',
+        b_order_num
+        as
+        'bOrderNum',
+        status
+        as
+        'status',
+        end_time
+        as
+        'endTime',
+        total_price
+        as
+        'totalPrice',
+        shopId,
+        pirce,
+        num
     </sql>
 
+
+    <resultMap id="orderListMap" type="com.youhe.entity.order.Order">
+        <id column="id" property="id"/>
+        <id column="user_id" property="userId"/>
+        <result column="b_order_num" property="bOrderNum"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="status" property="status"/>
+        <result column="delivery_addr" property="deliveryAddr"/>
+        <result column="end_time" property="endTime"/>
+        <result column="createTime" property="createTime"/>
+        <result column="shopId" property="shopId"></result>
+        <result column="pirce" property="pirce"></result>
+        <result column="num" property="num"></result>
+        <result column="USER_NAME" property="userName"></result>
+        <result column="addressee" property="addressee"></result>
+        <result column="address" property="address"></result>
+    </resultMap>
+
+    <select id="orderList" parameterType="com.youhe.entity.order.Order" resultMap="orderListMap">
+        SELECT so.*,su.USER_NAME
+        FROM shop_order so
+        LEFT JOIN sys_user su on su.UID = so.user_id
+        where 1 = 1
+        <if test="userId != null and userId !=''">
+            AND so.user_id = #{userId}
+        </if>
+        <if test="id != null ">
+            AND so.id = #{id}
+        </if>
+    </select>
+
+
     <select id="findOrder" parameterType="com.youhe.entity.order.Order" resultType="com.youhe.entity.order.Order">
-        select <include refid="order_Column_List"/> from shop_order
+        select
+        <include refid="order_Column_List"/>
+        from shop_order
         where 1=1
         <if test="id != null">
             AND id = #{id}
@@ -33,16 +98,20 @@
             AND b_order_num = #{bOrderNum}
         </if>
     </select>
-<!--查询订单详情-->
-    <select id="findOrderDetail" parameterType="com.youhe.entity.order.Order" resultType="com.youhe.entity.order.OrderDetail">
+    <!--查询订单详情-->
+    <select id="findOrderDetail" parameterType="com.youhe.entity.order.Order"
+            resultType="com.youhe.entity.order.OrderDetail">
         select
-          d.b_order_num as 'bOrderNum',
-          d.s_order_num as 'sOrderNum',
-          d.commodity_name as 'commodityName',
-          d.price as 'price',
-          d.num as 'num',
-          d.remark as 'remark'
-         from shop_order o  inner join shop_order_detail d on o.b_order_num=d.b_order_num
+        d.b_order_num as 'bOrderNum',
+        d.s_order_num as 'sOrderNum',
+        d.commodity_name as 'commodityName',
+        d.price as 'price',
+        d.num as 'num',
+        d.remark as 'remark',
+        d.shopId,
+        d.pirce,
+        d.num
+        from shop_order o inner join shop_order_detail d on o.b_order_num=d.b_order_num
         where 1=1
         <if test="bOrderNum != null">
             AND o.b_order_num = #{bOrderNum}
@@ -50,21 +119,81 @@
     </select>
 
 
-    <update id="updates" parameterType="com.youhe.entity.order.Order"  >
+    <update id="updates" parameterType="com.youhe.entity.order.Order">
         UPDATE shop_order
         SET
-            <if test="deliveryAddr != null and deliveryAddr!=''">
-                delivery_addr=#{deliveryAddr}
+        <if test="deliveryAddr != null and deliveryAddr!=''">
+            delivery_addr=#{deliveryAddr}
+        </if>
+        WHERE b_order_num=#{bigOrderCode}
+    </update>
+    <!--修改订单状态-->
+    <update id="updateSatus" parameterType="com.youhe.entity.order.Order">
+        UPDATE shop_order
+        SET status='90'
+        WHERE b_order_num = #{bigOrderCode}
+    </update>
+
+    <insert id="saveOrder" parameterType="com.youhe.entity.order.Order" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into shop_order(b_order_num,
+                               shopId,
+                               pirce,
+                               num,
+                               total_price,
+                               createTime,
+                               user_id,
+                               delivery_addr,
+                               status,
+                               endTime,
+                               addressee,
+                               phone)
+            value (
+                   #{bOrderNum},
+                   #{shopId},
+                   #{pirce},
+                   #{num},
+                   #{totalPrice},
+                   NOW(),
+                   #{userId},
+                   #{deliveryAddr},
+                   #{status},
+                   null,
+                   #{addressee},
+                   #{phone}
+            )
+    </insert>
+
+    <update id="updateOrder" parameterType="com.youhe.entity.order.Order">
+        UPDATE shop_order
+        SET
+        <trim suffixOverrides=",">
+            <if test="status != null ">
+                status=#{status},
             </if>
-        WHERE b_order_num=#{bigOrderCode}
+            <if test="endTime != null">
+                endTime =#{endTime},
+            </if>
+            <if test="deliveryAddr != null">
+                delivery_addr =#{deliveryAddr},
+            </if>
+            <if test="phone != null">
+                phone =#{phone},
+            </if>
+            <if test="addressee != null">
+                addressee =#{addressee},
+            </if>
+        </trim>
+        WHERE
+        1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="shopId != null">
+            AND shopId = #{shopId}
+        </if>
     </update>
-<!--修改订单状态-->
-    <update id="updateSatus" parameterType="com.youhe.entity.order.Order" >
-        UPDATE shop_order
-        SET
-            status='90'
-        WHERE b_order_num=#{bigOrderCode}
-    </update>
+
 
     <!--<update id="updateOrder" parameterType="com.youhe.entity.order.Order">
         UPDATE order_order

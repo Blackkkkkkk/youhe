@@ -1,6 +1,8 @@
 package com.youhe.controller.user.shop.login;
 
+import com.youhe.biz.order.AddressBiz;
 import com.youhe.biz.user.UserBiz;
+import com.youhe.entity.order.Address;
 import com.youhe.entity.user.User;
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.InitUsernamePasswordToken;
@@ -13,16 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 /**
  * 商城登录
+ *
  * @author Kalvin
  */
 @RestController
@@ -31,6 +31,9 @@ public class ShopLoginController {
 
     @Autowired
     private UserBiz userBiz;
+
+    @Autowired
+    private AddressBiz addressBiz;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ShopLoginController.class);
 
@@ -41,6 +44,7 @@ public class ShopLoginController {
 
     /**
      * 登录接口
+     *
      * @param user
      * @return
      */
@@ -74,6 +78,7 @@ public class ShopLoginController {
 
     /**
      * 退出登录
+     *
      * @return
      */
     @PostMapping(value = "loinOut")
@@ -88,6 +93,124 @@ public class ShopLoginController {
             }
         }
         return R.error();
+    }
+
+
+    @GetMapping(value = "userInfo")
+    public R userInfo() {
+
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        User user = new User();
+
+        user.setUid(shiroUser.getUid());
+        // user.setType(2);
+
+        List<User> list = userBiz.findOnlyUserList(user);
+        if (!CollectionUtils.isEmpty(list)) {
+            user = list.get(0);
+        }
+
+        return R.ok().put("user", user);
+    }
+
+
+    @PostMapping(value = "updateUserInfo")
+    public R updateUserInfo(User user) {
+        try {
+            userBiz.update(user);
+            List<User> list = userBiz.findOnlyUserList(user);
+            if (!CollectionUtils.isEmpty(list)) {
+                user = list.get(0);
+            }
+            return R.ok("修改成功").put("user", user);
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
+            return R.error("修改失败，请联系管理员！");
+        }
+
+
+    }
+
+    @PostMapping(value = "updateUserPassword")
+    public R updateUserPassword(User user) {
+        Boolean status = false;
+
+        try {
+            String password = user.getUserPassword();
+            String newPassword = user.getNewPassword();
+
+            ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+
+            List<User> list = userBiz.findOnlyUserList(user);
+            if (!CollectionUtils.isEmpty(list)) {
+                user = list.get(0);
+            }
+
+            if (ShiroUserUtils.checkPasswordByMeixiang(user, password)) {
+                user.setUserPassword(newPassword);
+                ShiroUserUtils.encryptPassword(user);
+                userBiz.update(user);
+                return R.ok("修改成功！");
+            } else {
+                return R.error("旧密码输入有误，请重新输入！");
+
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
+            return R.error("修改失败，请联系管理员！");
+        }
+
+    }
+
+    @PostMapping(value = "addressSave")
+    public R addressSave(Address address) {
+
+        try {
+            ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+            address.setUserId(Integer.parseInt(shiroUser.getUid() + ""));
+            addressBiz.save(address);
+
+            address = new Address();
+            address.setUserId(Integer.parseInt(shiroUser.getUid() + ""));
+            List<Address> list = addressBiz.addreddList(address);
+            return R.ok("新增成功").put("list", list);
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
+            return R.error("新增失败");
+        }
+
+    }
+
+
+    @PostMapping(value = "addressUpdate")
+    public R addressUpdate(Address address) {
+        try {
+            ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+            address.setUserId(Integer.parseInt(shiroUser.getUid() + ""));
+            addressBiz.updates(address);
+            address = new Address();
+            address.setUserId(Integer.parseInt(shiroUser.getUid() + ""));
+            List<Address> list = addressBiz.addreddList(address);
+            return R.ok("修改成功").put("list", list);
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
+            return R.error("修改失败");
+        }
+    }
+
+
+    @GetMapping(value = "addressList")
+    public R addressList(Address address) {
+        try {
+            ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+            address.setUserId(Integer.parseInt(shiroUser.getUid() + ""));
+            List<Address> list = addressBiz.addreddList(address);
+            return R.ok().put("list", list);
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
+            return R.error();
+        }
+
     }
 
 }

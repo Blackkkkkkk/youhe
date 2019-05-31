@@ -13,7 +13,9 @@ var vm = new Vue({
             name: null,
             shopExplainList: [],
             sukList: [],
-            sukChangeName: null
+            sukChangeName: null,
+            shopStyleId: null,  // 选中商品下的类型id
+            cartNum: 1  // 购物车数量
         },
         lists: {},
         view: {},
@@ -22,10 +24,7 @@ var vm = new Vue({
             items: 0,
             prices: 0
         },
-        addcar: {
-            cartNum: 0,
-            remark: "",
-        },  // view 详情的
+        // view 详情的
         productQuantity: 1, //详情页商品数量字段
         stocknum: 0,
         stocktotal: 0,
@@ -48,55 +47,48 @@ var vm = new Vue({
 
             this.shop.pirce = price
             this.shop.sukChangeName = name
+            this.shop.shopStyleId = changeId
         },
         // 购物车数量增加
         addCardNum:
-
             function (event, index) {
-                this.productQuantity += 1;
-                _this.addcar.cartNum++;
-
-
+                this.shop.cartNum += 1;
             }
 
         ,// 购物车数量减少
         delCardNum: function (event, index) {
-            if (this.productQuantity > 0) {
-                this.productQuantity -= 1;
-            }
-            if (_this.addcar.cartNum > 0) {
-                _this.addcar.cartNum--;
+            if (this.shop.cartNum > 0) {
+                this.shop.cartNum -= 1;
             }
         }
         ,
         //立即购买
         purchase: function () {
-            id = vm.view.id;
+            id = vm.shop.id;
             var cartNum = $("input[name='text']").val();
             // id=vm.id;
-            debugger
+
+            var url = "/order/shoppingPurchase?id=" + id + "&cartNum=" + cartNum;
+
+            console.log(url)
             if (id && id != 'null') {
                 window.location.href = "/order/shoppingPurchase?id=" + id + "&cartNum=" + cartNum;
             }
-            // url = "/touristShop/addCart?id=" + el.id + "&remark=" + _this.addcar.remark + "&cartNum=" + _this.addcar.cartNum;
         }
         ,
         addCar: function (event, type) {
 
-            _this = this;
-            //获取点击对象
             x = event.clientX  // 获取点击对象的x 轴
             y = event.clientY  // 获取点击对象的y 轴
-            console.log(event)
-            var _this = this;
-            var el = event.currentTarget;
 
 
-            //type == 2  是view 那边添加
-            var url = "/touristShop/addCart?id=" + el.id;
-
-            if (type == 2) {
-                url = "/touristShop/addCart?id=" + el.id + "&remark=" + _this.addcar.remark + "&cartNum=" + _this.addcar.cartNum;
+            var url;
+            console.log(vm.shop.shopStyleId == null)
+            if (vm.shop.shopStyleId == null) {
+                url = "/touristShop/addCart?id=" + vm.shop.id;
+            } else {
+                url = "/touristShop/addCart?id=" + vm.shop.id + "&shopStyleId=" + vm.shop.shopStyleId + "&pirce=" + vm.shop.pirce + "&sukChangeName="
+                    + vm.shop.sukChangeName + "&cartNum=" + vm.shop.cartNum;
             }
 
             $.get(url, function (r) {
@@ -124,6 +116,7 @@ var vm = new Vue({
                     async: false,//取消异步
                     success: function (data) {
                         r = data;
+                        console.log(r)
                     }
                 });
             }
@@ -140,7 +133,8 @@ var vm = new Vue({
             _this.carData.prices = prices;
         }
         ,
-        delCart: function (event) {
+        delCart: function (event, item) {
+
 
             var x = event.clientX;
             var y = event.clientY;
@@ -148,14 +142,25 @@ var vm = new Vue({
             var el = event.currentTarget;
             var _this = this;
 
-            $.get("/touristShop/delCart?id=" + el.name, function (r) {
-                if (r == 1) {
-                    top.layer.msg('物品删除成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
-                    _this.initcart();
-                } else {
-                    top.layer.msg('物品删除失败，请重新删除', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
+
+            for (var i = 0; i < _this.shopList.length; i++) {
+
+                if (item.shopId != null && _this.shopList[i].shopId == item.shopId) {
+
+                    console.log(_this.shopList[i].id + ":" + _this.shopList[i].shopId)
+                    console.log(item.id + ":" + item.shopId)
+
+
+                    $.get("/touristShop/delCart?id=" + item.id + "&shopId=" + _this.shopList[i].shopId, function (r) {
+                        if (r == 1) {
+                            top.layer.msg('物品删除成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
+                            _this.initcart();
+                        } else {
+                            top.layer.msg('物品删除失败，请重新删除', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
+                        }
+                    })
                 }
-            })
+            }
         }
         ,
         showView: function (id) {//这个只是给基本方法   还没用上ajax请求

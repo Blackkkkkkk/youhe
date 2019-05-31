@@ -3,8 +3,10 @@ package com.youhe.entity.shop;
 import com.youhe.entity.SysBaseEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +46,9 @@ public class Shop extends SysBaseEntity {
     /*
      * 关联照片表的字段
      **/
+
     private String saveFileName; // 照片名字
+    private String fileName; // 照片名字
 
     private String pageaddr; // 页面显示路径
 
@@ -102,7 +106,19 @@ public class Shop extends SysBaseEntity {
     private int AllPrices;
     private String bigOrderCode;
     private Integer price;//商品价格
+    private Integer amount;//商品总价
+    private String shopStyleId;// 商品下二级类目id   如枕头下的 xxx枕头
     private int stockNum;
+    private String sukChangeName; // 选中suk 名字
 
+    private Integer shopId;//  // shop_picture 照片表的 id
+    private Integer spId;
 
+    private String shopIdList;// 订单列表多个商品id 的字段
+
+    public List<String> getshList() {
+        if (StringUtils.isEmpty(shopIdList))
+            return null;
+        return Arrays.asList(shopIdList.split(","));
+    }
 }

@@ -27,6 +27,29 @@
         <result property="sukParameter" column="sukParameter"></result>
     </resultMap>
 
+
+    <resultMap type="com.youhe.entity.shop.Shop" id="cartList">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="pirce" column="PRICE"/>
+        <result property="num" column="NUM"></result>
+        <result property="top" column="TOP"/>
+        <result property="status" column="STATUS"/>
+        <result property="register" column="REGISTER"/>
+        <result property="orderNum" column="ORDER_NUM"/>
+        <result property="saveFileName" column="SAVE_FILE_NAME"></result>
+        <result property="pageaddr" column="PAGEADDR"></result>
+        <result property="hotSale" column="HOT_SALE"></result>
+        <result property="isNewProductOrderNum" column="IS_NEW_PRODUCT_ORDER_NUM"></result>
+        <result property="commodityId" column="COMMODITY_ID"></result>
+        <result property="describe" column="DESCRIBE"></result>
+        <result property="available" column="AVAILABLE"></result>
+        <result property="shopId" column="SHOP_ID"></result>
+        <result property="spId" column="spId"></result>
+        <result property="fileName" column="FILE_NAME"></result>
+    </resultMap>
+
+
     <resultMap type="com.youhe.entity.shop.Shop" id="commodityList">
         <id property="id" column="ID"/>
         <result property="name" column="NAME"/>
@@ -159,6 +182,32 @@
             , sc.NUM
         </if>
         DESC
+    </select>
+
+
+    <!--购物车查询列表 -->
+
+    <select id="findCarList" parameterType="com.youhe.entity.shop.Shop" resultMap="cartList">
+        SELECT *,
+        sp.ID spId
+        FROM shop_commodity sc
+        LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
+
+        where 1 = 1
+        <if test="id!=null">
+            AND sc.ID = #{id}
+        </if>
+        <if test="shopId!=null">
+            AND sp.ID = #{shopId}
+        </if>
+        <if test="shopIdList != null and shopIdList!=''">
+            and sp.ID in
+            <foreach collection="shList" index="index" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        ORDER BY (spId+0)
+
     </select>
 
 

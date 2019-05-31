@@ -18,6 +18,7 @@ public interface ShopMapper {
     //查找分类
     List<Shop> findCommodity(Shop shop);
 
+
 //    //查看详情
 //    List<Shop> findCommodityType(Shop shop);
 
@@ -29,5 +30,8 @@ public interface ShopMapper {
 
     //查找商品详情页信息
     List<Shop> findshopDetail(Shop shop);
+
+    //购物车信息
+    List<Shop> findCarList(Shop shop);
 
 }

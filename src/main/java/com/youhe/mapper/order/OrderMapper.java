@@ -18,11 +18,23 @@ import java.util.List;
  */
 public interface OrderMapper extends BaseMapper<Order> {
     //修改角色表
-    void updates(String bigOrderCode,String deliveryAddr);
-     //查询订单
+    void updates(String bigOrderCode, String deliveryAddr);
+
+
+    void saveOrder(Order order); // 存入表单
+
+    //查询订单
     List<Order> findOrder(Order order);
+
     //查询订单详情
     List<OrderDetail> findOrderDetail(OrderDetail orderDetail);
+
     //修改订单状态
-   int updateSatus(String bOrderNum);
+    int updateSatus(String bOrderNum);
+
+    //查询订单
+    List<Order> orderList(Order order);
+
+    //更新订单
+    void updateOrder(Order order);
 }

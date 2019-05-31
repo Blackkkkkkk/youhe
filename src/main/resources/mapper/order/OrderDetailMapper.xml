@@ -4,20 +4,30 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.youhe.entity.order.OrderDetail">
-        <id column="id" property="id" />
-        <result column="b_order_num" property="bOrderNum" />
-        <result column="commodity_id" property="commodityId" />
-        <result column="s_order_num" property="sOrderNum" />
-        <result column="commodity_name" property="commodityName" />
-        <result column="price" property="price" />
-        <result column="num" property="num" />
-        <result column="remark" property="remark" />
-        <result column="create_time" property="createTime" />
+        <id column="id" property="id"/>
+        <result column="b_order_num" property="bOrderNum"/>
+        <result column="commodity_id" property="commodityId"/>
+        <result column="s_order_num" property="sOrderNum"/>
+        <result column="commodity_name" property="commodityName"/>
+        <result column="price" property="price"/>
+        <result column="num" property="num"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="addressee" property="addressee"></result>
+        <result column="address" property="address"></result>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, b_order_num, commodity_id, s_order_num, commodity_name, price,num,remark, create_time
+        id,
+        b_order_num,
+        commodity_id,
+        s_order_num,
+        commodity_name,
+        price,
+        num,
+        remark,
+        create_time
     </sql>
 
 </mapper>
