@@ -33,8 +33,8 @@
                             <!--<li><a href="#" onclick="changePassword(id)" th:id="${user.uid}">修改密码</a></li>-->
                             <li><a href="/user/changePassword">修改密码</a></li>
                             <li><a href="contacts.html">桌面设置</a></li>
-                            <li><a href="contacts.html">天气预报设置</a></li>
-                            <li><a href="contacts.html">个人网址收藏</a></li>
+                            <li><a href="/user/forecast">天气预报设置</a></li>
+                            <li><a href="/user/findCollections">个人网址收藏</a></li>
                             <li><a href="contacts.html">快速意见设置</a></li>
 
 
@@ -61,33 +61,16 @@
 
     </nav>
 
-</aside>
-<div th:include="common/Head :: js"></div>
-
-<script src="../bootstrap/js/dept/js/vue.min.js"></script>
-
-
-<script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
-
-<script src="../js/manage/js/fileinput.min.js"></script>
-<script src="../js/manage/js/zh.js"></script>
-<script src="../js/manage/js/processData.js"></script>
-
-
-<script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
-
-<script type="text/javascript">
-
-
-    var layer;
-    function updataPsd(id){}
-    // updatePsd(id){
-    //     alert(id);
-    // }
-    // var changePassword = function(){
-    //     alert("123");
-    // // changePassword=function (obj) {
-    //     debugger
+    <script type="text/javascript">
+        var layer;
+        function updataPsd(id){}
+        // updatePsd(id){
+        //     alert(id);
+        // }
+        // var changePassword = function(){
+        //     alert("123");
+        // // changePassword=function (obj) {
+        //     debugger
         // idx = layer.open({
         //     type: 1,
         //     title: '选择需要导入的流程模型JSON',
@@ -103,9 +86,25 @@
         //         console.log('index', index);
         //     }*/
         // });
-    // }
+        // }
 
-</script>
+    </script>
+</aside>
+<div th:include="common/Head :: js"></div>
+
+<script src="../bootstrap/js/dept/js/vue.min.js"></script>
+
+
+<script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
+
+<script src="../js/manage/js/fileinput.min.js"></script>
+<script src="../js/manage/js/zh.js"></script>
+<script src="../js/manage/js/processData.js"></script>
+
+
+<script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
+
+
 
 </body>
 </html>
