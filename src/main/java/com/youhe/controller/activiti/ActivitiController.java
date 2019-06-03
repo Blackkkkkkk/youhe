@@ -8,14 +8,12 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.pagehelper.PageInfo;
 import com.youhe.activiti.engine.MyProcessEngine;
 import com.youhe.activiti.ext.ProcessDiagramGenerator;
 import com.youhe.biz.user.UserBiz;
 import com.youhe.common.Constant;
 import com.youhe.controller.comm.BaseController;
-import com.youhe.dto.activiti.CopyToDto;
-import com.youhe.entity.activiti.Copyto;
+import com.youhe.dto.activiti.CopyToDTO;
 import com.youhe.entity.activiti.Delegate;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.FormCodeData;
@@ -29,7 +27,6 @@ import com.youhe.utils.R;
 import com.youhe.utils.activiti.FormParseUtils;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import com.youhe.utils.spring.HttpServletContextKit;
-import com.youhe.vo.activiti.CopyToVo;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
@@ -126,6 +123,12 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "/read")
     public ModelAndView indxMyRead() {
         return new ModelAndView("activiti/manage/MyRead");
+    }
+
+
+    @GetMapping(value = "submitTask")
+    public ModelAndView submitTask() {
+        return new ModelAndView("activiti/submit_task");
     }
 
     @GetMapping(value = "create")
@@ -315,7 +318,7 @@ public class ActivitiController extends BaseController {
     @GetMapping(value = "read/list")
     public R MyRead(int size,int current) {
         String userId = String.valueOf(ShiroUserUtils.getUserId());
-        IPage<CopyToDto> readList = copytoService.getReadList(userId, size, current);
+        IPage<CopyToDTO> readList = copytoService.getReadList(userId, size, current);
         return R.ok().put("data", readList.getRecords()).put("total",readList.getTotal());
     }
 
@@ -330,10 +333,7 @@ public class ActivitiController extends BaseController {
         return R.ok();
     }
 
-    @GetMapping(value = "submitTask")
-    public ModelAndView submitTask() {
-        return new ModelAndView("activiti/submit_task");
-    }
+
 
     /**
      * 导出流程xml

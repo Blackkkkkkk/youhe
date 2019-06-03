@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youhe.mapperfile..FileKnowledgeMapper">
+<mapper namespace="com.youhe.mapper.fileupload.FileKnowledgeMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.youhe.entity.fileupload.FileKnowledge">
         <id column="ID" property="id" />
-        <result column="REGISTER_DATE" property="registerDate" />
+        <result column="UPLOAD_DATE" property="uploadDate" />
         <result column="FILE_NAME" property="fileName" />
-        <result column="FILE_CATEGORY" property="fileCategory" />
+        <result column="FILE_CATEGORY_NUMBER" property="fileCategoryNumber" />
         <result column="FILE_TYPE" property="fileType" />
         <result column="SAVE_FILE_NAME" property="saveFileName" />
         <result column="SERVER_ADDR" property="serverAddr" />
@@ -17,7 +17,74 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID, REGISTER_DATE, FILE_NAME, FILE_CATEGORY, FILE_TYPE, SAVE_FILE_NAME, SERVER_ADDR, FILE_SIZE, VERSION_NUMBER
+        ID, UPLOAD_DATE, FILE_NAME, FILE_CATEGORY_NUMBER, FILE_TYPE,FILE_CATEGORY_NAME,SAVE_FILE_NAME, SERVER_ADDR, FILE_SIZE, VERSION_NUMBER
     </sql>
 
+    <sql id="FileList_Column_List">
+        ID, UPLOAD_DATE, FILE_NAME,FILE_CATEGORY_NAME,UPLOAD_PEOPLE
+    </sql>
+     <!--插入知识管理表-->
+    <insert id="insertFileInfomation" parameterType="com.youhe.entity.fileupload.FileKnowledge" >
+         insert into file_knowledge (UPLOAD_DATE, FILE_NAME, FILE_CATEGORY_NUMBER, FILE_TYPE,FILE_CATEGORY_NAME,SAVE_FILE_NAME, SERVER_ADDR, FILE_SIZE,UPLOAD_PEOPLE)values
+         <foreach collection="list" separator="," open="(" close=")" item="item" index="index">
+    #{item.uploadDate},#{item.fileName},#{item.fileCategoryNumber},#{item.fileType},#{item.fileCategoryName},#{item.saveFileName},#{item.serverAddr},#{item.fileSize},#{item.uploadPeople}
+</foreach>
+        </insert>
+
+    <!--查询知识管理已存在的分类名称-->
+    <select id="queryFileCategoryName"
+            resultType="com.youhe.dto.fileupload.FileKnowledgeDTO">
+           select distinct FILE_CATEGORY_NAME from file_knowledge
+    </select>
+    <!--查询知识管理内容-->
+    <select id="queryFileList"
+            resultType="com.youhe.dto.fileupload.FileKnowledgeDTO">
+        select <include refid="FileList_Column_List"/> from file_knowledge
+    </select>
+    <!--删除知识管理文件-->
+    <delete id="deleteFilesOne" parameterType="java.lang.Long">
+      delete  from file_knowledge where ID=#{id}
+    </delete>
+    <!--查询知识管理服务器文件路径和名称-->
+    <select id="queryFileAddr" parameterType="java.lang.Long"
+            resultType="com.youhe.entity.fileupload.FileKnowledge">
+        select SAVE_FILE_NAME,SERVER_ADDR  from file_knowledge where ID=#{id}
+    </select>
+
+   <!--下载需要的内容-->
+    <select id="queryDownloadText" parameterType="java.lang.Long"
+            resultType="com.youhe.entity.fileupload.FileRule">
+        select FILE_NAME,FILE_TYPE,SERVER_ADDR,SAVE_FILE_NAME  from file_rule where ID=#{id}
+    </select>
+
+   <!--规章制度查询-->
+    <select id="queryRuleText"
+            resultType="com.youhe.dto.fileupload.FileRuleDTO">
+        select <include refid="FileList_Column_List"/>  from file_rule
+    </select>
+   <!--插入规章制度-->
+    <insert id="insertRuleFile" parameterType="com.youhe.entity.fileupload.FileRule" >
+        insert into file_rule (UPLOAD_DATE, FILE_NAME, FILE_CATEGORY_NUMBER, FILE_TYPE,FILE_CATEGORY_NAME,SAVE_FILE_NAME, SERVER_ADDR, FILE_SIZE,UPLOAD_PEOPLE)values
+        <foreach collection="list" separator="," open="(" close=")" item="item" index="index">
+            #{item.uploadDate},#{item.fileName},#{item.fileCategoryNumber},#{item.fileType},#{item.fileCategoryName},#{item.saveFileName},#{item.serverAddr},#{item.fileSize},#{item.uploadPeople}
+        </foreach>
+    </insert>
+
+    <!--查询规章制度服务器文件路径和名称-->
+    <select id="queryRuleFileAddr" parameterType="java.lang.Long"
+            resultType="com.youhe.entity.fileupload.FileRule">
+        select SAVE_FILE_NAME,SERVER_ADDR  from file_rule where ID=#{id}
+    </select>
+
+
+    <!--删除规章制度文件-->
+    <delete id="deleteRuleFile" parameterType="java.lang.Long">
+      delete  from file_rule where ID=#{id}
+    </delete>
+
+    <!--查询规章制度已存在的分类名称-->
+    <select id="queryRuleFileCategoryName"
+            resultType="com.youhe.dto.fileupload.FileRuleDTO">
+           select distinct FILE_CATEGORY_NAME from file_rule
+    </select>
 </mapper>

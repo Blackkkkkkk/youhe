@@ -76,7 +76,7 @@ var vm = new Vue({
                 contentType: "application/json",
                 data: JSON.stringify(vm.dept),
                 success: function (r) {
-                    if (r.code === 0) {
+                    if (r.Status=== 0) {
                         layer.msg('操作成功', {icon: 1, time: 1000}, function () {
                             vm.reload();
                         });

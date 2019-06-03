@@ -22,7 +22,7 @@
     <sql id="Copy_Column_List">
         ID,CC, ASSIGNEE, PROC_INST_ID, TASK_ID, PROC_NAME,CREATE_TIME,READ_TIME
     </sql>
-    <select id="queryRead" parameterType="string" resultType="com.youhe.dto.activiti.CopyToDto">
+    <select id="queryRead" parameterType="string" resultType="com.youhe.dto.activiti.CopyToDTO">
      select <include refid="Copy_Column_List"/> from act_ext_copyto
      where
       CC=#{userId}

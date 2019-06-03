@@ -2,37 +2,37 @@ package com.youhe.entity.fileupload;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
-import java.util.Date;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
- *
- *@Description 知识管理
- * @author xdn
- * @since 2019-05-29
+ *@ClassName FileRule
+ *@Description TODO
+ *@Author xdn
+ *@Date 2019/6/213:54
+ *@Version 1.0
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class FileKnowledge implements Serializable {
-
+public class FileRule implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
     /**
+     * 上传人
+     */
+    private String uploadPeople;
+    /**
      *上传时间
      */
     private Date uploadDate;
-    /**
-     *上传人
-     */
-    private String uploadPeople;
+
     /**
      * 文件名称
      */
@@ -71,6 +71,4 @@ public class FileKnowledge implements Serializable {
      * 备用
      */
     private String versionNumber;
-
-
 }

@@ -1,7 +1,7 @@
 package com.youhe.service.activiti;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.youhe.dto.activiti.CopyToDto;
+import com.youhe.dto.activiti.CopyToDTO;
 import com.youhe.entity.activiti.Copyto;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -24,5 +24,5 @@ public interface CopytoService extends IService<Copyto> {
      * 待我阅读
      * @return
      */
-    IPage<CopyToDto> getReadList(String userId, int size, int current);
+    IPage<CopyToDTO> getReadList(String userId, int size, int current);
 }
