@@ -231,6 +231,10 @@ var yuheUtils = {
                 $(this).attr('aria-expanded', true);
             }
         });
+    },
+    getUserName: function (userId) {
+        var r = yuheUtils.get('/user/info/' + userId);
+        return r.user['userName'];
     }
 };
 
@@ -387,8 +391,7 @@ var CONSTANT = {
             USER_NAME: function (data, type, row, meta) {
                 try {
                     data = data || "";
-                    var r = yuheUtils.get('/user/info/' + data);
-                    return r.user['userName'];
+                    return yuheUtils.getUserName(data);
                 } catch (e) {
                     return e.msg;
                 }

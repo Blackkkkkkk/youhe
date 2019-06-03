@@ -51,7 +51,7 @@
                         <form id="taskForm" class="form-horizontal" role="form">
 
                             <!--选择审批人-->
-                            <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
+                            <div class="form-group" style="border-bottom: 1px solid #e5e6e7;" th:if="${taskData.flowVariable['nextNodeNum'] > 0}">
                                 <label class="col-sm-2 control-label" style="width: 100px">下一审批人</label>
                                 <div class="form-group">
                                     <span class="glyphicon glyphicon-user" style="margin-top: 9px;"  onclick="selUser(this)">
@@ -74,8 +74,13 @@
                             <div class="form-group" style="border-bottom: 1px solid #e5e6e7;">
                                 <label class="col-sm-2 control-label" style="width: 100px">下一环节</label>
                                 <div class="form-group">
+                                    <label class="radio-inline" th:if="${taskData.flowVariable['nextNodeNum'] == 0}">
+                                        <input type="radio" name="arc" checked>
+                                        <span>归档</span>
+                                    </label>
                                     <label class="radio-inline" th:each="nextNode, info: ${taskData.flowVariable['nextNodes']}">
-                                        <input type="radio" name="targetTaskDefKey" th:id="${'nextNode' + info.index}" th:value="${nextNode.id}" th:checked="${info.size==1}">
+                                        <input type="radio" name="targetTaskDefKey" th:id="${'nextNode' + info.index}" th:value="${nextNode.id}" th:checked="${info.size==1}"
+                                               th:data-assignee="${nextNode.assignee}" th:data-candidateUserIds="${nextNode.candidateUserIds}">
                                         <span th:text="${nextNode.name}">选项1</span>
                                     </label>
                                 </div>

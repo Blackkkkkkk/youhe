@@ -6,8 +6,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,7 +13,6 @@ import com.youhe.activiti.ext.FelSupport;
 import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.Copyto;
-import com.youhe.entity.activiti.Delegate;
 import com.youhe.entity.activiti.FlowVariable;
 import com.youhe.entity.activiti.Node;
 import com.youhe.entity.activitiData.MyCommentEntity;
@@ -34,6 +31,7 @@ import org.activiti.bpmn.model.*;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.*;
+import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -50,6 +48,7 @@ import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.pvm.process.TransitionImpl;
+import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -289,7 +288,6 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                     this.createAttachment(userId, "", task.getId(), processInstanceId, fileNameArr[i], "", filePathArr[i]);
                 }
             }
-
             taskService.addComment(task.getId(), processInstanceId, comment); // 添加审批意见
             Authentication.setAuthenticatedUserId(userId);
 
@@ -301,7 +299,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                     taskService.resolveTask(task.getId());
                 }
             }
-
+            taskService.setAssignee(task.getId(), userId);
             taskService.complete(task.getId(), taskFlowData);
         } else if (nodeNum > 1) {  // 跳转分支任务
             this.gotoAnyTask(flowVariable.getTargetTaskDefKey(), taskFlowData, null, comment, Constant.NODE_JUMP_TYPE_GO);
@@ -313,8 +311,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         final String ccUserId = flowVariable.getCcUserId();
         if (StrUtil.isNotBlank(ccUserId)) {
             // 获取提交成功后的目标任务节点实例。注意不是当前任务节点
-            List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstanceId).active().list();
-            List<Copyto> copytos = new ArrayList<>();
+            /*List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstanceId).active().list();
             tasks.forEach(task -> {
                 Copyto copyto;
                 for (String cc : ccUserId.split(",")) {
@@ -324,7 +321,17 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                             .setProcName(flowVariable.getProcessName());
                     copytos.add(copyto);
                 }
-            });
+            });*/
+            // 抄送当前审批环节
+            List<Copyto> copytos = new ArrayList<>();
+            Copyto copyto;
+            for (String cc : ccUserId.split(",")) {
+                copyto = new Copyto();
+                copyto.setCc(cc).setAssignee(nextUserId)
+                        .setProcInstId(processInstanceId).setTaskId(flowVariable.getTaskId())
+                        .setProcName(flowVariable.getProcessName());
+                copytos.add(copyto);
+            }
             copytoService.saveBatch(copytos);
         }
 
@@ -356,7 +363,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-        List<Task> taskList = taskService.createTaskQuery().taskAssignee(userId).orderByTaskCreateTime().desc().list();
+        List<Task> taskList = taskService.createTaskQuery().taskCandidateOrAssigned(userId).orderByTaskCreateTime().desc().list();
         taskList.forEach(lists->{
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
@@ -383,7 +390,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(processDefinitionId)
                     .singleResult();
-          pt.setName_(processDefinition.getName());
+            pt.setName_(processDefinition.getName());
 
             ptList.add(pt);
         });
@@ -475,7 +482,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
         // 获取当前登录用户
         String userId = String.valueOf(ShiroUserUtils.getUserId());
-        Task task = taskService.createTaskQuery().taskId(taskId).taskAssignee(userId).singleResult();
+        Task task = taskService.createTaskQuery().taskId(taskId).taskCandidateOrAssigned(userId).singleResult();
 
         if (task == null) {
             // todo 流程完结或当前用户没有权限
@@ -521,7 +528,42 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         // 设置下一步路由出口用户任务节点集
         List<UserTask> nextNodes = this.getNextNode(flowVariable.getProcessDefinitionId(), flowVariable.getCurrentNodeKey(), variables);
         List<Node> nodes = new ArrayList<>();
-        nextNodes.forEach(userTask -> nodes.add(new Node(userTask.getId(), userTask.getName())));
+        nextNodes.forEach(userTask -> {
+            Node node = new Node(userTask.getId(), userTask.getName());
+
+            TaskDefinition taskDefinition = this.getTaskDefinition(userTask.getId(), flowVariable.getProcessDefinitionId());
+
+            Expression assigneeExpression = taskDefinition.getAssigneeExpression();
+            Set<Expression> candidateUserIdExpressions = taskDefinition.getCandidateUserIdExpressions();
+            Set<Expression> candidateGroupIdExpressions = taskDefinition.getCandidateGroupIdExpressions();
+            if (assigneeExpression != null) {
+                node.setAssignee(assigneeExpression.getExpressionText());
+            }
+            if (CollectionUtil.isNotEmpty(candidateUserIdExpressions)) {
+                StringBuilder candidateUserIds = new StringBuilder();
+                for (Expression candidateUserIdExpression : candidateUserIdExpressions) {
+                    if (candidateUserIds.length() > 0) {
+                        candidateUserIds.append(",");
+                    }
+                    candidateUserIds.append(candidateUserIdExpression.getExpressionText());
+                }
+                node.setCandidateUserIds(candidateUserIds.toString());
+            }
+            if (CollectionUtil.isNotEmpty(candidateGroupIdExpressions)) {
+                StringBuilder candidateGroupIds = new StringBuilder();
+                for (Expression candidateGroupIdExpression : candidateGroupIdExpressions) {
+                    if (candidateGroupIds.length() > 0) {
+                        candidateGroupIds.append(",");
+                    }
+                    candidateGroupIds.append(candidateGroupIdExpression.getExpressionText());
+                }
+                node.setCandidateGroupIds(candidateGroupIds.toString());
+            }
+
+            nodes.add(node);
+
+        });
+
 
         flowVariable.setNextNodeNum(nextNodes.size());
         flowVariable.setNextNodes(nodes);
@@ -1208,5 +1250,19 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public List<Department> selectUsers(){
         return userMapper.findNames();
-    };
+    }
+
+    @Override
+    public ProcessDefinitionEntity getProcessDefinition(String processDefId) {
+        return (ProcessDefinitionEntity) processEngine.getRepositoryService()
+                .getProcessDefinition(processDefId);
+    }
+
+    @Override
+    public TaskDefinition getTaskDefinition(String taskDefId, String processDefId) {
+        ProcessDefinitionEntity processDefinition = this.getProcessDefinition(processDefId);
+        ActivityImpl activityImpl = processDefinition.findActivity(taskDefId); // 根据活动id获取活动实例
+        return (TaskDefinition)activityImpl.getProperties().get("taskDefinition");
+    }
+
 }

@@ -97,6 +97,7 @@ $.ajax({
 
 $(function() {
     ztree = $.fn.zTree.init($("#tree"), setting,zNodes);
+    ztree.expandAll(true);
     document.getElementById("key").value = ""; //清空搜索框中的内容
     //绑定事件
     key = $("#key");

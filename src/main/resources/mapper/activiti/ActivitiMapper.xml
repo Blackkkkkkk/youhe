@@ -1,4 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.youhe.mapper.activiti.ActivityMapper">
+
+    <select id="selectProcessReports" resultType="com.youhe.dto.activiti.ProcessReportDTO">
+        select proc.ID_ processDefId,proc.NAME_ processName,
+        count(if((SELECT count(1) FROM act_hi_actinst WHERE PROC_INST_ID_=hp.PROC_INST_ID_) = 2, 1, null)) createCount,
+        count(if((SELECT count(1) FROM act_hi_actinst WHERE PROC_INST_ID_=hp.PROC_INST_ID_) > 2, 1, null)) todoCount,
+        count(hp.END_ACT_ID_) archiveCount
+        from (select ID_,NAME_ FROM act_re_procdef rp where DEPLOYMENT_ID_ is not null and DEPLOYMENT_ID_ != '' ORDER BY VERSION_ DESC) proc
+        LEFT JOIN act_hi_procinst hp ON hp.PROC_DEF_ID_ = proc.ID_
+        <where>
+            <if test="startTime != null and startTime != ''">
+                hp.START_TIME_ like concat(#{startTime}, '%')
+            </if>
+            <if test="archiveTime != null and archiveTime != ''">
+                and hp.END_TIME_ like concat(#{archiveTime}, '%')
+            </if>
+        </where>
+        GROUP BY proc.NAME_;
+    </select>
+
+    <select id="selectVarInstList" resultType="com.youhe.dto.activiti.VarInstDTO">
+        select v.PROC_INST_ID_ procInstId,v.NAME_ varName,v.VAR_TYPE_ varType,v.BYTEARRAY_ID_ byteId,v.TEXT_ value
+        from act_hi_varinst v LEFT JOIN act_hi_procinst p ON v.PROC_INST_ID_ = p.PROC_INST_ID_
+        <where>
+            <if test="processDefId != null and processDefId != ''">
+                p.PROC_DEF_ID_ = #{processDefId} and p.END_ACT_ID_ is not null
+            </if>
+            <if test="(varName != null and varName != '') and (varValue != null and varValue != '')">
+                AND v.PROC_INST_ID_ IN (
+                select PROC_INST_ID_ FROM act_hi_varinst
+                where PROC_INST_ID_ = v.PROC_INST_ID_
+                AND NAME_ = #{varName} and TEXT_ LIKE concat(#{varValue}, '%')
+                GROUP BY PROC_INST_ID_)
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllVarInstProInstId" resultType="java.lang.String">
+        select v.PROC_INST_ID_ procInstId
+        from act_hi_varinst v LEFT JOIN act_hi_procinst p ON v.PROC_INST_ID_ = p.PROC_INST_ID_
+        <where>
+            <if test="processDefId != null and processDefId != ''">
+                p.PROC_DEF_ID_ = #{processDefId} and p.END_ACT_ID_ is not null
+            </if>
+            <if test="(varName != null and varName != '') and (varValue != null and varValue != '')">
+                AND EXISTS (
+                select PROC_INST_ID_ FROM act_hi_varinst
+                where PROC_INST_ID_ = v.PROC_INST_ID_
+                AND NAME_ = #{varName} and TEXT_ LIKE concat(#{varValue}, '%'))
+            </if>
+        </where>
+        GROUP BY v.PROC_INST_ID_
+    </select>
+
+    <select id="selectVarInstProInstId" resultType="java.lang.String">
+        select PROC_INST_ID_ procInstId from act_hi_varinst v where PROC_INST_ID_ in
+        <foreach item="item" collection="processInstIds" separator="," open="(" close=")" index="">
+            #{item}
+        </foreach>
+        AND EXISTS (select * from act_hi_varinst WHERE NAME_=#{varName} AND TEXT_ = #{varValue} AND PROC_INST_ID_ = v.PROC_INST_ID_)
+        GROUP BY PROC_INST_ID_;
+    </select>
 </mapper>

@@ -9,6 +9,7 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Attachment;
@@ -331,6 +332,22 @@ public interface MyProcessEngine {
      * 选择审批人
      * @return
      */
-     List<Department> selectUsers();
+    List<Department> selectUsers();
+
+    /**
+     * 根据流程定义ID获取流程定义
+     * @param processDefId 流程定义ID
+     * @return
+     */
+    ProcessDefinitionEntity getProcessDefinition(String processDefId);
+
+    /**
+     * 根据任务节点定义ID获取任务节点定义
+     * @param taskDefId 任务节点定义ID
+     * @param taskDefId 流程定义ID
+     * @return
+     */
+    TaskDefinition getTaskDefinition(String taskDefId, String processDefId);
+
 
 }

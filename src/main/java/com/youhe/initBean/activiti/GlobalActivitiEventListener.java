@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +58,11 @@ public class GlobalActivitiEventListener implements ActivitiEventListener {
                 }
 
                 // 设置审批人
-                task.setAssignee(nextUser);
+                if (nextUser.split(",").length > 1) {   // 多用户任务分配
+                    task.addCandidateUsers(Arrays.asList(nextUser.split(",")));
+                } else {
+                    task.setAssignee(nextUser);
+                }
 
                 // 设置了代理申请
                 if (flowVariable.isAgency()) {

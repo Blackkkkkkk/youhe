@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:shiro="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>友和OA管理系统</title>
+    <link th:replace="common/Head :: headCss">
+    <link th:href="@{/bootstrap/dataTable/datatables.min.css}" rel="stylesheet">
+
+    <style type="text/css">
+        .table > tbody > tr > td {
+            text-align: center;
+        }
+
+        /* dataTables表头居中 */
+        .table > thead:first-child > tr:first-child > th {
+            text-align: center;
+        }
+        .table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+            border-top: 0;
+            border-bottom: 0;
+        }
+        .layui-form .layui-form-item label {
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="wrapper">
+    <nav th:include="common/Left_Ment :: left"></nav>
+    <div id="page-wrapper" class="gray-bg">
+        <div th:include="common/Head :: head"></div>
+        <div class="wrapper wrapper-content animated fadeInRight"  id="wrapperView">
+            <div class="row">
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>按公司统计</legend>
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content" style="padding: 0;">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading" style="color: black">
+                                        <label class="control-label" style="color: white">年份</label>
+                                        <select class="" id="compYear">
+                                            <option value="2019">2019年</option>
+                                            <option value="2018">2018年</option>
+                                        </select>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="compChart" style="width: 100%;height:500px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>按部门统计</legend>
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content" style="padding: 0;">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading" style="color: black">
+                                        <label class="control-label" style="color: white">年份</label>
+                                        <select class="" id="unitYear">
+                                            <option value="2019">2019年</option>
+                                            <option value="2018">2018年</option>
+                                        </select>
+                                        <label class="control-label" style="color: white">部门</label>
+                                        <select class="" id="unit">
+                                            <option value="IT部">IT部</option>
+                                            <option value="客户部">客户部</option>
+                                        </select>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="unitChart" style="width: 100%;height:500px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <div>
+                <strong>Copyright</strong> 星记云典 Company &copy; 2014-2017
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:include="common/Head :: mainJs"></div>
+<div th:include="common/Head :: navMenuJs"></div>
+<script th:src="@{/bootstrap/dataTable/datatables.min.js}"></script>
+<script th:src="@{/js/echarts/echarts.min.js}"></script>
+
+
+<!-- Page-Level Scripts -->
+<script type="text/javascript">
+
+    layui.use(['element', 'form', 'laydate'], function () {
+        var $ = layui.jquery, element = layui.element, form = layui.form, laydate = layui.laydate;
+
+        // 选中左侧菜单
+        yuheUtils.leftMenuSelected('/report/reimburse/index');
+        yuheUtils.bindPersonalSetting();
+
+        var compChart = renderMyChart('compChart', 2019);
+        var unitChart = renderMyChart('unitChart', 2019, 'IT部', 1);
+
+        $('#compYear').on('change', function () {
+            compChart = renderMyChart('compChart', $(this).val());
+        });
+
+        $('#unitYear').on('change', function () {
+            unitChart = renderMyChart('unitChart', $(this).val(), $('#unit').val(), 1);
+        });
+
+        $('#unit').on('change', function () {
+            unitChart = renderMyChart('unitChart', $('#unitYear').val(), $(this).val(), 1);
+        });
+
+        $(window).resize(function () {
+            compChart.resize();
+            unitChart.resize();
+        });
+
+        function renderMyChart(id, year, unit, type) {
+            // 初始化echarts实例
+            var myChart = echarts.init(document.getElementById(id));
+
+            var param = {year: year};
+            if (unit) {
+                param.unit = unit;
+            }
+            $.get('/report/reimburse/data', param, function (r) {
+
+                var xAxisData = r.data.months;
+                var seriesData = r.data.prices;
+                var seriesJson = r.data.mps;
+
+                if (r.Status === 0) {
+                    // 指定图表的配置项和数据
+                    var option;
+
+                    if (!type || type === 0) {  // 柱状图
+                        option = {
+                            title: {
+                                text: '押金报销统计',
+                                subtext: r.data.subtext
+                            },
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            legend: {
+                                data: ['报销金额']
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    dataView: {show: true, readOnly: false},
+                                    magicType: {show: true, type: ['line', 'bar']},
+                                    restore: {show: true},
+                                    saveAsImage: {show: true}
+                                }
+                            },
+                            calculable: true,
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    data: xAxisData
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    name: '金额',
+                                    min: 0,
+                                    max: 10000,
+                                    interval: 1000,
+                                    axisLabel: {
+                                        formatter: '{value} 元'
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '报销金额',
+                                    type: 'bar',
+                                    data: seriesData,
+                                    markPoint: {
+                                        data: [
+                                            {type: 'max', name: '最大值'},
+                                            {type: 'min', name: '最小值'}
+                                        ]
+                                    },
+                                    markLine: {
+                                        data: [
+                                            {type: 'average', name: '平均值'}
+                                        ]
+                                    }
+                                }
+                            ]
+                        };
+                    } else if (type === 1) {    // 饼图
+                        option = {
+                            title : {
+                                text: '押金报销统计',
+                                subtext: r.data.subtext + '',
+                                x:'center'
+                            },
+                            tooltip : {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} 元"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                left: 'left',
+                                data: xAxisData
+                            },
+                            series : [
+                                {
+                                    name: '报销金额',
+                                    type: 'pie',
+                                    radius : '55%',
+                                    center: ['50%', '60%'],
+                                    data: seriesJson,
+                                    itemStyle: {
+                                        emphasis: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+                    }
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                } else {
+                    layer.msg('实例化报表失败：' + r.msg, {icon: 2});
+                }
+            });
+            return myChart;
+        }
+
+    });
+
+
+</script>
+
+</body>
+</html>

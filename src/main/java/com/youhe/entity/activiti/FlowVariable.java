@@ -16,8 +16,6 @@ import java.util.List;
 @ToString
 public class FlowVariable implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     private String processName; // 流程名称
     private String processDefinitionId; // 流程定义ID
     private String userId;  // 当前用户ID

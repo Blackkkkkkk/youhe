@@ -4,6 +4,25 @@
 $(function () {
     console.log('加载了流程引擎js..');
     $('#submitTaskModal').modal('hide');
+
+    var $checkedEl = $('input[name="targetTaskDefKey"]:checked');
+    var assignee = $checkedEl.attr('data-assignee');
+    var candidateUserIds = $checkedEl.attr('data-candidateUserIds');
+
+    var $userShowEl = $('#userShow');
+    var $nextUserIdEl = $('input[name="nextUserId"]');
+    if (assignee) {
+        $userShowEl.text(yuheUtils.getUserName(assignee));
+        $nextUserIdEl.val(assignee);
+    } else if (candidateUserIds) {
+        $.each(candidateUserIds.split(','), function (i, item) {
+            if (i > 0) {
+                $userShowEl.append(',');
+            }
+            $userShowEl.append(yuheUtils.getUserName(item));
+        });
+        $nextUserIdEl.val(candidateUserIds);
+    }
 });
 
 
@@ -17,6 +36,18 @@ function submitTask() {
     var businessFormData = yuheUtils.getFormJson('businessForm');
     var taskFormData = yuheUtils.getFormJson('taskForm');
 
+    var nextUserId = taskFormData.nextUserId;
+    var nextNode = taskFormData.targetTaskDefKey;
+    var nextNodeNum = $('input[name="nextNodeNum"]').val();
+    if (Number(nextNodeNum) > 0 && !nextUserId) {
+        alert('请选择下一环节审批人');
+        return false;
+    }
+    if (Number(nextNodeNum) > 0 && !nextNode) {
+        alert('请选择下一环节流向');
+        return false;
+    }
+
     // 保存选择的select的text值
     for (var i = 0; i < fcEl.length; i++) {
         console.log(fcEl[i]);
@@ -24,13 +55,12 @@ function submitTask() {
         var selTxt =$(fcEl[i]).find('option:selected').text();
         businessFormData[name + '_show'] = selTxt;
     }
-      var status=0;
+    var status = 0;
     console.log("businessFormData= ", businessFormData);
     console.log("taskFormData=" , taskFormData);
     taskData = businessFormData;
     taskData.flowVariable = JSON.stringify(taskFormData);
     console.log("taskData=", taskData);
-    // return false;
     $.ajax({
         type: 'POST',
         url: '../../submit/task',
@@ -38,19 +68,23 @@ function submitTask() {
         // contentType : 'application/json;charset=utf-8',
         data: taskData,
         success: function (r) {
-            if (r.Status == 0) {
-                alert('任务已提交');
-                status=1;
+            if (r.Status === 0) {
+                if (Number(nextNodeNum) === 0) {
+                    alert('任务已归档');
+                } else {
+                    alert('任务已提交');
+                }
+                status = 1;
             }
             else {
-                alert('任务提交失败');
+                alert('任务提交失败：' + r.msg);
             }
         }
     });
-    if(status=1){
-        window.opener.location.reload();//刷新父页面
+
+    if(status === 1){
+        window.opener.location.reload();    //刷新父页面
     }
-   //刷新
 
     return false;
 }
@@ -166,7 +200,7 @@ console.log(value)
 
 
 /**
- * todo 回退到首节点
+ * 回退到首节点
  */
 function back2FirstNode() {
     layer.confirm('确认回退到首环节吗？', {
@@ -196,7 +230,7 @@ function back2FirstNode() {
 }
 
 /**
- * todo 驳回上环节
+ * 驳回上环节
  */
 function back2PreNode() {
     layer.confirm('确认驳回上个环节吗？', {
