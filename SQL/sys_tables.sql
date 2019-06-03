@@ -129,6 +129,17 @@ CREATE TABLE `sys_user`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for sys_collection
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_collection`;
+CREATE TABLE `sys_collection`  (
+  `cid` int(11) NOT NULL AUTO_INCREMENT,
+  `cname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收藏地址保存的名字',
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收藏地址',
+  PRIMARY KEY (`cid`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 204 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for sys_user_department
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_department`;
