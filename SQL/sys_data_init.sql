@@ -33,8 +33,11 @@ INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE
 INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('30', '文档中心', 'menu', '/docment/index', 'sys:docment', '0', NULL, '3', '1', NULL);
 INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('31', '知识管理', 'menu', '/docment/knowledge', 'sys:knowdge', '30', NULL, '3', '1', NULL);
 INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('32', '待我阅读', 'menu', '/activiti/read', 'user:read', '2', NULL, '0', '1', '');
-INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('33', '规章制度', 'menu', '/docment/rule', 'sys:rule', '22', NULL, '0', '1', '');
-INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('34', '下载中心', 'menu', '/docment/download', 'sys:download', '22', NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('33', '规章制度', 'menu', '/docment/rule', 'sys:rule', '30', NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES ('34', '下载中心', 'menu', '/docment/download', 'sys:download', '30', NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (35, '报表中心', 'menu', NULL, 'report:center', 0, NULL, '0', '1', 'fa fa-bar-chart');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (36, '流程报表', 'menu', '/report/process/index', 'report:process:index', 35, NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (37, '报销报表', 'menu', '/report/reimburse/index', 'report:reimburse:index', 35, NULL, '0', '1', '');
 
 
 
