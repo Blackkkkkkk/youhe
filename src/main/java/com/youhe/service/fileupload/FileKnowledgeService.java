@@ -32,7 +32,7 @@ public interface FileKnowledgeService extends IService<FileKnowledge> {
      * @param fileCategory
      * @throws Exception
      */
-    void uploadFile(MultipartFile[] file, HttpServletRequest request, FileKnowledge fileCategory) throws Exception;
+    void uploadFile(MultipartFile file, HttpServletRequest request, FileKnowledge fileCategory) throws Exception;
 
     /**
      * 查询知识管理已存在的分类名称

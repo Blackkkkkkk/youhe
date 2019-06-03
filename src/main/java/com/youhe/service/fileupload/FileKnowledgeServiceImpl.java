@@ -42,7 +42,7 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
     private UserMapper userMapper;
 
     @Override
-    public void uploadFile(MultipartFile[] file, HttpServletRequest request, FileKnowledge fileKnowledge) throws Exception {
+    public void uploadFile(MultipartFile file, HttpServletRequest request, FileKnowledge fileKnowledge) throws Exception {
         List<FileKnowledge> fileInfos = new ArrayList<FileKnowledge>();
         List<FileKnowledge> fileKnowledges = null;
         FileKnowledge fk = null;
@@ -54,34 +54,34 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
         }
         //分类编号
         String categoryId = UUID.randomUUID().toString().replace("-", "");
-        for (int i = 0; i < file.length; i++) {
-            //文件编号
-            String fileId = UUID.randomUUID().toString().replace("-", "");
-            fk = new FileKnowledge();
-            User user= userMapper.findName(String.valueOf(userId));
-            //获取文件大小
-            long size = file[i].getSize();
-            //获取文件名称
-            String fileName = file[i].getOriginalFilename();
-            //获取文件后缀名
-            String suffix = fileName.substring(fileName.lastIndexOf('.'));
-            //拼接新文件名
-            String serverFileName = fileId + suffix;
-            File serverFile = new File(path, serverFileName);
-            //上传到本地
-            file[i].transferTo(serverFile);
 
-            fk.setFileName(fileName);
-            fk.setFileSize(size);
-            fk.setUploadPeople(user.getUserName());
-            fk.setFileType(suffix);
-            fk.setServerAddr(path);
-            fk.setFileCategoryName(fileKnowledge.getFileCategoryName());
-            fk.setSaveFileName(serverFileName);
-            fk.setFileCategoryNumber(categoryId);
-            fk.setUploadDate(new Date());
-            fileInfos.add(fk);
-        }
+        //文件编号
+        String fileId = UUID.randomUUID().toString().replace("-", "");
+        fk = new FileKnowledge();
+        User user = userMapper.findName(String.valueOf(userId));
+        //获取文件大小
+        long size = file.getSize();
+        //获取文件名称
+        String fileName = file.getOriginalFilename();
+        //获取文件后缀名
+        String suffix = fileName.substring(fileName.lastIndexOf('.'));
+        //拼接新文件名
+        String serverFileName = fileId + suffix;
+        File serverFile = new File(path, serverFileName);
+        //上传到本地
+        file.transferTo(serverFile);
+
+        fk.setFileName(fileName);
+        fk.setFileSize(size);
+        fk.setUploadPeople(user.getUserName());
+        fk.setFileType(suffix);
+        fk.setServerAddr(path);
+        fk.setFileCategoryName(fileKnowledge.getFileCategoryName());
+        fk.setSaveFileName(serverFileName);
+        fk.setFileCategoryNumber(categoryId);
+        fk.setUploadDate(new Date());
+        fileInfos.add(fk);
+
 
         //插入数据到知识管理表
         fileKnowledgeMapper.insertFileInfomation(fileInfos);
@@ -124,7 +124,7 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
             // 如果文件名存在，则进行下载
             if (file.exists()) {
                 // 下载文件能正常显示中文
-                response.addHeader("Content-Disposition", "attachment;filename=" +new String(fileName.getBytes("UTF-8"), "ISO8859-1" ));
+                response.addHeader("Content-Disposition", "attachment;filename=" + new String(fileName.getBytes("UTF-8"), "ISO8859-1"));
 
                 // 实现文件下载
                 byte[] buffer = new byte[1024];
@@ -152,7 +152,7 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
     public IPage<FileRuleDTO> queryRuleList(int current, int size) {
         Page<FileRuleDTO> page = new Page<>(current, size);
         List<FileRuleDTO> fileRuleDtos = fileKnowledgeMapper.queryRuleText(page);
-        return  page.setRecords(fileRuleDtos);
+        return page.setRecords(fileRuleDtos);
     }
 
     @Override
@@ -169,32 +169,32 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
         //分类编号
         String categoryId = UUID.randomUUID().toString().replace("-", "");
 
-            User user= userMapper.findName(String.valueOf(userId));
-            //文件编号
-            String fileId = UUID.randomUUID().toString().replace("-", "");
-            fk = new FileRule();
-            //获取文件大小
-            long size = file.getSize();
-            //获取文件名称
-            String fileName = file.getOriginalFilename();
-            //获取文件后缀名
-            String suffix = fileName.substring(fileName.lastIndexOf('.'));
-            //拼接新文件名
-            String serverFileName = fileId + suffix;
-            File serverFile = new File(path, serverFileName);
-            //上传到本地
-            file.transferTo(serverFile);
+        User user = userMapper.findName(String.valueOf(userId));
+        //文件编号
+        String fileId = UUID.randomUUID().toString().replace("-", "");
+        fk = new FileRule();
+        //获取文件大小
+        long size = file.getSize();
+        //获取文件名称
+        String fileName = file.getOriginalFilename();
+        //获取文件后缀名
+        String suffix = fileName.substring(fileName.lastIndexOf('.'));
+        //拼接新文件名
+        String serverFileName = fileId + suffix;
+        File serverFile = new File(path, serverFileName);
+        //上传到本地
+        file.transferTo(serverFile);
 
-            fk.setFileName(fileName);
-            fk.setUploadPeople(user.getUserName());
-            fk.setFileSize(size);
-            fk.setFileType(suffix);
-            fk.setServerAddr(path);
-            fk.setFileCategoryName(fileRule.getFileCategoryName());
-            fk.setSaveFileName(serverFileName);
-            fk.setFileCategoryNumber(categoryId);
-            fk.setUploadDate(new Date());
-            fileInfos.add(fk);
+        fk.setFileName(fileName);
+        fk.setUploadPeople(user.getUserName());
+        fk.setFileSize(size);
+        fk.setFileType(suffix);
+        fk.setServerAddr(path);
+        fk.setFileCategoryName(fileRule.getFileCategoryName());
+        fk.setSaveFileName(serverFileName);
+        fk.setFileCategoryNumber(categoryId);
+        fk.setUploadDate(new Date());
+        fileInfos.add(fk);
 
 
         //插入数据到规章制度表

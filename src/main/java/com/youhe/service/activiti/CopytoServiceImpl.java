@@ -40,12 +40,12 @@ public class CopytoServiceImpl extends ServiceImpl<CopytoMapper, Copyto> impleme
         Copyto copyto = super.getById(id);
         Date createTime = copyto.getCreateTime();
         Date readTime = copyto.getReadTime();
-      if(readTime==null) {
-          readTime = new Date();
-          // 计算时耗
-          long duration = DateUtil.betweenMs(createTime, readTime);
-          copyto.setDuration(duration);
-      }
+        if (readTime == null) {
+            readTime = new Date();
+            // 计算时耗
+            long duration = DateUtil.betweenMs(createTime, readTime);
+            copyto.setDuration(duration);
+        }
         copyto.setReadTime(readTime);
 
         super.updateById(copyto);
@@ -54,11 +54,11 @@ public class CopytoServiceImpl extends ServiceImpl<CopytoMapper, Copyto> impleme
     @Override
     public IPage<CopyToDTO> getReadList(String userId, int size, int current) {
         Page<CopyToDTO> page = new Page<>(current, size);
-        List<CopyToDTO> copyToDtoList=new ArrayList<CopyToDTO>();
-        List<CopyToDTO> copyToDtos = copytoMapper.queryRead(userId,page);
+        List<CopyToDTO> copyToDtoList = new ArrayList<CopyToDTO>();
+        List<CopyToDTO> copyToDtos = copytoMapper.queryRead(userId, page);
         copyToDtos.forEach(copyToDto -> {
 
-            CopyToDTO dto=new CopyToDTO();
+            CopyToDTO dto = new CopyToDTO();
 
             User userMapperName = userMapper.findName(copyToDto.getAssignee());
             dto.setAssignee(userMapperName.getUserName());

@@ -120,7 +120,7 @@ public class FileController {
      * @return
      */
     @PostMapping("/uploadLocal")
-    public R uploadLocalFile(@RequestParam(name = "file") MultipartFile[] file,
+    public R uploadLocalFile(@RequestParam(name = "file") MultipartFile file,
                              FileKnowledge fileKnowledge,
                              HttpServletRequest request) {
         if (StringUtil.isBlank(fileKnowledge.getFileCategoryName())) {
