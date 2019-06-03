@@ -5,7 +5,8 @@
     <select id="selectProcessReports" resultType="com.youhe.dto.activiti.ProcessReportDTO">
         select proc.ID_ processDefId,proc.NAME_ processName,
         count(if((SELECT count(1) FROM act_hi_actinst WHERE PROC_INST_ID_=hp.PROC_INST_ID_) = 2, 1, null)) createCount,
-        count(if((SELECT count(1) FROM act_hi_actinst WHERE PROC_INST_ID_=hp.PROC_INST_ID_) > 2, 1, null)) todoCount,
+        count(if((SELECT count(1) FROM act_hi_actinst WHERE PROC_INST_ID_=hp.PROC_INST_ID_
+        AND NOT EXISTS (select 1 from act_hi_actinst WHERE PROC_INST_ID_=hp.PROC_INST_ID_ and ACT_TYPE_ = 'endEvent')) > 2, 1, null)) todoCount,
         count(hp.END_ACT_ID_) archiveCount
         from (select ID_,NAME_ FROM act_re_procdef rp where DEPLOYMENT_ID_ is not null and DEPLOYMENT_ID_ != '' ORDER BY VERSION_ DESC) proc
         LEFT JOIN act_hi_procinst hp ON hp.PROC_DEF_ID_ = proc.ID_
