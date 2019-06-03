@@ -1,6 +1,6 @@
 
---文档中心
---知识管理
+-- 文档中心
+-- 知识管理
 DROP TABLE IF EXISTS `file_knowledge`;
 CREATE TABLE `file_knowledge`  (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -18,7 +18,7 @@ CREATE TABLE `file_knowledge`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 
---规章制度
+-- 规章制度
 DROP TABLE IF EXISTS `file_rule`;
 CREATE TABLE `file_rule`  (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
