@@ -58,7 +58,7 @@ public interface FileKnowledgeMapper extends BaseMapper<FileKnowledge> {
     FileKnowledge  queryFileAddr(Long id);
 
     /**
-     * 下载需要的内容
+     * 规章制度下载需要的内容
      * @param id
      * @return
      */
@@ -95,4 +95,11 @@ public interface FileKnowledgeMapper extends BaseMapper<FileKnowledge> {
      * @return
      */
     List<FileRuleDTO> queryRuleFileCategoryName();
+
+    /**
+     * 知识管理下载需要的内容
+     * @param id
+     * @return
+     */
+    FileKnowledge  queryKnowledgeDownloadText(Long id);
 }

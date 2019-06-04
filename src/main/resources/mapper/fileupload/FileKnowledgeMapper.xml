@@ -51,7 +51,7 @@
         select SAVE_FILE_NAME,SERVER_ADDR  from file_knowledge where ID=#{id}
     </select>
 
-   <!--下载需要的内容-->
+   <!--规章制度下载需要的内容-->
     <select id="queryDownloadText" parameterType="java.lang.Long"
             resultType="com.youhe.entity.fileupload.FileRule">
         select FILE_NAME,FILE_TYPE,SERVER_ADDR,SAVE_FILE_NAME  from file_rule where ID=#{id}
@@ -86,5 +86,10 @@
     <select id="queryRuleFileCategoryName"
             resultType="com.youhe.dto.fileupload.FileRuleDTO">
            select distinct FILE_CATEGORY_NAME from file_rule
+    </select>
+
+    <select id="queryKnowledgeDownloadText" parameterType="java.lang.Long"
+            resultType="com.youhe.entity.fileupload.FileKnowledge">
+        select FILE_NAME,FILE_TYPE,SERVER_ADDR,SAVE_FILE_NAME  from file_knowledge where ID=#{id}
     </select>
 </mapper>
