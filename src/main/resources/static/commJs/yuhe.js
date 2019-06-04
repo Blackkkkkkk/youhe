@@ -250,8 +250,6 @@ var yuheUtils = {
     renderlayTpl: function (tplId, data) {
         var html = '';
         layui.use('laytpl', function (laytpl) {
-            console.log($('#' + tplId));
-            console.log($('#' + tplId).html());
             html = laytpl($('#' + tplId).html()).render(data);
         });
         return html;

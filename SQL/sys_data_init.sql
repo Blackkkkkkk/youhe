@@ -38,6 +38,7 @@ INSERT INTO `activiti`.`sys_permission` (`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (35, '报表中心', 'menu', NULL, 'report:center', 0, NULL, '0', '1', 'fa fa-bar-chart');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (36, '流程报表', 'menu', '/report/process/index', 'report:process:index', 35, NULL, '0', '1', '');
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (37, '报销报表', 'menu', '/report/reimburse/index', 'report:reimburse:index', 35, NULL, '0', '1', '');
+INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (38, '测试', 'button', NULL, 'app:flow:test', 3, NULL, '0', '1', '');
 
 
 
