@@ -15,7 +15,7 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://localhost:3306/activiti?useUnicode=true&characterEncoding=utf8&useSSL=false
       username: root
-      password: root
+      password: root123
       filters: stat,wall,log4j,config
       max-active: 100
       initial-size: 1
