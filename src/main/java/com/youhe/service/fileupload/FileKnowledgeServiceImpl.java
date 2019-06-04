@@ -14,6 +14,7 @@ import com.youhe.entity.user.User;
 import com.youhe.mapper.fileupload.FileKnowledgeMapper;
 import com.youhe.mapper.user.UserMapper;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -111,12 +112,13 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
     }
 
     @Override
-    public void queryDownloadName(Long id, HttpServletResponse response, HttpServletRequest request) throws Exception {
+    public boolean queryDownloadName(Long id, HttpServletResponse response, HttpServletRequest request) throws Exception {
+        boolean flag = false;
         FileRule fileRule = fileKnowledgeMapper.queryDownloadText(id);
         String fileName = fileRule.getFileName();
         String fileServerName = fileRule.getSaveFileName();
         // 如果文件名不为空，则进行下载
-        if (fileName != null) {
+        if (StringUtils.isNotBlank(fileName)) {
             //设置文件路径
             String realPath = fileRule.getServerAddr();
             File file = new File(realPath, fileServerName);
@@ -130,22 +132,22 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
                 byte[] buffer = new byte[1024];
                 FileInputStream fis = null;
                 BufferedInputStream bis = null;
-                try {
-                    fis = new FileInputStream(file);
-                    bis = new BufferedInputStream(fis);
-                    OutputStream os = response.getOutputStream();
-                    int i = bis.read(buffer);
-                    while (i != -1) {
-                        os.write(buffer, 0, i);
-                        i = bis.read(buffer);
-                    }
 
-                    System.out.println("Download the song successfully!");
-                } catch (Exception e) {
-                    System.out.println("Download the song failed!");
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
                 }
+                flag = true;
+                System.out.println("Download the song successfully!");
+
+
             }
         }
+        return flag;
     }
 
     @Override
@@ -214,6 +216,47 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
     @Override
     public List<FileRuleDTO> selectRuleFileCategoryName() {
         return fileKnowledgeMapper.queryRuleFileCategoryName();
+    }
+
+    @Override
+    public boolean queryKnowledgeDownloadName(Long id, HttpServletResponse response, HttpServletRequest request) throws Exception {
+        boolean flag = false;
+        FileKnowledge fileKnowledge = fileKnowledgeMapper.queryKnowledgeDownloadText(id);
+        String fileName = fileKnowledge.getFileName();
+        String fileServerName = fileKnowledge.getSaveFileName();
+        // 如果文件名不为空，则进行下载
+        if (StringUtils.isNotBlank(fileName)) {
+            //设置文件路径
+            String realPath = fileKnowledge.getServerAddr();
+            File file = new File(realPath, fileServerName);
+
+            // 如果文件名存在，则进行下载
+            if (file.exists()) {
+
+                // 下载文件能正常显示中文
+                response.addHeader("Content-Disposition", "attachment;filename=" + new String(fileName.getBytes("UTF-8"), "ISO8859-1"));
+
+                // 实现文件下载
+                byte[] buffer = new byte[1024];
+                FileInputStream fis = null;
+                BufferedInputStream bis = null;
+
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+                flag = true;
+
+
+            }
+        }
+        return flag;
+
+
     }
 
 

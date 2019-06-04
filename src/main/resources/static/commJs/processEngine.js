@@ -76,16 +76,19 @@ function submitTask() {
             if (r.Status === 0) {
                 if (Number(nextNodeNum) === 0) {
                     alert('任务已归档');
+                    window.opener.location.reload();    //刷新父页面
                 } else {
                     alert('任务已提交');
+                    window.opener.location.reload();    //刷新父页面
                 }
-                window.opener.location.reload();    // 刷新待办列表
+
             }
             else {
                 alert('任务提交失败：' + r.msg);
             }
         }
     });
+
 
     return false;
 }

@@ -231,7 +231,7 @@
           $table.on('click', 'button[row-event="check"]', function () {
               var item = _table.row($(this).closest('tr')).data();
               var str=item.id
-              window.open("/activiti/form/task/"+item.taskId);
+              window.open("/activiti/form/histask/"+item.taskId);
               $.get("/activiti/read/change?id="+item.id,function (r) {
                   if(r.Status===0){
                       layer.msg('已阅读', {icon: 1, time: 1000}, function () {

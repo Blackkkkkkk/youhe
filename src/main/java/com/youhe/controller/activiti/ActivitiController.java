@@ -84,6 +84,7 @@ public class ActivitiController extends BaseController {
      * 我的待办页面
      * @return
      */
+    @RequiresPermissions(value = "user:backlog")
     @GetMapping(value = "/dealwith")
     public ModelAndView indexMyDealWith() {
         return new ModelAndView("activiti/manage/MyToDo");
@@ -102,6 +103,7 @@ public class ActivitiController extends BaseController {
      * 我的已办页面
      * @return
      */
+    @RequiresPermissions(value = "user:backlogdo")
     @GetMapping(value = "/dealwithdo")
     public ModelAndView indexMyDeal() {
         return new ModelAndView("activiti/manage/MyDo");
@@ -632,7 +634,7 @@ public class ActivitiController extends BaseController {
      * @param delegate
      * @return
      */
-    @RequiresPermissions(value = "flow:delegate:del")
+    @RequiresPermissions(value = "flow:delegate:edit")
     @PostMapping(value = "delegate/save")
     public R delegateSave(Delegate delegate) {
         delegate.setAssignee(String.valueOf(ShiroUserUtils.getUserId()));

@@ -321,10 +321,9 @@
                     console.log(r.Status)
                     if (r.Status === 0) {
                         layer.msg('上传成功', {icon: 1, time: 1000}, function () {
-                            layer.close(idx);
                             tableReload();
                         });
-
+                        layer.close(idx);
                     } else if (r.Status === 503) {
                         layer.msg('分类名称不能为空', {icon: 2, time: 1000}, function () {
                             layer.close(idx);

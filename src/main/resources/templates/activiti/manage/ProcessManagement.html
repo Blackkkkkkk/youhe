@@ -196,6 +196,7 @@
                         content: '导入成功'
                     });
                     layer.close(idx);
+                    tableReload()
                 } else {
                     layer.open({
                         type: 0,
@@ -206,7 +207,10 @@
         });
 
     });
-
+    function tableReload() {
+        var table = $('.dataTables-example').DataTable();
+        table.ajax.reload();
+    }
     function importModel() {
         idx = layer.open({
             type: 1,

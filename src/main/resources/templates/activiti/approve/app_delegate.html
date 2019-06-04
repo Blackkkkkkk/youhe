@@ -131,7 +131,7 @@
         // 选中左侧菜单
         yuheUtils.leftMenuSelected('/activiti/delegate/index');
         yuheUtils.bindPersonalSetting();
-
+        var $wrapper = $('#div-table-container');
         var $table = $('#myTable');
 
         // datatables 初始化，这个已经整合服务端分页了
@@ -235,6 +235,7 @@
         });
 
         // 行按钮事件
+
         $table.on('click', 'button[row-event="edit"]', function () {
             var item = _table.row($(this).closest('tr')).data();
             open(item);

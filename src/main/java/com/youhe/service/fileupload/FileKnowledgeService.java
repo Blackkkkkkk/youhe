@@ -62,11 +62,11 @@ public interface FileKnowledgeService extends IService<FileKnowledge> {
      FileKnowledge queryServerAddr(Long id) ;
 
     /**
-     * 下载需要的内容
+     * 规章制度下载需要的内容
      * @param id
      * @return
      */
-    void queryDownloadName(Long id, HttpServletResponse response, HttpServletRequest request) throws Exception;
+    boolean queryDownloadName(Long id, HttpServletResponse response, HttpServletRequest request) throws Exception;
 
     /**
      * 查询规章制度
@@ -102,5 +102,13 @@ public interface FileKnowledgeService extends IService<FileKnowledge> {
      * @return
      */
     List<FileRuleDTO> selectRuleFileCategoryName();
+
+    /**
+     * 知识管理下载需要的内容
+     * @param id
+     * @return
+     */
+    boolean queryKnowledgeDownloadName(Long id, HttpServletResponse response, HttpServletRequest request)  throws Exception;
+
 
 }

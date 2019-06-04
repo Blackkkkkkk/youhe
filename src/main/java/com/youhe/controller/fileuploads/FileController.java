@@ -30,9 +30,8 @@ import java.util.Map;
 /**
  * 文档中心
  *
- *
  * @ClassName FileController
- * @Description TODO
+ * @Description
  * @Author xdn
  * @Date 2019/5/2213:43
  * @Version 1.0
@@ -48,6 +47,7 @@ public class FileController {
 
     /**
      * 知识管理页面
+     *
      * @return
      */
     @GetMapping(value = "/knowledge")
@@ -57,20 +57,24 @@ public class FileController {
 
     /**
      * 规章制度页面
+     *
      * @return
      */
     @GetMapping(value = "/rule")
     public ModelAndView rule() {
         return new ModelAndView("sys/docment/rule");
     }
+
     /**
      * 下载中心页面
+     *
      * @return
      */
     @GetMapping(value = "/download")
     public ModelAndView download() {
         return new ModelAndView("sys/docment/download");
     }
+
     /**
      * 上传至sftp
      *
@@ -164,6 +168,7 @@ public class FileController {
 
     /**
      * 删除知识管理文件
+     *
      * @param id
      * @return
      */
@@ -174,9 +179,9 @@ public class FileController {
             FileKnowledge fileKnowledge = fileKnowledgeService.queryServerAddr(id);
             String fName = fileKnowledge.getServerAddr() + fileKnowledge.getSaveFileName();
             File file = new File(fName);
-                  if(file.exists()){
-                      file.delete();
-                  }
+            if (file.exists()) {
+                file.delete();
+            }
             fileKnowledgeService.deleteFileOne(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,32 +192,40 @@ public class FileController {
     }
 
     /**
-     * 下载文件
+     * 规章制度下载文件
+     *
      * @param id
      * @param response
      * @param request
      */
     @GetMapping(value = "/downloadFile")
-    public void downloadFile(Long id,HttpServletResponse response,HttpServletRequest request) {
+    public R downloadFile(Long id, HttpServletResponse response, HttpServletRequest request) {
         try {
-            fileKnowledgeService.queryDownloadName(id,response,request);
+            boolean flag = fileKnowledgeService.queryDownloadName(id, response, request);
+            if (flag) {
+                R.ok();
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            return R.error();
         }
+        return R.error();
     }
 
     /**
      * 查询规章制度内容
+     *
      * @param current
      * @param size
      * @return
      */
     @GetMapping(value = "/ruleList")
-    public R ruleFile(int current,int size) {
-        IPage<FileRuleDTO> fileRuleIPage = fileKnowledgeService.queryRuleList(current,size);
+    public R ruleFile(int current, int size) {
+        IPage<FileRuleDTO> fileRuleIPage = fileKnowledgeService.queryRuleList(current, size);
         return R.ok().put("data", fileRuleIPage.getRecords()).put("total", fileRuleIPage.getTotal());
 
     }
+
     /**
      * 规章制度上传至服务器本地
      *
@@ -223,7 +236,7 @@ public class FileController {
     @PostMapping("/uploadRule")
     public R uploadRuleFile(@RequestParam(name = "file") MultipartFile file,
                             FileRule fileRule,
-                             HttpServletRequest request) {
+                            HttpServletRequest request) {
         if (StringUtil.isBlank(fileRule.getFileCategoryName())) {
             return R.error(503, "分类名称不能为空");
         }
@@ -239,6 +252,7 @@ public class FileController {
 
     /**
      * 删除规章制度文件
+     *
      * @param id
      * @return
      */
@@ -249,7 +263,7 @@ public class FileController {
             FileRule fileRule = fileKnowledgeService.queryRuleAddr(id);
             String fName = fileRule.getServerAddr() + fileRule.getSaveFileName();
             File file = new File(fName);
-            if(file.exists()){
+            if (file.exists()) {
                 file.delete();
             }
             fileKnowledgeService.deleteRuleFileOne(id);
@@ -271,6 +285,28 @@ public class FileController {
     public List<FileRuleDTO> uploadRuleList() {
         List<FileRuleDTO> fileRuleDtos = fileKnowledgeService.selectRuleFileCategoryName();
         return fileRuleDtos;
+    }
+
+    /**
+     * 下载中心下载（知识管理）
+     *
+     * @param id
+     * @param response
+     * @param request
+     */
+    @GetMapping(value = "/downloadKnowledgeFile")
+    public R downloadKnowledgeFile(Long id, HttpServletResponse response, HttpServletRequest request) {
+        try {
+            boolean b = fileKnowledgeService.queryKnowledgeDownloadName(id, response, request);
+            if (b) {
+
+                return R.ok();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
+        return R.error();
     }
 }
 
