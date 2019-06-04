@@ -94,7 +94,7 @@
                             </div>
 
                             <!--流程流转相关的关键字段值-->
-                            <input type="hidden" name="userId" value="">
+                            <input type="hidden" name="userId" th:value="${taskData.flowVariable['userId']}">
                             <input type="hidden" name="processName" th:value="${taskData.flowVariable['processName']}">
                             <input type="hidden" name="processDefinitionId" th:value="${taskData.flowVariable['processDefinitionId']}">
                             <input type="hidden" name="processInstanceId" th:value="${taskData.flowVariable['processInstanceId']}">
@@ -108,6 +108,7 @@
                             <input type="hidden" name="mainFormKey" th:value="${taskData.flowVariable['mainFormKey']}">
                             <input type="hidden" name="firstSubmit" th:value="${taskData.flowVariable['firstSubmit']}">
                             <input type="hidden" name="nextNodeNum" th:value="${taskData.flowVariable['nextNodeNum']}">
+                            <input type="hidden" name="execType" th:value="${execType==null?taskData.flowVariable['execType']:execType}">
                             <!--<input type="hidden" name="nextNodes" th:value="${taskData.flowVariable['nextNodes']}">-->
                         </form>
                     </div>

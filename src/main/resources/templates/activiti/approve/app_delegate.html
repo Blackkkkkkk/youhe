@@ -223,7 +223,7 @@
             "drawCallback": function( settings ) {
                 //渲染完毕后的回调
                 //清空全选状态
-                $(":checkbox[name='cb-check-all']",$wrapper).prop('checked', false);
+                // $(":checkbox[name='cb-check-all']",$wrapper).prop('checked', false);
                 //默认选中第一行
                 $("tbody tr",$table).eq(0).click();
             }

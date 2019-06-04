@@ -191,6 +191,19 @@ public class ActivitiController extends BaseController {
     }
 
     /**
+     * 以测试的方式启动流程
+     * @param deploymentId 流程发布ID
+     * @return
+     */
+    @GetMapping(value = "test/process/{deploymentId}")
+    public ModelAndView testProcess(@PathVariable String deploymentId) {
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).singleResult();
+        ProcessInstance processInstance = myProcessEngine.start(processDefinition.getId());
+        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
+        return new ModelAndView("redirect:/activiti/form/task/" + task.getId() + "?execType=test");
+    }
+
+    /**
      * 提交任务
      */
     @PostMapping(value = "submit/task")
@@ -205,10 +218,11 @@ public class ActivitiController extends BaseController {
      * 任务表单
      *
      * @param taskId 任务ID
+     * @param execType 执行类型（可选）：默认是正常，test为测试方式启动
      * @return
      */
     @GetMapping(value = "form/task/{taskId}")
-    public ModelAndView taskForm(@PathVariable("taskId") String taskId) {
+    public ModelAndView taskForm(@PathVariable("taskId") String taskId, String execType) {
         ModelAndView mv = new ModelAndView();
         Map<String, Object> map = myProcessEngine.getTaskFormData(taskId);
         if (map == null) {
@@ -218,6 +232,7 @@ public class ActivitiController extends BaseController {
         FlowVariable flowVariable = (FlowVariable) map.get(Constant.FLOW_VARIABLE_KEY);
         mv.setViewName(Constant.FORM_TEMP);
         mv.addObject(Constant.TASK_DATA_KEY , map);
+        mv.addObject("execType", execType);
         FormCodeData taskFormCode = FormParseUtils.getTaskFormCode(flowVariable.getFormKey(), map);
         mv.addObject("table", taskFormCode.getTableHtml());
         mv.addObject("script", taskFormCode.getScript());

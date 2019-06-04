@@ -5,24 +5,34 @@ $(function () {
     console.log('加载了流程引擎js..');
     $('#submitTaskModal').modal('hide');
 
-    var $checkedEl = $('input[name="targetTaskDefKey"]:checked');
-    var assignee = $checkedEl.attr('data-assignee');
-    var candidateUserIds = $checkedEl.attr('data-candidateUserIds');
-
+    // 显示流程审批人
     var $userShowEl = $('#userShow');
     var $nextUserIdEl = $('input[name="nextUserId"]');
-    if (assignee) {
-        $userShowEl.text(yuheUtils.getUserName(assignee));
-        $nextUserIdEl.val(assignee);
-    } else if (candidateUserIds) {
-        $.each(candidateUserIds.split(','), function (i, item) {
-            if (i > 0) {
-                $userShowEl.append(',');
-            }
-            $userShowEl.append(yuheUtils.getUserName(item));
-        });
-        $nextUserIdEl.val(candidateUserIds);
+
+    var execType = $('input[name="execType"]').val();
+    var testUser = $('input[name="userId"]').val();
+    if (execType === 'test') {
+        $userShowEl.text(yuheUtils.getUserName(testUser));
+        $nextUserIdEl.val(testUser);
+    } else {
+        var $checkedEl = $('input[name="targetTaskDefKey"]:checked');
+        var assignee = $checkedEl.attr('data-assignee');
+        var candidateUserIds = $checkedEl.attr('data-candidateUserIds');
+
+        if (assignee) {
+            $userShowEl.text(yuheUtils.getUserName(assignee));
+            $nextUserIdEl.val(assignee);
+        } else if (candidateUserIds) {
+            $.each(candidateUserIds.split(','), function (i, item) {
+                if (i > 0) {
+                    $userShowEl.append(',');
+                }
+                $userShowEl.append(yuheUtils.getUserName(item));
+            });
+            $nextUserIdEl.val(candidateUserIds);
+        }
     }
+
 });
 
 
@@ -50,17 +60,12 @@ function submitTask() {
 
     // 保存选择的select的text值
     for (var i = 0; i < fcEl.length; i++) {
-        console.log(fcEl[i]);
         var name = $(fcEl[i]).attr('name');
-        var selTxt =$(fcEl[i]).find('option:selected').text();
-        businessFormData[name + '_show'] = selTxt;
+        businessFormData[name + '_show'] = $(fcEl[i]).find('option:selected').text();
     }
-    var status = 0;
     console.log("businessFormData= ", businessFormData);
-    console.log("taskFormData=" , taskFormData);
     taskData = businessFormData;
     taskData.flowVariable = JSON.stringify(taskFormData);
-    console.log("taskData=", taskData);
     $.ajax({
         type: 'POST',
         url: '../../submit/task',
@@ -74,17 +79,13 @@ function submitTask() {
                 } else {
                     alert('任务已提交');
                 }
-                status = 1;
+                window.opener.location.reload();    // 刷新待办列表
             }
             else {
                 alert('任务提交失败：' + r.msg);
             }
         }
     });
-
-    if(status === 1){
-        window.opener.location.reload();    //刷新父页面
-    }
 
     return false;
 }
@@ -215,7 +216,7 @@ function back2FirstNode() {
             // contentType : 'application/json;charset=utf-8',
             data: taskFormData,
             success: function (r) {
-                if (r.Status == 0) {
+                if (r.Status === 0) {
                     alert('任务已回退到首环节');
                 } else {
                     alert('任务回退失败');
@@ -226,7 +227,6 @@ function back2FirstNode() {
     }, function(){
     });
 
-    // alert('未实现');
 }
 
 /**
@@ -256,7 +256,6 @@ function back2PreNode() {
     }, function(){
     });
 
-    // alert('未实现');
 }
 
 /**
@@ -286,7 +285,7 @@ function back2AnyNode() {
         success: function(r){
             console.log(r);
             console.log(r.rNodes);
-            var zTree = $.fn.zTree.init($("#backNodeTree"),setting, r.rNodes);
+            var zTree = $.fn.zTree.init($("#backNodeTree"), setting, r.rNodes);
             // 让第一个父节点展开
             var rootNode_0 = zTree.getNodeByParam('pid', 0, null);
             zTree.expandNode(rootNode_0, true, false, false, false);
@@ -313,7 +312,7 @@ function back2AnyNode() {
                         dataType:'json',
                         data: {taskId: taskId, targetNode: node[0].id},
                         success: function (r) {
-                            if (r.Status == 0) {
+                            if (r.Status === 0) {
                                 alert('任务已驳回[' + node[0].name + ']节点');
                             } else {
                                 alert('任务驳回失败');

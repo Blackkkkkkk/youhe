@@ -142,14 +142,29 @@
 
 <script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
 
+<script type="text/html" id="rowToolbarTpl">
+    <button shiro:hasPermission="app:flow:test" class="btn btn-danger btn-xs btn-outline" style="margin-bottom:0" onclick="test([test_deploymentId])"></i>测试</button>
+    <button class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0" onclick="start('[start_deploymentId]')"></i>启动</button>
+    <a class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0"  href="/process-editor/modeler.html?modelId=[edit_id]" target="_blank"></i>修改</a>
+    <button class="btn btn-primary btn-xs btn-outline"  style="margin-bottom:0" onclick="exports([exports_id])"></i>导出</button>
+</script>
 
 <!-- Page-Level Scripts -->
 <script type="text/javascript">
+
     function start(deploymentId) {
-        if (deploymentId && deploymentId != 'null') {   // 流程已发布，直接打开页面
+        if (deploymentId) {   // 流程已发布，直接打开页面
             window.open("/activiti/start?deploymentId=" + deploymentId);
         } else { // 流程未发布，提示发布
             alert('此流程未发布');
+        }
+    }
+
+    function test(deploymentId) {
+        if (deploymentId) {
+            window.open("/activiti/test/process/" + deploymentId);
+        } else {
+            alert('请先发布流程后测试');
         }
     }
 
@@ -272,11 +287,11 @@
                 },
                 {
                     "render": function (data, type, row) {
-                        // return '  <button class="btn btn-success"   @click="start"><i class="fa fa-minus-square"></i>&nbsp;启动流程</button>';
-                        return ' <button class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0" onclick="javascript:start(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动</button>'+'&nbsp'+
-                            '<a class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0"  href="/process-editor/modeler.html?modelId=' + row.id + '" target="_blank"></i>&nbsp;修改</a>'+'&nbsp'+
-                            // ' <button class="btn btn-primary btn-xs btn-outline" onclick="javascript:exports(' + "'" + row.deploymentId + "'" + ');"></i>&nbsp;启动流程</button>';
-                            '<button class="btn btn-primary btn-xs btn-outline"  style="margin-bottom:0" onclick="javascript:exports(' + "'" + row.id + "'" + ');"></i>&nbsp;导出</button>';
+                        return $('#rowToolbarTpl').html()
+                            .replace('[test_deploymentId]', "'" + row.deploymentId + "'")
+                            .replace('[exports_id]', "'" + row.id + "'")
+                            .replace('[start_deploymentId]', row.deploymentId)
+                            .replace('[edit_id]', row.id);
                     },
                     "aTargets": 5 //第一列
                 }

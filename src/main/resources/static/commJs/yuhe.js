@@ -235,6 +235,26 @@ var yuheUtils = {
     getUserName: function (userId) {
         var r = yuheUtils.get('/user/info/' + userId);
         return r.user['userName'];
+    },
+    /**
+     * 获取url参数值
+     * @param name
+     * @returns {string|null}
+     */
+    getUrlParam: function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    },
+    renderlayTpl: function (tplId, data) {
+        var html = '';
+        layui.use('laytpl', function (laytpl) {
+            console.log($('#' + tplId));
+            console.log($('#' + tplId).html());
+            html = laytpl($('#' + tplId).html()).render(data);
+        });
+        return html;
     }
 };
 

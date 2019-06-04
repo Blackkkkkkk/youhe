@@ -219,6 +219,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
                 flowVariable.setAgency(true);
             }
 
+            flowVariable.setUserId(String.valueOf(userId));
             flowVariable.setFirstNode(true);
             flowVariable.setNextUserId(String.valueOf(userId));
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);

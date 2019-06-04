@@ -10,11 +10,14 @@ import java.util.List;
 
 /**
  * 工作流变量
+ * @author Kalvin
  */
 @Getter
 @Setter
 @ToString
 public class FlowVariable implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String processName; // 流程名称
     private String processDefinitionId; // 流程定义ID
@@ -37,5 +40,6 @@ public class FlowVariable implements Serializable {
     private List<Node> nextNodes;   // 当前节点所有可能的出口路由节点列表
     private List<ActivityImpl> canBackNodes; // 当前节点所有可驳回的节点列表
     private String comment; // 流转意见
+    private String execType;    // 执行类型：默认正常，test为测试方式启动
 
 }
