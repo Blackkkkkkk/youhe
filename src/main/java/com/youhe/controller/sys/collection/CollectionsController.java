@@ -39,18 +39,22 @@ public class CollectionsController {
     @Autowired
     private CollectionsService collectionsService;
 
-    @RequiresPermissions(value = "sys:collections")
+//    @RequiresPermissions(value = "sys:collections:edit")
     @RequestMapping(value = "/saveCollection")
     @ResponseBody
     public R saveCollection(String url) {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
         String userAccount=shiroUser.getUserAccount();
+        Long uid=shiroUser.getUid();
+        String uids=String.valueOf(uid);
+
         Collections collections=new Collections();
-        Integer count=collectionsMapper.finds(url);
+        Integer count=collectionsMapper.finds(url,uids);
         collections.setUrl(url);
+        collections.setUserId(uids);
         if (count>0){
             collectionsMapper.del(url);
-            return R.error();
+            return R.error("取消成功");
         }else {
             collectionsService.save(collections);
             return R.ok();
@@ -61,8 +65,12 @@ public class CollectionsController {
     //查找地址
     @RequestMapping(value = "/finds")
     public  R finds(String url) {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        String userAccount=shiroUser.getUserAccount();
+        Long uid=shiroUser.getUid();
+        String uids=String.valueOf(uid);
 //        Map<String, Object> vars = new HashMap<>();
-        Integer count=collectionsMapper.finds(url);
+        Integer count=collectionsMapper.finds(url,uids);
 //        vars.put("user",userNmae);
         if (count>0){
             return R.ok();

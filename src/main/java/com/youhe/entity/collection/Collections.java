@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Sara
@@ -33,6 +33,12 @@ public class Collections implements Serializable {
      * 收藏地址
      */
     private String url;
+
+    /**
+     * 用户id
+     */
+    private String userId;
+
 
 
 }

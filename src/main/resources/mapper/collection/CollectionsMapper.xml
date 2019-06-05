@@ -7,11 +7,12 @@
         <id column="cid" property="cid" />
         <result column="cname" property="cname" />
         <result column="url" property="url" />
+        <result column="user_id" property="userId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        cid, cname, url
+        cid, cname, url, user_id
     </sql>
 
     <!--<insert id="saveCollection"  parameterType="com.youhe.entity.collection.Collections" -->
@@ -20,12 +21,12 @@
     <!--</insert>-->
 
     <select id="findCollections" parameterType="com.youhe.entity.collection.Collections" resultMap="collectionList">
-        SELECT * from sys_collection;
+        SELECT * from sys_collection where user_id=#{uids};
     </select>
 
     <select id="finds" parameterType="String"  resultType="Integer">
         select count(1) from sys_collection
-         where url =#{url};
+         where url =#{url} and user_id=#{uids};
     </select>
 
 
