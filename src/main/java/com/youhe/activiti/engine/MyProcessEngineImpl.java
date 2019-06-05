@@ -341,31 +341,29 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public Map<String, Object> getTaskFormValue(String taskId) {
 
-        // 获取当前登录用户
-        Long userId = ShiroUserUtils.getUserId();
 
         HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
-                .taskId(taskId).taskAssignee(String.valueOf(userId)).singleResult();
+                .taskId(taskId).singleResult();
 
 
         List<HistoricVariableInstance> hisList = historyService.createHistoricVariableInstanceQuery()
                 .processInstanceId(historicTaskInstance.getProcessInstanceId()).list();
 
-        Map<String,Object> hisMap=new HashMap<>();
-        hisList.forEach(list->{
-            hisMap.put(list.getVariableName(),list.getValue());
+        Map<String, Object> hisMap = new HashMap<>();
+        hisList.forEach(list -> {
+            hisMap.put(list.getVariableName(), list.getValue());
         });
         return hisMap;
     }
 
     @Override
     public List<ProdefTask> getTaskList(String userId) {
-        List<ProdefTask> ptList=new ArrayList<>();
+        List<ProdefTask> ptList = new ArrayList<>();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
         List<Task> taskList = taskService.createTaskQuery().taskCandidateOrAssigned(userId).orderByTaskCreateTime().desc().list();
-        taskList.forEach(lists->{
+        taskList.forEach(lists -> {
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
 
@@ -374,14 +372,14 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             pt.setCreateTime(date.format(lists.getCreateTime()));
             pt.setTaskId(lists.getId());
 
-             //根据流程实例id查询发起人
+            //根据流程实例id查询发起人
             String startUserId = this.getStartUserId(lists.getProcessInstanceId());
             pt.setStartUserId(startUserId);
-            User user= userMapper.findName(pt.getStartUserId());
+            User user = userMapper.findName(pt.getStartUserId());
             pt.setStartUserName(user.getUserName());
-           //查询出上一环节的审批人
+            //查询出上一环节的审批人
             String preAssignee = this.getPreAssignee(lists);
-            if(StringUtils.isNotBlank(preAssignee)){
+            if (StringUtils.isNotBlank(preAssignee)) {
                 User userMapperName = userMapper.findName(preAssignee);
                 pt.setPreUserName(userMapperName.getUserName());
             }
@@ -401,13 +399,13 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     @Override
     public List<ProdefTask> getHisTaskList(String userId) {
-        List<ProdefTask> ptHisList=new ArrayList<>();
+        List<ProdefTask> ptHisList = new ArrayList<>();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime().desc().list();
 
-        list.forEach(lists->{
+        list.forEach(lists -> {
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
 
@@ -417,10 +415,10 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             pt.setEndTime(date.format(lists.getEndTime()));
             pt.setTaskId(lists.getId());
 
-        //根据流程实例id查询发起人
+            //根据流程实例id查询发起人
             String startUserId = this.getStartUserId(lists.getProcessInstanceId());
             pt.setStartUserId(startUserId);
-            User user= userMapper.findName(pt.getStartUserId());
+            User user = userMapper.findName(pt.getStartUserId());
             pt.setStartUserName(user.getUserName());
             //根据流程定义id查询出流程名称(标题)
             String processDefinitionId = lists.getProcessDefinitionId();
@@ -435,23 +433,24 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public int total(String userId){
-        int listSize= historyService.createHistoricTaskInstanceQuery()
+    public int total(String userId) {
+        int listSize = historyService.createHistoricTaskInstanceQuery()
                 .taskAssignee(userId).finished().orderByHistoricTaskInstanceEndTime()
                 .desc().list().size();
         return listSize;
     }
+
     @Override
-    public List<ProdefTask> getHisApplyList(String userId,int size,int current ) {
-        List<ProdefTask> ptHisList=new ArrayList<>();
+    public List<ProdefTask> getHisApplyList(String userId, int size, int current) {
+        List<ProdefTask> ptHisList = new ArrayList<>();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-         int currents=current-1;
+        int currents = current - 1;
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
                 .taskAssignee(userId)
                 .finished().orderByHistoricTaskInstanceEndTime().desc()
-                .listPage(currents*size,size);
-        list.forEach(lists->{
+                .listPage(currents * size, size);
+        list.forEach(lists -> {
             //通过浅克隆创建对象
             ProdefTask pt = ProdefTask.getOnePerson();
 
@@ -464,7 +463,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
             //根据流程实例id查询发起人
             String startUserId = this.getStartUserId(lists.getProcessInstanceId());
             pt.setStartUserId(startUserId);
-            User user= userMapper.findName(pt.getStartUserId());
+            User user = userMapper.findName(pt.getStartUserId());
             pt.setStartUserName(user.getUserName());
             //根据流程定义id查询出流程名称(标题)
             String processDefinitionId = lists.getProcessDefinitionId();
@@ -571,7 +570,6 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         LOGGER.info("variables = {}", variables);
         return variables;
     }
-
 
 
     @Override
@@ -752,20 +750,20 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     @Override
     public List<MyCommentEntity> findAdvice(String processInstanceId) {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        List<MyCommentEntity> comList=new ArrayList();
+        List<MyCommentEntity> comList = new ArrayList();
 
         List<Comment> proComments = taskService.getProcessInstanceComments(processInstanceId);
 
         proComments.forEach(comment -> {
 
-            CommentEntity commentEntity = (CommentEntity)comment;
-            MyCommentEntity com=new MyCommentEntity();
+            CommentEntity commentEntity = (CommentEntity) comment;
+            MyCommentEntity com = new MyCommentEntity();
             com.setTime(date.format(commentEntity.getTime()));
             BeanUtils.copyProperties(commentEntity, com);
 
-             //根据任务id查询出审批人和当前环节名称
+            //根据任务id查询出审批人和当前环节名称
             List<HistoricTaskInstance> userList = processEngine.getHistoryService().createHistoricTaskInstanceQuery().taskId(comment.getTaskId()).list();
-            userList.forEach(ul->{
+            userList.forEach(ul -> {
                 User userMapperName = userMapper.findName(ul.getAssignee());
                 com.setUserId(userMapperName.getUserName());
                 com.setCurNoName(ul.getName());
@@ -926,10 +924,10 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     @Override
     public Attachment createAttachment(String userId, String attachmentType, String taskId, String processInstanceId, String attachmentName, String attachmentDescription, String url) {
-        try{
+        try {
             identityService.setAuthenticatedUserId(userId);
             return taskService.createAttachment(attachmentType, taskId, processInstanceId, attachmentName, attachmentDescription, url);
-        }finally{
+        } finally {
             identityService.setAuthenticatedUserId(null);
         }
     }
@@ -1056,6 +1054,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     /**
      * 查询下一步节点 递归
+     *
      * @param flowElements 全流程节点集合
      * @param flowElement  当前节点
      * @param map          业务数据
@@ -1132,6 +1131,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     /**
      * 查询一个节点的是否子任务中的节点，如果是，返回子任务
+     *
      * @param flowElements 全流程的节点集合
      * @param flowElement  当前节点
      */
@@ -1151,7 +1151,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     /**
      * 根据ID查询流程节点对象, 如果是子任务，则返回子任务的开始节点
-     * @param Id    节点ID
+     *
+     * @param Id           节点ID
      * @param flowElements 流程节点集合
      */
     private FlowElement getFlowElementById(String Id, Collection<FlowElement> flowElements) {
@@ -1175,6 +1176,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     /**
      * 返回流程的开始节点
+     *
      * @param flowElements 流程节点集合
      */
     private FlowElement getStartFlowElement(Collection<FlowElement> flowElements) {
@@ -1188,8 +1190,9 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     /**
      * 根据流入任务集合，查询最近一次的流入任务节点
+     *
      * @param processInstanceId 流程实例ID
-     * @param tempList 流入任务集合
+     * @param tempList          流入任务集合
      * @return
      */
     private ActivityImpl filterNewestActivity(String processInstanceId, List<ActivityImpl> tempList) {
@@ -1225,6 +1228,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
     /**
      * 根据当前节点，查询输出流向是否为并行终点，如果为并行终点，则拼装对应的并行起点ID
+     *
      * @param activityImpl 当前节点
      * @return
      */
@@ -1249,7 +1253,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     }
 
     @Override
-    public List<Department> selectUsers(){
+    public List<Department> selectUsers() {
         return userMapper.findNames();
     }
 
@@ -1263,7 +1267,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     public TaskDefinition getTaskDefinition(String taskDefId, String processDefId) {
         ProcessDefinitionEntity processDefinition = this.getProcessDefinition(processDefId);
         ActivityImpl activityImpl = processDefinition.findActivity(taskDefId); // 根据活动id获取活动实例
-        return (TaskDefinition)activityImpl.getProperties().get("taskDefinition");
+        return (TaskDefinition) activityImpl.getProperties().get("taskDefinition");
     }
 
 }
