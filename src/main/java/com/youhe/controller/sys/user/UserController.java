@@ -19,6 +19,7 @@ import com.youhe.serviceImpl.Controller.userController.UserControllerImpl;
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
@@ -105,7 +106,14 @@ public class UserController {
     }
 
 
+    //桌面设置
+    @RequestMapping(value = "/desktop")
+    public String desktop() {
+        return "sys/user/desktop";
+    }
+
 //修改个人资料
+    @RequiresPermissions(value = "sys:info")
     @RequestMapping(value = "/updates")
     @ResponseBody
     public R updates(String userName,String email,String phone,Integer uid) {
@@ -128,6 +136,8 @@ public class UserController {
     }
 
     //修改密码
+
+    @RequiresPermissions(value = "sys:changePassword")
     @RequestMapping(value = "/updatePassword")
     @ResponseBody
     public R updatePassword(String oldpassword,String password,Integer uid) {
