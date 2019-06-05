@@ -33,6 +33,8 @@ $(function () {
         }
     }
 
+    initUserCommOpinion();
+
 });
 
 
@@ -378,3 +380,22 @@ function showComments() {
 function delAttachment(fileId) {
     alert('删除附件:' + fileId);
 }
+
+/**
+ * 初始化用户个人常用意见
+ */
+function initUserCommOpinion() {
+    var list = [{opinion: '同意'}, {opinion: '不同意'}]; // todo 把这个换成你数据查询出来的list列表数据就行
+    var options = '<option value="">常用意见</option>';
+    $.each(list, function (i, item) {
+        options += '<option value="' + item.opinion + '">' + item.opinion + '</option>';
+    });
+    $('#commOpinion').append(options);
+}
+
+/**
+ * 选择常用意见事件
+ */
+$('#commOpinion').on('change', function () {
+    $('textarea[name="comment"]').text($(this).val());
+});
