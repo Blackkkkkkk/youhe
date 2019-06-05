@@ -17,6 +17,7 @@ import com.youhe.utils.shiro.ShiroUserUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +42,7 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
     private FileKnowledgeMapper fileKnowledgeMapper;
     @Autowired
     private UserMapper userMapper;
-
+    @Transactional
     @Override
     public void uploadFile(MultipartFile file, HttpServletRequest request, FileKnowledge fileKnowledge) throws Exception {
         List<FileKnowledge> fileInfos = new ArrayList<FileKnowledge>();
@@ -101,6 +102,7 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
         return page.setRecords(fileKnowledges);
     }
 
+    @Transactional
     @Override
     public int deleteFileOne(Long id) throws Exception {
         return fileKnowledgeMapper.deleteFilesOne(id);
@@ -156,7 +158,7 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
         List<FileRuleDTO> fileRuleDtos = fileKnowledgeMapper.queryRuleText(page);
         return page.setRecords(fileRuleDtos);
     }
-
+    @Transactional
     @Override
     public void uploadRuleFile(MultipartFile file, HttpServletRequest request, FileRule fileRule) throws Exception {
         List<FileRule> fileInfos = new ArrayList<FileRule>();
@@ -208,6 +210,7 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
         return fileKnowledgeMapper.queryRuleFileAddr(id);
     }
 
+    @Transactional
     @Override
     public int deleteRuleFileOne(Long id) throws Exception {
         return fileKnowledgeMapper.deleteRuleFile(id);
@@ -257,6 +260,13 @@ public class FileKnowledgeServiceImpl extends ServiceImpl<FileKnowledgeMapper, F
         return flag;
 
 
+    }
+
+    @Override
+    public IPage<FileKnowledgeDTO> queryCategoryList(int current,int size,String fileCategoryName) {
+        Page<FileKnowledgeDTO> page = new Page<>(current, size);
+        List<FileKnowledgeDTO> fileKnowledgeDTOS = fileKnowledgeMapper.queryCategoryLists(page, fileCategoryName);
+        return page.setRecords(fileKnowledgeDTOS);
     }
 
 

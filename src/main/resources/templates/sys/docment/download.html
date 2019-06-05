@@ -180,7 +180,7 @@
                 //封装请求参数
                 var param = getQueryCondition(data);
                 $.ajax({
-                    type: "POST",
+                    type: "get",
                     url: "/docment/fileList", // 表格数据接口
                     cache: false,  //禁用缓存
                     data: param,    // 传入已封装的参数
@@ -260,10 +260,12 @@
                 /*var str=$('td', row).eq(5).text();
                 str='0'?'未阅读':'已阅读'
                 $('td', row).eq(5).html(str);*/
-                var $btnCheck = $('<button type="button" row-event="delete" class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0">删除</button>');
-                var $btnCheck2 = $('<button type="button" row-event="download" class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0">下载</button>');
+                var ids=data.id
+                /*var $btnCheck = $('<button type="button" row-event="delete" class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0">删除</button>');*/
+              /*  var item = _table.row($(this).closest('tr')).data();*/
+                var $btnCheck2 = $('<a href="/docment/downloadKnowledgeFile?id='+data.id+'" row-event="download" class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0">下载</a>');
 
-                $('td', row).eq(5).append($btnCheck).append('&nbsp;&nbsp;&nbsp;')
+               /* $('td', row).eq(5).append($btnCheck).append('&nbsp;&nbsp;&nbsp;')*/
                 $('td', row).eq(5).append($btnCheck2)
 
             },
@@ -283,7 +285,7 @@
         });
 
         // 行按钮事件
-        $table.on('click', 'button[row-event="delete"]', function () {
+        /*$table.on('click', 'button[row-event="delete"]', function () {
             var item = _table.row($(this).closest('tr')).data();
             $.get("/docment/deleteOne?id=" + item.id, function (r) {
                 if (r.Status === 0) {
@@ -295,12 +297,12 @@
                     });
                 }
             })
-        });
-        $table.on('click', 'button[row-event="download"]', function () {
+        });*/
+      /*  $table.on('click', 'button[row-event="download"]', function () {
             var item = _table.row($(this).closest('tr')).data();
             window.open("/docment/downloadKnowledgeFile?id=" + item.id)
 
-          /*  $.ajax({
+          /!*  $.ajax({
                 url: "/docment/downloadKnowledgeFile?id=" + item.id,
                 type: "get",
                 dataType: "json",
@@ -314,9 +316,9 @@
 
                     }
                 }
-            });*/
+            });*!/
 
-        });
+        });*/
 
 
         var idx;

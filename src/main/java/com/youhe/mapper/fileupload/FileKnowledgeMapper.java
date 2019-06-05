@@ -8,6 +8,7 @@ import com.youhe.entity.fileupload.FileKnowledge;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youhe.entity.fileupload.FileRule;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -102,4 +103,12 @@ public interface FileKnowledgeMapper extends BaseMapper<FileKnowledge> {
      * @return
      */
     FileKnowledge  queryKnowledgeDownloadText(Long id);
+
+    /**
+     * 根据分类条件查询对应内容
+     * @param page
+     * @param fileCategoryName
+     * @return
+     */
+    List<FileKnowledgeDTO> queryCategoryLists(IPage page,@Param("fileCategoryName") String fileCategoryName);
 }

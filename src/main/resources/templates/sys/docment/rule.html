@@ -78,9 +78,9 @@
                                         <th>
                                             <input type="checkbox" name="cb-check-all">
                                         </th>
-                                        <th>文件名称</th>
-                                        <th>分类名称</th>
-                                        <th>上传人</th>
+                                        <th>公司制度文件</th>
+                                        <th>类型</th>
+                                        <th>编辑人</th>
                                         <th>上传时间</th>
                                         <th>操作</th>
                                     </tr>
@@ -99,7 +99,7 @@
             <div class="layui-upload" style="margin-top: 30px;">
                 <div class="layui-row" style="text-align: center">
                     <div class="layui-col-md12">
-                        <button type="button" class="layui-btn layui-btn-normal" id="files">选择文件</button>
+                        <button type="button" class="layui-btn layui-btn-normal" id="files">请选择Excel,Word文件</button>
                     </div>
                 </div>
                 <br/>
@@ -260,7 +260,7 @@
                 str='0'?'未阅读':'已阅读'
                 $('td', row).eq(5).html(str);*/
                 var $btnCheck = $('<button type="button" row-event="delete" class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0">删除</button>');
-                var $btnCheck2 = $('<button type="button" row-event="download" class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0">下载</button>');
+                var $btnCheck2 = $('<a href="/docment/downloadFile?id='+data.id+'" row-event="download" class="btn btn-primary btn-xs btn-outline" style="margin-bottom:0">下载</a>');
 
                 $('td', row).eq(5).append($btnCheck).append('&nbsp;&nbsp;&nbsp;')
                 $('td', row).eq(5).append($btnCheck2)
@@ -318,6 +318,7 @@
                 }
                 , auto: false
                 , accept: 'file'
+                ,exts:'xlsx|doc|docx|xls|xlsm|xlt|xlb|xlc|xlk|xlm|xld|xll|xlv|xlthtml|xlshtml'
                 , size: 10240
                 , multiple: true
                 , bindAction: '#upload'

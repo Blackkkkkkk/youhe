@@ -87,9 +87,19 @@
             resultType="com.youhe.dto.fileupload.FileRuleDTO">
            select distinct FILE_CATEGORY_NAME from file_rule
     </select>
-
+   <!-- 下载中心的知识管理内容-->
     <select id="queryKnowledgeDownloadText" parameterType="java.lang.Long"
             resultType="com.youhe.entity.fileupload.FileKnowledge">
         select FILE_NAME,FILE_TYPE,SERVER_ADDR,SAVE_FILE_NAME  from file_knowledge where ID=#{id}
+    </select>
+     <!--根据分类条件查询内容-->
+    <select id="queryCategoryLists" parameterType="java.lang.String"
+            resultType="com.youhe.dto.fileupload.FileKnowledgeDTO">
+        select <include refid="FileList_Column_List"/>
+        from file_knowledge
+        where 1=1
+        <if test="fileCategoryName!=null and fileCategoryName!=''">
+        and FILE_CATEGORY_NAME=#{fileCategoryName}
+        </if>
     </select>
 </mapper>

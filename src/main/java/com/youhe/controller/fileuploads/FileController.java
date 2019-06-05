@@ -10,6 +10,7 @@ import com.youhe.entity.fileupload.FileRule;
 import com.youhe.service.fileupload.FileKnowledgeService;
 import com.youhe.utils.R;
 import com.youhe.utils.fileupload.FtpsUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,7 @@ public class FileController {
      *
      * @return
      */
+    @RequiresPermissions(value = "sys:knowdge")
     @GetMapping(value = "/knowledge")
     public ModelAndView DocmentKnowLedge() {
         return new ModelAndView("sys/docment/files");
@@ -60,6 +62,7 @@ public class FileController {
      *
      * @return
      */
+    @RequiresPermissions(value = "sys:rule")
     @GetMapping(value = "/rule")
     public ModelAndView rule() {
         return new ModelAndView("sys/docment/rule");
@@ -70,6 +73,7 @@ public class FileController {
      *
      * @return
      */
+    @RequiresPermissions(value = "sys:download")
     @GetMapping(value = "/download")
     public ModelAndView download() {
         return new ModelAndView("sys/docment/download");
@@ -82,6 +86,7 @@ public class FileController {
      * @return
      */
     @PostMapping(value = "/file")
+    @Deprecated
     public R uploadFile(@RequestParam(name = "file") MultipartFile[] multipartFile) {
 
         Map<String, String> sftpDetails = new HashMap<String, String>();
@@ -123,6 +128,7 @@ public class FileController {
      * @param request
      * @return
      */
+    /*@RequiresPermissions(value = "sys:rule")*/
     @PostMapping("/uploadLocal")
     public R uploadLocalFile(@RequestParam(name = "file") MultipartFile file,
                              FileKnowledge fileKnowledge,
@@ -159,7 +165,7 @@ public class FileController {
      * @param size
      * @return
      */
-    @PostMapping("/fileList")
+    @GetMapping("/fileList")
     @ResponseBody
     public R displayFile(int current, int size) {
         IPage<FileKnowledgeDTO> fileKnowledgeIPage = fileKnowledgeService.queryFiles(current, size);
@@ -183,6 +189,9 @@ public class FileController {
                 file.delete();
             }
             fileKnowledgeService.deleteFileOne(id);
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
             return R.error();
@@ -207,7 +216,7 @@ public class FileController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return R.error();
+            return R.error(500,"网络异常或文件不存在");
         }
         return R.error();
     }
@@ -304,9 +313,16 @@ public class FileController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return R.error();
+            return R.error(500,"网络异常或文件不存在");
         }
-        return R.error();
+        return R.error(500,"网络异常或文件不存在");
+    }
+
+
+    @GetMapping("/categoryConditionList")
+    public R selectCategoryList(int current,int size,String fileCategoryName) {
+        IPage<FileKnowledgeDTO> fileKnowledgeIPage = fileKnowledgeService.queryCategoryList(current,size,fileCategoryName);
+        return R.ok().put("data", fileKnowledgeIPage.getRecords()).put("total", fileKnowledgeIPage.getTotal());
     }
 }
 

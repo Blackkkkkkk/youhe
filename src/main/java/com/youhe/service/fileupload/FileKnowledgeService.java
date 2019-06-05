@@ -110,5 +110,12 @@ public interface FileKnowledgeService extends IService<FileKnowledge> {
      */
     boolean queryKnowledgeDownloadName(Long id, HttpServletResponse response, HttpServletRequest request)  throws Exception;
 
-
+    /**
+     * 根据分类条件查询对应内容
+     * @param current
+     * @param size
+     * @param fileCategoryName
+     * @return
+     */
+    IPage<FileKnowledgeDTO> queryCategoryList(int current,int size,String fileCategoryName);
 }
