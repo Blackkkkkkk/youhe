@@ -9,6 +9,7 @@ import com.youhe.service.sys.CollectionsService;
 import com.youhe.utils.R;
 import com.youhe.utils.shiro.ShiroUser;
 import com.youhe.utils.shiro.ShiroUserUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class CollectionsController {
     @Autowired
     private CollectionsService collectionsService;
 
-
+    @RequiresPermissions(value = "sys:collections")
     @RequestMapping(value = "/saveCollection")
     @ResponseBody
     public R saveCollection(String url) {

@@ -126,7 +126,7 @@
                     <!--<span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>-->
                 <!--</li>-->
 
-                <!--<iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=52&icon=1&num=3" width="140" height="20" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>-->
+                <iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=52&icon=1&num=3" width="140" height="20" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info"  href="/index">
                         <i class="glyphicon glyphicon-blackboard"></i>
@@ -325,11 +325,15 @@
                     $.get("/collections/saveCollection?url=" + href, function (r) {
                         console.info(r);
                         if (r.Status == 0) {
+
+                                $('#div1').addClass('styleclass');
+
                             alert("收藏成功")
                         } else {
-                            alert("取消收藏")
+                            $('#div1').removeClass('styleclass');
+                            alert("取消成功")
                         }
-                        location.replace(location.href);
+                        // location.replace(location.href);
                     });
 
             // });
