@@ -233,8 +233,8 @@ var Dept = {
 Dept.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
-        {title: '分类ID', field: 'id', visible: false, align: 'center', valign: 'middle', width: '80px'},
-        {title: '分类名称', field: 'opinionName', align: 'center', valign: 'middle', sortable: true, width: '180px'}]
+        {title: '意见ID', field: 'id', visible: false, align: 'center', valign: 'middle', width: '80px'},
+        {title: '意见内容', field: 'opinionName', align: 'center', valign: 'middle', sortable: true, width: '180px'}]
     return columns;
 };
 

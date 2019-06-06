@@ -139,6 +139,19 @@ CREATE TABLE `sys_collection`  (
   PRIMARY KEY (`cid`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 204 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+
+
+-- ----------------------------
+-- Table structure for sys_opinion
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_opinion`;
+CREATE TABLE `sys_opinion`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `opinion_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `opinion_name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
 -- ----------------------------
 -- Table structure for sys_user_department
 -- ----------------------------

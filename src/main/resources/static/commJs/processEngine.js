@@ -385,12 +385,17 @@ function delAttachment(fileId) {
  * 初始化用户个人常用意见
  */
 function initUserCommOpinion() {
-    var list = [{opinion: '同意'}, {opinion: '不同意'}]; // todo 把这个换成你数据查询出来的list列表数据就行
+    $.get("/opinion/list", function (r) {
+        console.info(r)
+        var opinionList=r;
+    debugger
+    // var list = [{opinion: '同意'}, {opinion: '不同意'}]; // todo 把这个换成你数据查询出来的list列表数据就行
     var options = '<option value="">常用意见</option>';
-    $.each(list, function (i, item) {
-        options += '<option value="' + item.opinion + '">' + item.opinion + '</option>';
+    $.each(opinionList, function (i, item) {
+        options += '<option value="' + item.opinionName + '">' + item.opinionName + '</option>';
     });
     $('#commOpinion').append(options);
+    });
 }
 
 /**
