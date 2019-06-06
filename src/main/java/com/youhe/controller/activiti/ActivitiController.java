@@ -655,4 +655,21 @@ public class ActivitiController extends BaseController {
         return R.ok();
     }
 
+    @GetMapping(value = "hisAgency/index")
+    public ModelAndView hisAgency() {
+        return new ModelAndView("activiti/approve/app_his_agent");
+    }
+
+    /**
+     * 历史委托和代理列表
+     * @param current
+     * @param size
+     * @return
+     */
+    @GetMapping(value = "hisAgency/listData")
+    public R hisAgencyListData(int current, int size) {
+        IPage<Map<String, Object>> mapIPage = myProcessEngine.listAllHisAgencyPage(ShiroUserUtils.getUserId(), current, size);
+        return R.ok().put("data", mapIPage.getRecords()).put("total", mapIPage.getTotal());
+    }
+
 }

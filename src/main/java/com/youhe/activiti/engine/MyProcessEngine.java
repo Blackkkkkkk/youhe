@@ -349,5 +349,13 @@ public interface MyProcessEngine {
      */
     TaskDefinition getTaskDefinition(String taskDefId, String processDefId);
 
+    /**
+     * 根据用户ID获取历史已办代理任务列表(分页)
+     * @param userId
+     * @param current
+     * @param size
+     * @return
+     */
+    IPage<Map<String, Object>> listAllHisAgencyPage(Long userId, int current, int size);
 
 }
