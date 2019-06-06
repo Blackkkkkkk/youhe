@@ -34,4 +34,5 @@ public interface ShopMapper {
     //购物车信息
     List<Shop> findCarList(Shop shop);
 
+    List<Shop> findSearchList(Shop shop);
 }

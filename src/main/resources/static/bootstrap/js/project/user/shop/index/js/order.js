@@ -2,7 +2,7 @@
  * Created by xiaoqiang on 2019/1/10.
  */
 
-//新增vue组件化
+
 
 var vm = new Vue({
     el: '#wrapper',
@@ -24,13 +24,11 @@ var vm = new Vue({
         stocknum: 0,
         stocktotal: 0,
         minpic: []
-    },
+    }, extends: searchVue,
     created: function () {
-
     }
     ,
     mounted: function () {
-
     }
     ,
     methods: {
@@ -45,7 +43,6 @@ var vm = new Vue({
 
 
         }
-
         ,
         //立即购买
         purchase: function () {
@@ -86,7 +83,7 @@ var vm = new Vue({
             _this.carData.items = num;
             _this.carData.prices = prices;
         },
-        delCart: function (event,item) {
+        delCart: function (event, item) {
 
             var x = event.clientX;
             var y = event.clientY;
@@ -112,7 +109,6 @@ var vm = new Vue({
         ,
     }
 })
-
 jQuery(document).ready(function () {
     vm.initcart();
 })

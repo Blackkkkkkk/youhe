@@ -6,6 +6,7 @@
     <resultMap type="com.youhe.entity.shop.Shop" id="shopList">
         <id property="id" column="ID"/>
         <result property="name" column="NAME"/>
+        <result property="cid" column="cid"/>
         <result property="pirce" column="PRICE"/>
         <result property="num" column="NUM"></result>
         <result property="top" column="TOP"/>
@@ -31,6 +32,7 @@
     <resultMap type="com.youhe.entity.shop.Shop" id="cartList">
         <id property="id" column="ID"/>
         <result property="name" column="NAME"/>
+        <result property="cid" column="cid"/>
         <result property="pirce" column="PRICE"/>
         <result property="num" column="NUM"></result>
         <result property="top" column="TOP"/>
@@ -53,6 +55,7 @@
     <resultMap type="com.youhe.entity.shop.Shop" id="commodityList">
         <id property="id" column="ID"/>
         <result property="name" column="NAME"/>
+        <result property="cid" column="cid"/>
         <result property="pirce" column="PRICE"/>
         <result property="num" column="NUM"></result>
         <result property="top" column="TOP"/>
@@ -72,6 +75,7 @@
     <resultMap id="shopDetail" type="com.youhe.entity.shop.Shop">
         <id property="id" column="ID"/>
         <result property="name" column="NAME"/>
+        <result property="cid" column="cid"/>
         <result property="pirce" column="PRICE"/>
         <result property="num" column="NUM"></result>
         <result property="top" column="TOP"/>
@@ -134,15 +138,9 @@
         LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id
         where
         1=1
-
         <if test="id!=null">
             AND sc.ID = #{id}
         </if>
-
-        <if test="id!=null">
-            AND sc.ID = #{id}
-        </if>
-
         <if test="isIndex !=null">
             AND sp.SAVE_FILE_NAME is not NULL
             AND sp.PAGEADDR is not NULL
@@ -153,6 +151,9 @@
         </if>
         <if test="type!=null">
             AND sp.TYPE = #{type}
+        </if>
+        <if test="cid!=null">
+            AND sc.cid = #{cid}
         </if>
         GROUP BY sc.ID
         ORDER BY
@@ -182,6 +183,17 @@
             , sc.NUM
         </if>
         DESC
+    </select>
+
+
+    <!--模糊搜索-->
+    <select id="findSearchList" parameterType="com.youhe.entity.shop.Shop" resultMap="shopList">
+        SELECT sc.*,sp.SAVE_FILE_NAME,sp.PAGEADDR,ct.TID,ct.COLOR,ct.SIZE FROM shop_commodity sc
+        LEFT JOIN shop_picture sp ON sc.ID = sp.SHOP_ID
+        LEFT JOIN shop_commodity_type ct ON ct.commodity_type_id = sc.id
+        where
+         sc.ID  in (SELECT id from shop_commodity where NAME like concat(concat("%",#{searcnName}),"%"))
+        GROUP BY sc.ID
     </select>
 
 
@@ -219,10 +231,6 @@
         sp.ID =
         (SELECT ID from shop_picture ssp where sc.ID = ssp.SHOP_ID LIMIT 1)
         where sp.TYPE=1
-        <if test="id!=null">
-            AND sc.ID = #{id}
-        </if>
-
         <if test="id!=null">
             AND sc.ID = #{id}
         </if>
@@ -316,7 +324,8 @@
                                    IS_NEW_PRODUCT_ORDER_NUM,
                                    shopExplain,
                                    specification,
-                                   sukParameter)
+                                   sukParameter,
+                                   cid)
         values (#{name,jdbcType=VARCHAR},
                 #{pirce,jdbcType=INTEGER},
                 #{num,jdbcType=INTEGER},
@@ -329,7 +338,8 @@
                 #{isNewProductOrderNum,jdbcType=INTEGER},
                 #{shopExplain,jdbcType=VARCHAR},
                 #{specification,jdbcType=VARCHAR},
-                #{sukParameter,jdbcType=VARCHAR})
+                #{sukParameter,jdbcType=VARCHAR},
+                #{cid,jdbcType=INTEGER})
     </insert>
 
 
@@ -376,6 +386,9 @@
                 </if>
                 <if test="sukParameter != null and sukParameter != ''">
                     sukParameter = #{sukParameter,jdbcType=VARCHAR},
+                </if>
+                <if test="cid != null">
+                    cid = #{cid,jdbcType=INTEGER},
                 </if>
             </trim>
         </set>

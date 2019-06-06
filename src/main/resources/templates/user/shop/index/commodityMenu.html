@@ -64,7 +64,7 @@
 <div id="wrapper">
 
     <!-- BEGIN TOP BAR -->
-    <!--<div th:include="common/userShopHead :: head"></div>-->
+    <div th:include="common/userShopHead :: head"></div>
     <!-- END TOP BAR -->
 
     <!-- BEGIN HEADER -->
@@ -91,7 +91,7 @@
             <ul class="breadcrumb">
                 <li><a href="/touristShop/index">首页</a></li>
                 <li><a href="">商品</a></li>
-                <li class="active">Men category</li>
+                <li class="active" v-text="cname">Men category</li>
             </ul>
             <!-- BEGIN SIDEBAR & CONTENT -->
 
@@ -107,215 +107,61 @@
                 <!-- BEGIN CONTENT -->
                 <div class="col-md-9 col-sm-7">
 
-                    <iframe th:src="${'/touristShop/shopList.html?cid='+cId+'&pageSize=9&pageNum=1'}" id="iframepage"
-                            frameborder="0" scrolling="no" marginheight="0" marginwidth="0" onLoad="" height="900px"
-                            width="100%"></iframe>
-
+                    <div class="row list-view-sorting clearfix">
+                        <div class="col-md-2 col-sm-2 list-view">
+                            <a href="#"><i class="fa fa-th-large"></i></a>
+                            <a href="#"><i class="fa fa-th-list"></i></a>
+                        </div>
+                        <div class="col-md-10 col-sm-10">
+                        </div>
+                    </div>
+                    <!-- BEGIN PRODUCT LIST -->
+                    <div class="row product-list">
+                        <input type="hidden"
+                               class="btn btn-default fancybox-button"></input>
+                        <!-- PRODUCT ITEM START -->
+                        <div v-if="!shopVieList.length>0" style="    padding-left: 100px;">暂无商品</div>
+                        <div class="col-md-4 col-sm-6 col-xs-12" v-for="item in shopVieList"
+                             style="height: 446px;width: 292px;">
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img :src="item.pageaddr+item.saveFileName" class="img-responsive"
+                                         alt="Berry Lace Dress" style="height: 317px;width: 238px;">
+                                    <div>
+                                        <a :href="item.pageaddr+item.saveFileName"
+                                           class="btn btn-default fancybox-button">查看</a>
+                                        <a href="#product-pop-up"
+                                           class="btn btn-default fancybox-fast-view1"
+                                           @click="showView(item.id)"
+                                        >详情</a>
+                                    </div>
+                                </div>
+                                <h3><a href="item.html" v-text="item.name"></a></h3>
+                                <div class="pi-price" v-text='"¥"+item.pirce'></div>
+                                <a class="btn btn-default add2cart" @click="addCar($event,1)"
+                                   :id="item.id">加入购物车</a>
+                            </div>
+                        </div>
+                        <!-- PRODUCT ITEM END -->
+                    </div>
+                    <!-- END PRODUCT LIST -->
+                    <!-- BEGIN PAGINATOR -->
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8">
+                            <ul id="pageLimit" style="float: right;"></ul>
+                        </div>
+                    </div>
+                    <!-- END PAGINATOR -->
                 </div>
-                <!-- END CONTENT -->
             </div>
             <!-- END SIDEBAR & CONTENT -->
         </div>
     </div>
 
     <!-- BEGIN BRANDS -->
-    <div class="brands">
-        <div class="container">
-            <div class="row">
-                <div class="bxslider-wrapper">
-                    <ul class="bxslider" data-slides-phone="1" data-slides-tablet="3" data-slides-desktop="6"
-                        data-slide-margin="15">
-                        <li><a href="#"><img src="/templates/upload/brands//esprit.jpg" alt="canon" title="canon"></a>
-                        </li>
-                        <li><a href="#"><img src="/templates/upload/brands/esprit.jpg" alt="esprit" title="esprit"></a>
-                        </li>
-                        <li><a href="#"><img src="/templates/upload/brands/gap.jpg" alt="gap" title="gap"></a></li>
-                        <li><a href="#"><img src="/templates/upload/brands/next.jpg" alt="next" title="next"></a></li>
-                        <li><a href="#"><img src="/templates/upload/brands/puma.jpg" alt="puma" title="puma"></a></li>
-                        <li><a href="#"><img src="/templates/upload/brands/zara.jpg" alt="zara" title="zara"></a></li>
-                        <li><a href="#"><img src="/templates/upload/brands/canon.jpg" alt="canon" title="canon"></a>
-                        </li>
-                        <li><a href="#"><img src="/templates/upload/brands/esprit.jpg" alt="esprit" title="esprit"></a>
-                        </li>
-                        <li><a href="#"><img src="/templates/upload/brands/gap.jpg" alt="gap" title="gap"></a></li>
-                        <li><a href="#"><img src="/templates/upload/brands/next.jpg" alt="next" title="next"></a></li>
-                        <li><a href="#"><img src="/templates/upload/brands/puma.jpg" alt="puma" title="puma"></a></li>
-                        <li><a href="#"><img src="/templates/upload/brands/zara.jpg" alt="zara" title="zara"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:include="common/Head :: brands"></div>
     <!-- END BRANDS -->
 
-    <!-- BEGIN STEPS -->
-    <div class="steps3 steps3red">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 steps3-col">
-                    <i class="fa fa-truck"></i>
-                    <div>
-                        <h2>Free shipping</h2>
-                        <em>Express delivery withing 3 days</em>
-                    </div>
-                    <span>&nbsp;</span>
-                </div>
-                <div class="col-md-4 steps3-col">
-                    <i class="fa fa-gift"></i>
-                    <div>
-                        <h2>Daily Gifts</h2>
-                        <em>3 Gifts daily for lucky customers</em>
-                    </div>
-                    <span>&nbsp;</span>
-                </div>
-                <div class="col-md-4 steps3-col">
-                    <i class="fa fa-phone"></i>
-                    <div>
-                        <h2>477 505 8877</h2>
-                        <em>24/7 customer care available</em>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END STEPS -->
-
-    <!-- BEGIN PRE-FOOTER -->
-    <div class="pre-footer">
-        <div class="container">
-            <div class="row">
-                <!-- BEGIN BOTTOM ABOUT BLOCK -->
-                <div class="col-md-3 col-sm-6 pre-footer-col">
-                    <h2>About us</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam sit nonummy nibh euismod
-                        tincidunt ut laoreet dolore magna aliquarm erat sit volutpat. Nostrud exerci tation ullamcorper
-                        suscipit lobortis nisl aliquip commodo consequat. </p>
-                    <p>Duis autem vel eum iriure dolor vulputate velit esse molestie at dolore.</p>
-                </div>
-                <!-- END BOTTOM ABOUT BLOCK -->
-                <!-- BEGIN BOTTOM INFO BLOCK -->
-                <div class="col-md-3 col-sm-6 pre-footer-col">
-                    <h2>Information</h2>
-                    <ul class="list-unstyled">
-                        <li><i class="fa fa-angle-right"></i> <a href="#">Delivery Information</a></li>
-                        <li><i class="fa fa-angle-right"></i> <a href="#">Customer Service</a></li>
-                        <li><i class="fa fa-angle-right"></i> <a href="#">Order Tracking</a></li>
-                        <li><i class="fa fa-angle-right"></i> <a href="#">Shipping & Returns</a></li>
-                        <li><i class="fa fa-angle-right"></i> <a href="contacts.html">Contact Us</a></li>
-                        <li><i class="fa fa-angle-right"></i> <a href="#">Careers</a></li>
-                        <li><i class="fa fa-angle-right"></i> <a href="#">Payment Methods</a></li>
-                    </ul>
-                </div>
-                <!-- END INFO BLOCK -->
-                <!-- BEGIN TWITTER BLOCK -->
-                <div class="col-md-3 col-sm-6 pre-footer-col">
-                    <h2>Latest Tweets</h2>
-                    <dl class="dl-horizontal f-twitter">
-                        <dt><i class="fa fa-twitter"></i></dt>
-                        <dd>
-                            <a href="#">@keenthemes</a>
-                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
-                            <span>3 min ago</span>
-                        </dd>
-                    </dl>
-                    <dl class="dl-horizontal f-twitter">
-                        <dt><i class="fa fa-twitter"></i></dt>
-                        <dd>
-                            <a href="#">@keenthemes</a>
-                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
-                            <span>3 min ago</span>
-                        </dd>
-                    </dl>
-                    <dl class="dl-horizontal f-twitter">
-                        <dt><i class="fa fa-twitter"></i></dt>
-                        <dd>
-                            <a href="#">@keenthemes</a>
-                            Imperdiet condimentum diam dolor lorem sit consectetur adipiscing
-                            <span>3 min ago</span>
-                        </dd>
-                    </dl>
-                </div>
-                <!-- END TWITTER BLOCK -->
-                <!-- BEGIN BOTTOM CONTACTS -->
-                <div class="col-md-3 col-sm-6 pre-footer-col">
-                    <h2>Our Contacts</h2>
-                    <address class="margin-bottom-40">
-                        35, Lorem Lis Street, Park Ave<br>
-                        California, US<br>
-                        Phone: 300 323 3456<br>
-                        Fax: 300 323 1456<br>
-                        Email: <a href="mailto:info@metronic.com">info@metronic.com</a><br>
-                        Skype: <a href="skype:metronic">metronic</a>
-                    </address>
-                </div>
-                <!-- END BOTTOM CONTACTS -->
-            </div>
-            <hr>
-            <div class="row">
-                <!-- BEGIN SOCIAL ICONS -->
-                <div class="col-md-6 col-sm-6">
-                    <ul class="social-icons">
-                        <li><a class="rss" data-original-title="rss" href="#"></a></li>
-                        <li><a class="facebook" data-original-title="facebook" href="#"></a></li>
-                        <li><a class="twitter" data-original-title="twitter" href="#"></a></li>
-                        <li><a class="googleplus" data-original-title="googleplus" href="#"></a></li>
-                        <li><a class="linkedin" data-original-title="linkedin" href="#"></a></li>
-                        <li><a class="youtube" data-original-title="youtube" href="#"></a></li>
-                        <li><a class="vimeo" data-original-title="vimeo" href="#"></a></li>
-                        <li><a class="skype" data-original-title="skype" href="#"></a></li>
-                    </ul>
-                </div>
-                <!-- END SOCIAL ICONS -->
-                <!-- BEGIN NEWLETTER -->
-                <div class="col-md-6 col-sm-6">
-                    <div class="pre-footer-subscribe-box pull-right">
-                        <h2>Newsletter</h2>
-                        <form action="#">
-                            <div class="input-group">
-                                <input type="text" placeholder="youremail@mail.com" class="form-control">
-                                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">Subscribe</button>
-                  </span>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- END NEWLETTER -->
-            </div>
-        </div>
-    </div>
-    <!-- END PRE-FOOTER -->
-
-    <!-- BEGIN FOOTER -->
-    <div class="footer padding-top-15">
-        <div class="container">
-            <div class="row">
-                <!-- BEGIN COPYRIGHT -->
-                <div class="col-md-6 col-sm-6 padding-top-10">
-                    2014 © Metronic Shop UI. ALL Rights Reserved.
-                </div>
-                <!-- END COPYRIGHT -->
-                <!-- BEGIN PAYMENTS -->
-                <div class="col-md-6 col-sm-6">
-                    <ul class="list-unstyled list-inline pull-right margin-bottom-15">
-                        <li><img src="/templates/upload/payments/western-union.jpg" alt="We accept Western Union"
-                                 title="We accept Western Union"></li>
-                        <li><img src="/templates/upload/payments/american-express.jpg" alt="We accept American Express"
-                                 title="We accept American Express"></li>
-                        <li><img src="/templates/upload/payments/MasterCard.jpg" alt="We accept MasterCard"
-                                 title="We accept MasterCard"></li>
-                        <li><img src="/templates/upload/payments/PayPal.jpg" alt="We accept PayPal"
-                                 title="We accept PayPal">
-                        </li>
-                        <li><img src="/templates/upload/payments/visa.jpg" alt="We accept Visa" title="We accept Visa">
-                        </li>
-                    </ul>
-                </div>
-                <!-- END PAYMENTS -->
-            </div>
-        </div>
-    </div>
-    <!-- END FOOTER -->
 </div>
 <!-- END fast view of a product -->
 
@@ -345,21 +191,40 @@
 <script type="text/javascript" src="../bootstrap/user/scripts/app.js"></script>
 <!--
 <script type="text/javascript" src="../bootstrap/user/scripts/test.js"></script>
+
 -->
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
-<script src="../bootstrap/js/project/user/shop/index/js/test.js"></script>
+<script src="../bootstrap/js/bootstrap-paginator.js"></script>
+<script src="../layui/layui.js"></script>
+<script type="text/javascript" src="../bootstrap/js/project/search.js"></script>
+<script src="../bootstrap/js/project/user/shop/index/js/commodityMenu.js"></script>
 
-
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
     jQuery(document).ready(function () {
+
+        console.log(jQuery(".fancybox-button").size())
+
         App.init();
         App.initBxSlider();
         App.initImageZoom();
         App.initSliderRange();
         App.initUniform();
         App.initTouchspin();
+
+        var list = [[${list}]];
+        vm.cname = [[${cname}]];
+        vm.shopPage = [[${shop}]];
+        console.log(vm.shopPage)
+        if (list != null) {
+            vm.shopVieList = list.list;
+            vm.initPageLimit(vm.shopPage)
+        }
+
     });
+
 </script>
+
+
 <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

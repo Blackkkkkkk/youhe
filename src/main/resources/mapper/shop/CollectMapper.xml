@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.shop.CollectMapper">
+
+
+    <resultMap type="com.youhe.entity.shop.Collect" id="collectList">
+        <id property="id" column="id"/>
+        <result property="shopId" column="shopId"/>
+        <result property="collectTime" column="collectTime"/>
+        <result property="userId" column="userId"></result>
+    </resultMap>
+
+    <select id="find" parameterType="com.youhe.entity.shop.Collect" resultMap="collectList">
+        SELECT * FROM shop_collect
+        where 1=1
+        <if test="id!=null">
+            AND id = #{id}
+        </if>
+        <if test="shopId!=null">
+            AND shopId = #{shopId}
+        </if>
+        <if test="userId!=null">
+            AND userId = #{userId}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.youhe.entity.shop.Collect" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into shop_collect (shopId,
+                                  collectTime,
+                                  userId)
+        values (#{shopId},
+                NOW(),
+                #{userId})
+    </insert>
+
+    <delete id="del" parameterType="com.youhe.entity.shop.Collect">
+        delete
+        from shop_collect
+        where
+        <trim prefixOverrides="AND">
+            <if test="id!=null">
+                AND id = #{id}
+            </if>
+            <if test="shopId!=null">
+                AND shopId = #{shopId}
+            </if>
+            <if test="userId!=null">
+                AND userId = #{userId}
+            </if>
+        </trim>
+    </delete>
+
+</mapper>

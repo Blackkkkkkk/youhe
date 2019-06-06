@@ -47,7 +47,7 @@
                     <ul class="list-unstyled list-inline pull-right">
                         <li><a href="/touristShop/shoppingUser" th:text="#{login.account}"></a></li>
                         <li><a id="myOrder_1" href="/order/myOrder">我的订单</a></li>
-                        <li><a href="#" th:text="#{login.my}"></a></li>
+                        <li><a href="/shopDetail/myCollect" th:text="#{login.my}"></a></li>
                         <li><a id="loginOut_1" href="javascript:void(0);" th:text="#{login.checkOut}"></a></li>
                         <li><a id="login_1" href="javascript:void(0);" th:text="#{login.login}"></a></li>
                     </ul>
@@ -128,14 +128,6 @@
                             </li>
                         </ul>
                     </li>
-                    <!--<li class="dropdown">-->
-                    <!--<a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"-->
-                    <!--data-target="product-list.html" href="product-list.html">-->
-                    <!--商品-->
-                    <!--<i class="fa fa-angle-down"></i> </a>-->
-                    <!--<tree-head-two :lists="lists">-->
-                    <!--</tree-head-two>-->
-                    <!--</li>-->
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" data-delay="0" data-close-others="false"
                            data-target="product-list.html" href="product-list.html" style="font-weight: 600;">
@@ -180,6 +172,21 @@
                             </li>
                         </ul>
                         <!-- END DROPDOWN MENU -->
+                    </li>
+                    <li class="menu-search">
+                        <span class="sep"></span>
+                        <i class="fa fa-search search-btn"></i>
+                        <div class="search-box">
+                            <form action="#">
+                                <div class="input-group">
+                                    <input type="text" placeholder="输入关键字" class="form-control" v-model="searcnName">
+                                    <span class="input-group-btn">
+                                        <a class="btn btn-primary" @click="searchShop($event)"
+                                           style="color: aliceblue; background: #e94d1c;border-color: #e94d1c;">搜索</a>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
                     </li>
                 </ul>
 
