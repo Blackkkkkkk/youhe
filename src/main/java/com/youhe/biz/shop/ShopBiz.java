@@ -42,6 +42,22 @@ public class ShopBiz {
         return new PageInfo<>(list);
     }
 
+
+    //查找商品表
+    public PageInfo<Shop> findShopListByPage(Shop shop) {
+        PageHelper.startPage(shop.getPageNum(), shop.getPageSize(), true);
+        List<Shop> list = findShopList(shop);
+        return new PageInfo<>(list);
+    }
+
+    //查找商品表
+    public PageInfo<Shop> findSearchListByPage(Shop shop) {
+        PageHelper.startPage(shop.getPageNum(), shop.getPageSize(), true);
+        List<Shop> list = shopMapper.findSearchList(shop);
+        return new PageInfo<>(list);
+    }
+
+
 //    //查看详情
 //    public List<Shop> findCommodityType(Shop shop) {
 //        return shopMapper.findCommodity(shop);
@@ -50,12 +66,11 @@ public class ShopBiz {
     //查找商品表分页
     public PageInfo<Shop> list(Shop shop) {
 
-        PageHelper.startPage(shop.getPageNum(), shop.getPageSize());
-
+        // PageHelper.startPage(shop.getPageNum(), shop.getPageSize());
+        PageHelper.startPage(1, 10);
         List<Shop> list = shopMapper.findShopList(shop);
 
         PageInfo<Shop> pageInfo = new PageInfo<Shop>(list);
-
 
         return pageInfo;
     }
@@ -84,8 +99,6 @@ public class ShopBiz {
     public List<Shop> findCarList(Shop shop) {
         return shopMapper.findCarList(shop);
     }
-
-
 
 
 }

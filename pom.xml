@@ -252,6 +252,7 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+
         <!-- druid -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -349,7 +350,7 @@
             <artifactId>fel</artifactId>
             <version>0.8</version>
         </dependency>
-     <!--sftp-->
+        <!--sftp-->
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
@@ -447,16 +448,25 @@
 
     <build>
         <resources>
+            <!-- 解决boostrap 图标二进制流被破坏导致无法显示的问题-->
             <resource>
-                <directory>src/main/java</directory>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
                 <includes>
-                    <include>**/*.xml</include>
+                    <include>**/*.*</include>
                 </includes>
                 <excludes>
-                    <exclude>**/*.woff</exclude>
-                    <exclude>**/*.woff2</exclude>
-                    <exclude>**/*.ttf</exclude>
+                    <exclude>static/bootstrap/font-awesome/fonts/**</exclude>
+                    <exclude>static/bootstrap/fonts/**</exclude>
                 </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>static/bootstrap/font-awesome/fonts/**</include>
+                    <include>static/bootstrap/fonts/**</include>
+                </includes>
             </resource>
         </resources>
 
@@ -468,6 +478,7 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -475,7 +486,7 @@
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
-
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

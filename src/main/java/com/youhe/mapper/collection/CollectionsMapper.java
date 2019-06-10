@@ -20,11 +20,11 @@ public interface CollectionsMapper extends BaseMapper<Collections> {
     //查找详情
 //    Collections saveCollection(@Param(value ="url") String url);
 
-    //保存
-    List<Collections> findCollections();
+
+    List<Collections> findCollections(String uids);
 
     //查找详情
-    Integer finds(@Param(value="url") String url);
+    Integer finds(@Param(value="url") String url,String uids);
 
     //删除
     Integer del(@Param(value="url") String url);

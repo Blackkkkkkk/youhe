@@ -13,7 +13,6 @@ import com.youhe.entity.user.User;
 
 import com.youhe.mapper.collection.CollectionsMapper;
 import com.youhe.mapper.user.UserMapper;
-import com.youhe.service.sys.CollectionsService;
 import com.youhe.serviceImpl.Controller.userController.UserControllerImpl;
 
 import com.youhe.utils.R;
@@ -88,9 +87,13 @@ public class UserController {
     @RequestMapping(value = "/findCollections")
     @ResponseBody
     public ModelAndView findCollections() {
+        ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
+        String userAccount=shiroUser.getUserAccount();
+        Long uid=shiroUser.getUid();
+        String uids=String.valueOf(uid);
         ModelAndView models = new ModelAndView();
 //        Map<String, Object> vars = new HashMap<>();
-        List<Collections> collectionList = collectionsMapper.findCollections();
+        List<Collections> collectionList = collectionsMapper.findCollections(uids);
 //        vars.put("collectionList",collectionList);
         models.addObject("collectionList", collectionList);
 //        return "sys/user/collections";
@@ -110,6 +113,14 @@ public class UserController {
     @RequestMapping(value = "/desktop")
     public String desktop() {
         return "sys/user/desktop";
+    }
+
+    //快捷意见
+    @RequestMapping(value = "/opinion")
+    public String opinion() {
+
+        System.out.println("123");
+        return "sys/user/opinionSet";
     }
 
 //修改个人资料
@@ -134,6 +145,7 @@ public class UserController {
         vars.put("user",userNmae);
         return "sys/user/changePassword";
     }
+
 
     //修改密码
 

@@ -46,7 +46,7 @@ var vm = new Vue({
         },
         menList: [],
         lists: []
-    },
+    }, extends: searchVue,
     created: function () {
 
     }
@@ -78,7 +78,9 @@ var vm = new Vue({
     }
     ,
     methods: {
+        getShopList: function () {
 
+        },
         //把数据类型转成树格式
         toTreeData: function (data, attributes) {
             let resData = data;
@@ -122,49 +124,7 @@ var vm = new Vue({
 
             return tree;
         }
-        ,
-        addCar: function (event) {
 
-            //获取点击对象
-            x = event.clientX  // 获取点击对象的x 轴
-            y = event.clientY  // 获取点击对象的y 轴
-            var _this = this;
-            var el = event.currentTarget;
-            $.get("/touristShop/addCart?id=" + el.id, function (r) {
-                parent.vm.initcart(r.shopList);
-                if (r.Status == 1) {
-                    top.layer.msg('加入购物车成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
-                } else if (r.Status == 2) {
-                    layer.msg('购物车已存在，数量自动加1', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
-                } else if (r.Status == 3) {
-                    layer.msg('未登录，请登录后再添加到购物车', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
-                } else if (r.Status == 4) {
-                    layer.msg('添加到购物车失败，请联系管理员', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
-                }
-            })
-        }
-        ,
-        delCart: function (event,item) {
-
-            var x = event.clientX;
-            var y = event.clientY;
-
-            var el = event.currentTarget;
-            var _this = this;
-
-            for (var i = 0; i < _this.shopList.length; i++) {
-                if (item.shopId != null && _this.shopList[i].shopId == item.shopId) {
-                    $.get("/touristShop/delCart?id=" + item.id + "&shopId=" + _this.shopList[i].shopId, function (r) {
-                        if (r == 1) {
-                            top.layer.msg('物品删除成功', {icon: 1, time: 1000, offset: [y + 'px', x + 'px']});
-                            _this.initcart();
-                        } else {
-                            top.layer.msg('物品删除失败，请重新删除', {icon: 2, time: 1000, offset: [y + 'px', x + 'px']});
-                        }
-                    })
-                }
-            }
-        }
     }
 })
 

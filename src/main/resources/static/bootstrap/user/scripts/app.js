@@ -185,6 +185,7 @@ var App = function () {
         }
 
         if (jQuery(".fancybox-button").size() > 0) {
+
             jQuery(".fancybox-button").fancybox({
                 groupAttr: 'data-rel',
                 prevEffect: 'none',
@@ -196,7 +197,6 @@ var App = function () {
                     }
                 }
             });
-
             $('.fancybox-video').fancybox({
                 type: 'iframe'
             });

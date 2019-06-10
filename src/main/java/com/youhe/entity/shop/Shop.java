@@ -86,8 +86,9 @@ public class Shop extends SysBaseEntity {
     /*
      * 关联商品分类表的字段
      **/
-    private int cid;
+    private Integer cid;
     private String cname;
+    private String searcnName;// 模糊搜索字段
 
     /*
      *判断是哪一个页面
