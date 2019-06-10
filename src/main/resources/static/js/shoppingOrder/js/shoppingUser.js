@@ -117,7 +117,7 @@ var vm = new Vue({
             deliveryAddr: null
         },
         addressList: {}
-    },
+    }, extends: searchVue,
     created: function () {
         this.initUser();
         this.addList();
@@ -158,7 +158,7 @@ var vm = new Vue({
                     _this.order.addressee = _this.addressList[i].addressee
                     _this.order.deliveryAddr = _this.addressList[i].deliveryAddr
                     _this.order.phone = _this.addressList[i].phone
-                    console.log(_this.addressList[i])
+
                 }
             }
 
@@ -172,7 +172,7 @@ var vm = new Vue({
         },
         //新增收货地址
         saveAddress: function () {
-            console.log("1")
+
             _this = this;
             var url;
             if (_this.order.id == null) {
@@ -198,7 +198,7 @@ var vm = new Vue({
                             _this.order.addressee = null
                             _this.order.deliveryAddr = null
                             _this.order.phone = null
-                            console.log(_this.addressList)
+
                         });
                     } else {
                         layer.msg(r.msg, {icon: 2, time: 1000});
@@ -335,7 +335,7 @@ var vm = new Vue({
             _this.carData.items = num;
             _this.carData.prices = prices;
         },
-        delCart: function (event,item) {
+        delCart: function (event, item) {
 
             var x = event.clientX;
             var y = event.clientY;

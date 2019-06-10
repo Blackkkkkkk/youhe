@@ -28,15 +28,48 @@ var vm = new Vue({
         productQuantity: 1, //详情页商品数量字段
         stocknum: 0,
         stocktotal: 0,
-        minpic: []
+        minpic: [],
+        collect: "收藏商品"
     }, extends: vmSon,// 接收对象和函数
     created: function () {
+        _this = this;
+        $.get("/shopDetail/CollectList?shopId=" + _this.shop.id, function (r) {
+            if (r.list.length > 0) {
+                _this.collect = "取消收藏"
+            } else {
+                _this.collect = "收藏商品"
+            }
+        })
+
     }
     ,
     mounted: function () {
+
     }
     ,
     methods: {
+        collectShop: function (id) {
+            if (vm.collect == "收藏商品") {
+                $.get("/shopDetail/saveCollect?shopId=" + id, function (r) {
+                    if (r.Status == 0) {
+                        top.layer.msg(r.msg, {icon: 1, time: 1000});
+                        vm.collect = "取消收藏";
+                    } else {
+                        top.layer.msg(r.msg, {icon: 2, time: 1000});
+                    }
+                })
+            } else {
+                $.get("/shopDetail/delCollect?shopId=" + id, function (r) {
+                    if (r.Status == 0) {
+                        top.layer.msg(r.msg, {icon: 1, time: 1000});
+                        vm.collect = "收藏商品";
+                    } else {
+                        top.layer.msg(r.msg, {icon: 2, time: 1000});
+                    }
+                })
+
+            }
+        },
         changePrice: function (price, name, changeId) {
 
             $('#product div ').each(function (i) {
@@ -70,7 +103,6 @@ var vm = new Vue({
 
             var url = "/order/shoppingPurchase?id=" + id + "&cartNum=" + cartNum;
 
-            console.log(url)
             if (id && id != 'null') {
                 window.location.href = "/order/shoppingPurchase?id=" + id + "&cartNum=" + cartNum;
             }
@@ -83,7 +115,7 @@ var vm = new Vue({
 
 
             var url;
-            console.log(vm.shop.shopStyleId == null)
+
             if (vm.shop.shopStyleId == null) {
                 url = "/touristShop/addCart?id=" + vm.shop.id;
             } else {
@@ -116,7 +148,7 @@ var vm = new Vue({
                     async: false,//取消异步
                     success: function (data) {
                         r = data;
-                        console.log(r)
+
                     }
                 });
             }
@@ -147,9 +179,6 @@ var vm = new Vue({
 
                 if (item.shopId != null && _this.shopList[i].shopId == item.shopId) {
 
-                    console.log(_this.shopList[i].id + ":" + _this.shopList[i].shopId)
-                    console.log(item.id + ":" + item.shopId)
-
 
                     $.get("/touristShop/delCart?id=" + item.id + "&shopId=" + _this.shopList[i].shopId, function (r) {
                         if (r == 1) {
@@ -177,7 +206,7 @@ var vm = new Vue({
                         _this.view = r.shopList;
                         _this.stocktotal = _this.view.num;
                         _this.minpic = _this.view.thumbnail.split(',');
-                        console.log(_this.view);
+
                     }
                 }
             })

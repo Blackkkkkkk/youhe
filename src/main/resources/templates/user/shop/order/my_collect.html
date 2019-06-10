@@ -61,6 +61,21 @@
     <link href="../bootstrap/js/project/sys/shop/css/fileinput.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../bootstrap/dataTable/datatables.min.css"/>
     <style>
+        .laytable-cell-1-id { /*最后的pic为字段的field*/
+            height: 100%;
+            max-width: 100%;
+        }
+
+
+        .layui-table > thead > tr {
+
+            height: 50px !important;
+        }
+
+        .layui-table > tbody > tr > td > div {
+            height: 100% !important;
+        }
+
         .btn-primary {
             background: #e94d1c;
             border-color: #e94d1c;
@@ -90,13 +105,6 @@
     <!-- BEGIN HEADER -->
     <div th:include="common/userShopHead :: head-navigation"></div>
     <!-- END HEADER -->
-    <!-- BEGIN TOP BAR -->
-
-    <!-- END TOP BAR -->
-
-
-    <!-- END HEADER -->
-
 
     <div class="main">
         <div class="container">
@@ -104,18 +112,10 @@
                 <li><a href="/touristShop/index">主页</a></li>
                 <li class="active">我的订单</li>
             </ul>
-            <!-- BEGIN SIDEBAR & CONTENT -->
+
 
             <div class="row margin-bottom-40 ">
-                <!-- BEGIN SIDEBAR -->
-                <!--<div class="sidebar col-md-3 col-sm-5">
-                    <tree :lists="lists"></tree>
 
-                </div>-->
-
-
-                <!-- END SIDEBAR -->
-                <!-- BEGIN CONTENT -->
                 <div class="col-md-12 col-sm-12">
 
                     <div class="row">
@@ -146,16 +146,10 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--<iframe th:src="${'/order/list'}" id="iframepage" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" onLoad="" height="900px" width="100%"></iframe>-->
-
                 </div>
-                <!-- END CONTENT -->
             </div>
-            <!-- END SIDEBAR & CONTENT -->
         </div>
     </div>
-
     <!-- BEGIN BRANDS -->
     <div th:include="common/Head :: brands"></div>
     <!-- END BRANDS -->
@@ -171,7 +165,7 @@
 </script>
 
 <script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
-<script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
+
 <script src="../bootstrap/js/project/sys/shop/js/fileinput.min.js"></script>
 <script src="../bootstrap/js/project/sys/shop/js/zh.js"></script>
 <!--
@@ -179,7 +173,9 @@
 
 -->
 <script type="text/javascript" src="../bootstrap/js/project/search.js"></script>
+<script type="text/javascript" src="../bootstrap/user/scripts/index.js"></script>
 <script src="../bootstrap/js/project/user/shop/index/js/order.js"></script>
+<script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
 
 
 <!-- Page-Level Scripts -->
@@ -191,30 +187,34 @@
         table.render({
             elem: '#demo'
             , height: 600
-            , url: '/order/myOrderData' //数据接口
+            , url: '/shopDetail/myOrderData' //数据接口
             , page: true //开启分页
             , cols: [[ //表头
-                {field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', align: 'center'}
-                , {field: 'BOrderNum', title: '订单号', width: 290, align: 'center', sort: true,}
-                , {field: 'totalPrice', title: '金额', width: 200, sort: true, align: 'center'}
+
+                {field: 'id', title: '商品名', width: 100, align: 'center', sort: true,}
+                , {field: 'name', title: '商品名', width: 290, align: 'center', sort: true,}
+                , {field: 'pirce', title: '金额', width: 200, sort: true, align: 'center'}
+                , {field: 'num', title: '商品剩余数量', width: 200, sort: true, align: 'center'}
                 , {
-                    field: 'status', title: '状态', width: 100, align: 'center', templet: function (d) {
-                        if (d.status == 1) {
-                            return '待发货'
-                        }
-                        if (d.status == 2) {
-                            return '运输中'
-                        }
-                    }
-                }
-                , {
-                    field: 'createTime', title: '订单时间', width: 150, align: 'center',
+                    field: 'register', title: '上架时间', width: 150, align: 'center',
                     templet: function (d) {
-                        return new Date(d.createTime).Format("yyyy-MM-dd")
+                        console.log(d.register)
+                        return new Date(d.register).Format("yyyy-MM-dd")
                     }
                 }
-                , {field: 'userName', title: '购买者', width: 150, sort: true, align: 'center'}
-                , {fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo'}
+                , {
+                    field: 'id',
+                    title: '商品图',
+                    width: 155,
+                    sort: true,
+                    align: 'center',
+                    //   style: 'height:200px !important;',
+                    templet: function (d) {   //@{${com_list.pageaddr}+${com_list.saveFileName}}
+                        var a = "<img src=" + d.pageaddr + d.saveFileName + ">"
+                        return a
+
+                    }
+                }
 
             ]]
         });
@@ -271,7 +271,9 @@
     }
 
     $(function () {
+        $('.layui-table th:first').css("height", "50px");
         $('.brands').css("display", "none");
+
         $('.search-btn').click(function () {
             if ($('.search-btn').hasClass('show-search-icon')) {
                 if ($(window).width() > 767) {
@@ -293,7 +295,9 @@
 
 
 </script>
-
+<script type="text/html" id="zizeng">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
 <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

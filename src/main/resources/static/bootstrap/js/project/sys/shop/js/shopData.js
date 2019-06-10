@@ -76,6 +76,7 @@ var vm = new Vue({
                     hotSale: 1,
                     isNewProductOrderNum: 1,
                     cid: '',
+                    cname: "",
                     shopExplain: null,
                     shopExplainList: [],
                     specification: null,
@@ -415,13 +416,9 @@ var vm = new Vue({
                 })
             },
             getDept: function () {
-
-
-                //加载部门树
+                //加载分类树
                 $.get("/commodity/select", function (c) {
-
                     ztree = $.fn.zTree.init($("#deptTree"), setting, c.deptList);
-
 
                     var node = ztree.getNodeByParam("cid", vm.dept.cid);
 
@@ -448,11 +445,11 @@ var vm = new Vue({
                     btn: ['确定', '取消'],
                     btn1: function (index) {
                         var node = ztree.getSelectedNodes();
-
                         //选择上级部门
-                        vm.dept.parentId = node[0].cid;
-                        vm.dept.parentName = node[0].cname;
+                        //  vm.dept.parentId = node[0].cid;
+                        //  vm.dept.parentName = node[0].cname;
                         vm.shop.cid = node[0].cid;
+                        vm.shop.cname = node[0].cname;
                         layer.close(index);
                     }
                 });

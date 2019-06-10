@@ -19,12 +19,12 @@
 
     <link th:href="@{/bootstrap/css/animate.css}" rel="stylesheet">
     <link th:href="@{/bootstrap/css/style.css}" rel="stylesheet">
-<!--    <link th:href="@{/bootstrap/dataTable/datatables.min.css}" rel="stylesheet">-->
+    <!--    <link th:href="@{/bootstrap/dataTable/datatables.min.css}" rel="stylesheet">-->
 
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
 
     <style>
-        .styleclass{
+        .styleclass {
             color: dodgerblue;
         }
     </style>
@@ -123,16 +123,16 @@
             </div>
             <ul class="nav navbar-top-links navbar-right">
                 <!--<li>-->
-                    <!--<span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>-->
+                <!--<span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>-->
                 <!--</li>-->
 
                 <!--<iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=52&icon=1&num=3" width="140" height="20" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>-->
                 <li class="dropdown">
-                    <a class="dropdown-toggle count-info"  href="/index">
+                    <a class="dropdown-toggle count-info" href="/index">
                         <i class="glyphicon glyphicon-blackboard"></i>
                     </a>
                     <!--<a href="/touristShop/index.html" class="navbar-brand"><img src="../bootstrap/user/img/youhe.png" height="40px" width="160px"-->
-                                                                                <!--alt="Metronic Shop UI"></a>&lt;!&ndash; LOGO &ndash;&gt;-->
+                    <!--alt="Metronic Shop UI"></a>&lt;!&ndash; LOGO &ndash;&gt;-->
 
                     <ul class="dropdown-menu dropdown-messages">
                         <li>
@@ -187,56 +187,46 @@
                 </li>
 
                 <li class="dropdown">
-                    <!--<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">-->
-                        <!--<i class="fa fa-bell"></i> <span class="label label-primary">8</span>-->
-                    <!--</a>-->
-                    <!--<div class="availability" style="margin-right: -53%;margin-top: 8px;"><i-->
-                            <!--class="glyphicon glyphicon-star" style="padding-top: 2px;"></i>-->
-                        <!--<p-->
-                                <!--style="float: right;color: #212020;"></p></div>-->
-                    <!--<li><a href="#" onclick="addFavorite()" >修改密码</a></li>-->
-                    <!--<div class="availability" style="margin-right: -53%;"><i-->
-                            <!--class="glyphicon glyphicon-star" style="padding-top: 2px;"></i>-->
-                        <!--<p-->
-                                <!--style="float: right;color: #212020;">收藏商品</p></div>-->
-                    <li  class="glyphicon glyphicon-star" style="padding-top: 2px;text-align: center;"  href="javascript:void(0)" onclick="addFavorite()" id="div1"></li>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="mailbox.html">
-                                <div>
-                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="profile.html">
-                                <div>
-                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small">12 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="grid_options.html">
-                                <div>
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="text-center link-block">
-                                <a href="notifications.html">
-                                    <strong>See All Alerts</strong>
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
+
+                <li class="glyphicon glyphicon-star" style="padding-top: 2px;text-align: center;"
+                    href="javascript:void(0)" onclick="addFavorite()" id="div1"></li>
+                <ul class="dropdown-menu dropdown-alerts">
+                    <li>
+                        <a href="mailbox.html">
+                            <div>
+                                <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                <span class="pull-right text-muted small">4 minutes ago</span>
                             </div>
-                        </li>
-                    </ul>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="profile.html">
+                            <div>
+                                <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                <span class="pull-right text-muted small">12 minutes ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="grid_options.html">
+                            <div>
+                                <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                <span class="pull-right text-muted small">4 minutes ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="text-center link-block">
+                            <a href="notifications.html">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
                 </li>
 
 
@@ -256,15 +246,15 @@
 
         <div class="form-group" style="display: none;" id="collectionName">
             <div class="col-sm-10">
-                <input type="hidden" class="form-control"th:value="${user.userName}"
+                <input type="hidden" class="form-control" th:value="${user.userName}"
                        placeholder="姓名" style="width: 8cm" name="userName"/>
             </div>
             <div class="col-sm-10">
-                <input type="hidden" class="form-control"th:value="${user.userName}"
+                <input type="hidden" class="form-control" th:value="${user.userName}"
                        placeholder="姓名" style="width: 8cm" name="userName"/>
             </div>
             <div class="col-sm-2 control-label" type="hidden">名称</div>
-            <div >名称</div>
+            <div>名称</div>
             <div class="col-sm-10">
                 <input type="text" class="form-control"
                        placeholder="姓名" style="width: 8cm" name="cname"/>
@@ -277,10 +267,10 @@
     <script type="text/javascript">
         var layer;
         var idx;
-        var flag=0;
-        window.onload=function(){
+        var flag = 0;
+        window.onload = function () {
             var url = window.location;
-            href=url.href;
+            href = url.href;
 
             $.get("/collections/finds?url=" + href, function (r) {
                 console.info(r);
@@ -304,11 +294,12 @@
         }
 
         function addFavorite() {
-            var flag=0;
+            var flag = 0;
             // var cname=$("input[name='cname']").val();
+            debugger
             // if (cname!=null) {
-                var url = window.location;
-                href=url.href;
+            var url = window.location;
+            href = url.href;
             // idx = layer.open({
             //     type: 1,
             //     title: '收藏名称',
@@ -321,19 +312,15 @@
             //     content: $('#collectionName'),
             //     btn: ['确定', '取消'],
             //     btn1: function (index) {
-                    $.get("/collections/saveCollection?url=" + href, function (r) {
-                        console.info(r);
-                        if (r.Status == 0) {
-
-                                $('#div1').addClass('styleclass');
-
-                            alert("收藏成功")
-                        } else {
-                            $('#div1').removeClass('styleclass');
-                            alert(r.msg);
-                        }
-                        // location.replace(location.href);
-                    });
+            $.get("/collections/saveCollection?url=" + href, function (r) {
+                console.info(r);
+                if (r.Status == 0) {
+                    alert("收藏成功")
+                } else {
+                    alert("取消收藏")
+                }
+                location.replace(location.href);
+            });
 
             // });
 
@@ -349,22 +336,221 @@
             //     document.getElementById("div1").style.background="green";
 
 
-
             //     flag=1;
             // }
 
 
         }
-
-
-
-
-
     </script>
-
-
 </aside>
+
+<div th:fragment="brands">
+    <div class="brands">
+        <div class="container">
+            <div class="row">
+                <div class="bxslider-wrapper">
+                    <ul class="bxslider" data-slides-phone="1" data-slides-tablet="3" data-slides-desktop="6"
+                        data-slide-margin="15">
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/canon.jpg" alt="canon"
+                                                             title="canon"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/esprit.jpg" alt="esprit"
+                                                             title="esprit"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/gap.jpg" alt="gap"
+                                                             title="gap"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/next.jpg" alt="next"
+                                                             title="next"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/puma.jpg" alt="puma"
+                                                             title="puma"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/zara.jpg" alt="zara"
+                                                             title="zara"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/canon.jpg" alt="canon"
+                                                             title="canon"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/esprit.jpg" alt="esprit"
+                                                             title="esprit"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/gap.jpg" alt="gap"
+                                                             title="gap"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/next.jpg" alt="next"
+                                                             title="next"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/puma.jpg" alt="puma"
+                                                             title="puma"></a></li>
+                        <li><a href="product-list.html"><img src="../bootstrap/user/temp/brands/zara.jpg" alt="zara"
+                                                             title="zara"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- BEGIN STEPS -->
+    <div class="steps3 steps3red">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-truck"></i>
+                    <div>
+                        <h2>Free shipping</h2>
+                        <em>Express delivery withing 3 days</em>
+                    </div>
+                    <span>&nbsp;</span>
+                </div>
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-gift"></i>
+                    <div>
+                        <h2>Daily Gifts</h2>
+                        <em>3 Gifts daily for lucky customers</em>
+                    </div>
+                    <span>&nbsp;</span>
+                </div>
+                <div class="col-md-4 steps3-col">
+                    <i class="fa fa-phone"></i>
+                    <div>
+                        <h2>477 505 8877</h2>
+                        <em>24/7 customer care available</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END STEPS -->
+
+    <!-- BEGIN PRE-FOOTER -->
+    <div class="pre-footer">
+        <div class="container">
+            <div class="row">
+                <!-- BEGIN BOTTOM ABOUT BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>关于我们</h2>
+                    <p>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                       xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx. </p>
+                    <p>xxxxxxxxxxxxxxxxxxxxxxxxxxxxx.</p>
+                </div>
+                <!-- END BOTTOM ABOUT BLOCK -->
+                <!-- BEGIN BOTTOM INFO BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>信息</h2>
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-angle-right"></i> <a href="javascript:void(0);">交付信息</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="javascript:void(0);">用户服务</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="javascript:void(0);">订单跟踪</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="javascript:void(0);">购物 & 返回</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="javascript:void(0);">联系我们</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="javascript:void(0);">职业生涯</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="javascript:void(0);">付款方法</a></li>
+                    </ul>
+                </div>
+                <!-- END INFO BLOCK -->
+                <!-- BEGIN TWITTER BLOCK -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>最新消息</h2>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@xxxx</a>
+                            是一种苦味，是一种苦味
+                            <span>3 分钟前</span>
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@xxxx</a>
+                            是一种苦味，是一种苦味
+                            <span>3 分钟前</span>
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@xxxx</a>
+                            是一种苦味，是一种苦味
+                            <span>3 分钟前</span>
+                        </dd>
+                    </dl>
+                </div>
+                <!-- END TWITTER BLOCK -->
+                <!-- BEGIN BOTTOM CONTACTS -->
+                <div class="col-md-3 col-sm-6 pre-footer-col">
+                    <h2>我们的客户</h2>
+                    <address class="margin-bottom-40">
+                        广州天河<br>
+                        归属地, 广州<br>
+                        电话: 300 323 3456<br>
+                        Fax: 300 323 1456<br>
+                        邮箱: <a href="mailto:info@metronic.com">info@metronic.com</a><br>
+                        Skype: <a href="skype:metronic">metronic</a>
+                    </address>
+                </div>
+                <!-- END BOTTOM CONTACTS -->
+            </div>
+            <hr>
+            <div class="row">
+                <!-- BEGIN SOCIAL ICONS -->
+                <div class="col-md-6 col-sm-6">
+                    <ul class="social-icons">
+                        <li><a class="rss" data-original-title="rss" href="#"></a></li>
+                        <li><a class="facebook" data-original-title="facebook" href="#"></a></li>
+                        <li><a class="twitter" data-original-title="twitter" href="#"></a></li>
+                        <li><a class="googleplus" data-original-title="googleplus" href="#"></a></li>
+                        <li><a class="linkedin" data-original-title="linkedin" href="#"></a></li>
+                        <li><a class="youtube" data-original-title="youtube" href="#"></a></li>
+                        <li><a class="vimeo" data-original-title="vimeo" href="#"></a></li>
+                        <li><a class="skype" data-original-title="skype" href="#"></a></li>
+                    </ul>
+                </div>
+                <!-- END SOCIAL ICONS -->
+                <!-- BEGIN NEWLETTER -->
+                <div class="col-md-6 col-sm-6">
+                    <div class="pre-footer-subscribe-box pull-right">
+                        <h2>时事通讯</h2>
+                        <form action="#">
+                            <div class="input-group">
+                                <input type="text" placeholder="你的邮箱@mail.com" class="form-control">
+                                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">订阅</button>
+                  </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END NEWLETTER -->
+            </div>
+        </div>
+    </div>
+    <!-- END PRE-FOOTER -->
+    <!-- BEGIN FOOTER -->
+    <div class="footer padding-top-15">
+        <div class="container">
+            <div class="row">
+                <!-- BEGIN COPYRIGHT -->
+                <div class="col-md-6 col-sm-6 padding-top-10">
+                    2014 © 广州星记云典.
+                </div>
+                <!-- END COPYRIGHT -->
+                <!-- BEGIN PAYMENTS -->
+                <div class="col-md-6 col-sm-6">
+                    <ul class="list-unstyled list-inline pull-right margin-bottom-15">
+                        <li><img src="../bootstrap/user/img/payments/western-union.jpg" alt="We accept Western Union"
+                                 title="We accept Western Union"></li>
+                        <li><img src="../bootstrap/user/img/payments/american-express.jpg"
+                                 alt="We accept American Express"
+                                 title="We accept American Express"></li>
+                        <li><img src="../bootstrap/user/img/payments/MasterCard.jpg" alt="We accept MasterCard"
+                                 title="We accept MasterCard"></li>
+                        <li><img src="../bootstrap/user/img/payments/PayPal.jpg" alt="We accept PayPal"
+                                 title="We accept PayPal"></li>
+                        <li><img src="../bootstrap/user/img/payments/visa.jpg" alt="We accept Visa"
+                                 title="We accept Visa">
+                        </li>
+                    </ul>
+                </div>
+                <!-- END PAYMENTS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div th:include="common/Head :: js"></div>
+
 
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
 
@@ -376,7 +562,6 @@
 <script src="../js/manage/js/processData.js"></script>
 
 <script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
-
 
 
 </body>

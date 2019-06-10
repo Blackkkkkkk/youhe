@@ -85,9 +85,7 @@
                     <div class="col-sm-2 control-label">商品分类</div>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" style="cursor:pointer;"
-                               @click="deptTree" readonly="readonly" placeholder=""/>
-                        <input type="hidden" class="form-control" style="cursor:pointer;" v-model="dept.parentId"
-                               readonly="readonly" placeholder=""/>
+                               @click="deptTree" readonly="readonly" placeholder="" v-model="shop.cname"/>
                         <input type="hidden" v-model="shop.cid" name="cid" id="cid">
                     </div>
                 </div>

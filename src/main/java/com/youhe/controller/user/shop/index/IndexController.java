@@ -7,12 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.youhe.biz.redis.RedisBiz;
+import com.youhe.biz.shop.CommodityBiz;
 import com.youhe.biz.shop.PictureBiz;
 import com.youhe.biz.shop.ShopBiz;
 import com.youhe.biz.shop.ShopUserIndexBiz;
 import com.youhe.entity.order.Order;
 import com.youhe.entity.order.OrderDetail;
 import com.youhe.entity.pay.Refund;
+import com.youhe.entity.shop.Commodity;
 import com.youhe.entity.shop.Picture;
 import com.youhe.entity.shop.Shop;
 import com.youhe.entity.shop.Shop_index_carousel;
@@ -76,6 +78,9 @@ public class IndexController {
     private OrderService orderService;
     @Autowired
     private OrderDetailService orderDetailService;
+
+    @Autowired
+    private CommodityBiz commodityBiz;
 
 
     @RequestMapping(value = "/index")
@@ -427,9 +432,69 @@ public class IndexController {
 
     @RequestMapping(value = "/commodityMenu")
     public String commodity(Model model, Shop shop) {
+
         model.addAttribute("cId", shop.getCid());
+        shop.setPageSize(9);
+        Commodity commodity = new Commodity();
+        commodity.setCid(shop.getCid() + "");
+        List<Commodity> commodityList = commodityBiz.findCommodityList(commodity);
+
+        if (!CollectionUtils.isEmpty(commodityList)) {
+            commodity = commodityList.get(0);
+            model.addAttribute("cname", commodity.getCname());
+        }
+        PageInfo<Shop> list = shopBiz.findShopListByPage(shop);
+        model.addAttribute("list", list);
+        shop.setPageNum(list.getPageNum());
+        shop.setPageSize(list.getPageSize());
+        shop.setPage(list.getPages());
+        model.addAttribute("shop", shop);
         return "user/shop/index/commodityMenu";
     }
+
+
+    @RequestMapping(value = "/commodityMenuSearch")
+    public String commodityMenuSearch(Model model, Shop shop) {
+
+        //  findSearchListByPage
+        model.addAttribute("searcnName", shop.getSearcnName());
+        shop.setPageSize(9);
+        model.addAttribute("cname", "搜索结果");
+
+        PageInfo<Shop> list = shopBiz.findSearchListByPage(shop);
+        model.addAttribute("list", list);
+        shop.setPageNum(list.getPageNum());
+        shop.setPageSize(list.getPageSize());
+        shop.setPage(list.getPages());
+        model.addAttribute("shop", shop);
+
+        return "user/shop/index/commodityMenu";
+    }
+
+
+    @RequestMapping(value = "/commodityMenuData")
+    @ResponseBody
+    public R commodityMenuData(Model model, Shop shop) {
+
+        Integer cId = shop.getCid();
+        String cname = new String();
+
+        Commodity commodity = new Commodity();
+        commodity.setCid(shop.getCid() + "");
+        List<Commodity> commodityList = commodityBiz.findCommodityList(commodity);
+
+        if (!CollectionUtils.isEmpty(commodityList)) {
+            commodity = commodityList.get(0);
+            cname = commodity.getCname();
+        }
+        PageInfo<Shop> list = shopBiz.findShopListByPage(shop);
+        return R.ok().
+                put("cId", shop.getCid())
+                .put("list", list)
+                .put("shop", shop)
+                .put("cname", cname);
+    }
+
 
     //退款接口
     @RequestMapping(value = "/refund")
