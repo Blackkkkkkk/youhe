@@ -1,7 +1,6 @@
 package com.youhe.initBean.activiti;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.Delegate;
@@ -69,10 +68,9 @@ public class GlobalActivitiEventListener implements ActivitiEventListener {
                     Delegate agency = delegateService
                             .getDelegateAssigneeAndProcessDefId(nextUser, task.getProcessDefinitionId(), Constant.DELEGATE_TYPE_0);
                     if (agency != null) {
-                        Date startTime = agency.getStartTime();
+                        Date nowTIme = new Date();
                         Date endTime = agency.getEndTime();
-                        long l = DateUtil.betweenMs(startTime, endTime);
-                        if (l >= 0) {   // 由代理人发起申请
+                        if (endTime.getTime() > nowTIme.getTime()) {   // 由代理人发起申请
                             task.delegate(agency.getAttorney());
                             hiDelegateService.saveHiDelegate(nextUser, agency.getAttorney(), task.getId(), Constant.DELEGATE_TYPE_0);
                         }
@@ -80,14 +78,13 @@ public class GlobalActivitiEventListener implements ActivitiEventListener {
                 }
 
                 // 如果开启委托功能，把当前任务转交到委托代理人
-                if (!flowVariable.isFirstNode()) {
+                if (!flowVariable.isFirstSubmit()) {
                     Delegate delegate = delegateService
                             .getDelegateAssigneeAndProcessDefId(nextUser, task.getProcessDefinitionId(), Constant.DELEGATE_TYPE_1);
                     if (delegate != null) {
-                        Date startTime = delegate.getStartTime();
+                        Date nowTIme = new Date();
                         Date endTime = delegate.getEndTime();
-                        long l = DateUtil.betweenMs(startTime, endTime);
-                        if (l >= 0) {   // 转交委托人办理
+                        if (endTime.getTime() > nowTIme.getTime()) {   // 转交委托人办理
                             task.delegate(delegate.getAttorney());
                             hiDelegateService.saveHiDelegate(nextUser, delegate.getAttorney(), task.getId(), Constant.DELEGATE_TYPE_1);
                             LOGGER.info("任务实例{}委托给{}代理处理", task.getId(), delegate.getAttorney());

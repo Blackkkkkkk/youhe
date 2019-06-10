@@ -6,6 +6,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -14,6 +17,7 @@ import com.youhe.activiti.ext.NodeJumpTaskCmd;
 import com.youhe.common.Constant;
 import com.youhe.entity.activiti.Copyto;
 import com.youhe.entity.activiti.FlowVariable;
+import com.youhe.entity.activiti.HiDelegate;
 import com.youhe.entity.activiti.Node;
 import com.youhe.entity.activitiData.MyCommentEntity;
 import com.youhe.entity.activitiData.ProdefTask;
@@ -23,6 +27,7 @@ import com.youhe.exception.YuheOAException;
 import com.youhe.mapper.activiti.ActivityMapper;
 import com.youhe.mapper.user.UserMapper;
 import com.youhe.service.activiti.CopytoService;
+import com.youhe.service.activiti.HiDelegateService;
 import com.youhe.utils.activiti.TimeAsc;
 import com.youhe.utils.shiro.ShiroUserUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
@@ -101,6 +106,8 @@ public class MyProcessEngineImpl implements MyProcessEngine {
     private ActivityMapper activityMapper;
     @Autowired
     private CopytoService copytoService;
+    @Autowired
+    private HiDelegateService hiDelegateService;
 
     @Override
     public String createModel() {
@@ -221,6 +228,7 @@ public class MyProcessEngineImpl implements MyProcessEngine {
 
             flowVariable.setUserId(String.valueOf(userId));
             flowVariable.setFirstNode(true);
+            flowVariable.setFirstSubmit(true);
             flowVariable.setNextUserId(String.valueOf(userId));
             variables.put(Constant.FLOW_VARIABLE_KEY, flowVariable);
             // 设置当前任务的办理人
@@ -1268,6 +1276,23 @@ public class MyProcessEngineImpl implements MyProcessEngine {
         ProcessDefinitionEntity processDefinition = this.getProcessDefinition(processDefId);
         ActivityImpl activityImpl = processDefinition.findActivity(taskDefId); // 根据活动id获取活动实例
         return (TaskDefinition) activityImpl.getProperties().get("taskDefinition");
+    }
+
+    @Override
+    public IPage<Map<String, Object>> listAllHisAgencyPage(Long userId, int current, int size) {
+        Page<HiDelegate> page = new Page<>(current, size);
+        LambdaQueryWrapper<HiDelegate> hiDelegateLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        hiDelegateLambdaQueryWrapper.eq(HiDelegate::getAttorney, userId);
+        IPage<Map<String, Object>> pageMaps = hiDelegateService.pageMaps(page, hiDelegateLambdaQueryWrapper);
+        List<Map<String, Object>> records = pageMaps.getRecords();
+        records.forEach(record -> {
+            HistoricTaskInstance hisTask = historyService.createHistoricTaskInstanceQuery().taskId((String) record.get("task_id")).singleResult();
+            ProcessDefinitionEntity processDefinition = this.getProcessDefinition(hisTask.getProcessDefinitionId());
+            record.put("processName", processDefinition.getName());
+            record.put("taskName", hisTask.getName());
+        });
+        pageMaps.setRecords(records);
+        return pageMaps;
     }
 
 }
