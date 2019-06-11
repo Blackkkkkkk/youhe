@@ -152,6 +152,32 @@ CREATE TABLE `sys_opinion`  (
   PRIMARY KEY (`id`, `opinion_name`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+
+-- ----------------------------
+-- Table structure for sys_desktop
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_desktop`;
+CREATE TABLE `sys_desktop`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户ID',
+  `div_id` int(11) NULL DEFAULT NULL COMMENT '模块ID',
+  `div_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for sys_desktop_set
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_desktop_set`;
+CREATE TABLE `sys_desktop_set`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `sys_div_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
 -- ----------------------------
 -- Table structure for sys_user_department
 -- ----------------------------

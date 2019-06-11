@@ -5,6 +5,8 @@ TRUNCATE sys_role;
 TRUNCATE sys_role_permission;
 TRUNCATE sys_user;
 TRUNCATE sys_user_role;
+TRUNCATE sys_desktop;
+TRUNCATE sys_desktop_set;
 
 -- 系统权限数据
 INSERT INTO `activiti`.`sys_permission`(`PID`, `PNAME`, `TYPE`, `URL`, `PERCODE`, `PARENTID`, `PARENTIDS`, `SORTSRING`, `AVAILABLE`, `MENUICON`) VALUES (2, '流程审批', 'menu', NULL, 'user:flow', 0, '0/', '2', '1', 'fa fa-tasks');
@@ -78,3 +80,18 @@ INSERT INTO `activiti`.`sys_user_role`(`id`, `sys_user_id`, `sys_role_id`) VALUE
 -- 部门表
 INSERT INTO `activiti`.`sys_department`(`DEPT_ID`, `PARENT_ID`, `NAME`, `ORDER_NUM`, `STATUS`) VALUES (42, 0, '服务中心', 0, 1);
 INSERT INTO `activiti`.`sys_department`(`DEPT_ID`, `PARENT_ID`, `NAME`, `ORDER_NUM`, `STATUS`) VALUES (43, 42, 'IT部', 0, 1);
+
+-- 桌面设置表
+INSERT INTO `sys_desktop` VALUES (2, 1, 1, '项目测试进度');
+INSERT INTO `sys_desktop` VALUES (20, 1, 2, ' 报告的新数据');
+INSERT INTO `sys_desktop` VALUES (21, 1, 3, '阅读下面的评论');
+INSERT INTO `sys_desktop` VALUES (22, 1, 4, '你的每日饲料');
+INSERT INTO `sys_desktop` VALUES (23, 1, 5, '阿尔法项目');
+
+
+-- 桌面设置divId表
+INSERT INTO `sys_desktop_set` VALUES (71, 1, 1);
+INSERT INTO `sys_desktop_set` VALUES (72, 1, 2);
+INSERT INTO `sys_desktop_set` VALUES (73, 1, 3);
+INSERT INTO `sys_desktop_set` VALUES (74, 1, 4);
+INSERT INTO `sys_desktop_set` VALUES (75, 1, 5);
