@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youhe.mapper.desktop.DesktopMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="desktopList" type="com.youhe.entity.desktop.Desktop">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="div_id" property="divId" />
+        <result column="div_name" property="divName" />
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="find_desktop_list" type="com.youhe.entity.desktop.DesktopSet">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="sys_div_id" property="sysDivId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, div_id, div_name
+    </sql>
+
+    <!-- 查询div-->
+    <select id="findDesktopList" parameterType="com.youhe.entity.desktop.Desktop" resultMap="desktopList">
+        SELECT ds.*,us.uid from sys_desktop ds LEFT JOIN sys_user us ON ds.user_id=us.uid
+        where
+        1=1
+        <if test="uid!=null">
+            AND us.uid= #{uid}
+        </if>
+    </select>
+
+
+    <delete id="delPer" parameterType="com.youhe.entity.desktop.Desktop">
+        DELETE  from sys_desktop where user_id = #{uid}
+--        UPDATE sys_desktop set div_name=0 where user_id =  #{uid}
+    </delete>
+
+    <insert id="save" parameterType="com.youhe.entity.desktop.Desktop">
+
+
+-- 		 UPDATE   sys_desktop set div_name=1 where user_id = #{uid} and div_id= #{id}
+        insert into sys_desktop(
+        user_id,
+        div_id
+        )
+        values(
+        #{uid},
+        #{id}
+        )
+    </insert>
+
+    <!-- 查询div-->
+    <select id="findDesktop" parameterType="com.youhe.entity.desktop.Desktop" resultMap="find_desktop_list">
+        SELECT * from sys_desktop_set where user_id=#{userId}
+    </select>
+
+</mapper>
