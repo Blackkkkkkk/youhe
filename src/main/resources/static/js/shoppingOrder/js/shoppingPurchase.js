@@ -2,84 +2,6 @@
  * Created by xiaoqiang on 2019/1/10.
  */
 
-//新增vue组件化
-Vue.component('tree', {
-    name: 'treeNode',
-    props: ['lists'],
-    template: `
-		<div>
-				  <template v-for="item in lists">
-
-                        <li v-if="item.children == null" class="list-group-item clearfix"><a :href="'/touristShop/commodityMenu?cid='+item.cid+''"><i
-                                class="fa fa-angle-right"></i>
-                            {{item.cname}}</a>
-                        </li>
-                        <li v-if="item.children != null && item.children.length >0"
-                            class="list-group-item clearfix dropdown">
-                            <a v-if="item.children != null && item.children.length >0" href="javascript:void(0);" style="padding: 0px;" :id="item.cid"> 
-                            <i v-if="item.parentId == 0" class="fa fa-angle-right"></i>
-                            <i v-if="item.parentId != 0" class="fa fa-circle" style="float: left;margin-right: 7px;font-size: 5px;position: relative;top: 7px;color: #949fae;"></i>
-                            {{item.cname}}<i class="fa fa-angle-down"></i></a>
-                            <ul class="dropdown-menu" v-if="item.children != null && item.children.length >0">
-                                <treeNode :lists="item.children">                     
-                                </treeNode>
-                            </ul>
-
-                        <li v-if="item.children != null && item.children.length ==0" class="list-group-item clearfix">
-                                <a :href="'/touristShop/commodityMenu?cid='+item.cid+''" style="padding: 0px;" :id="item.cid">
-                                <i v-if="item.parentId == 0" class="fa fa-angle-right"></i>
-                                  <i v-if="item.parentId != 0" class="fa fa-circle" style="float: left;margin-right: 7px;font-size: 5px;position: relative;top: 7px;color: #949fae;"></i>{{item.cname}}</a></li>
-                        </li>
-                
-                  </template>
-		</div>
-	`
-})
-Vue.component('treeHeadTwo', {
-    name: 'treeNode',
-    props: ['lists'],
-    template: `
-		<ul class="dropdown-menu">
-			<template v-for="(item,index) in lists">
-			     <li v-if="item.children == null"><a href="/touristShop/commodityMenu?cid={{item.cid}}"><i
-                            ></i>
-                        {{item.cname}}</a>
-                 </li>
-                    <li v-if="item.children != null && item.children.length >0"
-                        class="dropdown-submenu">
-                        <a v-if="item.children != null && item.children.length >0" href="javascript:void(0);"
-                            :id="item.cid">
-                            {{item.cname}}11<i class="fa fa-angle-right"></i></a>
-                      
-                            <treeNode :lists="item.children">
-                            </treeNode>
-                       
-                    <li v-if="item.children != null && item.children.length ==0" >
-                        <a :href="'/touristShop/commodityMenu?cid='+item.cid+''"  :id="item.cid">
-                        {{item.cname}}22</a>
-                    </li>
-
-            </template>
-		</ul>
-	`
-})
-
-Vue.component('treeHead', {
-    name: 'treeNode',
-    props: ['lists'],
-    template: `
-		<div>
-			<template v-for="(item,index) in lists">
-			<div class="nav-content-col">
-                <h3>{{item.cname}}</h3>
-                   <ul >
-                       <li v-for="(item1,index) in item.children"><a href="product-list.html">{{item1.cname}}</a></li>
-                   </ul>  
-            </div>
-            </template>
-		</div>
-	`
-})
 
 
 var vm = new Vue({
@@ -110,7 +32,7 @@ var vm = new Vue({
         addressList: []
 
 
-    },
+    }, extends: searchVue,
     created: function () {
 
     }
@@ -368,7 +290,7 @@ var vm = new Vue({
             _this.carData.items = num;
             _this.carData.prices = prices;
         },
-        delCart: function (event,item) {
+        delCart: function (event, item) {
 
             var x = event.clientX;
             var y = event.clientY;

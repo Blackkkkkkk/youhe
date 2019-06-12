@@ -97,6 +97,7 @@ var searchVue = {
     },
     methods: { //把数据类型转成树格式
         toTreeData: function (data, attributes) {
+            console.log(data)
             let resData = data;
             let tree = [];
 

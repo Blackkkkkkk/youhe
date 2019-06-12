@@ -80,6 +80,10 @@
             background: #e94d1c;
             border-color: #e94d1c;
         }
+
+        .layui-table-fixed-r {
+            display: none;
+        }
     </style>
 </head>
 <!--<style type="text/css">
@@ -159,9 +163,8 @@
 
 <script src="../bootstrap/js/dept/js/vue.min.js"></script>
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+    <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">取消收藏</a>
 </script>
 
 <script src="../bootstrap/js/dept/js/bootstrapValidator.js"></script>
@@ -176,7 +179,6 @@
 <script type="text/javascript" src="../bootstrap/user/scripts/index.js"></script>
 <script src="../bootstrap/js/project/user/shop/index/js/order.js"></script>
 <script type="text/javascript" src="../bootstrap/dataTable/datatables.min.js"></script>
-
 
 <!-- Page-Level Scripts -->
 <script th:inline="none">
@@ -193,8 +195,8 @@
 
                 {field: 'id', title: '商品名', width: 100, align: 'center', sort: true,}
                 , {field: 'name', title: '商品名', width: 290, align: 'center', sort: true,}
-                , {field: 'pirce', title: '金额', width: 200, sort: true, align: 'center'}
-                , {field: 'num', title: '商品剩余数量', width: 200, sort: true, align: 'center'}
+                , {field: 'pirce', title: '金额', width: 130, sort: true, align: 'center'}
+                , {field: 'num', title: '商品剩余数量', width: 130, sort: true, align: 'center'}
                 , {
                     field: 'register', title: '上架时间', width: 150, align: 'center',
                     templet: function (d) {
@@ -215,6 +217,7 @@
 
                     }
                 }
+                , {fixed: 'right', title: '操作', width: 140, align: 'center', toolbar: '#barDemo'}
 
             ]]
         });
@@ -231,18 +234,21 @@
 
                 layer.msg('查看操作');
             } else if (layEvent === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del(); //删除对应行（tr）的DOM结构
-                    layer.close(index);
+                layer.confirm('真的删除收藏吗', function (index) {
+                    $.get("/shopDetail/delCollect?shopId=" + data.id, function (r) {
+                        console.log(r)
+                        if (r.Status == 0) {
+                            layer.msg(r.msg, {icon: 1, time: 1000});
+                            obj.del(); //删除对应行（tr）的DOM结构
+                            layer.close(index);
+                        }else {
+                            layer.msg(r.msg, {icon: 2, time: 1000});
+                        }
+                    })
                     //向服务端发送删除指令
                 });
             } else if (layEvent === 'edit') {
-                if (data.status == 2) {
-                    layer.msg('商品已发货，无法修改订单！');
-                } else {
-                    window.open("/order/myOrderDetail?id=" + data.id);
-                }
-
+                window.open("/shopDetail/detail?id=" + data.id);
             }
         });
 
@@ -292,6 +298,10 @@
             }
         });
     })
+
+    function shop(id) {
+        alert(id)
+    }
 
 
 </script>
