@@ -185,7 +185,6 @@
         var bootstrapValidator = $("#myForm").data('bootstrapValidator');
         bootstrapValidator.validate();
         if (bootstrapValidator.isValid()) {
-            debugger
             // console.info(deliveryAddr);
 
             $.get("/user/updates?userName=" + userName + "&email=" + email + "&phone=" + phone + "&uid=" + uid, function (r) {

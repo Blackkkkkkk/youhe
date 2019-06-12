@@ -177,7 +177,6 @@
         var bootstrapValidator = $("#myForm").data('bootstrapValidator');
         bootstrapValidator.validate();
         if (bootstrapValidator.isValid()) {
-            debugger
             // console.info(deliveryAddr);
 
             $.get("/user/updates?userName=" + userName + "&email=" + email + "&phone=" + phone + "&uid=" + uid, function (r) {
@@ -436,7 +435,7 @@
             }
         });
         $(function () {
-            var $thisA = $('a[href="/user/updateUser"]');
+            var $thisA = $('a[href="/user/findCollections"]');
             $thisA.parent().attr("class", "active");
             $thisA.parent().parent().attr("class", "nav nav-second-level collapse in");
         });
