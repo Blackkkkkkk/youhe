@@ -29,6 +29,24 @@ var vm = new Vue({
     }
     ,
     mounted: function () {
+        _this = this;
+        $.ajaxSettings.async = false;
+
+        $.get("/commodity/list", function (r) {
+            _this.menList = r;
+        })
+
+
+        let data = _this.menList;
+        // 属性配置信息
+        let attributes = {
+            cid: 'cid',
+            parentId: 'parentId',
+            cname: 'cname',
+            rootId: 0
+        }
+        _this.lists = _this.toTreeData(data, attributes)
+        $.ajaxSettings.async = false;
     }
     ,
     methods: {

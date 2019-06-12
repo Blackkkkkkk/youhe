@@ -1,49 +1,3 @@
-
-Vue.component('treeHeadTwo', {
-    name: 'treeNode',
-    props: ['lists'],
-    template: `
-		<ul class="dropdown-menu">
-			<template v-for="(item,index) in lists">
-			     <li v-if="item.children == null"><a href="/touristShop/commodityMenu?cid={{item.cid}}"><i
-                            ></i>
-                        {{item.cname}}</a>
-                 </li>
-                    <li v-if="item.children != null && item.children.length >0"
-                        class="dropdown-submenu">
-                        <a v-if="item.children != null && item.children.length >0" href="javascript:void(0);"
-                            :id="item.cid">
-                            {{item.cname}}11<i class="fa fa-angle-right"></i></a>
-                      
-                            <treeNode :lists="item.children">
-                            </treeNode>
-                       
-                    <li v-if="item.children != null && item.children.length ==0" >
-                        <a :href="'/touristShop/commodityMenu?cid='+item.cid+''"  :id="item.cid">
-                        {{item.cname}}22</a>
-                    </li>
-
-            </template>
-		</ul>
-	`
-})
-
-Vue.component('treeHead', {
-    name: 'treeNode',
-    props: ['lists'],
-    template: `
-		<div>
-			<template v-for="(item,index) in lists">
-			<div class="nav-content-col">
-                <h3>{{item.cname}}</h3>
-                   <ul >
-                       <li v-for="(item1,index) in item.children"><a href="product-list.html">{{item1.cname}}</a></li>
-                   </ul>  
-            </div>
-            </template>
-		</div>
-	`
-})
 var vm = new Vue({
     el: '#wrapper',
     data: {
@@ -59,21 +13,20 @@ var vm = new Vue({
         },
         menList: [],
         lists: []
-    },
+    }, extends: searchVue,
     created: function () {
 
     },
     mounted: function () {
 
+
         this.initcart();
 
         _this = this;
-
+        $.ajaxSettings.async = false;
 
         $.get("/commodity/list", function (r) {
-
-
-            _this.menList = r
+            _this.menList = r;
         })
 
 
@@ -85,16 +38,10 @@ var vm = new Vue({
             cname: 'cname',
             rootId: 0
         }
-
         _this.lists = _this.toTreeData(data, attributes)
+        $.ajaxSettings.async = false;
 
 
-        // this. test();
-
-        /*
-        this.$nextTick(function () {
-           // console.log(this.$refs.input1[0])
-        })*/
     },
     methods: {
         pay: function () {
@@ -103,9 +50,9 @@ var vm = new Vue({
 
             // $.get("/activiti/deploy?modelId=" + id, function (data,status) {
             $.get("/order/payment", function (r) {
-                if(r.Status == 0){
+                if (r.Status == 0) {
                     window.location.href = (r.url)
-                }else {
+                } else {
                     layer.msg(r.msg, {icon: 2, time: 500});
                 }
             })
@@ -207,7 +154,7 @@ var vm = new Vue({
             _this.cartPrices.allPrice = prices + _this.cartPrices.shipping
         }
         ,
-        delCart: function (event,item) {
+        delCart: function (event, item) {
 
             var x = event.clientX;
             var y = event.clientY;

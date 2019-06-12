@@ -167,26 +167,27 @@ public class ShopDetailController {
         ShiroUser shiroUser = ShiroUserUtils.getShiroUser();
         collect.setUserId(Integer.parseInt(shiroUser.getUid() + ""));
         List<Collect> list = collectBiz.find(collect);
+        String js = "{\"code\":0,\"msg\":\"\",\"count\":\" 0 \",\"data\":[]}";
 
         String shopIdList = "";
         if (!CollectionUtils.isEmpty(list)) {
             for (int i = 0; i < list.size(); i++) {
                 shopIdList += list.get(i).getShopId() + ",";
             }
+            Shop shop = new Shop();
+            shop.setShopIdList(shopIdList);
+            List<Shop> shopList = shopBiz.findCarList(shop);
+
+
+            // 自定义data类
+            JsonConfig jsonConfig = new JsonConfig();
+            jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+            JSONArray json = JSONArray.fromObject(shopList, jsonConfig);
+            js = "{\"code\":0,\"msg\":\"\",\"count\":\" " + list.size() + " \",\"data\":" + json.toString() + "}";
+
         }
 
-        Shop shop = new Shop();
-        shop.setShopIdList(shopIdList);
-        List<Shop> shopList = shopBiz.findCarList(shop);
 
-
-        // 自定义data类
-        JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-        JSONArray json = JSONArray.fromObject(shopList, jsonConfig);
-        String js = "{\"code\":0,\"msg\":\"\",\"count\":\" " + list.size() + " \",\"data\":" + json.toString() + "}";
-
-        System.out.println(js);
         return js;
     }
 
