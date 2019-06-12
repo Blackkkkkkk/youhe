@@ -49,6 +49,9 @@
                                 <div class="col-sm-2">
                                     <input class="form-control" name="archiveTime" id="archiveTime" type="text"  autocomplete="off" placeholder="全部"/>
                                 </div>
+                                <div class="col-sm-2">
+                                    <button id="btnQuery" class="layui-btn layui-btn-normal layui-btn-sm"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                </div>
                             </div>
                             <div class="form-group hide">
                                 <button type="submit" id="submitBtn">提交</button>
@@ -63,7 +66,7 @@
                         <div class="ibox-content">
                             <div class="table-responsive" id="div-table-container">
                                 <div class="grid-btn" style="float: left;">
-                                    <button id="btnQuery" class="layui-btn layui-btn-normal layui-btn-sm"><i class="layui-icon">&#xe615;</i>搜索</button>
+<!--                                    <button id="btnQuery" class="layui-btn layui-btn-normal layui-btn-sm"><i class="layui-icon">&#xe615;</i>搜索</button>-->
                                 </div>
                                 <table id="myTable" class="table table-striped table-bordered table-hover dataTables-example" style="width: 100%" >
                                     <thead>
@@ -251,6 +254,7 @@
         $('#queryForm').submit(function(e) {
             params = yuheUtils.getFormJson('queryForm');
             tableReload();
+            return false;
         });
 
         laydate.render({

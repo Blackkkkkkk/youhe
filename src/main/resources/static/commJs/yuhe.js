@@ -368,6 +368,11 @@ var CONSTANT = {
                 "oAria": {
                     "sSortAscending":  ": 以升序排列此列",
                     "sSortDescending": ": 以降序排列此列"
+                },
+                "buttons": {
+                    "colvis": "列可见性",
+                    "print": "打印",
+                    "copy": "复制"
                 }
             },
             dom: '<"html5buttons"B>f<"top">rt<"bottom"lp>i<"clear">',
