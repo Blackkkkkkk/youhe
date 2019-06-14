@@ -36,3 +36,25 @@ CREATE TABLE `act_ext_copyto` (
   `CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务抄送表';
+
+
+DROP TABLE IF EXISTS `shop_address`;
+CREATE TABLE `shop_address` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `userId` int(20) DEFAULT NULL,
+  `addressee` varchar(200) DEFAULT NULL,
+  `phone` varchar(200) DEFAULT NULL,
+  `deliveryAddr` varchar(2000) DEFAULT NULL,
+  `createTime` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='地址表';
+
+
+DROP TABLE IF EXISTS `shop_collect`;
+CREATE TABLE `shop_collect` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `shopId` int(4) NOT NULL,
+  `collectTime` datetime(6) DEFAULT NULL,
+  `userId` int(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='收藏表';
