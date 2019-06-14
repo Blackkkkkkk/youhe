@@ -19,41 +19,42 @@
     <nav th:include="common/Left_Ment :: left"></nav>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div th:include="common/Head :: head"></div>
-        <div class="row  border-bottom white-bg dashboard-header" >
+        <!--<div class="ibox float-e-margins" id="div3" name="div3" style="display: none">-->
+        <div class="row  border-bottom white-bg dashboard-header"  id="div6" name="div6" style="display: none">
             <!--<div class="col-lg-4" id="div4" name="div4" style="display: none">-->
-            <div class="col-md-3" id="div1" name="div1" style="display: none">
+            <div class="col-md-3">
                 <h2></h2>
-                <small>You have 42 messages and 6 notifications.</small>
+                <small>您有42条消息和6条通知。</small>
                 <ul class="list-group clear-list m-t">
                     <li class="list-group-item fist-item">
                                 <span class="pull-right">
-                                    09:00 pm
+                                    下午 09:00
                                 </span>
-                        <span class="label label-success">1</span> Please contact me
+                        <span class="label label-success">1</span> 请联系我
                     </li>
                     <li class="list-group-item">
                                 <span class="pull-right">
-                                    10:16 am
+                                    上午 10:16
                                 </span>
-                        <span class="label label-info">2</span> Sign a contract
+                        <span class="label label-info">2</span> 签订合同
                     </li>
                     <li class="list-group-item">
                                 <span class="pull-right">
-                                    08:22 pm
+                                    下午 08:22
                                 </span>
-                        <span class="label label-primary">3</span> Open new shop
+                        <span class="label label-primary">3</span> 开新店
                     </li>
                     <li class="list-group-item">
                                 <span class="pull-right">
-                                    11:06 pm
+                                    下午 11:06
                                 </span>
-                        <span class="label label-default">4</span> Call back to Sylvia
+                        <span class="label label-default">4</span> 回电给西尔维亚
                     </li>
                     <li class="list-group-item">
                                 <span class="pull-right">
-                                    12:00 am
+                                    上午 12:00
                                 </span>
-                        <span class="label label-primary">5</span> Write a letter to Sandra
+                        <span class="label label-primary">5</span> 给桑德拉写封信
                     </li>
                 </ul>
             </div>
@@ -937,29 +938,6 @@
                 console.log(r)
                 for (var i = 0; i < r.length; i++) {
                     $('#div' + r[i]).show();
-
-                    // if (divId==1){
-                    //     // document.getElementById("div1").style.visibility="visible";//显示
-                    //     // document.getElementById("div1").style.visibility="hidden";//隐藏
-                    //     document.getElementById("div1").style.visibility="visible";//显示
-                    //     alert("我是1")
-                    // }
-                    // else if(divId==2){
-                    //     document.getElementById("div2").style.visibility="visible";//显示
-                    //     alert("我是2")
-                    // }else if(divId==3){
-                    //     document.getElementById("div3").style.visibility="visible";//显示
-                    //     alert("我是3")
-                    // }else if(divId==4){
-                    //     document.getElementById("div4").style.visibility="visible";//显示
-                    //     // document.getElementById("div4").style.visibility="hidden";//隐藏
-                    //     alert("我是4")
-                    // }else if(divId==5){
-                    //     alert("我是5")
-                    //     document.getElementById("div5").style.visibility="visible";//显示
-                    // }
-
-
                 }
 
                 if (r.Status == 0) {
