@@ -388,7 +388,6 @@ function initUserCommOpinion() {
     $.get("/opinion/list", function (r) {
         console.info(r)
         var opinionList=r;
-    debugger
     // var list = [{opinion: '同意'}, {opinion: '不同意'}]; // todo 把这个换成你数据查询出来的list列表数据就行
     var options = '<option value="">常用意见</option>';
     $.each(opinionList, function (i, item) {
